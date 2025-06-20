@@ -6,6 +6,8 @@ Git进阶
 
 **Learn to love the command line. Leave the IDE behind.**
 
+<!--more-->
+
 # Git in a nutshell
 
 ## Git特点

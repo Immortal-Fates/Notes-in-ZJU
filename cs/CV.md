@@ -6,16 +6,7 @@
 
 <!--more-->
 
-50% hw + 50% 期末
 
-作业提交
-
-![image-20241112142300030](markdown-img/CV.assets/image-20241112142300030.png)
-
-references
-
-- [7_1_相机校准 - OpenCV中文官方文档 (woshicver.com)](https://www.woshicver.com/Eighth/7_1_相机校准/)
-- [jash-git/Learning-OpenCV-3: 《Learning OpenCV 3》學習OpenCV 3 範例/電子檔備份 (github.com)](https://github.com/jash-git/Learning-OpenCV-3)
 
 # Contents
 
@@ -28,8 +19,6 @@ references
 opencv 4.x 全面采用C++
 
 [数字图像处理-Digital Image Processing(DIP)](https://blog.csdn.net/LIWEI940638093/article/details/105744116)
-
-![26062ded0c9eb56ed4394e74af27e197](markdown-img/计算机视觉.assets/26062ded0c9eb56ed4394e74af27e197.png)
 
 - https://www.cc98.org/topic/5231792)
 - opencv tutorial
@@ -49,7 +38,7 @@ what is an image
 
 Gestalt laws
 
-![image-20250102160450508](markdown-img/CV.assets/image-20250102160450508.png)
+![image-20250102160450508](assets/CV.assets/image-20250102160450508.png)
 
 1. **Law of Proximity**: Elements that are close to each other are perceived as a group. For example, a cluster of dots is seen as a single group rather than individual dots.
 2. **Law of Similarity**: Similar elements (in shape, size, color, etc.) are perceived as belonging together. For instance, a grid of squares and circles will be seen as rows or columns of similar shapes.
@@ -78,7 +67,7 @@ Edge detection  ：Identify sudden changes (discontinuities) in an image
 
 用模板(Template/Kernel，实质为系数矩阵)来对图像做卷积（convolution）
 
-![image-20241112211157991](markdown-img/CV.assets/image-20241112211157991.png)
+![image-20241112211157991](assets/CV.assets/image-20241112211157991.png)
 
 因为超出图像边界，所以resulting image一般会小一点
 
@@ -170,33 +159,33 @@ text
 
 梯度，连续的情况如下
 
-![image-20241112211535022](markdown-img/CV.assets/image-20241112211535022.png)
+![image-20241112211535022](assets/CV.assets/image-20241112211535022.png)
 
-![image-20241112211544741](markdown-img/CV.assets/image-20241112211544741.png)
+![image-20241112211544741](assets/CV.assets/image-20241112211544741.png)
 
 离散化：使用差分近似偏导数
 
-![image-20241112211605995](markdown-img/CV.assets/image-20241112211605995.png)
+![image-20241112211605995](assets/CV.assets/image-20241112211605995.png)
 
 一般使用卷积模板进行计算
 
-<img src="markdown-img/CV.assets/image-20241112211630067.png" alt="image-20241112211630067" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241112211630067.png" alt="image-20241112211630067" style="zoom:50%;" />
 
 - Roberts交叉算子——2*2梯度算子
 
-  ![image-20241112211703497](markdown-img/CV.assets/image-20241112211703497.png)
+  ![image-20241112211703497](assets/CV.assets/image-20241112211703497.png)
 
 - Sobel算子——3*3梯度算子
 
-  ![image-20241112211735903](markdown-img/CV.assets/image-20241112211735903.png)
+  ![image-20241112211735903](assets/CV.assets/image-20241112211735903.png)
 
 - Prewitt算子——3*3梯度算子，运算较快
 
-  ![image-20241112211825244](markdown-img/CV.assets/image-20241112211825244.png)
+  ![image-20241112211825244](assets/CV.assets/image-20241112211825244.png)
 
 - 均值差分——一定邻域内灰度平均值之差
 
-  ![image-20241112211925374](markdown-img/CV.assets/image-20241112211925374.png)
+  ![image-20241112211925374](assets/CV.assets/image-20241112211925374.png)
 
 ## 基于二阶导数的边缘检测
 
@@ -204,25 +193,25 @@ text
 
 - 拉普拉斯（Laplacian）算子
 
-  ![image-20241112212107873](markdown-img/CV.assets/image-20241112212107873.png)
+  ![image-20241112212107873](assets/CV.assets/image-20241112212107873.png)
 
   表示为卷积模板
 
-  ![image-20241112212335236](markdown-img/CV.assets/image-20241112212335236.png)
+  ![image-20241112212335236](assets/CV.assets/image-20241112212335236.png)
 
   邻域中心点具有更大权值的近似算子
 
-  ![image-20241112212348894](markdown-img/CV.assets/image-20241112212348894.png)
+  ![image-20241112212348894](assets/CV.assets/image-20241112212348894.png)
 
 - LoG边缘检测算法（LoG = Laplacian of Gaussian ）
 
    高斯滤波+拉普拉斯边缘检测
 
-  ![image-20241112212444317](markdown-img/CV.assets/image-20241112212444317.png)
+  ![image-20241112212444317](assets/CV.assets/image-20241112212444317.png)
 
   经过推导得到LoG算子
 
-  ![image-20241112212606242](markdown-img/CV.assets/image-20241112212606242.png)
+  ![image-20241112212606242](assets/CV.assets/image-20241112212606242.png)
 
   两种等效计算方式
 
@@ -246,17 +235,17 @@ canny梯度较大的地方留下来，然后看周围和自己相似的像素也
 
    平滑去噪和边缘检测是一对矛盾，应用高斯函数的一阶导数，在二者之间获得最佳的平衡
 
-  ![image-20241112212850174](markdown-img/CV.assets/image-20241112212850174.png)
+  ![image-20241112212850174](assets/CV.assets/image-20241112212850174.png)
 
 - 一阶偏导差分计算梯度幅值和方向
 
-  ![image-20241112212917606](markdown-img/CV.assets/image-20241112212917606.png)
+  ![image-20241112212917606](assets/CV.assets/image-20241112212917606.png)
 
 - 非极大值抑制（NMS，Non-max Suppression）  
 
   NMS：找到局部极大值，并筛除（抑制）邻域内其余的值
 
-  ![image-20241112214253867](markdown-img/CV.assets/image-20241112214253867.png)
+  ![image-20241112214253867](assets/CV.assets/image-20241112214253867.png)
 
   1）将其梯度方向近似为以下值中的一个，包括0、45、90、135、180、225、270和315，即表示上下左右和45度方向。——简单，但效果不一定最好
 
@@ -281,11 +270,11 @@ canny梯度较大的地方留下来，然后看周围和自己相似的像素也
 
 ## 曲线表示
 
-![image-20241114194416970](markdown-img/CV.assets/image-20241114194416970.png)
+![image-20241114194416970](assets/CV.assets/image-20241114194416970.png)
 
 曲线的离散化
 
-![image-20241114194430263](markdown-img/CV.assets/image-20241114194430263.png)
+![image-20241114194430263](assets/CV.assets/image-20241114194430263.png)
 
 
 
@@ -295,7 +284,7 @@ canny梯度较大的地方留下来，然后看周围和自己相似的像素也
 
 曲线拟合：给定一系列边缘点，设法找到一条曲线的函数表达式，通过调整参数尽量使该曲线接近所有的边缘点以描述对象的轮廓
 
-![image-20241114203147466](markdown-img/CV.assets/image-20241114203147466.png)
+![image-20241114203147466](assets/CV.assets/image-20241114203147466.png)
 
 - 解析法：用p个边缘点。（缺点：不鲁棒）
 
@@ -318,13 +307,13 @@ canny梯度较大的地方留下来，然后看周围和自己相似的像素也
 
 Hough变换算法
 
-<img src="markdown-img/CV.assets/image-20241114203553260.png" alt="image-20241114203553260" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241114203553260.png" alt="image-20241114203553260" style="zoom:50%;" />
 
 ### 圆弧检测
 
-![image-20250101122910450](markdown-img/CV.assets/image-20250101122910450.png)
+![image-20250101122910450](assets/CV.assets/image-20250101122910450.png)
 
-![image-20241114203752899](markdown-img/CV.assets/image-20241114203752899.png)
+![image-20241114203752899](assets/CV.assets/image-20241114203752899.png)
 
 ### 评价
 
@@ -350,7 +339,7 @@ Hough变换算法
        - **Hough变换**：计算复杂度较高，特别是对于高维的参数空间。它需要对原空间中的每个点进行参数空间的映射和投票7。
        - **RANSAC算法**：计算复杂度相对较低，特别是对于简单的模型。它只需要进行有限次的随机采样和模型拟合8。
     5. **结果解释**：
-       - **Hough变换**：结果是参数空间中的峰值，需要进一步解释为原空间中的几何形状7。
+       - **Hough变换**：结果是参数空间中的峰值，需要进一步解释为原空间中的几何形状。
        - **RANSAC算法**：结果是最佳的模型参数，可以直接用于解释原空间中的数据
 
 
@@ -367,21 +356,21 @@ SIFT  尺寸不变特征变换（Scale Invariant Feature Transform）
 
   - 基本思想：用一个小窗来看图像，当移动时小窗内图像改变会非常大
 
-    ![image-20241114204427080](markdown-img/CV.assets/image-20241114204427080.png)
+    ![image-20241114204427080](assets/CV.assets/image-20241114204427080.png)
 
   - Mathematics：
 
-    ![image-20241114204617082](markdown-img/CV.assets/image-20241114204617082.png)
+    ![image-20241114204617082](assets/CV.assets/image-20241114204617082.png)
 
     近似等价
 
-    ![image-20241114204724629](markdown-img/CV.assets/image-20241114204724629.png)
+    ![image-20241114204724629](assets/CV.assets/image-20241114204724629.png)
 
-![image-20250101144657592](markdown-img/CV.assets/image-20250101144657592.png)
+![image-20250101144657592](assets/CV.assets/image-20250101144657592.png)
 
 **二次项函数本质上就是一个椭圆函数**
 
-![image-20250101144840328](markdown-img/CV.assets/image-20250101144840328.png)
+![image-20250101144840328](assets/CV.assets/image-20250101144840328.png)
 
 - Corner response R is invariant to image rotation
 - Partial invariance to affine intensity change  
@@ -396,7 +385,7 @@ SIFT  尺寸不变特征变换（Scale Invariant Feature Transform）
 
 要解决scale的问题
 
-![image-20241119145751558](markdown-img/CV.assets/image-20241119145751558.png)
+![image-20241119145751558](assets/CV.assets/image-20241119145751558.png)
 
 用一个函数来寻找每张图片合适的window size——LoG
 
@@ -411,11 +400,11 @@ Scale Invariant Detectors
   LoG具有尺度不变性，但是要对高斯函数求二次导，计算量大。能不能简化LoG算子呢？——使用DoG算子（Difference of Gaussians）
 
   SIFT算法建议，在某一个尺度上对斑点的检测，可以通过对两个相邻高斯尺度空间的图像相减，得到一个DoG (Difference of Gaussians)的响应值图像
-  ![image-20250101151156915](markdown-img/CV.assets/image-20250101151156915.png)
+  ![image-20250101151156915](assets/CV.assets/image-20250101151156915.png)
 
   Discard points with DOG value below threshold (low contrast)  
 
-  ![image-20250101151246962](markdown-img/CV.assets/image-20250101151246962.png)
+  ![image-20250101151246962](assets/CV.assets/image-20250101151246962.png)
 
   去除edge
 
@@ -423,7 +412,7 @@ Scale Invariant Detectors
 
 - SIFT
 
-![image-20241119145905371](markdown-img/CV.assets/image-20241119145905371.png)
+![image-20241119145905371](assets/CV.assets/image-20241119145905371.png)
 
 
 
@@ -448,43 +437,43 @@ SIFT算法可以的解决问题：
 5. 杂物场景（clutter）
 6. 噪声
 
-![image-20241119191056163](markdown-img/CV.assets/image-20241119191056163.png)
+![image-20241119191056163](assets/CV.assets/image-20241119191056163.png)
 
 - 图像尺度空间：因为scale的变化，我们希望计算机对物体在不同尺度下有一个统一的认知，就要考虑图像在不同尺度下都存在的特点
 
 - 多分辨率金字塔：不同尺度（塔的每层）下做不同分辨率的高斯滤波
 
-  ![image-20241119192937115](markdown-img/CV.assets/image-20241119192937115.png)
+  ![image-20241119192937115](assets/CV.assets/image-20241119192937115.png)
 
   有价值的东西：不同分辨率下不同的地方，因此我们有高斯差分金字塔（DOG）
 
 - 高斯差分金字塔（DOG）：得到多层
 
-  ![image-20241119193121194](markdown-img/CV.assets/image-20241119193121194.png)
+  ![image-20241119193121194](assets/CV.assets/image-20241119193121194.png)
 
-  ![image-20241119193253994](markdown-img/CV.assets/image-20241119193253994.png)
+  ![image-20241119193253994](assets/CV.assets/image-20241119193253994.png)
 
 - DoG空间极值检测：找出极值点
 
   特征点是由DOG空间的局部极值点组成的。为了寻找DOG函数的极值点，每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域 的相邻点大或者小
 
-  <img src="markdown-img/CV.assets/image-20241119193556476.png" alt="image-20241119193556476" style="zoom:50%;" />
+  <img src="assets/CV.assets/image-20241119193556476.png" alt="image-20241119193556476" style="zoom:50%;" />
 
   中间的检测点和它同尺度的8个相邻点和上下相邻尺度对应的9×2个 点共26个点比较，以确保在尺度空间和二维图像空间都检测到极值点——keypoint
 
   得到一堆离散的点——不一定全是真正的极值点
 
-  ![image-20241119193727334](markdown-img/CV.assets/image-20241119193727334.png)
+  ![image-20241119193727334](assets/CV.assets/image-20241119193727334.png)
 
 - 关键点的精确定位
 
   对检测到的离散的点，对尺度空间DoG函数进行曲线拟合，计算其极值点，从而实现关键点的精确定位——利用泰勒级数进行展开
 
-  ![image-20241119194036077](markdown-img/CV.assets/image-20241119194036077.png)
+  ![image-20241119194036077](assets/CV.assets/image-20241119194036077.png)
 
   求导令导数=0
 
-  ![image-20250101152059601](markdown-img/CV.assets/image-20250101152059601.png)
+  ![image-20250101152059601](assets/CV.assets/image-20250101152059601.png)
 
 - 消除边界响应
 
@@ -492,13 +481,13 @@ SIFT算法可以的解决问题：
 
   > 边缘效应是指在图像处理中，由于滤波器的应用，图像边缘区域的像素值受到不完整邻域的影响，导致这些区域的响应与图像内部区域的响应不同
 
-  ![image-20241119194220284](markdown-img/CV.assets/image-20241119194220284.png)
+  ![image-20241119194220284](assets/CV.assets/image-20241119194220284.png)
 
   消除完后我们就得到了真正的最后的关键点，下面要对得到的关键点进行描述
 
 - 特征点的主方向
 
-  ![image-20241119194328666](markdown-img/CV.assets/image-20241119194328666.png)
+  ![image-20241119194328666](assets/CV.assets/image-20241119194328666.png)
 
   - **关键点邻域**：对于每个检测到的关键点，选择一个以关键点为中心的局部区域（通常是一个圆形区域，半径为 3×1.5σ\，其中 σ 是关键点的尺度）。
 
@@ -506,33 +495,33 @@ SIFT算法可以的解决问题：
 
   在完成关键点的梯度计算后，使用直方图统计邻域内像素的梯度和方向
 
-  ![image-20241119194610768](markdown-img/CV.assets/image-20241119194610768.png)
+  ![image-20241119194610768](assets/CV.assets/image-20241119194610768.png)
 
   这样可以确定主方向
 
-  ![image-20250101152330394](markdown-img/CV.assets/image-20250101152330394.png)
+  ![image-20250101152330394](assets/CV.assets/image-20250101152330394.png)
 
   > 当有多个方向近似时，我们可以把关键点复制成多份然后将方向分别赋给复制后的特征点——多峰值情况。每一份复制后的关键点具有相同的位置和尺度，但分配了不同的主方向
 
-  ![image-20241119194914813](markdown-img/CV.assets/image-20241119194914813.png)
+  ![image-20241119194914813](assets/CV.assets/image-20241119194914813.png)
 
-  ![image-20250101152533495](markdown-img/CV.assets/image-20250101152533495.png)
+  ![image-20250101152533495](assets/CV.assets/image-20250101152533495.png)
 
   保证旋转不变性——预处理已经完成
 
   - **旋转归一化**：在生成描述子时，将关键点邻域的梯度方向相对于主方向进行旋转归一化。这意味着描述子是基于关键点的局部坐标系生成的，而不是基于图像的全局坐标系。
 
-  ![image-20241119195015334](markdown-img/CV.assets/image-20241119195015334.png)
+  ![image-20241119195015334](assets/CV.assets/image-20241119195015334.png)
 
   128=16*8维的SIFT特征向量
 
-  ![image-20241119195127212](markdown-img/CV.assets/image-20241119195127212.png)
+  ![image-20241119195127212](assets/CV.assets/image-20241119195127212.png)
 
 - SIFT特征的匹配——度量两幅图像中关键点的相似性
   $$
   ratio=\frac{最近邻距离}{次近邻距离}
   $$
-  ![image-20250101152717469](markdown-img/CV.assets/image-20250101152717469.png)
+  ![image-20250101152717469](assets/CV.assets/image-20250101152717469.png)
 
 - 优点
   - 尺度/光照/旋转不变性
@@ -579,7 +568,7 @@ Procedure:
 
    - 计算转化矩阵
 
-     ![image-20250101153635642](markdown-img/CV.assets/image-20250101153635642.png)
+     ![image-20250101153635642](assets/CV.assets/image-20250101153635642.png)
 
    - RANSAC提高求解准确度
 
@@ -628,7 +617,7 @@ Procedure:
 
       适用于各种类型的模型拟合问题，不限于特定的几何形状。它对模型的形式没有特定的要求，只要能够通过数据点拟合出模型即可
 
-![image-20250101155318726](markdown-img/CV.assets/image-20250101155318726.png)
+![image-20250101155318726](assets/CV.assets/image-20250101155318726.png)
 
 - outlier比例给定的情况下，k次采样后成功的概率是
   $$
@@ -636,11 +625,11 @@ Procedure:
   $$
   
 
-![image-20241124164842205](markdown-img/CV.assets/image-20241124164842205.png)
+![image-20241124164842205](assets/CV.assets/image-20241124164842205.png)
 
-![image-20241124165201172](markdown-img/CV.assets/image-20241124165201172.png)
+![image-20241124165201172](assets/CV.assets/image-20241124165201172.png)
 
-![image-20241124165207023](markdown-img/CV.assets/image-20241124165207023.png)
+![image-20241124165207023](assets/CV.assets/image-20241124165207023.png)
 
 
 
@@ -727,9 +716,9 @@ Procedure:
 
   > 什么是DCT离散余弦变换？[离散余弦变换(DCT)原理及应用_二维dct谱](https://blog.csdn.net/ZHUQIUSHI123/article/details/82795401)
   >
-  > ![image-20250101165700578](markdown-img/CV.assets/image-20250101165700578.png)
+  > ![image-20250101165700578](assets/CV.assets/image-20250101165700578.png)
   >
-  > ![image-20250101165726887](markdown-img/CV.assets/image-20250101165726887.png)
+  > ![image-20250101165726887](assets/CV.assets/image-20250101165726887.png)
 
 - PCA降维后，还能重构再升维：
 
@@ -737,7 +726,7 @@ Procedure:
 
   - 重构的过程实际上是通过降维后的数据和PCA过程中得到的变换矩阵，计算出原始数据的近似值
 
-    ![image-20250107223118094](markdown-img/CV.assets/image-20250107223118094.png)
+    ![image-20250107223118094](assets/CV.assets/image-20250107223118094.png)
     
     > - **线性变换**：PCA的降维和重构都是通过线性变换实现的，因此重构后的数据是原始数据的线性组合。
     > - **信息保留**：PCA在降维时会保留数据中的主要模式或特征，因此重构后的数据能够较好地还原原始数据的主要信息。
@@ -745,13 +734,13 @@ Procedure:
 
 - 以下是PCA的理论推导
 
-  ![image-20250107222607249](markdown-img/CV.assets/image-20250107222607249.png)
+  ![image-20250107222607249](assets/CV.assets/image-20250107222607249.png)
 
-  ![image-20250101163703711](markdown-img/CV.assets/image-20250101163703711.png)
+  ![image-20250101163703711](assets/CV.assets/image-20250101163703711.png)
   
-  ![image-20250101163121603](markdown-img/CV.assets/image-20250101163121603.png)
+  ![image-20250101163121603](assets/CV.assets/image-20250101163121603.png)
 
-![image-20250101163127815](markdown-img/CV.assets/image-20250101163127815.png)
+![image-20250101163127815](assets/CV.assets/image-20250101163127815.png)
 
 
 
@@ -761,15 +750,15 @@ Eigenface 算法的思想是希望能够将高维的图像数据**降维**，以
 
 Eigenface 降维图像数据的方法是寻找一组特征脸，将特征脸作为一组基，**人脸信息便可以描述为特征脸的线性组合再加上一张平均脸**
 
-![image-20250101171039371](markdown-img/CV.assets/image-20250101171039371.png)
+![image-20250101171039371](assets/CV.assets/image-20250101171039371.png)
 
 [EigenFace的原理、实现及性能评估_eigenface算法](https://blog.csdn.net/Piamen/article/details/121617194)
 
-![image-20250101170651583](markdown-img/CV.assets/image-20250101170651583.png)
+![image-20250101170651583](assets/CV.assets/image-20250101170651583.png)
 
 - 理解利用人脸重构进行人脸检测的原理。如果一幅白噪声图像用Eigenface 去重构，预计结果会是怎么样？原因是？
 
-  ![image-20250101171909896](markdown-img/CV.assets/image-20250101171909896.png)
+  ![image-20250101171909896](assets/CV.assets/image-20250101171909896.png)
 
   如果使用Eigenface算法对一幅白噪声图像进行重构，预计结果会是：
 
@@ -800,11 +789,11 @@ Eigenface 降维图像数据的方法是寻找一组特征脸，将特征脸作�
 
 ## Performance Evaluation
 
-![image-20241126234549128](markdown-img/CV.assets/image-20241126234549128.png)
+![image-20241126234549128](assets/CV.assets/image-20241126234549128.png)
 
 FAR vs FRR
 
-![image-20241126234751131](markdown-img/CV.assets/image-20241126234751131.png)
+![image-20241126234751131](assets/CV.assets/image-20241126234751131.png)
 
 
 
@@ -826,11 +815,11 @@ optical flow光流法
 
 一个点的约束等式
 
-![image-20250101172841293](markdown-img/CV.assets/image-20250101172841293.png)
+![image-20250101172841293](assets/CV.assets/image-20250101172841293.png)
 
 
 
-![image-20241127000358572](markdown-img/CV.assets/image-20241127000358572.png)
+![image-20241127000358572](assets/CV.assets/image-20241127000358572.png)
 
 - 哪些位置的光流比较可靠？为什么？
 
@@ -844,11 +833,11 @@ LK有一个window的概念，即我先划定一块区域比如(5x5)的像素区�
 
 孔径问题(Aperture Problem)：所以**我们在追光流的时候，选点通常会选目标的角点(corner)**
 
-![image-20241127000414644](markdown-img/CV.assets/image-20241127000414644.png)
+![image-20241127000414644](assets/CV.assets/image-20241127000414644.png)
 
 直接最小二乘求解
 
-![image-20250101173641578](markdown-img/CV.assets/image-20250101173641578.png)
+![image-20250101173641578](assets/CV.assets/image-20250101173641578.png)
 
 
 
@@ -891,7 +880,7 @@ classification/detection
 
 - a simple pipeline 
 
-  ![image-20250101182847251](markdown-img/CV.assets/image-20250101182847251.png)
+  ![image-20250101182847251](assets/CV.assets/image-20250101182847251.png)
 
 
 
@@ -905,7 +894,7 @@ classification/detection
 
   交叉验证选择cross validate
 
-  ![image-20241211140210204](markdown-img/CV.assets/image-20241211140210204.png)
+  ![image-20241211140210204](assets/CV.assets/image-20241211140210204.png)
 
 - 点距离的计算
 
@@ -913,7 +902,7 @@ classification/detection
 
 - 维度爆炸
 
-![image-20241211140116500](markdown-img/CV.assets/image-20241211140116500.png)
+![image-20241211140116500](assets/CV.assets/image-20241211140116500.png)
 
 
 
@@ -965,11 +954,11 @@ classification/detection
 
 ## 基于卷积的物体识别
 
-![image-20250101204145067](markdown-img/CV.assets/image-20250101204145067.png)
+![image-20250101204145067](assets/CV.assets/image-20250101204145067.png)
 
 - 𝑊: the (10x1024) matrix of weight vectors
 
-![image-20250101204316290](markdown-img/CV.assets/image-20250101204316290.png)
+![image-20250101204316290](assets/CV.assets/image-20250101204316290.png)
 
 - Softmax 函数的主要作用是将网络的原始输出（通常称为 logits）转换为概率分布
 
@@ -999,7 +988,7 @@ classification/detection
   - 参数更新，使用优化算法（如梯度下降、Adam等）
   - 迭代训练
 
-![image-20250101205718729](markdown-img/CV.assets/image-20250101205718729.png)
+![image-20250101205718729](assets/CV.assets/image-20250101205718729.png)
 
 ## BP
 
@@ -1022,13 +1011,13 @@ classification/detection
 
     BP算法中需要用到梯度下降法，用来配合反向传播，BP算法就是提供了**给梯度下降法所需要的所有值**。梯度下降法是求局部最好的w (权重)
 
-![image-20250101211747900](markdown-img/CV.assets/image-20250101211747900.png)
+![image-20250101211747900](assets/CV.assets/image-20250101211747900.png)
 
-![image-20250101212123968](markdown-img/CV.assets/image-20250101212123968.png)
+![image-20250101212123968](assets/CV.assets/image-20250101212123968.png)
 
 计算图如下：横线上写前向值，下面写后向值
 
-![image-20250102170419065](markdown-img/CV.assets/image-20250102170419065.png)
+![image-20250102170419065](assets/CV.assets/image-20250102170419065.png)
 
 
 
@@ -1049,17 +1038,17 @@ Convolution = image-> Features
 
 减小模型参数的技巧
 
-![image-20250101203106289](markdown-img/CV.assets/image-20250101203106289.png)
+![image-20250101203106289](assets/CV.assets/image-20250101203106289.png)
 
 > 上面算feature_map的公式不对
 
-![image-20250108121619446](markdown-img/CV.assets/image-20250108121619446.png)
+![image-20250108121619446](assets/CV.assets/image-20250108121619446.png)
 
 上述是如何计算NN的Neurons Weights Parameters
 
 下面介绍CNN的计算
 
-![image-20250102165829359](markdown-img/CV.assets/image-20250102165829359.png)
+![image-20250102165829359](assets/CV.assets/image-20250102165829359.png)
 
 一个neuron的weights=卷积核的大小*输入图像的channel
 
@@ -1068,7 +1057,7 @@ note that connectivity is:
 - local in space (5x5 inside 32x32)
 - but full in depth (all 3 depth channels)
 
-![image-20250102170004474](markdown-img/CV.assets/image-20250102170004474.png)
+![image-20250102170004474](assets/CV.assets/image-20250102170004474.png)
 
 output volume向下取整
 
@@ -1076,7 +1065,7 @@ output volume向下取整
 
 池化层：在连续的卷积层之间会周期性地插入一个polling层。它的作用是逐渐降低数据体的空间尺寸，这样的话就能减少网络中参数的数量，使得计算资源耗费变少，也能有效控制过拟合。
 
-![image-20250101205423459](markdown-img/CV.assets/image-20250101205423459.png)
+![image-20250101205423459](assets/CV.assets/image-20250101205423459.png)
 
 全连接层，softmax回归
 
@@ -1084,17 +1073,17 @@ Softmax函数将前一层的输出（通常称为逻辑值或logits）转换为�
 
 Softmax层常常与交叉熵损失函数一起结合使用。交叉熵损失函数能够衡量预测的概率分布与真实标签之间的差异，从而指导模型的训练过程
 
-<img src="markdown-img/CV.assets/image-20241211143846851.png" alt="image-20241211143846851" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241211143846851.png" alt="image-20241211143846851" style="zoom:50%;" />
 
 - 交叉熵cross-entropy loss
 
-<img src="markdown-img/CV.assets/image-20241211150640767.png" alt="image-20241211150640767" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241211150640767.png" alt="image-20241211150640767" style="zoom:50%;" />
 
-<img src="markdown-img/CV.assets/image-20241211210050451.png" alt="image-20241211210050451" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241211210050451.png" alt="image-20241211210050451" style="zoom:50%;" />
 
 激活函数
 
-<img src="markdown-img/CV.assets/image-20241211210201081.png" alt="image-20241211210201081" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241211210201081.png" alt="image-20241211210201081" style="zoom:50%;" />
 
 
 
@@ -1205,7 +1194,7 @@ batch normalization的初衷是为了改变优化过程中的什么？
   - v
     - **含义**：代表序列中**每个元素**携带的**实际信息**的向量表示。
     - **作用**：根据Query与Key计算得到的**权重分布**，对Value进行**加权求和**，得到一个包含丰富上下文信息的新元素表示。
-  - ![image-20250102000954923](markdown-img/CV.assets/image-20250102000954923.png)
+  - ![image-20250102000954923](assets/CV.assets/image-20250102000954923.png)
 
 - 为什么要加位置编码（positional encoding）
 
@@ -1215,15 +1204,15 @@ batch normalization的初衷是为了改变优化过程中的什么？
 
 - Self-attention机制与CNN卷积机制的关系？【定性理解】
 
-  ![image-20250102001742928](markdown-img/CV.assets/image-20250102001742928.png)
+  ![image-20250102001742928](assets/CV.assets/image-20250102001742928.png)
 
-  ![image-20250102001832619](markdown-img/CV.assets/image-20250102001832619.png)
+  ![image-20250102001832619](assets/CV.assets/image-20250102001832619.png)
 
 - Self-attention机制与循环神经网络模型（RNN）的关系？【定性理解】 
 
   > RNN：[史上最详细循环神经网络讲解（RNN/LSTM/GRU）](https://zhuanlan.zhihu.com/p/123211148)
 
-  ![image-20250108102159607](markdown-img/CV.assets/image-20250108102159607.png)
+  ![image-20250108102159607](assets/CV.assets/image-20250108102159607.png)
 
   RNN没有办法并行化产生输出，只能一个接一个输出；
 
@@ -1247,11 +1236,11 @@ batch normalization的初衷是为了改变优化过程中的什么？
 
 - input
 
-![image-20241225211648306](markdown-img/CV.assets/image-20241225211648306.png)
+![image-20241225211648306](assets/CV.assets/image-20241225211648306.png)
 
 输入视频/语言
 
-![image-20241225212906970](markdown-img/CV.assets/image-20241225212906970.png)
+![image-20241225212906970](assets/CV.assets/image-20241225212906970.png)
 
 左边这种没有包含什么语义信息
 
@@ -1259,11 +1248,11 @@ Graph
 
 - output
 
-  ![image-20241225213223423](markdown-img/CV.assets/image-20241225213223423.png)
+  ![image-20241225213223423](assets/CV.assets/image-20241225213223423.png)
 
   sequence labeling
 
-  ![image-20241226105128480](markdown-img/CV.assets/image-20241226105128480.png)
+  ![image-20241226105128480](assets/CV.assets/image-20241226105128480.png)
 
   加入self-attention得到新的feature，其中包含自己和自己与前后的关系
 
@@ -1271,21 +1260,21 @@ Graph
 
   大的架构如下：
 
-  ![image-20241226105632442](markdown-img/CV.assets/image-20241226105632442.png)
+  ![image-20241226105632442](assets/CV.assets/image-20241226105632442.png)
 
   中间的算法可以随便替换
 
-  ![image-20241226110030490](markdown-img/CV.assets/image-20241226110030490.png)
+  ![image-20241226110030490](assets/CV.assets/image-20241226110030490.png)
 
   像这样提取不同的信息
 
-  ![image-20241226110053792](markdown-img/CV.assets/image-20241226110053792.png)
+  ![image-20241226110053792](assets/CV.assets/image-20241226110053792.png)
 
   如何考虑关联性呢？：每个a中都包含三个空间：自己与别人的关联性query/被别人比较的量key/自己的value
 
   其中$a\prime_{i,j}$由如下获得：
 
-  ![image-20241226111122454](markdown-img/CV.assets/image-20241226111122454.png)
+  ![image-20241226111122454](assets/CV.assets/image-20241226111122454.png)
 
 
 
@@ -1305,9 +1294,9 @@ Camera Calibration（single-view calibration）
 
 - 相机模型：小孔成像
 
-  ![image-20250108110307876](markdown-img/CV.assets/image-20250108110307876.png)
+  ![image-20250108110307876](assets/CV.assets/image-20250108110307876.png)
 
-  ![image-20250108110416847](markdown-img/CV.assets/image-20250108110416847.png)
+  ![image-20250108110416847](assets/CV.assets/image-20250108110416847.png)
 
   not a linear transformation——所以我们改用齐次坐标
 
@@ -1317,7 +1306,7 @@ Camera Calibration（single-view calibration）
 
   - 光圈(aperture孔径)：镜头中用于控制光线透过镜头并进入机身内感光面光量的装置
 
-    ![image-20250101221052085](markdown-img/CV.assets/image-20250101221052085.png)
+    ![image-20250101221052085](assets/CV.assets/image-20250101221052085.png)
 
     大光圈景深小，小光圈景深大光路图里把上下两条线放近一点
 
@@ -1327,7 +1316,7 @@ Camera Calibration（single-view calibration）
 
   - 视场(Field of View FOV)：镜头能够观察到的最大范围
   
-    ![image-20250101221531130](markdown-img/CV.assets/image-20250101221531130.png)
+    ![image-20250101221531130](assets/CV.assets/image-20250101221531130.png)
     $$
     \varphi = \arctan\frac{d}{2f}
     $$
@@ -1341,7 +1330,7 @@ Camera Calibration（single-view calibration）
 
 - 投影变换：
 
-  ![image-20250108103217372](markdown-img/CV.assets/image-20250108103217372.png)
+  ![image-20250108103217372](assets/CV.assets/image-20250108103217372.png)
 
   - **不保角**：投影变换会改变角度。
   - **不保距**：投影变换会改变距离。
@@ -1391,15 +1380,15 @@ Camera Calibration（single-view calibration）
 
 内参矩阵
 
-![image-20250101221842677](markdown-img/CV.assets/image-20250101221842677.png)
+![image-20250101221842677](assets/CV.assets/image-20250101221842677.png)
 
-![image-20250108105606758](markdown-img/CV.assets/image-20250108105606758.png)
+![image-20250108105606758](assets/CV.assets/image-20250108105606758.png)
 
-![image-20241219200757845](markdown-img/CV.assets/image-20241219200757845.png)
+![image-20241219200757845](assets/CV.assets/image-20241219200757845.png)
 
 畸变模型s
 
-![image-20250101221914754](markdown-img/CV.assets/image-20250101221914754.png)
+![image-20250101221914754](assets/CV.assets/image-20250101221914754.png)
 $$
 x_{\text{distorted}} = x + \left[2p_1 xy + p_2 (r^2 + 2x^2)\right]
 $$
@@ -1410,15 +1399,15 @@ $$
 
 外参模型
 
-![image-20250101221954812](markdown-img/CV.assets/image-20250101221954812.png)
+![image-20250101221954812](assets/CV.assets/image-20250101221954812.png)
 
-![image-20241219200850227](markdown-img/CV.assets/image-20241219200850227.png)
+![image-20241219200850227](assets/CV.assets/image-20241219200850227.png)
 
 > distortion失真
 
 
 
-![image-20241219201005657](markdown-img/CV.assets/image-20241219201005657.png)
+![image-20241219201005657](assets/CV.assets/image-20241219201005657.png)
 
 
 
@@ -1440,21 +1429,21 @@ $$
 
   4.求解相机参数
 
-![image-20241219202341737](markdown-img/CV.assets/image-20241219202341737.png)
+![image-20241219202341737](assets/CV.assets/image-20241219202341737.png)
 
 homography；chess定标
 
-![a3f6138ceebcd7118be536f6b4796e1](markdown-img/CV.assets/a3f6138ceebcd7118be536f6b4796e1.png)
+![a3f6138ceebcd7118be536f6b4796e1](assets/CV.assets/a3f6138ceebcd7118be536f6b4796e1.png)
 
-![image-20241219203149078](markdown-img/CV.assets/image-20241219203149078.png)
+![image-20241219203149078](assets/CV.assets/image-20241219203149078.png)
 
 拍多个照片；测角点；建立等式
 
-![image-20241219203859996](markdown-img/CV.assets/image-20241219203859996.png)
+![image-20241219203859996](assets/CV.assets/image-20241219203859996.png)
 
 外参会变
 
-![image-20241219204037533](markdown-img/CV.assets/image-20241219204037533.png)
+![image-20241219204037533](assets/CV.assets/image-20241219204037533.png)
 
 每个view=6个外参参数+4个共同的内参参数
 
@@ -1473,19 +1462,19 @@ $$
 
 triangulation三角测量；Rectification整流，整改
 
-![image-20241219210508271](markdown-img/CV.assets/image-20241219210508271.png)
+![image-20241219210508271](assets/CV.assets/image-20241219210508271.png)
 
 disparity
 
-<img src="markdown-img/CV.assets/image-20241219210911738.png" alt="image-20241219210911738" style="zoom:50%;" />
+<img src="assets/CV.assets/image-20241219210911738.png" alt="image-20241219210911738" style="zoom:50%;" />
 
-![image-20241219211241060](markdown-img/CV.assets/image-20241219211241060.png)
+![image-20241219211241060](assets/CV.assets/image-20241219211241060.png)
 
 - 基本步骤
 
-  ![image-20250101234436811](markdown-img/CV.assets/image-20250101234436811.png)
+  ![image-20250101234436811](assets/CV.assets/image-20250101234436811.png)
 
-  ![image-20250101233927769](markdown-img/CV.assets/image-20250101233927769.png)
+  ![image-20250101233927769](assets/CV.assets/image-20250101233927769.png)
 
   > 将双目相机拍摄的左右两幅图像进行几何变换，使得两幅图像的**对极线**水平对齐
   >
@@ -1494,7 +1483,7 @@ disparity
   >
   > 如果不进行receification，则会使得匹配复杂度高，匹配精度低，极线几何
 
-![image-20241219211919393](markdown-img/CV.assets/image-20241219211919393.png)
+![image-20241219211919393](assets/CV.assets/image-20241219211919393.png)
 
 
 
@@ -1517,9 +1506,9 @@ The basic geometry of a stereo imaging system
 
 - 基本原理
 
-  ![image-20250101234531623](markdown-img/CV.assets/image-20250101234531623.png)
+  ![image-20250101234531623](assets/CV.assets/image-20250101234531623.png)
 
-![280c221a06641153ad2e3037a092d5f](markdown-img/CV.assets/280c221a06641153ad2e3037a092d5f.jpg)
+![280c221a06641153ad2e3037a092d5f](assets/CV.assets/280c221a06641153ad2e3037a092d5f.jpg)
 
 点云，深度图，网格（mesh）
 
@@ -1530,9 +1519,9 @@ The basic geometry of a stereo imaging system
 - 目标：计算两组数据（两帧图像）间的旋转平移量，使之形成最佳匹配
 - 常用的求解方法有**奇异值分解（SVD）**和**非线性优化**
 
-![image-20241220112846179](markdown-img/CV.assets/image-20241220112846179.png)
+![image-20241220112846179](assets/CV.assets/image-20241220112846179.png)
 
-![image-20250101235729404](markdown-img/CV.assets/image-20250101235729404.png)
+![image-20250101235729404](assets/CV.assets/image-20250101235729404.png)
 
 
 
@@ -1550,9 +1539,9 @@ BoW Bag of words
 
 以sift特征为例，假设图像集中包含人脸、自行车、吉他等，我们首先对每幅图像提取sift特征，然后使用如kmeans等聚类方法，进行聚类得到码本(dictionary)
 
-![image-20241220115208682](markdown-img/CV.assets/image-20241220115208682.png)
+![image-20241220115208682](assets/CV.assets/image-20241220115208682.png)
 
-![image-20241220115139351](markdown-img/CV.assets/image-20241220115139351.png)
+![image-20241220115139351](assets/CV.assets/image-20241220115139351.png)
 
 
 
@@ -1566,6 +1555,5 @@ BoW Bag of words
 
 - [CC98论坛](https://www.cc98.org/topic/5803726)
 
-- [2021-2022 冬 计算机视觉 回忆 - CC98论坛](
-
- 
+- [7_1_相机校准 - OpenCV中文官方文档 (woshicver.com)](https://www.woshicver.com/Eighth/7_1_相机校准/)
+- [jash-git/Learning-OpenCV-3: 《Learning OpenCV 3》學習OpenCV 3 範例/電子檔備份 (github.com)](https://github.com/jash-git/Learning-OpenCV-3)

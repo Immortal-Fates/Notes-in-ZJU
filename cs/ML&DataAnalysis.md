@@ -10,9 +10,9 @@ https://student.neoschool.com/#/passport/login
 
 [课程详情-CIS NanoMaster (neoscholar.com)](https://www.neoscholar.com/#/advance/detail/course/1800442859247337474)
 
-![image-20250329200132679](markdown-img/ML&DataAnalysis.assets/image-20250329200132679.png)
+![image-20250329200132679](assets/ML&DataAnalysis.assets/image-20250329200132679.png)
 
-![image-20250329200146536](markdown-img/ML&DataAnalysis.assets/image-20250329200146536.png)
+![image-20250329200146536](assets/ML&DataAnalysis.assets/image-20250329200146536.png)
 
 <!--more-->
 
@@ -40,7 +40,7 @@ https://student.neoschool.com/#/passport/login
 
 ## Data Lifecycle & the Role of Analysis
 
-![image-20250408213642796](markdown-img/ML&DataAnalysis.assets/image-20250408213642796.png)
+![image-20250408213642796](assets/ML&DataAnalysis.assets/image-20250408213642796.png)
 
 
 
@@ -141,7 +141,7 @@ https://student.neoschool.com/#/passport/login
 - Reduce Overfitting (Training vs Validating/Testing)
 - Improved Model Performance
 
-![image-20250408224603614](markdown-img/ML&DataAnalysis.assets/image-20250408224603614.png)
+![image-20250408224603614](assets/ML&DataAnalysis.assets/image-20250408224603614.png)
 
 - Probability versus Nonprobability
 
@@ -362,7 +362,7 @@ EDA
 
 
 
-![image-20250408195624564](markdown-img/ML&DataAnalysis.assets/image-20250408195624564.png)
+![image-20250408195624564](assets/ML&DataAnalysis.assets/image-20250408195624564.png)
 
 Ratio :  定量，两个值的差异定义明确，有意义，比值是有意义的，0值是有意义的
 
@@ -372,7 +372,7 @@ Ordinal : 定性，人为的排序，差值和比值无意义
 
 Nominal : 定性，只有名称标签
 
-![image-20250408200255642](markdown-img/ML&DataAnalysis.assets/image-20250408200255642.png)
+![image-20250408200255642](assets/ML&DataAnalysis.assets/image-20250408200255642.png)
 
 
 
@@ -384,13 +384,13 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408200440033](markdown-img/ML&DataAnalysis.assets/image-20250408200440033.png)
+![image-20250408200440033](assets/ML&DataAnalysis.assets/image-20250408200440033.png)
 
 
 
 使用场景
 
-![image-20250408200657714](markdown-img/ML&DataAnalysis.assets/image-20250408200657714.png)
+![image-20250408200657714](assets/ML&DataAnalysis.assets/image-20250408200657714.png)
 
 
 
@@ -400,7 +400,7 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408201227803](markdown-img/ML&DataAnalysis.assets/image-20250408201227803.png)
+![image-20250408201227803](assets/ML&DataAnalysis.assets/image-20250408201227803.png)
 
 ### 3 Skew 数据的偏态
 
@@ -410,7 +410,7 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408201729656](markdown-img/ML&DataAnalysis.assets/image-20250408201729656.png)
+![image-20250408201729656](assets/ML&DataAnalysis.assets/image-20250408201729656.png)
 
 
 
@@ -426,7 +426,7 @@ Nominal : 定性，只有名称标签
 
 **公式：**
 
-![image-20250408203514268](markdown-img/ML&DataAnalysis.assets/image-20250408203514268.png)
+![image-20250408203514268](assets/ML&DataAnalysis.assets/image-20250408203514268.png)
 
 适用范围： 假设变量呈正态分布，变量间是线性的，且对异常值敏感
 
@@ -488,13 +488,13 @@ Nominal : 定性，只有名称标签
 
 ## Data Visualization
 
-![image-20250408205350586](markdown-img/ML&DataAnalysis.assets/image-20250408205350586.png)
+![image-20250408205350586](assets/ML&DataAnalysis.assets/image-20250408205350586.png)
 
-![image-20250408205359058](markdown-img/ML&DataAnalysis.assets/image-20250408205359058.png)
+![image-20250408205359058](assets/ML&DataAnalysis.assets/image-20250408205359058.png)
 
-![image-20250408205412981](markdown-img/ML&DataAnalysis.assets/image-20250408205412981.png)
+![image-20250408205412981](assets/ML&DataAnalysis.assets/image-20250408205412981.png)
 
-![image-20250408205423147](markdown-img/ML&DataAnalysis.assets/image-20250408205423147.png)
+![image-20250408205423147](assets/ML&DataAnalysis.assets/image-20250408205423147.png)
 
 剩下都是python
 
@@ -632,7 +632,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
   比较一个样本的均值是否等于某个特定值（总体均值）；例如10个同学成绩是否比上次提高 （可以比较平均值和上次均值75分）
 
-  ![image-20250412113709875](markdown-img/ML&DataAnalysis.assets/image-20250412113709875.png)
+  ![image-20250412113709875](assets/ML&DataAnalysis.assets/image-20250412113709875.png)
 
 - 成对样本t检验paired t-test
 
@@ -657,7 +657,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 - 相关性（两个变量变化是否相匹配）不能建立不同变量的因果性：统计数据即可观察
 
-  ![image-20250412114227394](markdown-img/ML&DataAnalysis.assets/image-20250412114227394.png)
+  ![image-20250412114227394](assets/ML&DataAnalysis.assets/image-20250412114227394.png)
 
 - 分析因果性：回归模型，需要严格的实验
 
@@ -677,7 +677,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 专有名词
 
-![image-20250409113813911](markdown-img/ML&DataAnalysis.assets/image-20250409113813911.png)
+![image-20250409113813911](assets/ML&DataAnalysis.assets/image-20250409113813911.png)
 
 
 
@@ -685,7 +685,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 **作用**：惩罚无关变量，避免过拟合。
 
-![image-20250409113859911](markdown-img/ML&DataAnalysis.assets/image-20250409113859911.png)
+![image-20250409113859911](assets/ML&DataAnalysis.assets/image-20250409113859911.png)
 
 
 
@@ -755,7 +755,7 @@ multicollinearity
 
 
 
-![image-20250409115318540](markdown-img/ML&DataAnalysis.assets/image-20250409115318540.png)
+![image-20250409115318540](assets/ML&DataAnalysis.assets/image-20250409115318540.png)
 
 
 
@@ -805,6 +805,134 @@ multicollinearity
 ## 纠正措施
 
 Model Diagnostics – Corrective Actions
+
+# Mid-Term Exam
+
+![image-20250424031350272](assets/ML&DataAnalysis.assets/image-20250424031350272.png)
+
+![image-20250424031503643](assets/ML&DataAnalysis.assets/image-20250424031503643.png)
+
+![image-20250424031705308](assets/ML&DataAnalysis.assets/image-20250424031705308.png)
+
+- **F统计量的作用**：检验模型整体显著性，即所有自变量联合是否对因变量有显著影响。
+- **原假设（H₀）**：所有自变量系数均为零（模型不优于空模型）。
+- **p值解读**：若p值极小（如<0.05），拒绝H₀，说明模型整体显著。
+
+![image-20250424031808397](assets/ML&DataAnalysis.assets/image-20250424031808397.png)
+
+- **B. 创造多用途新信息**：错误。题目聚焦模型性能提升，非外部应用。
+- **C. 转化为更具意义的变量**：正确。年龄直接关联房屋状态，更易被模型捕捉规律。
+
+# Lec 6 Regression & Clustering
+
+## 线性回归Regression 
+
+多元线性回归模型
+
+- Durbin-Watson 检验：用于检测线性回归模型中相邻残差是否存在相关性
+
+- Cook距离
+
+  - 用于异常值检验
+  - 经验：N为观测值的个数，当cook距离大于4/N时需要关注可能存在的影响
+
+- 分类变量：需将其转换为数值量
+
+  - dummy variables虚拟变量（哑变量），使用0和1二进制来表示某些变量的存在或者否定
+
+    > 独热编码是一种典型的虚拟变量
+
+    - 优点
+      - 保留了类别的所有信息
+      - 当类别数量不太多时效果很好
+      - 当类别和目标之间的关系很复杂时，用线性模型时很合适
+    - 缺点
+      - 可能导致高维特征空间，在类别较多时发生
+      - 可能导致多重共线性问题
+
+- 方差分析，线性回归
+
+- 无参数线性回归：无需预先设定回归函数的形式
+  $$
+  y=m(x)+\epsilon
+  $$
+
+  - 局部加权散点平滑法（LOESS，Locally Weighted Scatterplot Smoothing）是一种非参数回归方法
+
+    基本原理：LOESS 方法并不假定数据之间存在特定的全局函数关系，而是基于局部数据点来拟合一个多项式函数。
+
+    对于给定的预测点，它会在该点的邻域内选取一定数量的数据点，并根据这些点到预测点的距离赋予不同的权重，距离越近权重越大。然后使用加权最小二乘法拟合一个低阶多项式（通常是一次或二次多项式），最后用这个多项式来预测该点的值。通过对每个点都进行这样的操作，就可以得到整个数据集的平滑曲线
+
+- 非线性回归
+
+  线性回归模型不能泛化，将独立变量赋予不同的指数，系数仍为线性
+  $$
+  y = \beta_0 +\beta_1x+\beta_2x^2+...+\beta_n x^n
+  $$
+  
+- 3种回归模型
+  - MAE:AbsoluteDifferenceinError，当极端值不太容易大幅度影响模型时可以使用
+  - MSE:Mean Squared Error，当模型预测需要高度准确且极端值要么很少要么可以容易分离的情况
+  - MAPE:MeanAbsolutePercentageError，很直观、很直觉
+
+
+
+## 聚类Clustering
+
+非监督学习
+
+- 层次聚类
+
+  - 步骤：将每个观测点都当做独立的类，重复以下过程：
+    1. 找到距离最近的两个类 
+    2. 将最相似的两个类融合 
+    3. 直到所有类都融合结束
+  - 输出：树状图
+  - 两种方法：
+    - 凝聚方法：初始将所有点作为不同的类逐步将相似点聚合
+    - 分裂方法：初始将所有点作为一个单独的类依次分离这些类，实践中较少使用，因为计算大
+
+- Kmeans
+
+  Elbow图：绘制可解释性方差和k值的关系曲线，在“拐点”处一般是合理的k值
+
+- 聚类质量：silhouette score剪影分数
+
+  度量每个点和当前类中其他点的相似度以及最近其他类中点的相似度
+  范围：-1~1，值越大表示匹配越好
+
+
+
+# Lec 7 Classification
+
+- 混淆矩阵：评估分类问题的模型性能
+- 阈值选择：AUC+ROC
+- logistic regression
+
+
+
+# Lec 8 Classification_KNN_SVM_Ensembles
+
+- KNN：K近邻
+
+  常用预处理方法：标准化(z分数)，min-max缩放
+
+- SVM：核技巧
+- 集成方法：
+  - bagging:弱学习器独立训练，他们的预测被平均（回归）或投票（分类），如随机森林
+  - boosting:弱学习器顺序训练，后一个针对前一个的误差，如 AdaBoost,XGBoost
+  - stacking:弱学习器的预测被另一个独立模型作为输入以获得最终输出
+
+![image-20250507133221717](assets/ML&DataAnalysis.assets/image-20250507133221717.png)
+
+
+
+# Lec 9 Deep Learning
+
+- 全域近似定理：一个有隐藏层的前向传播神经网络能近似任何连续函数
+
+- SMOTE方法：从已经存在的样本中合成新的样本，属于数据增强，也是一种预处理的方法
+  - 工作原理：选择特征空间中距离较近的样本，在特征空间中将这些样本连线，并在该连线的某个点处绘制一个新的样本
 
 
 

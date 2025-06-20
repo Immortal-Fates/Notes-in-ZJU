@@ -6,19 +6,17 @@
 
 <!--more-->
 
-【【运筹学】应试向基础教程（已完结）{适用范围：本科期末、考研、考博}】https://www.bilibili.com/video/BV1Uw411f7WM?p=4&vd_source=93bb338120537438ee9180881deab9c1
-
-![image-20240423092721496](markdown-img/OR.assets/image-20240423092721496.png)
+![image-20240423092721496](assets/OR.assets/image-20240423092721496.png)
 
 # 概述
 
 运筹学特点：
 
-<img src="markdown-img/OR.assets/image-20240423083542856.png" alt="image-20240423083542856" style="zoom:50%;" />
+<img src="assets/OR.assets/image-20240423083542856.png" alt="image-20240423083542856" style="zoom:50%;" />
 
 运筹学解题过程：
 
-![image-20240423084147042](markdown-img/OR.assets/image-20240423084147042.png)
+![image-20240423084147042](assets/OR.assets/image-20240423084147042.png)
 
 
 
@@ -50,19 +48,19 @@
 
 ## 线性规划问题及数学模型
 
-![image-20240430081533972](markdown-img/OR.assets/image-20240430081533972.png)
+![image-20240430081533972](assets/OR.assets/image-20240430081533972.png)
 
-![image-20240430081541677](markdown-img/OR.assets/image-20240430081541677.png)
+![image-20240430081541677](assets/OR.assets/image-20240430081541677.png)
 
 > 看x是有符号约束还是free——无符号约束
 
-![image-20240430081609770](markdown-img/OR.assets/image-20240430081609770.png)
+![image-20240430081609770](assets/OR.assets/image-20240430081609770.png)
 
-![image-20240430081623280](markdown-img/OR.assets/image-20240430081623280.png)
+![image-20240430081623280](assets/OR.assets/image-20240430081623280.png)
 
 ## 图解法
 
-![image-20240430082042955](markdown-img/OR.assets/image-20240430082042955.png)
+![image-20240430082042955](assets/OR.assets/image-20240430082042955.png)
 
 > 可行域常为凸集——[最优化理论入门（一） 凸集与凸函数](https://zhuanlan.zhihu.com/p/336704622)
 >
@@ -90,7 +88,7 @@
 
 ### 线性规划问题的标准形式
 
-![image-20240430083150396](markdown-img/OR.assets/image-20240430083150396.png)
+![image-20240430083150396](assets/OR.assets/image-20240430083150396.png)
 
 > 两个约束条件
 
@@ -98,23 +96,23 @@
 
 - 变量条件的转化
 
-  ![image-20240430083246980](markdown-img/OR.assets/image-20240430083246980.png)
+  ![image-20240430083246980](assets/OR.assets/image-20240430083246980.png)
 
   > $x_j=x_j`-x_j``$很重要的思想，最终$x_j$的取值根据优化结果决定
 
 - 约束条件的转化
 
-  ![image-20240430083356720](markdown-img/OR.assets/image-20240430083356720.png)
+  ![image-20240430083356720](assets/OR.assets/image-20240430083356720.png)
 
   > slack：松弛的
 
 - 目标函数的转化
 
-  ![image-20240430083510302](markdown-img/OR.assets/image-20240430083510302.png)
+  ![image-20240430083510302](assets/OR.assets/image-20240430083510302.png)
 
 非齐次线性方程组解  ：
 
-![image-20240430083716263](markdown-img/OR.assets/image-20240430083716263.png)
+![image-20240430083716263](assets/OR.assets/image-20240430083716263.png)
 
 一般情况：
 $$
@@ -144,7 +142,7 @@ $$
 
   可行域顶点的几何解释：
 
-  ![image-20240430084916149](markdown-img/OR.assets/image-20240430084916149.png)
+  ![image-20240430084916149](assets/OR.assets/image-20240430084916149.png)
 
   超平面$\sum {a_jx_j}=b$——线性方程表达一个$n-m$维超平面
 
@@ -152,23 +150,23 @@ $$
 
 
 
-![image-20240430085715752](markdown-img/OR.assets/image-20240430085715752.png)
+![image-20240430085715752](assets/OR.assets/image-20240430085715752.png)
 
 - 约束方程中找出线性无关的列向量当作基变量：将非基变量设为0，然后求出基变量——即为基本解（$C_n^m$）
 
 - 基可行解：满足可行域条件的基解——找可行域顶点
 
-  ![image-20240430091207977](markdown-img/OR.assets/image-20240430091207977.png)
+  ![image-20240430091207977](assets/OR.assets/image-20240430091207977.png)
 
-<img src="markdown-img/OR.assets/image-20240430090017745.png" alt="image-20240430090017745" style="zoom:50%;" />
+<img src="assets/OR.assets/image-20240430090017745.png" alt="image-20240430090017745" style="zoom:50%;" />
 
 总结：
 
-![image-20240430091313893](markdown-img/OR.assets/image-20240430091313893.png)
+![image-20240430091313893](assets/OR.assets/image-20240430091313893.png)
 
 线性规划最优解性质：
 
-![image-20240430091357852](markdown-img/OR.assets/image-20240430091357852.png)
+![image-20240430091357852](assets/OR.assets/image-20240430091357852.png)
 
 
 
@@ -176,13 +174,13 @@ $$
 
 【基本单纯形法解线性规划问题示例】https://www.bilibili.com/video/BV11f4y1x7sK?vd_source=93bb338120537438ee9180881deab9c1
 
-![image-20240430091733786](markdown-img/OR.assets/image-20240430091733786.png)
+![image-20240430091733786](assets/OR.assets/image-20240430091733786.png)
 
 - 步骤：
 
-  ![步骤](markdown-img/OR.assets/v2-9d4b7d07e392859b6926342f9c2f45e8_720w.webp)
+  ![步骤](assets/OR.assets/v2-9d4b7d07e392859b6926342f9c2f45e8_720w.webp)
 
-![image-20240507214658669](markdown-img/OR.assets/image-20240507214658669.png)
+![image-20240507214658669](assets/OR.assets/image-20240507214658669.png)
 
 - $C_B$列：基变量对应的价值系数
 
@@ -211,13 +209,13 @@ $$
 
 - 换基+更新单纯形表
 
-  ![image-20240522153435920](markdown-img/OR.assets/image-20240522153435920.png)
+  ![image-20240522153435920](assets/OR.assets/image-20240522153435920.png)
   
   > 算$B^{-1}$
   
 - 解的说明：
 
-  ![img](markdown-img/OR.assets/v2-79ea6dc0f991ec857e32cd157dfe660a_720w.webp)
+  ![img](assets/OR.assets/v2-79ea6dc0f991ec857e32cd157dfe660a_720w.webp)
 
 
 
@@ -235,9 +233,9 @@ $$
 
 #### 人工变量法（大M法）
 
-![image-20240522153908266](markdown-img/OR.assets/image-20240522153908266.png)
+![image-20240522153908266](assets/OR.assets/image-20240522153908266.png)
 
-![image-20240522154055191](markdown-img/OR.assets/image-20240522154055191.png)
+![image-20240522154055191](assets/OR.assets/image-20240522154055191.png)
 
 
 
@@ -245,19 +243,19 @@ $$
 
 #### 两阶段法
 
-![image-20240522154152869](markdown-img/OR.assets/image-20240522154152869.png)
+![image-20240522154152869](assets/OR.assets/image-20240522154152869.png)
 
 
 
 - 第一阶段
 
-  ![image-20240522154439515](markdown-img/OR.assets/image-20240522154439515.png)
+  ![image-20240522154439515](assets/OR.assets/image-20240522154439515.png)
 
   > 满足$(x_6,x_7)=(0,0)$，和原问题有相同约束，人工变量不影响
 
 - 第二阶段
 
-  ![image-20240522154735609](markdown-img/OR.assets/image-20240522154735609.png)
+  ![image-20240522154735609](assets/OR.assets/image-20240522154735609.png)
 
 
 
@@ -273,33 +271,33 @@ $$
 
 > 当一个线性规划问题的变量都具有非负约束时，且其约束条件当目标函数求极大值时均取"$\le$"号，目标函数求极小值时均取"$\ge$"号
 
-![image-20240522145811690](markdown-img/OR.assets/image-20240522145811690.png)
+![image-20240522145811690](assets/OR.assets/image-20240522145811690.png)
 
 > 化为标准型：
 >
-> ![image-20240522203015609](markdown-img/OR.assets/image-20240522203015609-1716381025088-1.png)
+> ![image-20240522203015609](assets/OR.assets/image-20240522203015609-1716381025088-1.png)
 
 
 
 
 
-![image-20240522150602577](markdown-img/OR.assets/image-20240522150602577.png)
+![image-20240522150602577](assets/OR.assets/image-20240522150602577.png)
 
 ## 对偶问题的性质
 
-![image-20240522091423155](markdown-img/OR.assets/image-20240522091423155.png)
+![image-20240522091423155](assets/OR.assets/image-20240522091423155.png)
 
-![image-20240522093900299](markdown-img/OR.assets/image-20240522093900299.png)
+![image-20240522093900299](assets/OR.assets/image-20240522093900299.png)
 
 > 与传统单纯形法对比不要求资源限量$b_i$为正
 
-![image-20240523081905466](markdown-img/OR.assets/image-20240523081905466.png)
+![image-20240523081905466](assets/OR.assets/image-20240523081905466.png)
 
 - 强对偶性：若原问题和对偶问题均有可行解，则两者均有最优解，且最优解目标函数值相同$cx=b^Ty$
 
 - 互补松弛性！
 
-  ![image-20240523082522708](markdown-img/OR.assets/image-20240523082522708.png)
+  ![image-20240523082522708](assets/OR.assets/image-20240523082522708.png)
 
   > 两者中必有一个为0
 
@@ -311,7 +309,7 @@ $$
 
 ## 化为对偶问题
 
-![image-20240523074918959](markdown-img/OR.assets/image-20240523074918959.png)
+![image-20240523074918959](assets/OR.assets/image-20240523074918959.png)
 
 
 
@@ -321,7 +319,7 @@ $$
 
 2. 确定对偶问题的目标函数
 
-   ![image-20240522090010162](markdown-img/OR.assets/image-20240522090010162.png)
+   ![image-20240522090010162](assets/OR.assets/image-20240522090010162.png)
 
 3. 确定对偶问题中约束条件的个数n
    $$
@@ -330,27 +328,27 @@ $$
 
 4. 确定对偶问题中约束条件左边系数
 
-   ![image-20240522090432730](markdown-img/OR.assets/image-20240522090432730.png)
+   ![image-20240522090432730](assets/OR.assets/image-20240522090432730.png)
 
 5. 确定对偶问题中约束条件右边常数
 
-   ![image-20240522090728425](markdown-img/OR.assets/image-20240522090728425.png)
+   ![image-20240522090728425](assets/OR.assets/image-20240522090728425.png)
 
 6. 确定对偶问题中约束条件中的符号
 
-   ![image-20240522090911825](markdown-img/OR.assets/image-20240522090911825.png)
+   ![image-20240522090911825](assets/OR.assets/image-20240522090911825.png)
 
 7. 确定对偶问题中变量的范围
 
-   ![image-20240522091137046](markdown-img/OR.assets/image-20240522091137046.png)
+   ![image-20240522091137046](assets/OR.assets/image-20240522091137046.png)
 
 
 
 ## 求对偶问题的最优解
 
-![image-20240522091921370](markdown-img/OR.assets/image-20240522091921370.png)
+![image-20240522091921370](assets/OR.assets/image-20240522091921370.png)
 
-![image-20240522092208789](markdown-img/OR.assets/image-20240522092208789.png)
+![image-20240522092208789](assets/OR.assets/image-20240522092208789.png)
 
 
 
@@ -360,17 +358,17 @@ $$
 
 
 
-![image-20240522092309840](markdown-img/OR.assets/image-20240522092309840.png)
+![image-20240522092309840](assets/OR.assets/image-20240522092309840.png)
 
-![image-20240522092733890](markdown-img/OR.assets/image-20240522092733890.png)
+![image-20240522092733890](assets/OR.assets/image-20240522092733890.png)
 
 ## 影子价格
 
-![image-20240523083719906](markdown-img/OR.assets/image-20240523083719906.png)
+![image-20240523083719906](assets/OR.assets/image-20240523083719906.png)
 
-![image-20240523083915503](markdown-img/OR.assets/image-20240523083915503.png)
+![image-20240523083915503](assets/OR.assets/image-20240523083915503.png)
 
-![image-20240522092813673](markdown-img/OR.assets/image-20240522092813673.png)
+![image-20240522092813673](assets/OR.assets/image-20240522092813673.png)
 
 
 
@@ -383,7 +381,7 @@ $$
 - 目标：成本最小化
 - 条件：产销平衡
 
-![image-20240523084620974](markdown-img/OR.assets/image-20240523084620974.png)
+![image-20240523084620974](assets/OR.assets/image-20240523084620974.png)
 
 
 
@@ -401,7 +399,7 @@ $$
 
 ## 数学模型
 
-![image-20240523090522618](markdown-img/OR.assets/image-20240523090522618.png)
+![image-20240523090522618](assets/OR.assets/image-20240523090522618.png)
 
 模型特点：
 
@@ -409,7 +407,7 @@ $$
 
 - 约束条件的系数矩阵
 
-  ![image-20240523090957880](markdown-img/OR.assets/image-20240523090957880.png)
+  ![image-20240523090957880](assets/OR.assets/image-20240523090957880.png)
 
 运输问题约束方程的 系数矩阵都是由 0 00 或 1 11 组成 的 , 这种矩阵称为 稀疏矩阵 , 稀疏矩阵的计算要远远比正常的矩阵更简单 ;
 
@@ -418,19 +416,19 @@ $$
 
 ### 基本思想
 
-![image-20240523091517145](markdown-img/OR.assets/image-20240523091517145.png)
+![image-20240523091517145](assets/OR.assets/image-20240523091517145.png)
 
-![image-20240523091547401](markdown-img/OR.assets/image-20240523091547401.png)
+![image-20240523091547401](assets/OR.assets/image-20240523091547401.png)
 
 单位运价表：
 
-![image-20240523091730914](markdown-img/OR.assets/image-20240523091730914.png)
+![image-20240523091730914](assets/OR.assets/image-20240523091730914.png)
 
 ### 寻找初始基可行解
 
 #### 西北角法
 
-![image-20240523092041384](markdown-img/OR.assets/image-20240523092041384.png)
+![image-20240523092041384](assets/OR.assets/image-20240523092041384.png)
 
 > 不一定最优
 >
@@ -454,7 +452,7 @@ $$
 >
 > 利用过的罚数就不再用了
 
-![image-20240523093527882](markdown-img/OR.assets/image-20240523093527882.png)
+![image-20240523093527882](assets/OR.assets/image-20240523093527882.png)
 
 
 
@@ -464,25 +462,25 @@ $$
 
 #### 闭回路法
 
-![image-20240523094302273](markdown-img/OR.assets/image-20240523094302273.png)
+![image-20240523094302273](assets/OR.assets/image-20240523094302273.png)
 
 检验数：
 
-![image-20240523094435061](markdown-img/OR.assets/image-20240523094435061.png)
+![image-20240523094435061](assets/OR.assets/image-20240523094435061.png)
 
 > 要找到所有的检验数，
 
-![image-20240523095120177](markdown-img/OR.assets/image-20240523095120177.png)
+![image-20240523095120177](assets/OR.assets/image-20240523095120177.png)
 
 - 在偶数顶点中，找出运输量最小的顶点作为出基变量
 
-![image-20240523100553993](markdown-img/OR.assets/image-20240523100553993.png)
+![image-20240523100553993](assets/OR.assets/image-20240523100553993.png)
 
 
 
 #### 位势法
 
-![image-20240523101339863](markdown-img/OR.assets/image-20240523101339863.png)
+![image-20240523101339863](assets/OR.assets/image-20240523101339863.png)
 
 
 
@@ -510,7 +508,7 @@ $$
 
   0-1变量作为二进制变量（或逻辑变量）
 
-  ![image-20240523104147065](markdown-img/OR.assets/image-20240523104147065.png)
+  ![image-20240523104147065](assets/OR.assets/image-20240523104147065.png)
 
 - 非0-1型整数规划
 
@@ -530,17 +528,17 @@ $$
 
 0-1变量作为二进制变量（或逻辑变量）
 
-![image-20240523104147065](markdown-img/OR.assets/image-20240523104147065.png)
+![image-20240523104147065](assets/OR.assets/image-20240523104147065.png)
 
-![image-20240523104338284](markdown-img/OR.assets/image-20240523104338284.png)
+![image-20240523104338284](assets/OR.assets/image-20240523104338284.png)
 
 > 大M法处理不需要的约束
 >
 > 固定费用也用0-1建模
 
-> example:![image-20240523105154894](markdown-img/OR.assets/image-20240523105154894.png)
+> example:![image-20240523105154894](assets/OR.assets/image-20240523105154894.png)
 
-![image-20240523105405330](markdown-img/OR.assets/image-20240523105405330.png)
+![image-20240523105405330](assets/OR.assets/image-20240523105405330.png)
 
 
 
@@ -550,7 +548,7 @@ $$
 
 逐步增加约束条件
 
-![image-20240523110435210](markdown-img/OR.assets/image-20240523110435210.png)
+![image-20240523110435210](assets/OR.assets/image-20240523110435210.png)
 
 
 
@@ -564,27 +562,27 @@ $$
 
 先算对应的松弛问题的最优解（单纯形法）
 
-![image-20240523111239550](markdown-img/OR.assets/image-20240523111239550.png)
+![image-20240523111239550](assets/OR.assets/image-20240523111239550.png)
 
 然后如果$b_i$不为整数，拆成整数和分数
 
-![image-20240523111533611](markdown-img/OR.assets/image-20240523111533611.png)
+![image-20240523111533611](assets/OR.assets/image-20240523111533611.png)
 
 直接写最后一个式子即可
 
-![image-20240523111911892](markdown-img/OR.assets/image-20240523111911892.png)
+![image-20240523111911892](assets/OR.assets/image-20240523111911892.png)
 
 引入新的松弛变量将符号变为=，得到割平面方程
 
-![image-20240523112002386](markdown-img/OR.assets/image-20240523112002386.png)
+![image-20240523112002386](assets/OR.assets/image-20240523112002386.png)
 
 
 
 ### 例题
 
-![image-20240523112638295](markdown-img/OR.assets/image-20240523112638295.png)
+![image-20240523112638295](assets/OR.assets/image-20240523112638295.png)
 
-![image-20240523113540405](markdown-img/OR.assets/image-20240523113540405.png)
+![image-20240523113540405](assets/OR.assets/image-20240523113540405.png)
 
 
 
@@ -598,13 +596,13 @@ $$
 
 先分支再确定解
 
-![image-20240612142513812](markdown-img/OR.assets/image-20240612142513812.png)
+![image-20240612142513812](assets/OR.assets/image-20240612142513812.png)
 
 > 下届是求得的最大整数解——过程中变量全为整数得到的解
 
-![image-20240523114330102](markdown-img/OR.assets/image-20240523114330102.png)
+![image-20240523114330102](assets/OR.assets/image-20240523114330102.png)
 
-![image-20240523114455482](markdown-img/OR.assets/image-20240523114455482.png)
+![image-20240523114455482](assets/OR.assets/image-20240523114455482.png)
 
 
 
@@ -630,15 +628,15 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 ## 数学模型
 
-![image-20240522155657253](markdown-img/OR.assets/image-20240522155657253.png)
+![image-20240522155657253](assets/OR.assets/image-20240522155657253.png)
 
 > 以求最小值为标准问题
 
-![image-20240522155739294](markdown-img/OR.assets/image-20240522155739294.png)
+![image-20240522155739294](assets/OR.assets/image-20240522155739294.png)
 
 - 非线性规划解的类型
 
-  ![image-20240522160600637](markdown-img/OR.assets/image-20240522160600637.png)
+  ![image-20240522160600637](assets/OR.assets/image-20240522160600637.png)
 
 
 
@@ -650,13 +648,13 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 就是vjf学的
 
-![image-20240522161101652](markdown-img/OR.assets/image-20240522161101652.png)
+![image-20240522161101652](assets/OR.assets/image-20240522161101652.png)
 
 
 
-![image-20240522161115782](markdown-img/OR.assets/image-20240522161115782.png)
+![image-20240522161115782](assets/OR.assets/image-20240522161115782.png)
 
-![image-20240522161121989](markdown-img/OR.assets/image-20240522161121989.png)
+![image-20240522161121989](assets/OR.assets/image-20240522161121989.png)
 
 ### 有约束极值问题
 
@@ -664,11 +662,11 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 #### 等式约束
 
-<img src="markdown-img/OR.assets/image-20240522161552653.png" alt="image-20240522161552653" style="zoom:67%;" />
+<img src="assets/OR.assets/image-20240522161552653.png" alt="image-20240522161552653" style="zoom:67%;" />
 
 使用Lagrange函数法将有约束极值问题转化为无约束极值问题
 
-![image-20240522161558805](markdown-img/OR.assets/image-20240522161558805.png)
+![image-20240522161558805](assets/OR.assets/image-20240522161558805.png)
 
 
 
@@ -680,7 +678,7 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 例题：[约束优化问题的最优性条件-CSDN博客](https://blog.csdn.net/m0_61209712/article/details/134712152)
 
-<img src="markdown-img/OR.assets/image-20240522161621290.png" alt="image-20240522161621290" style="zoom:50%;" />
+<img src="assets/OR.assets/image-20240522161621290.png" alt="image-20240522161621290" style="zoom:50%;" />
 
 求解思路：
 
@@ -692,11 +690,11 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 ![img](https://pic3.zhimg.com/80/v2-3e07af64e0c6ccdd4e5457c24d7de1a2_720w.webp)
 
-![image-20240522162812956](markdown-img/OR.assets/image-20240522162812956.png)
+![image-20240522162812956](assets/OR.assets/image-20240522162812956.png)
 
 ![img](https://pic4.zhimg.com/80/v2-3c4292fe0f48953ffa9458e80a16794f_720w.webp)
 
-![Gordan引理](markdown-img/OR.assets/image-20240522164621539.png)
+![Gordan引理](assets/OR.assets/image-20240522164621539.png)
 
 
 
@@ -704,7 +702,7 @@ NLP全称为Nonlinear programming，即非线性规划，指**目标函数和约
 
 设X是非线性规划的局部最优点，函数$f(x)$和$gj(x)(j=1,2,...,l)$在点X有连续一阶偏导，则必然存在不全为零的数$μ1,μ2,...,μl$，使
 
-![img](markdown-img/OR.assets/v2-d61a0905e01209a8369d322910ce7a22_720w.webp)
+![img](assets/OR.assets/v2-d61a0905e01209a8369d322910ce7a22_720w.webp)
 
 该定理给出了非线性规划的局部最优点应满足的必要条件，上式称为**Fritz John条件**，满足这个条件的点称为**Fritz John点**。
 
@@ -721,7 +719,7 @@ K-T条件是确定某点为非线性规划最优解的一个必要条件，但�
 
 ![img](https://pic2.zhimg.com/80/v2-f10853410bfe8d333bc48b3915f96ba5_720w.webp)
 
-![image-20240522172702521](markdown-img/OR.assets/image-20240522172702521.png)
+![image-20240522172702521](assets/OR.assets/image-20240522172702521.png)
 
 ##### KKT条件
 
@@ -737,7 +735,7 @@ $$
 $$
 \begin{aligned} \nabla f(\mathbf{x}^*)+\sum_{i=1}^{m}{\lambda_i \nabla g_i(\mathbf{x}^*)}+\sum_{j=1}^{p}{\mu_j\nabla h_j(\mathbf{x}^*)} &=0\\ \lambda_i g_i(\mathbf{x}^*) &=0,\quad i=1,2,...,m \end{aligned}\\
 $$
-![image-20240522173241006](markdown-img/OR.assets/image-20240522173241006.png)
+![image-20240522173241006](assets/OR.assets/image-20240522173241006.png)
 
 
 
@@ -745,15 +743,15 @@ $$
 
 下降迭代法
 
-![image-20240604000921505](markdown-img/OR.assets/image-20240604000921505.png)
+![image-20240604000921505](assets/OR.assets/image-20240604000921505.png)
 
 - 最速下降法——沿负梯度下降
 
-  ![image-20240604000944419](markdown-img/OR.assets/image-20240604000944419.png)
+  ![image-20240604000944419](assets/OR.assets/image-20240604000944419.png)
 
 - 牛顿法
 
-  ![image-20240604001241011](markdown-img/OR.assets/image-20240604001241011.png)
+  ![image-20240604001241011](assets/OR.assets/image-20240604001241011.png)
 
 [共轭梯度（CG）算法_共轭梯度法-CSDN博客](https://blog.csdn.net/lusongno1/article/details/78550803)
 
@@ -791,13 +789,13 @@ $$
 
 - 问题提出：
 
-  ![image-20240529231318187](markdown-img/OR.assets/image-20240529231318187.png)
+  ![image-20240529231318187](assets/OR.assets/image-20240529231318187.png)
 
 - 阶段
 
 - 状态：k阶段开始（或结束）时的客观条件，记为$s_k\in S_k,S_k$为k阶段状态集合
 
-  ![](markdown-img/OR.assets/image-20240529231535276.png)
+  ![](assets/OR.assets/image-20240529231535276.png)
 
   > 无后效性——很重要！
 
@@ -809,7 +807,7 @@ $$
 
 - 状态转移方程：给出一种递推关系
 
-  ![image-20240529231808543](markdown-img/OR.assets/image-20240529231808543.png)
+  ![image-20240529231808543](assets/OR.assets/image-20240529231808543.png)
   $$
   s_{k+1}=T_k(s_k,u_k(s_k))
   $$
@@ -824,11 +822,11 @@ $$
   $$
   可分离性：
 
-  ![image-20240603154258076](markdown-img/OR.assets/image-20240603154258076.png)
+  ![image-20240603154258076](assets/OR.assets/image-20240603154258076.png)
 
   $\varphi(k)$的常见形式：求和型，乘积型
 
-![image-20240603155034426](markdown-img/OR.assets/image-20240603155034426.png)
+![image-20240603155034426](assets/OR.assets/image-20240603155034426.png)
 
 ## 求解模型
 
@@ -838,25 +836,25 @@ $$
 
 充要条件：（各个阶段的子策略都是最优策略）
 
-![image-20240603155305707](markdown-img/OR.assets/image-20240603155305707.png)
+![image-20240603155305707](assets/OR.assets/image-20240603155305707.png)
 
-![image-20240529232108985](markdown-img/OR.assets/image-20240529232108985.png)
+![image-20240529232108985](assets/OR.assets/image-20240529232108985.png)
 
 多阶段决策，从边界开始，逐段递推寻优，各阶段孤立，综合考虑效益（无后效性）
 
-![image-20240529231254030](markdown-img/OR.assets/image-20240529231254030.png)
+![image-20240529231254030](assets/OR.assets/image-20240529231254030.png)
 
 ### 顺序解法
 
-![image-20240603155935982](markdown-img/OR.assets/image-20240603155935982.png)
+![image-20240603155935982](assets/OR.assets/image-20240603155935982.png)
 
-![image-20240529232815384](markdown-img/OR.assets/image-20240529232815384.png)
+![image-20240529232815384](assets/OR.assets/image-20240529232815384.png)
 
-![image-20240529232837965](markdown-img/OR.assets/image-20240529232837965.png)
+![image-20240529232837965](assets/OR.assets/image-20240529232837965.png)
 
 ### 逆序解法
 
-![image-20240603155920786](markdown-img/OR.assets/image-20240603155920786.png)
+![image-20240603155920786](assets/OR.assets/image-20240603155920786.png)
 
 
 
@@ -870,7 +868,7 @@ $$
 
 ## 习题
 
-![image-20240603161048646](markdown-img/OR.assets/image-20240603161048646.png)
+![image-20240603161048646](assets/OR.assets/image-20240603161048646.png)
 
 把阶段，状态变量、决策变量，状态转移方程，阶段指标函数，最优指标函数值的递推方程都列写出来即可
 
@@ -882,25 +880,25 @@ $$
 
 ### 背包问题
 
-![image-20240529234353790](markdown-img/OR.assets/image-20240529234353790.png)
+![image-20240529234353790](assets/OR.assets/image-20240529234353790.png)
 
-![image-20240529234604476](markdown-img/OR.assets/image-20240529234604476.png)
+![image-20240529234604476](assets/OR.assets/image-20240529234604476.png)
 
 
 
 ### 生产与储存问题
 
-![image-20240529235259990](markdown-img/OR.assets/image-20240529235259990.png)
+![image-20240529235259990](assets/OR.assets/image-20240529235259990.png)
 
-![image-20240529235624111](markdown-img/OR.assets/image-20240529235624111.png)
+![image-20240529235624111](assets/OR.assets/image-20240529235624111.png)
 
 
 
 ### 采购与销售
 
-![image-20240529235823705](markdown-img/OR.assets/image-20240529235823705.png)
+![image-20240529235823705](assets/OR.assets/image-20240529235823705.png)
 
-![image-20240529235845707](markdown-img/OR.assets/image-20240529235845707.png)
+![image-20240529235845707](assets/OR.assets/image-20240529235845707.png)
 
 
 
@@ -914,15 +912,15 @@ $$
 
 - 邻接矩阵
 
-  ![image-20240603165355174](markdown-img/OR.assets/image-20240603165355174.png)
+  ![image-20240603165355174](assets/OR.assets/image-20240603165355174.png)
 
-  ![image-20240603165445724](markdown-img/OR.assets/image-20240603165445724.png)
+  ![image-20240603165445724](assets/OR.assets/image-20240603165445724.png)
 
 - 网络：点或边带权的图（赋权图）
 
 - 链与道路
 
-  ![image-20240603165507939](markdown-img/OR.assets/image-20240603165507939.png)
+  ![image-20240603165507939](assets/OR.assets/image-20240603165507939.png)
 
 - 连通图：任意两点之间至少又=有1条链相连
 
@@ -930,9 +928,9 @@ $$
 
 - 数：不含圈的连通无向图
 
-  ![image-20240603165728348](markdown-img/OR.assets/image-20240603165728348.png)
+  ![image-20240603165728348](assets/OR.assets/image-20240603165728348.png)
 
-  ![image-20240603165747034](markdown-img/OR.assets/image-20240603165747034.png)
+  ![image-20240603165747034](assets/OR.assets/image-20240603165747034.png)
 
 生成子图
 
@@ -944,9 +942,9 @@ $$
 
 - Dijkstra算法
 
-  ![image-20240603170441814](markdown-img/OR.assets/image-20240603170441814.png)
+  ![image-20240603170441814](assets/OR.assets/image-20240603170441814.png)
 
-  ![image-20240603171028042](markdown-img/OR.assets/image-20240603171028042.png)
+  ![image-20240603171028042](assets/OR.assets/image-20240603171028042.png)
 
   成立条件：所有边的权值**非负**
 
@@ -954,11 +952,11 @@ $$
 
   含负权值的最短路径
 
-  ![迭代公式](markdown-img/OR.assets/image-20240603172254798.png)
+  ![迭代公式](assets/OR.assets/image-20240603172254798.png)
 
-  ![image-20240603172332371](markdown-img/OR.assets/image-20240603172332371.png)
+  ![image-20240603172332371](assets/OR.assets/image-20240603172332371.png)
 
-  ![image-20240603173012141](markdown-img/OR.assets/image-20240603173012141.png)
+  ![image-20240603173012141](assets/OR.assets/image-20240603173012141.png)
 
   > 要求所有环的权值和$>0$
 
@@ -966,11 +964,11 @@ $$
 
   求任意两点最短距离
 
-  ![image-20240603173505247](markdown-img/OR.assets/image-20240603173505247.png)
+  ![image-20240603173505247](assets/OR.assets/image-20240603173505247.png)
 
 ## 最大流问题
 
-![image-20240603174059990](markdown-img/OR.assets/image-20240603174059990.png)
+![image-20240603174059990](assets/OR.assets/image-20240603174059990.png)
 
 ### Ford-Fulkerson算法
 
@@ -984,11 +982,11 @@ $$
 
 
 
-![image-20240603174259826](markdown-img/OR.assets/image-20240603174259826.png)
+![image-20240603174259826](assets/OR.assets/image-20240603174259826.png)
 
 最大流性质
 
-![image-20240603174830964](markdown-img/OR.assets/image-20240603174830964.png)
+![image-20240603174830964](assets/OR.assets/image-20240603174830964.png)
 
 
 
@@ -1000,25 +998,25 @@ $$
 
 最大流-最小割定理
 
-![image-20240604135959669](markdown-img/OR.assets/image-20240604135959669.png)
+![image-20240604135959669](assets/OR.assets/image-20240604135959669.png)
 
 ## 最小费用流问题
 
 
 
-![image-20240604140249643](markdown-img/OR.assets/image-20240604140249643.png)
+![image-20240604140249643](assets/OR.assets/image-20240604140249643.png)
 
 > $u_{ij}$是边的容量，$c_{ij}$是边的费用
 
 对偶算法
 
-![image-20240604141218997](markdown-img/OR.assets/image-20240604141218997.png)
+![image-20240604141218997](assets/OR.assets/image-20240604141218997.png)
 
 
 
 ## 习题
 
-![image-20240603175738163](markdown-img/OR.assets/image-20240603175738163.png)
+![image-20240603175738163](assets/OR.assets/image-20240603175738163.png)
 
 车辆每年都需要维修，在年末决定是否更新车辆，如果更新，则需支付更新费用。
 
@@ -1030,7 +1028,7 @@ $$
 
 解决方法：将目标化作一种**软目标/软约束**
 
-![image-20240604142353588](markdown-img/OR.assets/image-20240604142353588.png)
+![image-20240604142353588](assets/OR.assets/image-20240604142353588.png)
 
 求满意解
 
@@ -1042,7 +1040,7 @@ $$
 
 多目标：
 
-![image-20240604143141905](markdown-img/OR.assets/image-20240604143141905.png)
+![image-20240604143141905](assets/OR.assets/image-20240604143141905.png)
 
 目标规划思想：将定量技术和定性技术结合，承认矛盾、冲突的合理性，强调通过协调，达到总体和谐
 
@@ -1050,23 +1048,23 @@ $$
 
 example:
 
-![image-20240604143927781](markdown-img/OR.assets/image-20240604143927781.png)
+![image-20240604143927781](assets/OR.assets/image-20240604143927781.png)
 
-![image-20240604143933356](markdown-img/OR.assets/image-20240604143933356.png)
+![image-20240604143933356](assets/OR.assets/image-20240604143933356.png)
 
-![image-20240604143948159](markdown-img/OR.assets/image-20240604143948159.png)
+![image-20240604143948159](assets/OR.assets/image-20240604143948159.png)
 
 约束条件的表示
 
-![image-20240604193715795](markdown-img/OR.assets/image-20240604193715795.png)
+![image-20240604193715795](assets/OR.assets/image-20240604193715795.png)
 
-![image-20240604193722527](markdown-img/OR.assets/image-20240604193722527.png)
+![image-20240604193722527](assets/OR.assets/image-20240604193722527.png)
 
-![image-20240604220333540](markdown-img/OR.assets/image-20240604220333540.png)
+![image-20240604220333540](assets/OR.assets/image-20240604220333540.png)
 
 含有绝对优先级：
 
-![image-20240604144456587](markdown-img/OR.assets/image-20240604144456587.png)
+![image-20240604144456587](assets/OR.assets/image-20240604144456587.png)
 
 同等优先级：权系数
 
@@ -1074,7 +1072,7 @@ example:
 
 目标函数全由偏差系数决定
 
-![image-20240604144901193](markdown-img/OR.assets/image-20240604144901193.png)
+![image-20240604144901193](assets/OR.assets/image-20240604144901193.png)
 
 
 
@@ -1110,7 +1108,7 @@ example:
 
 - 赢得函数/支付函数（Payoff function）
 
-![image-20240606115002365](markdown-img/OR.assets/image-20240606115002365.png)
+![image-20240606115002365](assets/OR.assets/image-20240606115002365.png)
 
 
 
@@ -1124,31 +1122,31 @@ example:
 
  理性博弈原则：
 
- ![image-20240606143155208](markdown-img/OR.assets/image-20240606143155208.png)
+ ![image-20240606143155208](assets/OR.assets/image-20240606143155208.png)
 
  自身利益最大化原则：
 
- ![image-20240606143445807](markdown-img/OR.assets/image-20240606143445807.png)
+ ![image-20240606143445807](assets/OR.assets/image-20240606143445807.png)
 
  极大极小值与极小极大值：
 $$
  \max_i \min_j a_{ij}\le \min_j \max_i a_{ij}
 $$
- ![image-20240606143924026](markdown-img/OR.assets/image-20240606143924026.png)
+ ![image-20240606143924026](assets/OR.assets/image-20240606143924026.png)
 
  
 
  共许原则
 
- ![image-20240606144133735](markdown-img/OR.assets/image-20240606144133735.png)
+ ![image-20240606144133735](assets/OR.assets/image-20240606144133735.png)
 
  最优策略对存在的充要条件：鞍点（驻点+拐点）
 
- ![image-20240606144211462](markdown-img/OR.assets/image-20240606144211462.png)
+ ![image-20240606144211462](assets/OR.assets/image-20240606144211462.png)
 
 Nash均衡解：
 
-![image-20240606144644603](markdown-img/OR.assets/image-20240606144644603.png)
+![image-20240606144644603](assets/OR.assets/image-20240606144644603.png)
 
 ##### 解的类型
 
@@ -1158,23 +1156,23 @@ Nash均衡解：
 
   - 无差别性
 
-    ![image-20240606145419457](markdown-img/OR.assets/image-20240606145419457.png)
+    ![image-20240606145419457](assets/OR.assets/image-20240606145419457.png)
 
   - 可交换性
 
-    ![image-20240606145432304](markdown-img/OR.assets/image-20240606145432304.png)
+    ![image-20240606145432304](assets/OR.assets/image-20240606145432304.png)
 
-  ![image-20240606150432173](markdown-img/OR.assets/image-20240606150432173.png)
+  ![image-20240606150432173](assets/OR.assets/image-20240606150432173.png)
 
 - 无纯策略解
 
-  ![image-20240606145617397](markdown-img/OR.assets/image-20240606145617397.png)
+  ![image-20240606145617397](assets/OR.assets/image-20240606145617397.png)
 
 
 
 
 
-![image-20240606145117714](markdown-img/OR.assets/image-20240606145117714.png)
+![image-20240606145117714](assets/OR.assets/image-20240606145117714.png)
 
 最优纯策略对不一定是鞍点解——但赢得值相同的策略对均等价
 
@@ -1184,21 +1182,21 @@ Nash均衡解：
 
 #### 混合策略博弈及其均衡解
 
-![image-20240606150919801](markdown-img/OR.assets/image-20240606150919801.png)
+![image-20240606150919801](assets/OR.assets/image-20240606150919801.png)
 
 混合策略的取值在多次博弈中可看作概率，一次博弈中可看作偏好
 
-![image-20240606150854498](markdown-img/OR.assets/image-20240606150854498.png)
+![image-20240606150854498](assets/OR.assets/image-20240606150854498.png)
 
-![image-20240606151148012](markdown-img/OR.assets/image-20240606151148012.png)
+![image-20240606151148012](assets/OR.assets/image-20240606151148012.png)
 
 一定存在均衡解
 
-![image-20240606151300854](markdown-img/OR.assets/image-20240606151300854.png)
+![image-20240606151300854](assets/OR.assets/image-20240606151300854.png)
 
 example:
 
-![image-20240606151522465](markdown-img/OR.assets/image-20240606151522465.png)
+![image-20240606151522465](assets/OR.assets/image-20240606151522465.png)
 
 - 主要是列写$E(x,y)$的公式，然后求偏导即可
 
@@ -1216,13 +1214,13 @@ example:
 
 - 定理9
 
-![image-20240606152309605](markdown-img/OR.assets/image-20240606152309605.png)
+![image-20240606152309605](assets/OR.assets/image-20240606152309605.png)
 
 
 
 - 图解法
 
-  ![image-20240606153039259](markdown-img/OR.assets/image-20240606153039259.png)
+  ![image-20240606153039259](assets/OR.assets/image-20240606153039259.png)
 
   使三条直线的最小值尽可能大
 
@@ -1230,39 +1228,39 @@ example:
 
 - 方程组法
 
-  ![image-20240606153658867](markdown-img/OR.assets/image-20240606153658867.png)
+  ![image-20240606153658867](assets/OR.assets/image-20240606153658867.png)
 
   对偶变量$x^*,y^*$​不为0，则不等式可以转化为等式
 
   > 先对最优策略对进行化简
 
-  ![image-20240606153727135](markdown-img/OR.assets/image-20240606153727135.png)
+  ![image-20240606153727135](assets/OR.assets/image-20240606153727135.png)
 
-  ![image-20240606153843840](markdown-img/OR.assets/image-20240606153843840.png)
+  ![image-20240606153843840](assets/OR.assets/image-20240606153843840.png)
 
 
 
 - 线性规划法
 
-  ![image-20240606154143289](markdown-img/OR.assets/image-20240606154143289.png)
+  ![image-20240606154143289](assets/OR.assets/image-20240606154143289.png)
 
   > 想换掉w
 
-  ![image-20240606154536731](markdown-img/OR.assets/image-20240606154536731.png)
+  ![image-20240606154536731](assets/OR.assets/image-20240606154536731.png)
 
 
 
 ### 双矩阵博弈
 
-![image-20240606155123681](markdown-img/OR.assets/image-20240606155123681.png)
+![image-20240606155123681](assets/OR.assets/image-20240606155123681.png)
 
-![image-20240606155836874](markdown-img/OR.assets/image-20240606155836874.png)
+![image-20240606155836874](assets/OR.assets/image-20240606155836874.png)
 
 严格意义下的解：满足可交换性和无差别性的Pareto最优均衡解
 
 完全弱意义下的解：反复删除非占优策略所得的简化博弈的严格意义下的解，可以证明同时也是原博弈问题的Nash均衡解
 
-![image-20240606155921906](markdown-img/OR.assets/image-20240606155921906.png)
+![image-20240606155921906](assets/OR.assets/image-20240606155921906.png)
 
 **囚徒困境**
 
@@ -1375,27 +1373,27 @@ END
 
 1.线性规划最优解类型。单纯形法可求出哪种？ 
 
-![image-20240612224707519](markdown-img/OR.assets/image-20240612224707519.png)
+![image-20240612224707519](assets/OR.assets/image-20240612224707519.png)
 
 
 
 2.对偶问题对原问题有何帮助。举3例。 
 
-![image-20240612225035718](markdown-img/OR.assets/image-20240612225035718.png)
+![image-20240612225035718](assets/OR.assets/image-20240612225035718.png)
 
 
 
 3.动态规划的最优性原理是什么。贝尔曼是如何用数学语言表达最优性原理的。
 
-![image-20240612225504562](markdown-img/OR.assets/image-20240612225504562.png)
+![image-20240612225504562](assets/OR.assets/image-20240612225504562.png)
 
-![image-20240612225753179](markdown-img/OR.assets/image-20240612225753179.png)
+![image-20240612225753179](assets/OR.assets/image-20240612225753179.png)
 
 
 
 4.等式约束化为无约束问题有哪两种方法，各有什么特点？ 数值解的时候哪个更好。
 
-![image-20240612230051788](markdown-img/OR.assets/image-20240612230051788.png)
+![image-20240612230051788](assets/OR.assets/image-20240612230051788.png)
 
 在实际数值解中，**拉格朗日乘子法通常被认为是更优的选择**
 
@@ -1403,15 +1401,15 @@ END
 
 5.运输问题建模的两种方法。
 
-![image-20240612230335978](markdown-img/OR.assets/image-20240612230335978.png)
+![image-20240612230335978](assets/OR.assets/image-20240612230335978.png)
 
-![image-20240612230345280](markdown-img/OR.assets/image-20240612230345280.png)
+![image-20240612230345280](assets/OR.assets/image-20240612230345280.png)
 
 
 
  6.Floyd算法对于网络边权有什么限定条件，为什么？
 
-![image-20240612230634898](markdown-img/OR.assets/image-20240612230634898.png)
+![image-20240612230634898](assets/OR.assets/image-20240612230634898.png)
 
  7.目标规划$d^+*d^-=0$什么时候可以省略。 
 
@@ -1423,11 +1421,11 @@ END
 
 8.最速下降法，牛顿法，共轭梯度法。 这三种方法适合在寻优的哪个时期使用，为什么？
 
-![image-20240612231151082](markdown-img/OR.assets/image-20240612231151082.png)
+![image-20240612231151082](assets/OR.assets/image-20240612231151082.png)
 
-![image-20240612231156735](markdown-img/OR.assets/image-20240612231156735.png)
+![image-20240612231156735](assets/OR.assets/image-20240612231156735.png)
 
-![image-20240612231201925](markdown-img/OR.assets/image-20240612231201925.png)
+![image-20240612231201925](assets/OR.assets/image-20240612231201925.png)
 
 
 
@@ -1435,7 +1433,7 @@ END
 
 9.分支、定界概念，意义。 
 
-![image-20240612232219003](markdown-img/OR.assets/image-20240612232219003.png)
+![image-20240612232219003](assets/OR.assets/image-20240612232219003.png)
 
 
 
@@ -1443,7 +1441,7 @@ END
 
 10.Nash均衡概念，此时是否为合作关系。 
 
-![image-20240612233008009](markdown-img/OR.assets/image-20240612233008009.png)
+![image-20240612233008009](assets/OR.assets/image-20240612233008009.png)
 
 附加题， 给出题目问题的KT条件。 判断是否为充要条件。原因。
 
@@ -1451,13 +1449,13 @@ END
 
 制约函数法核心是什么？罚函数和障碍函数相似于不同？内点法外点法是什么意思（内涵）
 
-![image-20240613075238226](markdown-img/OR.assets/image-20240613075238226.png)
+![image-20240613075238226](assets/OR.assets/image-20240613075238226.png)
 
-![image-20240613075248209](markdown-img/OR.assets/image-20240613075248209.png)
+![image-20240613075248209](assets/OR.assets/image-20240613075248209.png)
 
-![image-20240613075309814](markdown-img/OR.assets/image-20240613075309814.png)
+![image-20240613075309814](assets/OR.assets/image-20240613075309814.png)
 
-![image-20240613075319184](markdown-img/OR.assets/image-20240613075319184.png)
+![image-20240613075319184](assets/OR.assets/image-20240613075319184.png)
 
 
 
@@ -1503,7 +1501,11 @@ END
 
 
 
+# References
 
+- 【【运筹学】应试向基础教程（已完结）{适用范围：本科期末、考研、考博}】https://www.bilibili.com/video/BV1Uw411f7WM?p=4&vd_source=93bb338120537438ee9180881deab9c1
+
+  
 
 
 

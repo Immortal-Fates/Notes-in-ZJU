@@ -15,7 +15,7 @@
    - 对于 simple constants（简单常量），用 const objects（const 对象）或 enums（枚举）取代 #defines。
    - 对于 function-like macros（类似函数的宏），用 inline functions（内联函数）取代 #defines。
 
-   ![image-20240626215137739](markdown-img/eff_C++.assets/image-20240626215137739.png)
+   ![image-20240626215137739](assets/eff_C++.assets/image-20240626215137739.png)
 
    - 函数会不会修改成员加const说明——语义
 
@@ -28,7 +28,7 @@
 
      让non-const调用const版本是避免代码重复的安全方法
 
-     ![image-20240626215817037](markdown-img/eff_C++.assets/image-20240626215817037.png)
+     ![image-20240626215817037](assets/eff_C++.assets/image-20240626215817037.png)
 
      > 返回值去掉const，调用时加上const
 
@@ -91,11 +91,11 @@
 
    如果不自己声明，编译器可能（不同编译器不同）会替你声明拷贝构造函数、拷贝赋值运算符和析构函数
 
-   ![image-20240626221246653](markdown-img/eff_C++.assets/image-20240626221246653.png)
+   ![image-20240626221246653](assets/eff_C++.assets/image-20240626221246653.png)
 
    如果不想使用，则放在private里面，为了防止成员函数和友元函数调用，只提供声明，不提供定义
 
-   ![image-20240626222928316](markdown-img/eff_C++.assets/image-20240626222928316.png)
+   ![image-20240626222928316](assets/eff_C++.assets/image-20240626222928316.png)
 
 
 

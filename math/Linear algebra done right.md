@@ -9,7 +9,7 @@
 
 This encounter will focus on abstract vector spaces and linear maps.
 
-
+<!--more-->
 
 # CH1 Vector Spaces
 
@@ -36,7 +36,7 @@ learning objectives：span, linear independence, bases, dimension
 
 # CH3 Linear Maps
 
-![image-20250228103147350](markdown-img/Linear algebra done right.assets/image-20250228103147350.png)
+![image-20250228103147350](assets/Linear algebra done right.assets/image-20250228103147350.png)
 
 “由局部决定整体”的典型体现，揭示了基向量在定义线性映射中的核心地位
 
@@ -71,7 +71,7 @@ $$
 
 linear combination of columns
 
-![image-20250228145446686](markdown-img/Linear algebra done right.assets/image-20250228145446686.png)
+![image-20250228145446686](assets/Linear algebra done right.assets/image-20250228145446686.png)
 
 matrix multiplication as linear combinations of columns or rows  
 
@@ -79,21 +79,21 @@ matrix multiplication as linear combinations of columns or rows
 
 column–row factorization(分解)
 
-![image-20250228145837409](markdown-img/Linear algebra done right.assets/image-20250228145837409.png)
+![image-20250228145837409](assets/Linear algebra done right.assets/image-20250228145837409.png)
 
 $C$是A中线性无关的列，R
 
 How to find CR for every A ? Elimination !
 
-![image-20250228151054443](markdown-img/Linear algebra done right.assets/image-20250228151054443.png)
+![image-20250228151054443](assets/Linear algebra done right.assets/image-20250228151054443.png)
 
 
 
 Invertibility and Isomorphisms(同构)
 
-![image-20250302140835073](markdown-img/Linear algebra done right.assets/image-20250302140835073.png)
+![image-20250302140835073](assets/Linear algebra done right.assets/image-20250302140835073.png)
 
-![image-20250302141148959](markdown-img/Linear algebra done right.assets/image-20250302141148959.png)
+![image-20250302141148959](assets/Linear algebra done right.assets/image-20250302141148959.png)
 
 
 
