@@ -891,7 +891,11 @@ MDH运动学参量表：
 
 ## 建立坐标系
 
-如何建模看这个就好了：[机器人学：MDH建模](https://www.cnblogs.com/s206/p/16067661.html)
+### MDH
+
+![image-20250627111534323](./assets/ROBOT_I_%E8%BF%90%E5%8A%A8%E5%AD%A6.assets/image-20250627111534323.png)
+
+如何建模：
 
 1. 先画出所有$z_i$轴
 2. 再确定$x_i$轴（下面是MDH的细节）
@@ -913,7 +917,15 @@ SDH方法将连杆的坐标系固定在连杆的后端，MDH方法将连杆的�
 
 这里需要强调连杆i的坐标系是建立在传动关节也就是靠近末端执行器\\一侧的关节处，也就是说坐标系$\(O_{i-1}x_{i-1}y_{i-1}z_{i-1}\)（简称\(\{O_{i-1}\}\)）$是与$\(Link_{i-1}\)\\$固连在一起的，坐标系$\(\{O_{i}\}\)是与\(Link_{i}\)$固连在一起的，在后面的介绍中请各位一定牢记，否则你会觉得整个坐标系变换都很奇怪
 
+### SDH
+
+![image-20250627111601155](./assets/ROBOT_I_%E8%BF%90%E5%8A%A8%E5%AD%A6.assets/image-20250627111601155.png)
+
+
+
 ## 正运动学计算
+
+### MDH
 
 下面是MDH参数设定顺序：$\alpha_{i-1}\to a_{i-1}\to \theta_i\to d_i$
 
@@ -953,16 +965,38 @@ $$
 \end{bmatrix}
 $$
 
-$$
-^{i-1}_iT(\theta_i) = 
-\begin{matrix}
-\cos{\theta_i} & -\sin{\theta_i} & 0 & l_i\\
-\sin{\theta_i} & \cos{\theta_i} & 0 & 0\\
-0 & 0 & 1 & 0\\
-0 & 0 & 0 & 1
-\end{matrix}
-$$
 
+
+### SDH
+
+下面是SDH参数设定顺序：$\theta_i \to d_i \to a_i \to \alpha_i$
+
+1. **绕 $Z_i$ 轴旋转 $\theta_i$**
+   - 旋转角度：$\theta_i$（关节角，转动关节的变量，滑动关节的固定参数）
+   - 目的：对齐 $X_{i-1}$ 轴与 $X_i$ 轴的方向（转动关节）或固定方向（滑动关节）。
+
+2. **沿 $Z_i$ 轴平移 $d_i$**
+   - 平移距离：$d_i$（偏距，滑动关节的变量，转动关节的固定参数）
+   - 目的：沿关节 $i$ 的轴线移动坐标系原点至与关节 $i+1$ 轴线垂直的位置。
+
+3. **沿 $X_i$ 轴平移 $a_i$**
+   - 平移距离：$a_i$（连杆长度，固定参数）
+   - 目的：将坐标系原点移动到与关节 $i+1$ 轴线垂直的位置。
+
+4. **绕 $X_i$ 轴旋转 $\alpha_i$**
+   - 旋转角度：$\alpha_i$（连杆扭角，固定参数）
+   - 目的：调整 $Z_i$ 轴与 $Z_{i+1}$ 轴的相对方向。
+
+齐次变换矩阵为：
+
+$$
+_{i+1}^{i}T = \underbrace{\text{Rot}(Z_i, \theta_i)}_{第1步} \cdot \underbrace{\text{Trans}(Z_i, d_i)}_{第2步} \cdot \underbrace{\text{Trans}(X_i, a_i)}_{第3步} \cdot \underbrace{\text{Rot}(X_i, \alpha_i)}_{第4步}
+$$
+正运动学问题：已知各关节变量的值，以基座坐标系为参考系，求末端工具联体坐标系的位姿
+
+$$
+{^{i}_{i+1}}T = \begin{bmatrix}\cos\theta_i & -\sin\theta_i \cos\alpha_i & \sin\theta_i \sin\alpha_i & a_i \cos\theta_i \\\sin\theta_i & \cos\theta_i \cos\alpha_i & -\cos\theta_i \sin\alpha_i & a_i \sin\theta_i \\0 & \sin\alpha_i & \cos\alpha_i & d_i \\0 & 0 & 0 & 1\end{bmatrix}
+$$
 
 
 

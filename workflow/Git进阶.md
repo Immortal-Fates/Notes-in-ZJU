@@ -32,7 +32,7 @@ Git 有三种状态：**已提交（committed）**、**已修改（modified）**
 
 这会让我们的 Git 项目拥有三个阶段：工作区、暂存区以及 Git 目录。
 
-![areas](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/areas.png)
+<img src="./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222024684.png" alt="image-20250707222024684" style="zoom:50%;" />
 
 - 工作区是对项目的某个版本独立提取出来的内容。 这些从 Git 仓库的压缩数据库中提取出来的文件，放在磁盘上供你使用或修改。
 - 暂存区是一个文件，保存了下次将要提交的文件列表信息，一般在 Git 仓库目录中。 按照 Git 的术语叫做“索引”，不过一般说法还是叫“暂存区”。
@@ -151,7 +151,7 @@ $ git config --global user.email johndoe@example.com
 
 每一个文件都有两种状态：**已跟踪** 或 **未跟踪**。（已跟踪的文件就是 Git 已经知道的文件。）
 
-![lifecycle](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/lifecycle.png)
+![image-20250707222045711](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222045711.png)
 
 - #### 检查当前文件状态
 
@@ -651,7 +651,7 @@ Git保存一系列不同时刻的snapshots,When you make a commit, Git stores a 
 
 现在，Git 仓库中有五个对象：三个 *blob* 对象（保存着文件快照）、一个 **树** 对象 （记录着目录结构和 blob 对象索引）以及一个 **提交** 对象（包含着指向前述树对象的指针和所有提交信息）。
 
-![commit-and-tree](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/commit-and-tree.png)
+![image-20250707222100297](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222100297.png)
 
 Git 的分支，其实本质上仅仅是指向提交对象的可变指针
 
@@ -667,11 +667,11 @@ Git有一个名为 `HEAD` 的特殊指针，指向当前所在的本地分支（
 $ git branch testing
 ```
 
-![head-to-master](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/head-to-master.png)
+![image-20250707222115988](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222115988.png)
 
-**创建新分支的同时切换过去**
+- **创建新分支的同时切换过去**
 
-通常我们会在创建一个新分支后立即切换过去，这可以用 `git checkout -b <newbranchname>` 一条命令搞定
+  通常我们会在创建一个新分支后立即切换过去，这可以用 `git checkout -b <newbranchname>` 一条命令搞定
 
 ## 分支删除
 
@@ -726,7 +726,7 @@ $ git merge hotfix
 
 ### diverged branches:
 
-![basic-merging-2](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/basic-merging-2.png)
+![image-20250707222133151](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222133151.png)
 
 Git 会使用两个分支的末端所指的快照（`C4` 和 `C5`）以及这两个分支的公共祖先（`C2`），做一个简单的三方合并。
 
@@ -778,7 +778,9 @@ $ git merge experiment
 $ git rebase --onto master server client
 ```
 
-理解：取出 `client` 分支，找出它从 `server` 分支分歧之后的补丁， 然后把这些补丁在 `master` 分支上重放一遍，让 `client` 看起来像直接基于 `master` 修改一样![interesting-rebase-2](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/interesting-rebase-2.png)
+理解：取出 `client` 分支，找出它从 `server` 分支分歧之后的补丁， 然后把这些补丁在 `master` 分支上重放一遍，让 `client` 看起来像直接基于 `master` 修改一样
+
+![image-20250707222147250](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222147250.png)
 
 ### 变基的风险
 
@@ -851,7 +853,7 @@ git branch -f main HEAD~3
 
 趋于稳定分支的流水线（“silo”）视图：
 
-![lr-branches-2](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/lr-branches-2.png)
+![image-20250707222157032](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222157032.png)
 
 ### 主题分支
 
@@ -869,7 +871,7 @@ git branch -f main HEAD~3
 
 Git 的 `clone` 命令会为你自动将其命名为 `origin`，拉取它的所有数据， 创建一个指向它的 `master` 分支的指针，并且在本地将其命名为 `origin/master`。 Git 也会给你一个与 origin 的 `master` 分支在指向同一个地方的本地 `master` 分支，这样你就有工作的基础。
 
-![remote-branches-1](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/remote-branches-1.png)
+![image-20250707222211935](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222211935.png)
 
 > Tips:运行 `git clone -o booyah`，那么你默认的远程分支名字将会是 `booyah/master`。-o远程库的命名。
 >
@@ -879,7 +881,7 @@ Git 的 `clone` 命令会为你自动将其命名为 `origin`，拉取它的所�
 
 程仓库同步数据，运行 `git fetch <remote>` 
 
-![remote-branches-3](https://raw.githubusercontent.com/Immortal-Fates/figure_Bed/main/blog/remote-branches-3.png)
+![image-20250707222219760](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222219760.png)
 
 > Tips:本地与远程的工作可以分叉
 
@@ -1103,6 +1105,44 @@ SSH 协议的缺点在于它不支持匿名访问 Git 仓库。 如果你使用 
 Git 协议缺点是缺乏授权机制。 把 Git 协议作为访问项目版本库的唯一手段是不可取的。 一般的做法里，会同时提供 SSH 或者 HTTPS 协议的访问服务，只让少数几个开发者有推送（写）权限，其他人通过 `git://` 访问只有读权限。 Git 协议也许也是最难架设的。 它要求有自己的守护进程，这就要配置 `xinetd`、`systemd` 或者其他的程序，这些工作并不简单。 它还要求防火墙开放 9418 端口，但是企业防火墙一般不会开放这个非标准端口。 而大型的企业防火墙通常会封锁这个端口。
 
 
+
+# Git Hook
+
+使用`pre-commit`进行git hook的生成在目录`.git/hooks/`下
+
+1. ```
+   pip install pre-commit
+   ```
+
+2. ```
+   pre-commit install
+   ```
+
+   ```
+   pre-commit autoupdate
+   ```
+
+   这个命令利用`.pre-commit-config.yaml`中的配置生成git hook
+
+3. 使用pre-commit手动进行代码检查：
+
+   ```
+   pre-commit run --all-file
+   ```
+
+   当然我们希望它能自动检查，如果成功配置在你commit时会进行自动检查
+
+   > 当然我们也可以跳过检查：`git commit -m "" --no-verify`
+
+4. 卸载安装的hook
+
+   ```
+   pre-commit uninstall
+   ```
+
+   
+
+我常用的.pre-commit-config.yaml的配置见我的`.dotfiles`
 
 
 
