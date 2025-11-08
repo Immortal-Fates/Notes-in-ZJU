@@ -6,16 +6,16 @@ Notes-in-ZJU collects study notes from courses and extracurricular exploration d
 
 ## Directory overview
 
-| Path | Summary |
-| --- | --- |
-| [control/](control/) | Control theory resources; see the detailed overview in [control/README.md](control/README.md). |
-| [cs/](cs/) | Computer science study roadmap; more background in [cs/README.md](cs/README.md). |
-| [dev/](dev/) | Development tools, workflows, and productivity tips. |
-| [hardware/](hardware/) | Hardware-related study notes, from electronics fundamentals to system design. |
-| [ideology_politics/](ideology_politics/) | Notes on ideology and political theory coursework. |
-| [math/](math/) | Mathematics lectures, problem sets, and advanced topics. |
-| [others/](others/) | Miscellaneous materials that do not yet fit a dedicated module. |
-| [robot/](robot/) | Robotics and automation practice notes beyond the core control theory folder. |
+| Path                                     | Summary                                                                                        |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [control/](control/)                     | Control theory resources; see the detailed overview in [control/README.md](control/README.md). |
+| [cs/](cs/)                               | Computer science study roadmap; more background in [cs/README.md](cs/README.md).               |
+| [dev/](dev/)                             | Development tools, workflows, and productivity tips.                                           |
+| [hardware/](hardware/)                   | Hardware-related study notes, from electronics fundamentals to system design.                  |
+| [ideology_politics/](ideology_politics/) | Notes on ideology and political theory coursework.                                             |
+| [math/](math/)                           | Mathematics lectures, problem sets, and advanced topics.                                       |
+| [others/](others/)                       | Miscellaneous materials that do not yet fit a dedicated module.                                |
+| [robot/](robot/)                         | Robotics and automation practice notes beyond the core control theory folder.                  |
 
 ## TODO
 

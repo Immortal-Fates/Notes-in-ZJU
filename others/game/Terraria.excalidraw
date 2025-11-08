@@ -1,0 +1,480 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "chatgpt-minimal-terra",
+  "elements": [
+    {
+      "type": "diamond",
+      "id": "n_start",
+      "x": 60,
+      "y": 60,
+      "width": 140,
+      "height": 64,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#e2e8f0",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 1,
+      "groupIds": [],
+      "roundness": 0
+    },
+    {
+      "type": "text",
+      "id": "t_start",
+      "x": 94,
+      "y": 82,
+      "width": 72,
+      "height": 24,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 2,
+      "text": "开始游戏",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 18
+    },
+    {
+      "type": "rectangle",
+      "id": "n_prep",
+      "x": 240,
+      "y": 48,
+      "width": 220,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 3,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_prep",
+      "x": 252,
+      "y": 58,
+      "width": 196,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 4,
+      "text": "开局准备\n砍树→木套装→木屋\n向导查合成/安家NPC",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "rectangle",
+      "id": "n_mine",
+      "x": 500,
+      "y": 48,
+      "width": 220,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 5,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_mine",
+      "x": 512,
+      "y": 58,
+      "width": 196,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 6,
+      "text": "地下探索\n矿石/宝箱/生命水晶\n做火把与绳索",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "rectangle",
+      "id": "n_craft",
+      "x": 760,
+      "y": 48,
+      "width": 220,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 7,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_craft",
+      "x": 772,
+      "y": 58,
+      "width": 196,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 8,
+      "text": "制作升级\n工具/武器/护甲\n（铜铁→银金）",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "rectangle",
+      "id": "n_boss_pre",
+      "x": 1020,
+      "y": 48,
+      "width": 260,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 9,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_boss_pre",
+      "x": 1032,
+      "y": 58,
+      "width": 236,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 10,
+      "text": "前期Boss路线\n克眼 → 史莱姆王 →\n世界吞噬者/克脑 → 骷髅王",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "rectangle",
+      "id": "n_wof",
+      "x": 1310,
+      "y": 48,
+      "width": 220,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 11,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_wof",
+      "x": 1322,
+      "y": 58,
+      "width": 196,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 12,
+      "text": "血肉之墙\n→ 进入困难模式",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "rectangle",
+      "id": "n_hard_loop",
+      "x": 1580,
+      "y": 48,
+      "width": 260,
+      "height": 88,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 13,
+      "roundness": 8
+    },
+    {
+      "type": "text",
+      "id": "t_hard_loop",
+      "x": 1592,
+      "y": 58,
+      "width": 236,
+      "height": 68,
+      "angle": 0,
+      "strokeColor": "#0f172a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "seed": 14,
+      "text": "困难模式循环\n钴/秘银/钛金 → 机械三王\n（后续自行扩展）",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 62
+    },
+    {
+      "type": "arrow",
+      "id": "a1",
+      "x": 200,
+      "y": 92,
+      "width": 38,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 15,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_start",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_prep",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "id": "a2",
+      "x": 460,
+      "y": 92,
+      "width": 38,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 16,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_prep",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_mine",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "id": "a3",
+      "x": 720,
+      "y": 92,
+      "width": 38,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 17,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_mine",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_craft",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "id": "a4",
+      "x": 980,
+      "y": 92,
+      "width": 38,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 18,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_craft",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_boss_pre",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "id": "a5",
+      "x": 1280,
+      "y": 92,
+      "width": 30,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 19,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          30,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_boss_pre",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_wof",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "id": "a6",
+      "x": 1530,
+      "y": 92,
+      "width": 38,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e293b",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "seed": 20,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38,
+          0
+        ]
+      ],
+      "startBinding": {
+        "elementId": "n_wof",
+        "focus": 0,
+        "gap": 0
+      },
+      "endBinding": {
+        "elementId": "n_hard_loop",
+        "focus": 0,
+        "gap": 2
+      },
+      "endArrowhead": "arrow"
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff",
+    "currentItemStrokeColor": "#1e293b",
+    "currentItemBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
