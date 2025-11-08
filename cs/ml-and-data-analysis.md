@@ -10,9 +10,9 @@ https://student.neoschool.com/#/passport/login
 
 [课程详情-CIS NanoMaster (neoscholar.com)](https://www.neoscholar.com/#/advance/detail/course/1800442859247337474)
 
-![image-20250329200132679](assets/ML&DataAnalysis.assets/image-20250329200132679.png)
+![image-20250329200132679](assets/ml-and-data-analysis.assets/image-20250329200132679.png)
 
-![image-20250329200146536](assets/ML&DataAnalysis.assets/image-20250329200146536.png)
+![image-20250329200146536](assets/ml-and-data-analysis.assets/image-20250329200146536.png)
 
 <!--more-->
 
@@ -40,7 +40,7 @@ https://student.neoschool.com/#/passport/login
 
 ## Data Lifecycle & the Role of Analysis
 
-![image-20250408213642796](assets/ML&DataAnalysis.assets/image-20250408213642796.png)
+![image-20250408213642796](assets/ml-and-data-analysis.assets/image-20250408213642796.png)
 
 
 
@@ -141,7 +141,7 @@ https://student.neoschool.com/#/passport/login
 - Reduce Overfitting (Training vs Validating/Testing)
 - Improved Model Performance
 
-![image-20250408224603614](assets/ML&DataAnalysis.assets/image-20250408224603614.png)
+![image-20250408224603614](assets/ml-and-data-analysis.assets/image-20250408224603614.png)
 
 - Probability versus Nonprobability
 
@@ -362,7 +362,7 @@ EDA
 
 
 
-![image-20250408195624564](assets/ML&DataAnalysis.assets/image-20250408195624564.png)
+![image-20250408195624564](assets/ml-and-data-analysis.assets/image-20250408195624564.png)
 
 Ratio :  定量，两个值的差异定义明确，有意义，比值是有意义的，0值是有意义的
 
@@ -372,7 +372,7 @@ Ordinal : 定性，人为的排序，差值和比值无意义
 
 Nominal : 定性，只有名称标签
 
-![image-20250408200255642](assets/ML&DataAnalysis.assets/image-20250408200255642.png)
+![image-20250408200255642](assets/ml-and-data-analysis.assets/image-20250408200255642.png)
 
 
 
@@ -384,13 +384,13 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408200440033](assets/ML&DataAnalysis.assets/image-20250408200440033.png)
+![image-20250408200440033](assets/ml-and-data-analysis.assets/image-20250408200440033.png)
 
 
 
 使用场景
 
-![image-20250408200657714](assets/ML&DataAnalysis.assets/image-20250408200657714.png)
+![image-20250408200657714](assets/ml-and-data-analysis.assets/image-20250408200657714.png)
 
 
 
@@ -400,7 +400,7 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408201227803](assets/ML&DataAnalysis.assets/image-20250408201227803.png)
+![image-20250408201227803](assets/ml-and-data-analysis.assets/image-20250408201227803.png)
 
 ### 3 Skew 数据的偏态
 
@@ -410,7 +410,7 @@ Nominal : 定性，只有名称标签
 
 
 
-![image-20250408201729656](assets/ML&DataAnalysis.assets/image-20250408201729656.png)
+![image-20250408201729656](assets/ml-and-data-analysis.assets/image-20250408201729656.png)
 
 
 
@@ -426,7 +426,7 @@ Nominal : 定性，只有名称标签
 
 **公式：**
 
-![image-20250408203514268](assets/ML&DataAnalysis.assets/image-20250408203514268.png)
+![image-20250408203514268](assets/ml-and-data-analysis.assets/image-20250408203514268.png)
 
 适用范围： 假设变量呈正态分布，变量间是线性的，且对异常值敏感
 
@@ -488,13 +488,13 @@ Nominal : 定性，只有名称标签
 
 ## Data Visualization
 
-![image-20250408205350586](assets/ML&DataAnalysis.assets/image-20250408205350586.png)
+![image-20250408205350586](assets/ml-and-data-analysis.assets/image-20250408205350586.png)
 
-![image-20250408205359058](assets/ML&DataAnalysis.assets/image-20250408205359058.png)
+![image-20250408205359058](assets/ml-and-data-analysis.assets/image-20250408205359058.png)
 
-![image-20250408205412981](assets/ML&DataAnalysis.assets/image-20250408205412981.png)
+![image-20250408205412981](assets/ml-and-data-analysis.assets/image-20250408205412981.png)
 
-![image-20250408205423147](assets/ML&DataAnalysis.assets/image-20250408205423147.png)
+![image-20250408205423147](assets/ml-and-data-analysis.assets/image-20250408205423147.png)
 
 剩下都是python
 
@@ -632,7 +632,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
   比较一个样本的均值是否等于某个特定值（总体均值）；例如10个同学成绩是否比上次提高 （可以比较平均值和上次均值75分）
 
-  ![image-20250412113709875](assets/ML&DataAnalysis.assets/image-20250412113709875.png)
+  ![image-20250412113709875](assets/ml-and-data-analysis.assets/image-20250412113709875.png)
 
 - 成对样本t检验paired t-test
 
@@ -657,7 +657,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 - 相关性（两个变量变化是否相匹配）不能建立不同变量的因果性：统计数据即可观察
 
-  ![image-20250412114227394](assets/ML&DataAnalysis.assets/image-20250412114227394.png)
+  ![image-20250412114227394](assets/ml-and-data-analysis.assets/image-20250412114227394.png)
 
 - 分析因果性：回归模型，需要严格的实验
 
@@ -677,7 +677,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 专有名词
 
-![image-20250409113813911](assets/ML&DataAnalysis.assets/image-20250409113813911.png)
+![image-20250409113813911](assets/ml-and-data-analysis.assets/image-20250409113813911.png)
 
 
 
@@ -685,7 +685,7 @@ t检验：判断样本均值之间的差异是否统计上显著
 
 **作用**：惩罚无关变量，避免过拟合。
 
-![image-20250409113859911](assets/ML&DataAnalysis.assets/image-20250409113859911.png)
+![image-20250409113859911](assets/ml-and-data-analysis.assets/image-20250409113859911.png)
 
 
 
@@ -755,7 +755,7 @@ multicollinearity
 
 
 
-![image-20250409115318540](assets/ML&DataAnalysis.assets/image-20250409115318540.png)
+![image-20250409115318540](assets/ml-and-data-analysis.assets/image-20250409115318540.png)
 
 
 
@@ -808,17 +808,17 @@ Model Diagnostics – Corrective Actions
 
 # Mid-Term Exam
 
-![image-20250424031350272](assets/ML&DataAnalysis.assets/image-20250424031350272.png)
+![image-20250424031350272](assets/ml-and-data-analysis.assets/image-20250424031350272.png)
 
-![image-20250424031503643](assets/ML&DataAnalysis.assets/image-20250424031503643.png)
+![image-20250424031503643](assets/ml-and-data-analysis.assets/image-20250424031503643.png)
 
-![image-20250424031705308](assets/ML&DataAnalysis.assets/image-20250424031705308.png)
+![image-20250424031705308](assets/ml-and-data-analysis.assets/image-20250424031705308.png)
 
 - **F统计量的作用**：检验模型整体显著性，即所有自变量联合是否对因变量有显著影响。
 - **原假设（H₀）**：所有自变量系数均为零（模型不优于空模型）。
 - **p值解读**：若p值极小（如<0.05），拒绝H₀，说明模型整体显著。
 
-![image-20250424031808397](assets/ML&DataAnalysis.assets/image-20250424031808397.png)
+![image-20250424031808397](assets/ml-and-data-analysis.assets/image-20250424031808397.png)
 
 - **B. 创造多用途新信息**：错误。题目聚焦模型性能提升，非外部应用。
 - **C. 转化为更具意义的变量**：正确。年龄直接关联房屋状态，更易被模型捕捉规律。
@@ -923,7 +923,7 @@ Model Diagnostics – Corrective Actions
   - boosting:弱学习器顺序训练，后一个针对前一个的误差，如 AdaBoost,XGBoost
   - stacking:弱学习器的预测被另一个独立模型作为输入以获得最终输出
 
-![image-20250507133221717](assets/ML&DataAnalysis.assets/image-20250507133221717.png)
+![image-20250507133221717](assets/ml-and-data-analysis.assets/image-20250507133221717.png)
 
 
 
