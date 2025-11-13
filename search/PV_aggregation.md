@@ -2,9 +2,7 @@
 
 
 - **Operational day-ahead solar power forecasting for aggregated PV systems with a varying spatial distribution**. Visser Lennard et.al. **Renewable Energy**, **2022-1**, ([pdf](..\..\papers\PV\Operational_day-ahead_solar_power_forecasting_for_aggregated_PV_systems_with_a_varying_spatial_distribution.pdf))([link](https://doi.org/10.1016/j.renene.2021.10.102)).
-
-
-    - RF、LSTM多光伏系统聚合效果好，其余经济相关内容没啥用
+  - RF、LSTM多光伏系统聚合效果好，其余经济相关内容没啥用
 
 
 
@@ -18,11 +16,9 @@
 
 - **A cross-sectional survey of deterministic PV power forecasting: Progress and limitations in current approaches**. Sabadus Andreea et.al. **Renewable Energy**, **2024-5**, ([pdf](..\..\papers\PV\A_cross-sectional_survey.pdf))([link](https://doi.org/10.1016/j.renene.2024.120385)).
 
+  - 仅单一预测场景
 
-    - 仅单一预测场景
-
-
-    - 短时间5mins内，hybrid方法（physics+ml）更好
+  - 短时间5mins内，hybrid方法（physics+ml）更好
 
 
 
@@ -45,10 +41,9 @@
 
 - **Comparison of Direct and Indirect Approaches to PV Power Estimation**. Narynbaev Alisher F. et.al. **No journal**, **2024-2-29**,([pdf](..\..\papers\PV\Comparison_of_Direct_and_Indirect_Approaches_to_PV_Power_Estimation.pdf)) ([link](https://doi.org/10.1109/reepe60449.2024.10479839)).
 
+  - 间接就是分阶段建模数据好的时候还是统计/机器学习模型表现好
 
-    - 间接就是分阶段建模数据好的时候还是统计/机器学习模型表现好
-    
-      > 没啥用，用的MLP，可做benchmark
+    > 没啥用，用的MLP，可做benchmark
 
 
 - **Day-ahead solar photovoltaic energy forecasting based on weather data using LSTM networks: a comparative study for photovoltaic (PV) panels in Turkey**. Garip Zeynep et.al. **Electr Eng**, **2023-6-19**, ([pdf](..\..\papers\PV\Day_ahead.pdf))([link](https://doi.org/10.1007/s00202-023-01883-7)).***
@@ -65,17 +60,13 @@
 
 - **Solar Power Estimation Methods Using ANN and CA-ANN Models for Hydrogen Production Potential in Mediterranean Region**. Ateş Kübra Tümay et.al. **IETE Journal of Research**, **2023-3**,([pdf](..\..\papers\PV\Solar_Power_Estimation_Methods_Using_ANN_and_CA-ANN_Models_for_Hydrogen_Production_Potential_in_Mediterranean_Region.pdf)) ([link](https://doi.org/10.1080/03772063.2023.2176931)).
 
+  - 人工神经网络（ANN）
 
-    - **人工神经网络（ANN）**
+  - Cultural Algorithm-Artificial Neural Network(CA-ANN)
 
-
-    - Cultural Algorithm-Artificial Neural Network(******CA**-ANN)
-    
-      > 感觉没啥用，或许可以试试
-
+    > 感觉没啥用，或许可以试试
 
 - **Day-Ahead Operational Forecast of Aggregated Solar Generation Assimilating Mesoscale Meteorology Information**. Terrén-Serrano Guillermo et.al. **No journal**, **2025-1-21**, ([pdf](..\..\papers\PV\Day-Ahead_Operational_Forecast_of_Aggregated_Solar_Generation_Assimilating_Mesoscale_Meteorology_Information.pdf)) ([link](https://doi.org/10.1109/gridedge61154.2025.10887459)).
-
 
   - 和我想要的不太一样，一种基于稀疏和贝叶斯学习的集成模型，用于开发具有概率性的日提前期系统级太阳能预测
 
@@ -98,10 +89,15 @@
 
 - **A Data-driven Approach for Forecasting State Level Aggregated Solar Photovoltaic Power Production**. Rana Mashud et.al. **No journal**, **2020-7**, ([pdf](..\..\papers\PV\A_Data-driven_Approach_for_Forecasting_State_Level_Aggregated_Solar_Photovoltaic_Power_Production.pdf))([link](https://doi.org/10.1109/ijcnn48605.2020.9207594)).***
 
-
   - 区域性预测，强comm，仅依赖历史数据（并网长期发电数据），未融合复杂气象数据，day-ahead
 
     ![05f7ef3b635152c1d61f1174d21f8ecc](./assets/PV_aggregation.assets/05f7ef3b635152c1d61f1174d21f8ecc.png)
+    
+    ![image-20251112144621524](./assets/PV_aggregation.assets/image-20251112144621524.png)
+    
+    不是一直向前预测，而是每个时间点单独进行预测
+
+
 
 - **Forecasting Regional Level Solar Power Generation Using Advanced Deep Learning Approach**. Almaghrabi Sarah et.al. **No journal**, **2021-7-18**, ([pdf](..\..\papers\PV\Forecasting_Regional_Level_Solar_Power_Generation_Using_Advanced_Deep_Learning_Approach.pdf))([link](https://doi.org/10.1109/ijcnn52387.2021.9533458)).
 
