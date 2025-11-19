@@ -213,7 +213,7 @@ D --> E[Compact Efficient Model]
 # References
 
 - [(39 封私信 / 80 条消息) 量化、剪枝、蒸馏、二值化](https://zhuanlan.zhihu.com/p/1888965050078839746)
-- https://arxiv.org/pdf/1603.05279
-  https://arxiv.org/pdf/2004.09602
-  https://arxiv.org/pdf/1511.00363
-  https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/37631.pdf
+- <https://arxiv.org/pdf/1603.05279>
+  <https://arxiv.org/pdf/2004.09602>
+  <https://arxiv.org/pdf/1511.00363>
+  <https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/37631.pdf>

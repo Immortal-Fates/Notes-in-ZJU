@@ -4,13 +4,7 @@
 
 <!--more-->
 
-
-
 # 水测
-
-
-
-
 
 # 六级
 
@@ -65,7 +59,7 @@
 
 - 现象解释：
 
-  With the rapid development of _/In the contemporary world,___(主题词)have/has become increasingly important.主题句(It's of great necessity for _ to _.)Reasons and concrete evidence to support my view point are as follows.
+  With the rapid development of _/In the contemporary world,___(主题词)have/has become increasingly important.主题句(It's of great necessity for _to_.)Reasons and concrete evidence to support my view point are as follows.
 
 - 问题解决
 
@@ -73,30 +67,22 @@
 
 - 观点选择
 
-  In the contemporary world,___(主题词)have/has become increasingly important(背景).When faced with decision of A or B，quite a few would deem that _,but others,in contrast,believe that _A/B is the premier choice and that is also my point. Among countless reasons which support my view there are three conspicious aspects as follow
+  In the contemporary world,___(主题词)have/has become increasingly important(背景).When faced with decision of A or B，quite a few would deem that _,but others,in contrast,believe that_A/B is the premier choice and that is also my point. Among countless reasons which support my view there are three conspicious aspects as follow
 
 #### 第二段
 
 - 论点1：In the first place,there is no doubt that_保证正确;With something,something will happen(学会扩写)
-- 论据1：Based on big data,most of _admitted that _
+- 论据1：Based on big data,most of _admitted that_
 - 论点2：Moreover,no one can deny that _
-- 论据2：Where there is/are _,there is _
+- 论据2：Where there is/are _,there is_
 - 论点3：Last but not least, I firmly believe that_
 - 论据3：the more _ ,the more
 
 #### 第三段
 
-- In conclusion,_.If we spare no efforts to _ ,the future of will be both hopeful and rosy.
-
-
+- In conclusion,_.If we spare no efforts to_ ,the future of will be both hopeful and rosy.
 
 # 托福雅思
-
-
-
-
-
-
 
 # Some Words
 
@@ -107,15 +93,9 @@
 - irritated 激怒
 - restless 不安的
 
-
-
-
-
-
-
 # References
 
-- 托福雅思：https://ielts.papaen.com/center/mock
+- 托福雅思：<https://ielts.papaen.com/center/mock>
 
 - 四六级题库：[同桌英语|四六级题库-英语四六级题库网站 (itongzhuo.com)](https://cet.itongzhuo.com/fourSix/exam/jumpFourSixExam.do?meType=11)
 

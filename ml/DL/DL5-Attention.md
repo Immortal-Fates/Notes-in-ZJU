@@ -10,8 +10,6 @@ Attention Mechanisms and Transformers
 
 最后将描述仅仅基于注意力机制的**Transformer**架构，该架构中使用了**多头注意力**（multi-head attention）和**自注意力**（self-attention）。自2017年横空出世，Transformer一直都普遍存在于现代的深度学习应用中，
 
-
-
 # Attention Cues
 
 人类的注意力方式：
@@ -31,8 +29,6 @@ Attention Mechanisms and Transformers
 
 可以通过设计注意力汇聚的方式，便于给定的查询（自主性提示）与键（非自主性提示）进行匹配（得到注意力权重），这将引导得出最匹配的值（感官输入）
 
-
-
 # Attention Pooling
 
 - what: 给定一组向量 x1,…,xnx_1,\dots,x_nx1,…,xn（比如序列中的 token 表示、图的邻居节点、CNN 的空间/通道特征），Attention Pooling 通过**可学习的注意力权重**把它们**加权汇聚**成一个摘要向量
@@ -45,8 +41,6 @@ $$
 
 - 注意力汇聚可以分为非参数型和带参数型。
 
-
-
 ## 批量矩阵乘法
 
 批量矩阵乘法（batched matmul）
@@ -57,13 +51,13 @@ $$
 
 - how：
 
-  - **`torch.bmm(A, B)`**  
+  - **`torch.bmm(A, B)`**
     - 仅 3D：`[B, n, m] @ [B, m, p] -> [B, n, p]`
-  - **`torch.matmul(A, B)` 或 `A @ B`**  
+  - **`torch.matmul(A, B)` 或 `A @ B`**
     - 支持更高维与**广播**：`[..., n, m] @ [..., m, p] -> [..., n, p]`
-  - **`torch.einsum('... n m, ... m p -> ... n p', A, B)`**  
+  - **`torch.einsum('... n m, ... m p -> ... n p', A, B)`**
     - 显式指定维度关系，最直观
-  - **`torch.baddbmm(C, A, B, beta=1, alpha=1)`**  
+  - **`torch.baddbmm(C, A, B, beta=1, alpha=1)`**
     - 计算 `C = beta*C + alpha*(A @ B)`，融合加法更高效
 
 # Attention Scoring Functions
@@ -115,7 +109,6 @@ $$
 
 - Sequence-to-sequence model: reasonable for short sequences but struggled whit lbng ones
 
-
 - The Bahdanau Attention Mechanism
 
   - 没有严格单项对齐限制的可微注意力模型。dynamically focus
@@ -126,18 +119,18 @@ $$
 
     ![seq2seq-details-attention](./assets/DL5-Attention.assets/seq2seq-details-attention.svg)
 
-    1. **Encoder Outputs** 
+    1. **Encoder Outputs**
        The encoder processes the input sequence $(x_1, x_2, ..., x_T)$ and produces hidden states:  $ h_1, h_2, ..., h_T $
 
-    2. **Attention Scores (Alignment Model)** 
-       At each decoder time step $ t $, the decoder hidden state $ s_{t-1} $ is compared with each encoder hidden state $ h_i $ to produce an **alignment score**: 
+    2. **Attention Scores (Alignment Model)**
+       At each decoder time step $ t $, the decoder hidden state $ s_{t-1} $ is compared with each encoder hidden state $ h_i $ to produce an **alignment score**:
        $$
        e_{ti} = a(s_{t-1}, h_i)
        $$
        where $ a(\cdot) $ is a small feed-forward neural network (hence “additive” attention).使用加性注意力打分函数
 
-    3. **Attention Weights** 
-       The alignment scores are normalized using a **softmax** function: 
+    3. **Attention Weights**
+       The alignment scores are normalized using a **softmax** function:
        $$
        \alpha_{ti} = \frac{\exp(e_{ti})}{\sum_{k}\exp(e_{tk})}
        $$
@@ -146,27 +139,24 @@ $$
        > These weights depend on both the current decoding context $(s_{t-1})$and the encoder outputs $(h_i)$.
        >
        > Therefore, **for each word being generated**, the model “looks” at **different parts of the input sequence**
-       
-    4. **Context Vector** 
-  
-       A **context vector** is computed as a weighted sum of encoder hidden states:  
+
+    4. **Context Vector**
+
+       A **context vector** is computed as a weighted sum of encoder hidden states:
        $$
        c_t = \sum_{i} \alpha_{ti} h_i
        $$
 
-    5. **Decoder Update** 
+    5. **Decoder Update**
 
        The context vector $ c_t $ and the previous decoder state $ s_{t-1} $ are combined to produce the new decoder state $ s_t $, which then predicts the next output token.
-  
+
   - how:
-  
+
     - 初始化解码器状态
       - 编码器在所有时间步的最终层隐状态，将作为注意力的键和值；
       - 上一时间步的编码器全层隐状态，将作为初始化解码器的隐状态；
       - 编码器有效长度（排除在注意力池中填充词元）。
-  
-    
-  
 
 # Multi-Head Attention
 
@@ -219,7 +209,7 @@ $$
   $$
   attention pooling $f$。
 
-- how: 
+- how:
 
   1. Starting Point: Token Embeddings
 
@@ -242,21 +232,17 @@ $$
 
      $$
      \begin{aligned}
-     
+
      Q = X W_Q \\
      K = X W_K \\
      V = X W_V
-     
+
      \end{aligned}
      $$
      Where:
 
      - $  W_Q, W_K, W_V \in \mathbb{R}^{d_{\text{model}} \times d_k}  $
      - $  d_k  $ is the dimensionality of the Query/Key/Value space (often $  d_k = \frac{d_{\text{model}}}{h}  $ for multi-head attention with $  h  $ heads)
-
-     
-
-  
 
 ## Comparing CNNs, RNNs, and Self-Attention
 
@@ -265,7 +251,6 @@ $$
 > Note: that sequential operations prevent parallel computation, while a shorter path between any combination of sequence positions makes it easier to learn long-range dependencies within the sequence
 
 - Conclustion: Both CNNs and self-attention enjoy **parallel computation** and self-attention has the **shortest maximum path length**. However, the **quadratic computational complexity** with respect to the sequence length makes self-attention prohibitively slow for very long sequences.
-
 
 - parallel computation
 
@@ -278,8 +263,6 @@ $$
     Z = softmax(\frac{QK^T}{\sqrt{d_k}})V
     $$
     Since this uses matrix operations, **all pairwise interactions between tokens can be computed simultaneously** on GPUs or TPUs.
-
-
 
 ## Positional Encoding
 
@@ -301,19 +284,19 @@ $$
       Denoting$\omega_j = 1/10000^{2j/d}$, any pair of $(p_{i, 2j}, p_{i, 2j+1})$ can be linearly projected to $(p_{i+\delta, 2j}, p_{i+\delta, 2j+1})$for any fixed offset $\delta$:
       $$
       \begin{aligned}
-      
+
       \begin{bmatrix} \cos(\delta \omega_j) & \sin(\delta \omega_j) \\  -\sin(\delta \omega_j) & \cos(\delta \omega_j) \\ \end{bmatrix}
-      
+
       \begin{bmatrix} p_{i, 2j} \\  p_{i, 2j+1} \\ \end{bmatrix}
-      
+
       =&\begin{bmatrix} \cos(\delta \omega_j) \sin(i \omega_j) + \sin(\delta \omega_j) \cos(i \omega_j) \\  -\sin(\delta \omega_j) \sin(i \omega_j) + \cos(\delta \omega_j) \cos(i \omega_j) \\ \end{bmatrix}\\
-      
+
       =&\begin{bmatrix} \sin\left((i+\delta) \omega_j\right) \\  \cos\left((i+\delta) \omega_j\right) \\ \end{bmatrix}\\
-      
-      =& 
-      
+
+      =&
+
       \begin{bmatrix} p_{i+\delta, 2j} \\  p_{i+\delta, 2j+1} \\ \end{bmatrix},
-      
+
       \end{aligned}
       $$
       where the $2\times 2$ projection matrix does not depend on any position index $i$.
@@ -326,8 +309,6 @@ $$
   - Learnable Positional Embeddings
 
     Instead of fixed sinusoids, the model learns one embedding vector per position — similar to word embeddings.
-
-
 
 # The Transformer Architecture
 
@@ -357,15 +338,15 @@ This concept is the bridge between the **Transformer architecture** you’ve jus
 
 ## Motivation
 
-Before Transformers, NLP systems often trained a model **from scratch** on each task — translation, sentiment analysis, question answering, etc.  
+Before Transformers, NLP systems often trained a model **from scratch** on each task — translation, sentiment analysis, question answering, etc.
 This approach had two major problems:
 
-- **Limited labeled data** for each task  
-- **Poor generalization** across tasks  
+- **Limited labeled data** for each task
+- **Poor generalization** across tasks
 
 The key idea behind *large-scale pretraining* is to **train one big Transformer model** on **massive amounts of unlabeled text**, and then **fine-tune** it for specific downstream tasks.
 
-> This approach mirrors how humans learn language:  
+> This approach mirrors how humans learn language:
 >
 > We learn general knowledge from reading and listening before applying it to specific problems.
 
@@ -401,12 +382,12 @@ Unlabeled Text  ──► Pretraining (Self-Supervised Learning)
 
     **Pretraining tasks:**
 
-    - **Masked Language Modeling (MLM)** 
+    - **Masked Language Modeling (MLM)**
       Randomly mask 15% of tokens and train the model to predict them from surrounding context.
-    - **Next Sentence Prediction (NSP)** 
+    - **Next Sentence Prediction (NSP)**
       Train the model to determine whether two sentences appear consecutively in the original text.
 
-    **Goal:** 
+    **Goal:**
     Learn *deep bidirectional contextual representations* — every token’s embedding reflects information from both its left and right context.
 
   - Decoder-based Models — *e.g., GPT*
@@ -419,17 +400,16 @@ Unlabeled Text  ──► Pretraining (Self-Supervised Learning)
 
     - **Autoregressive Language Modeling (next-token prediction)**
 
-    **Goal:** 
+    **Goal:**
     Learn to *generate text* and *model sequences causally*, one token at a time.
 
 - Fine-Tuning: Transferring to Downstream Tasks
 
   During fine-tuning:
 
-  - The pretrained parameters are used as initialization.  
-  - A small task-specific layer (e.g., classifier head) is added.  
+  - The pretrained parameters are used as initialization.
+  - A small task-specific layer (e.g., classifier head) is added.
   - Training is much faster and more data-efficient.
-
 
 ## Benefits
 
@@ -439,22 +419,3 @@ Unlabeled Text  ──► Pretraining (Self-Supervised Learning)
 | **Generalization**          | Transfers linguistic and world knowledge to diverse tasks.   |
 | **Scalability**             | Larger models consistently perform better (scaling laws).    |
 | **Zero-/Few-shot Learning** | Models like GPT-3 can perform tasks with no or few examples. |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

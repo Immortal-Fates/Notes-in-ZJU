@@ -31,7 +31,7 @@ $$
 $$
 ^{A}V_Q = \lim_{\Delta t \to 0} \frac{
 \begin{aligned}
-&^{A}P_{Borg}(t + \Delta t) + {^{A}_BR}(t + \Delta t)^BQ(t + \Delta t) 
+&^{A}P_{Borg}(t + \Delta t) + {^{A}_BR}(t + \Delta t)^BQ(t + \Delta t)
 - {^{A}P_{Borg}}(t) - {^{A}_BR(t)}{^BQ(t)}
 \end{aligned}
 }{\Delta t}
@@ -112,27 +112,21 @@ $$
 RR^T = I_n
 $$
 
-
 其中，$I_n$ 是 $n \times n$ 单位阵。对于旋转矩阵，$n$ 为 3。
 
 对式子求导得：
-
 
 $$
 \dot{R}R^T + R\dot{R}^T = \dot{R}R^T + (\dot{R}R^T)^T = 0_n
 $$
 
-
 若定义 $S = \dot{R}R^T$，则由上式可知，$S$ 是一个反对称阵 (skew-symmetric matrix)，满足：
-
 
 $$
 S + S^T = 0_n
 $$
 
-
 因此知道，旋转矩阵的微分与某个反对称阵之间存在如下特性：
-
 
 $$
 S = \dot{R}R^{-1} =\begin{bmatrix}
@@ -259,8 +253,6 @@ $$
 
   > $\dot{d}_{i+1} $是移动关节$i+1$的平移速度
 
-
-
 ### 向外迭代法
 
 若已知每个关节，最后可求得${^N\omega_N}~and ~ {^N\nu _N}$，进一步可得
@@ -279,12 +271,6 @@ $$
 ![image-20250312160317384](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250312160317384.png)
 
 ![image-20250312160326740](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250312160326740.png)
-
-
-
-
-
-
 
 ## 雅可比矩阵
 
@@ -348,7 +334,6 @@ $$
   $$
   末端实际线速度和角速度就是各关节造成的线速度和角速度的总和:
 
-
 $$
    \nu_N = \sum_{i=1}^{N} \nu_N^{(i)}, \quad \omega_N = \sum_{i=1}^{N} \omega_N^{(i)}
 $$
@@ -356,7 +341,6 @@ $$
   定义笛卡尔速度矢量$  \nu_N = \begin{bmatrix} \nu_N \\ \omega_N \end{bmatrix} \in \mathbb{R}^6  $ 和关节空间角速度矢量$  \dot{\Theta} = \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \\ \vdots \\ \dot{\theta}_N \end{bmatrix} \in \mathbb{R}^N  $
 
   则：
-
 
 $$
 \nu_N = \begin{bmatrix} \hat{Z}_1 \times (P_N - P_1) & \hat{Z}_2 \times (P_N - P_2) & \cdots & \hat{Z}_{N-1} \times (P_N - P_{N-1}) & 0 \\ \hat{Z}_1 & \hat{Z}_2 & \cdots & \hat{Z}_{N-1} & \hat{Z}_N \end{bmatrix} \dot{\Theta}
@@ -378,7 +362,7 @@ $$
 
   ![image-20250304193342682](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250304193342682.png)
 
-参考坐标系变换下的雅可比矩阵  
+参考坐标系变换下的雅可比矩阵
 
 若关心 $\{i\}$ 中的笛卡尔速度向量，则
 $$
@@ -405,7 +389,7 @@ $$
 $$
 变换后的雅可比矩阵表示为
 $$
-^i \mathbf{J}(\mathbf{\Theta}) = 
+^i \mathbf{J}(\mathbf{\Theta}) =
 \begin{pmatrix}
 ^i_0 \mathbf{R} & 0 \\
 0 & ^i_0 \mathbf{R}
@@ -421,8 +405,6 @@ $$
 = ^i \mathbf{J}(\mathbf{\Theta}) \dot{\mathbf{\Theta}}
 $$
 ![image-20250310155016342](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250310155016342.png)
-
-
 
 - 微分变换法[【机器人学】微分变换与雅可比矩阵 - 简书 (jianshu.com)](https://www.jianshu.com/p/94213f4fe544)
 
@@ -479,7 +461,7 @@ $$
     > 如果R_i(\theta_i) = \begin{bmatrix} c\theta_i& -s\theta_i&0\\
     > s\theta_i&c\theta_i&0\\
     > 0&0&1
-    > \end{bmatrix},\\则\frac{\partial R_i}{\partial \theta_i} = \begin{bmatrix} 
+    > \end{bmatrix},\\则\frac{\partial R_i}{\partial \theta_i} = \begin{bmatrix}
     > -s\theta_i& -c\theta_i&0\\
     > c\theta_i& -s\theta_i&0\\
     > 0&0&1
@@ -494,8 +476,6 @@ $$
     $$
 
   以下是一个例子：
-
-  
 
   ![image-20240610171510584](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20240610171510584.png)
 
@@ -519,7 +499,6 @@ $$
   \end{aligned}
   $$
 
-
 ---
 
   矩阵形式表示
@@ -528,7 +507,7 @@ $$
   dx_b \\
   dy_b
   \end{bmatrix}
-  = 
+  =
   \underbrace{
   \begin{bmatrix}
   -l_1 \sin\theta_1 - l_2 \sin(\theta_1+\theta_2) & -l_2 \sin(\theta_1+\theta_2) \\
@@ -550,7 +529,7 @@ $$
   \dot{x}_b \\
   \dot{y}_b
   \end{bmatrix}
-  = J 
+  = J
   \begin{bmatrix}
   \dot{\theta}_1 \\
   \dot{\theta}_2
@@ -562,7 +541,6 @@ $$
 $$
   dx_b = \dot{x}_b dt, \quad d\theta_1 = \dot{\theta}_1 dt
 $$
-
 
 ---
 
@@ -583,7 +561,7 @@ $$
 - 向外迭代法：见上节
 
   主要是要使用${^0\nu_N},{^0\omega_N}$
-  
+
 - 内推法：得到的力域$J^T$，是在末端坐标系下
 
 ### 参考坐标系变换下的雅可比矩阵
@@ -634,7 +612,6 @@ $$
 
 令$  X = \begin{bmatrix} d \\ \phi \end{bmatrix}  $表示末端执行器的位姿，其中$  d  $为基座坐标系原点到末端执行器坐标系原点的一般向量，$  \phi  $为末端执行器坐标系相对于基座坐标系姿态的最小表示（例如固定角表示或欧拉角表示）。分析雅可比满足以下形式：
 
-
 $$
  \dot{X} = \begin{bmatrix} \dot{d} \\ \dot{\phi} \end{bmatrix} = J_a(\Theta) \dot{\Theta}
 $$
@@ -652,7 +629,6 @@ r_{21} & r_{22} & r_{23} \\
 r_{31} & r_{32} & r_{33}
 \end{pmatrix} \in \mathbb{R}^{3\times3}
 $$
-
 
 旋转矩阵微分方程：$$ \dot{R}R^T = S(\omega) $$其中反对称矩阵：
 $$
@@ -676,7 +652,6 @@ $$
 \end{pmatrix}
 $$
 
-
 这里假设刚体姿态采用**Z-Y-Z欧拉角**表示：$$ \Psi = (\alpha,\ \beta,\ \gamma)^T $$，欧拉角速率$\dot\Psi = (\alpha,\ \beta,\ \gamma)^T$
 
 总旋转矩阵为三次旋转的复合：$$ R = R_{Z\prime Y\prime Z\prime }(\alpha,\beta,\gamma) = R_z(\alpha)R_y(\beta)R_z(\gamma) $$
@@ -687,7 +662,7 @@ $$
 \omega_x = \left(\frac{\partial r_{31}}{\partial \alpha}r_{21} + \frac{\partial r_{32}}{\partial \alpha}r_{22} + \frac{\partial r_{33}}{\partial \alpha}r_{23}\right)\dot{\alpha} + \\
 \left(\frac{\partial r_{31}}{\partial \beta}r_{21} + \frac{\partial r_{32}}{\partial \beta}r_{22} + \frac{\partial r_{33}}{\partial \beta}r_{23}\right)\dot{\beta} + \\
 \left(\frac{\partial r_{31}}{\partial \gamma}r_{21} + \frac{\partial r_{32}}{\partial \gamma}r_{22} + \frac{\partial r_{33}}{\partial \gamma}r_{23}\right)\dot{\gamma}\\
-=-s\alpha\dot{\beta}+c\alpha s\beta \dot{\gamma} = (0\quad -s\alpha 
+=-s\alpha\dot{\beta}+c\alpha s\beta \dot{\gamma} = (0\quad -s\alpha
 \quad c\alpha s\beta)\dot\Psi
 $$
 
@@ -747,7 +722,6 @@ $$_N^0\boldsymbol{T}={}_1^0\boldsymbol{T}(\phi_1){}_2^1\boldsymbol{T}(\phi_2)\cd
 $X\left(\boldsymbol{\varphi}^d\right)=X\left(\boldsymbol{\varphi}^k\right)+\frac{\partial\boldsymbol{X}}{\partial\boldsymbol{\varphi}}\left(\boldsymbol{\varphi}^k\right)\delta\boldsymbol{\Phi}^k+\mathcal{O}\left(\left(\delta\boldsymbol{\varphi}^k\right)^2\right)$
 $\delta X\left(\boldsymbol{\Phi}^k\right)=\frac{\partial\boldsymbol{X}}{\partial\boldsymbol{\varphi}}\left(\boldsymbol{\Phi}^k\right)\delta\boldsymbol{\Phi}^k=\boldsymbol{J}_a\left(\boldsymbol{\Phi}^k\right)\delta\boldsymbol{\Phi}^k$
 
-
 由此得到迭代计算式$$\boldsymbol{\Phi}^{k+1}=\boldsymbol{\Phi}^k+\boldsymbol{J}_a^{-1}\left(\boldsymbol{\Phi}^k\right)\delta\boldsymbol{X}\left(\boldsymbol{\Phi}^k\right)$$
 
 > 这里使用$J_a^{-1}$，若是冗余机械臂则为行满秩，使用右逆矩阵$J_a^+$
@@ -764,7 +738,7 @@ $$
 
 - 正向速度关系：
   末端执行器的笛卡尔空间速度 $v_N$（含线速度与角速度）可表示为：$$ v_N = J(\theta)\dot{\theta} $$
-  
+
 - 逆向速度求解：
   已知末端速度 $v_N$ 时，关节角速度可通过雅可比逆矩阵计算：$$ \dot{\theta} = J^{-1}(\theta)v_N $$
 
@@ -786,8 +760,6 @@ $$
   \begin{bmatrix} 1 \\ 1 \end{bmatrix} x = \begin{bmatrix} 0 \\ 2 \end{bmatrix}，x^* = \left( \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} \right)^{-1} \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 0 \\ 2 \end{bmatrix}=1
   $$
 
-  
-
 - 欠定方程组（m < n），通常方程组可能存在无数个解，此时所有解中使得x范数最小的x为方程的最小范数解，由右伪逆计算：
   $$
   x^* =A^+b=A^{-1}_{right}b =  A^T(AA^T)^{-1}b
@@ -808,7 +780,7 @@ $$
  P = I - A^+A = \begin{cases}
 I - (A^TA)^{-1}A^TA & (m \geq n) \\
 I - A^T(AA^T)^{-1}A & (m < n)
-\end{cases} 
+\end{cases}
 $$
 
 所以逆微分运动总结如下：
@@ -838,12 +810,6 @@ $$
    \dot{\theta} = (J^TJ)^{-1}J^Tv_N
    $$
 
-   
-
-   
-
-
-
 ## 奇异性
 
 $$
@@ -866,8 +832,6 @@ $$
 - 当机械手处于奇异位型时，逆运动学问题可能出现无穷解；
 - 当接近奇异位型时，操作空间中细微的速度会导致关节空间中出现很大的速度。
 
-
-
 奇异位形分类：
 
 - 工作空间边界的奇异位形：出现在操作臂完全展开或者收回使得末端执行器处于或非常接近空间边界的情况
@@ -876,8 +840,6 @@ $$
 > 所有的操作臂在工作空间的边界都存在奇异位形，并且大多数操作臂在它们的工作空间也有奇异位形
 >
 > 对于平面机械臂，判断奇异性时，平面机械臂只需关心平面二维线速度部分的雅可比矩阵
-
-
 
 **可操作度**：衡量机器人位形与奇异位形距离的一种度量方式
 
@@ -927,7 +889,7 @@ $$
 $$
 v_e^\mathrm{T}\left(\boldsymbol{J}\boldsymbol{J}^\mathrm{T}\right)^{-1}\boldsymbol{v}_e=\boldsymbol{\alpha}^\mathrm{T}\boldsymbol{\Sigma}^{-2}\boldsymbol{\alpha}=\sum_{i=1}^m\frac{\alpha_i^2}{\sigma_i^2}\leq1
 $$
-为标准的椭球体方程，表明机器人此位形的可操作椭球体的轴由向量$\sigma_i u_i$给出  
+为标准的椭球体方程，表明机器人此位形的可操作椭球体的轴由向量$\sigma_i u_i$给出
 
 机器人关节速度取单位速度时：
 
@@ -960,9 +922,6 @@ $$
 <img src="markdown-img/ROBOT_Ⅰ.assets/image-20250312135529910.png" width=200/>
 </center>
 
-
-
-
 ## 机器人的静力
 
 操作臂在静态平衡（静止或匀速直线运动）状态下，考虑力和力矩如何从一个连杆向下一个连杆传递
@@ -988,8 +947,6 @@ $f$为作用在A点的力，则转移到B点，B点受力$f$且附加一个$r_{B
 
 **刚体静态平衡的条件**： 作用在刚体上的全部力的向量和为零且作用在刚体上的全部力矩的向量和为零，即$f_{\Sigma} =0,n_{\Sigma} = 0$
 
-
-
 ### 坐标系间力/力矩传递公式
 
 $$
@@ -1003,7 +960,6 @@ $$
 - $n_i=$连杆i-1施加在连杆i上的力矩
 
 在机器人动力学（如牛顿-欧拉法）中，相邻坐标系间的力和力矩传递关系可表示为：
-
 
 $$
 ^i \mathbf{f}_i = \,_{i+1}^{i}\mathbf{R} \cdot ^{i+1}\mathbf{f}_{i+1} \quad \text{(力的传递)}
@@ -1044,7 +1000,6 @@ J_{real}=\begin{bmatrix}
 \end{bmatrix} J
 $$
 
-
 下面是一个栗子：
 
 ![image-20250312172052858](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250312172052858.png)
@@ -1052,10 +1007,6 @@ $$
 ![image-20250312172101382](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250312172101382.png)
 
 ![image-20250312172109356](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20250312172109356.png)
-
-
-
-
 
 ### 力域中的雅可比
 
@@ -1112,7 +1063,6 @@ $$
 V^n = R(J^T) \oplus N(J)
 $$
 
-
 $$
 V^m = R(J) \oplus N(J^T)
 $$
@@ -1124,6 +1074,3 @@ $$
 ![image-20240610160923290](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20240610160923290.png)
 
 ![image-20240610161255435](markdown-img/ROBOT_I_微分运动学和静力学.assets/image-20240610161255435.png)
-
-
-

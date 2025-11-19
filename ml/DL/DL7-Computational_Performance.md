@@ -27,8 +27,6 @@ Understanding how asynchronous programming works helps us to develop more effici
 
 ## Barriers and Blockers
 
-
-
 # Automatic Parallelism
 
 - Modern systems have a variety of devices, such as multiple GPUs and CPUs. They can be used in parallel, asynchronously.
@@ -36,4 +34,3 @@ Understanding how asynchronous programming works helps us to develop more effici
 - The backend can improve performance through automatic parallel computation and communication.
 
 ![DM_20251110211534_001](./assets/DL7-Computational_Performance.assets/DM_20251110211534_001.svg)
-

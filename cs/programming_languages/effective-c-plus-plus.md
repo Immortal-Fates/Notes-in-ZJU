@@ -1,9 +1,5 @@
 # Main Takeaway
 
-
-
-
-
 # eff_C++
 
 1. 将 C++ 视为 federation of languages（语言联合体）
@@ -45,17 +41,17 @@
      ```c++
      ABEntry::ABEntry(const std::string& name, const std::string& address,
                       const std::list<PhoneNumber>& phones)
-     
+
      {
-     
+
        theName = name;                       // these are all assignments,
-     
+
        theAddress = address;                 // not initializations
-     
+
        thePhones = phones;
-     
+
        numTimesConsulted = 0;
-     
+
      }
      ```
 
@@ -64,12 +60,12 @@
      ```c++
      ABEntry::ABEntry(const std::string& name, const std::string& address,
                       const std::list<PhoneNumber>& phones)
-     
+
      : theName(name),
        theAddress(address),                  // these are now all initializations
        thePhones(phones),
        numTimesConsulted(0)
-     
+
      {}                                      // the ctor body is now empty
      ```
 
@@ -78,10 +74,10 @@
    - 将非局部静态对象替换为局部静态对象
 
      ```c++
-     FileSystem& tfs()	//这将替换tfs对象
+     FileSystem& tfs() //这将替换tfs对象
      {
-     	static FileSystem fs;	//初始化一个局部静态对象
-     	return fs;				//返回对它的引用
+      static FileSystem fs; //初始化一个局部静态对象
+      return fs;    //返回对它的引用
      }
      ```
 
@@ -97,21 +93,4 @@
 
    ![image-20240626222928316](assets/eff_C++.assets/image-20240626222928316.png)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# References 
-
-
-
+# References

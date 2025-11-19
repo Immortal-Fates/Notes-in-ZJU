@@ -4,15 +4,11 @@
 
 <!--more-->
 
-
-
 # MLP(Multilayer Perceptrons)
 
 ![image-20251101203201605](./assets/DL1-Basic.assets/image-20251101203201605.png)
 
 从线性模型进化：对每个隐藏单元应用非线性的激活函数(activation function)
-
-
 
 # Activation Function
 
@@ -36,7 +32,7 @@
   ![image-20251102113803460](./assets/DL1-Basic.assets/image-20251102113803460.png)
 
   当sigmoid输入很大或很小时，常会造成梯度消失
-  
+
 - tanh：双曲正切，将输入压缩转换到区间(-1, 1)
   $$
   \operatorname{tanh}(x) = \frac{1 - \exp(-2x)}{1 + \exp(-2x)}.
@@ -45,8 +41,6 @@
   $$
   \frac{d}{dx} \operatorname{tanh}(x) = 1 - \operatorname{tanh}^2(x).
   $$
-
-
 
 # underfitting and overfitting
 
@@ -87,17 +81,17 @@
     换言之，每个中间活性值$h$以**暂退概率**$p$由随机变量$h'$替换，如下所示：
     $$
     \begin{aligned}
-    
+
     h' =
-    
+
     \begin{cases}
-    
+
       0 & \text{ 概率为 } p \\
-    
+
       \frac{h}{1-p} & \text{ 其他情况}
-    
+
     \end{cases}
-    
+
     \end{aligned}
     $$
     根据此模型的设计，其期望值保持不变，即$E[h'] = h$。
@@ -107,12 +101,6 @@
   - 实践：我们可以将暂退法应用于每个隐藏层的输出（在激活函数之后），并且可以为每一层分别设置暂退概率：常见的技巧是在靠近输入层的地方设置较低的暂退概率，
 
   - 并且暂退法只在训练期间有效。
-
-
-
-
-
-
 
 # 范数与正则化
 
@@ -150,9 +138,9 @@
   $L_2$正则化回归的小批量随机梯度下降更新如下式：
   $$
   \begin{aligned}
-  
+
   \mathbf{w} & \leftarrow \left(1- \eta\lambda \right) \mathbf{w} - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \mathbf{x}^{(i)} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right).
-  
+
   \end{aligned}
   $$
   根据之前章节所讲的，我们根据估计值与观测值之间的差异来更新$\mathbf{w}$。然而，我们同时也在试图将$\mathbf{w}$的大小缩小到零。这就是为什么这种方法有时被称为**权重衰减**。
@@ -180,27 +168,27 @@
   现在，让我们假设层$x_j$的输入也具有零均值和方差$\gamma^2$，并且它们独立于$w_{ij}$并且彼此独立。在这种情况下，我们可以按如下方式计算$o_i$的平均值和方差：
   $$
   \begin{aligned}
-  
+
     E[o_i] & = \sum_{j=1}^{n_\mathrm{in}} E[w_{ij} x_j] \\&= \sum_{j=1}^{n_\mathrm{in}} E[w_{ij}] E[x_j] \\&= 0, \\
-  
+
     \mathrm{Var}[o_i] & = E[o_i^2] - (E[o_i])^2 \\
-  
+
   ​    & = \sum_{j=1}^{n_\mathrm{in}} E[w^2_{ij} x^2_j] - 0 \\
-  
+
   ​    & = \sum_{j=1}^{n_\mathrm{in}} E[w^2_{ij}] E[x^2_j] \\
-  
+
   ​    & = n_\mathrm{in} \sigma^2 \gamma^2.
-  
+
   \end{aligned}
   $$
   保持方差不变的一种方法是设置$n_\mathrm{in} \sigma^2 = 1$。现在考虑反向传播过程，我们面临着类似的问题，尽管梯度是从更靠近输出的层传播的。使用与前向传播相同的推断，我们可以看到，除非$n_\mathrm{out} \sigma^2 = 1$，否则梯度的方差可能会增大，其中$n_\mathrm{out}$是该层的输出的数量。这使得我们进退两难：我们不可能同时满足这两个条件。相反，我们只需满足：
   $$
   \begin{aligned}
-  
+
   \frac{1}{2} (n_\mathrm{in} + n_\mathrm{out}) \sigma^2 = 1 \text{ 或等价于 }
-  
+
   \sigma = \sqrt{\frac{2}{n_\mathrm{in} + n_\mathrm{out}}}.
-  
+
   \end{aligned}
   $$
   这就是现在标准且实用的**Xavier初始化**的基础，
@@ -221,8 +209,6 @@
 
 - 还有十几种不同的启发式方法
 
-
-
 # 数据预处理
 
 - 处理缺失值
@@ -240,4 +226,4 @@
 
 # References
 
-- super detailed: [CNN basics]https://cs231n.github.io/convolutional-networks/
+- super detailed: [CNN basics]<https://cs231n.github.io/convolutional-networks/>

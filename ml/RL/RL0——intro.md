@@ -4,8 +4,6 @@
 
 <!--more-->
 
-
-
 # Quick Start
 
 环境配置，使用conda环境装好（这里我是用的是python 3.10，基本什么都支持）
@@ -34,8 +32,6 @@
 
 5. 其他安装，例如pygame等
 
-
-
 # Envs
 
 下面对使用RL的环境进行一下介绍
@@ -45,8 +41,6 @@
   - **丰富的预置环境**: 包含经典控制、Atari游戏、机器人控制等多种任务
   - **环境注册系统**: 方便创建和管理自定义环境
 - **Stable Baselines3** 是一个高质量的强化学习算法实现库，基于PyTorch构建
-
-
 
 # Train
 
@@ -70,19 +64,17 @@ tensorboard --logdir=`your trained model path`
 
   - **含义**: 平均每个episode的长度（步数）
 
-   - **上升趋势**: 表示智能体存活时间越来越长，性能改善
+  - **上升趋势**: 表示智能体存活时间越来越长，性能改善
 
-   - **波动大**: 说明策略还不稳定
-
+  - **波动大**: 说明策略还不稳定
 
 - `rollout/ep_rew_mean`
 
   - **含义**: 平均每个episode的累积奖励
 
-   - **持续上升**: 训练进展良好
+  - **持续上升**: 训练进展良好
 
-   - **停滞或下降**: 可能遇到训练瓶颈
-
+  - **停滞或下降**: 可能遇到训练瓶颈
 
 ## Time 指标 (性能监控)
 
@@ -96,17 +88,14 @@ tensorboard --logdir=`your trained model path`
 
   - **影响因素**: 网络复杂度、并行环境数量、硬件性能
 
-
 - `time/iterations`
   - **含义**: 完成的训练迭代次数
-
 
 - `time/total_timesteps`
 
   - **含义**: 总的环境交互步数
 
   - **重要性**: 衡量智能体的经验积累量
-
 
 ## Train 指标 (核心学习指标)
 
@@ -116,15 +105,13 @@ tensorboard --logdir=`your trained model path`
 
   - **数值解读**:
 
-     - **0.01-0.03**: 理想范围，表示策略更新幅度适中
+    - **0.01-0.03**: 理想范围，表示策略更新幅度适中
 
-     - **> 0.05**: 策略变化太大，可能不稳定
+    - **> 0.05**: 策略变化太大，可能不稳定
 
-     - **< 0.005**: 策略变化太小，学习缓慢
-
+    - **< 0.005**: 策略变化太小，学习缓慢
 
   - **调整建议**: 如果持续过高，降低学习率或减小clip_range
-
 
 - `train/clip_fraction`
 
@@ -132,15 +119,13 @@ tensorboard --logdir=`your trained model path`
 
   - **数值解读**:
 
-     - **0.1-0.3**: 正常范围
+    - **0.1-0.3**: 正常范围
 
-     - **> 0.5**: 裁剪过多，学习率可能太高
+    - **> 0.5**: 裁剪过多，学习率可能太高
 
-     - **< 0.05**: 很少裁剪，可能可以提高学习率
-
+    - **< 0.05**: 很少裁剪，可能可以提高学习率
 
   - **PPO核心**: 反映PPO裁剪机制的工作情况
-
 
 - `train/clip_range`
 
@@ -150,22 +135,19 @@ tensorboard --logdir=`your trained model path`
 
   - **作用**: 限制策略更新幅度，保证训练稳定性
 
-
 - `train/entropy_loss`
 
   - **含义**: 策略熵的损失（负值）
 
   - **数值解读**:
 
-     - **绝对值大**: 策略探索性强（随机性高）
+    - **绝对值大**: 策略探索性强（随机性高）
 
-     - **绝对值小**: 策略变得确定性（收敛）
+    - **绝对值小**: 策略变得确定性（收敛）
 
-     - **逐渐减小**: 正常的学习过程
-
+    - **逐渐减小**: 正常的学习过程
 
   - **调整**: 通过ent_coef参数控制探索-利用平衡
-
 
 - `train/explained_variance`
 
@@ -173,22 +155,19 @@ tensorboard --logdir=`your trained model path`
 
   - **数值解读**:
 
-     - **0.8-0.95**: 价值函数学习良好
+    - **0.8-0.95**: 价值函数学习良好
 
-     - **0.5-0.8**: 中等水平
+    - **0.5-0.8**: 中等水平
 
-     - **< 0.3**: 价值函数学习困难
+    - **< 0.3**: 价值函数学习困难
 
-
-   - **负值**: 预测效果很差，需要调试
-
+  - **负值**: 预测效果很差，需要调试
 
 - `train/learning_rate`
 
   - **含义**: 当前学习率
 
   - **用途**: 如果使用学习率调度，可以观察其变化
-
 
 - `train/loss`
 
@@ -198,7 +177,6 @@ tensorboard --logdir=`your trained model path`
 
   - **波动**: 适度波动正常，剧烈波动表示不稳定
 
-
 - `train/policy_gradient_loss`
 
   - **含义**: 策略梯度损失
@@ -206,7 +184,6 @@ tensorboard --logdir=`your trained model path`
   - **重要性**: PPO的核心损失函数
 
   - **趋势**: 训练过程中应该逐渐减小
-
 
 - `train/std`
 
@@ -216,12 +193,11 @@ tensorboard --logdir=`your trained model path`
 
   - **数值解读**:
 
-     - **初期较大**: 探索性强
+    - **初期较大**: 探索性强
 
-     - **逐渐减小**: 策略变得更确定
+    - **逐渐减小**: 策略变得更确定
 
-     - **过小**: 可能收敛过早，缺乏探索
-
+    - **过小**: 可能收敛过早，缺乏探索
 
 - `train/value_loss`
 
@@ -230,7 +206,6 @@ tensorboard --logdir=`your trained model path`
   - **重要性**: 反映价值网络学习质量
 
   - **期望**: 逐渐下降，与explained_variance相关
-
 
 ## 指标监控建议
 
@@ -263,21 +238,18 @@ train/clip_fraction > 0.5: 策略更新过于激进
 # 根据指标调整超参数
 if train/approx_kl > 0.05:
     learning_rate *= 0.5  # 降低学习率
-    
+
 if train/explained_variance < 0.5:
     net_arch=dict(vf=[256, 256])  # 增加价值网络容量
-    
+
 if train/entropy_loss绝对值过小:
     ent_coef *= 2  # 增加探索
 ```
 
 通过监控这些指标，你可以实时了解训练进展，及时发现问题并调整超参数，确保训练的稳定性和效果。
 
-
-
 # References
 
 - [Stable-Baselines3 Docs - Reliable Reinforcement Learning Implementations — Stable Baselines3 2.6.1a1 documentation](https://stable-baselines3.readthedocs.io/en/master/index.html)
 - [Basic Usage - Gymnasium Documentation (farama.org)](https://gymnasium.farama.org/introduction/basic_usage/)
 - [PyTorch](https://pytorch.org/)
-

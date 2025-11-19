@@ -44,32 +44,32 @@ Git 有三种状态：**已提交（committed）**、**已修改（modified）**
 2. 将你想要下次提交的更改选择性地暂存，这样只会将更改的部分添加到暂存区。
 3. 提交更新，找到暂存区的文件，将快照永久性存储到 Git 目录。
 
-如果 Git 目录中保存着特定版本的文件，就属于 **已提交** 状态。 如果文件已修改并放入暂存区，就属于 **已暂存** 状态。 如果自上次检出后，作了修改但还没有放到暂存区域，就是 **已修改** 状态。 
+如果 Git 目录中保存着特定版本的文件，就属于 **已提交** 状态。 如果文件已修改并放入暂存区，就属于 **已暂存** 状态。 如果自上次检出后，作了修改但还没有放到暂存区域，就是 **已修改** 状态。
 
 ## Git获取帮助
 
 Git命令的manpage
 
 ```console
-$ git help <verb>
-$ git <verb> --help
-$ man git-<verb>
+git help <verb>
+git <verb> --help
+man git-<verb>
 ```
 
 or 可以用 `-h` 选项获得更简明的 "help'':
 
 ```
-$ git add -h 
+git add -h
 ```
 
 # Git config
 
-Git 自带一个 `git config` 的工具来帮助设置控制 Git 外观和行为的配置变量。 
+Git 自带一个 `git config` 的工具来帮助设置控制 Git 外观和行为的配置变量。
 
 查看所有的配置以及它们所在的文件：
 
 ```console
-$ git config --list --show-origin
+git config --list --show-origin
 ```
 
 - #### 用户信息
@@ -77,8 +77,8 @@ $ git config --list --show-origin
 安装完 Git 之后，要做的第一件事就是设置你的用户名和邮件地址。 这一点很重要，因为每一个 Git 提交都会使用这些信息，它们会写入到你的每一次提交中，不可更改：
 
 ```console
-$ git config --global user.name "John Doe"
-$ git config --global user.email johndoe@example.com
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
 ```
 
 > Tips:如果使用了 `--global` 选项，那么该命令只需要运行一次，因为之后无论你在该系统上做任何事情， Git 都会使用那些信息。（）
@@ -90,7 +90,7 @@ $ git config --global user.email johndoe@example.com
   如果你想使用不同的文本编辑器，例如 Emacs，可以这样做：
 
   ```console
-  $ git config --global core.editor emacs
+  git config --global core.editor emacs
   ```
 
   > 在 Windows 系统上，如果你想要使用别的文本编辑器，那么必须指定可执行文件的完整路径。 它可能随你的编辑器的打包方式而不同。
@@ -106,7 +106,7 @@ $ git config --global user.email johndoe@example.com
   John Doe
   ```
 
-> Note： 由于 Git 会从多个文件中读取同一配置变量的不同值，因此你可能会在其中看到意料之外的值而不知道为什么。 此时，你可以查询 Git 中该变量的 **原始** 值，它会告诉你哪一个配置文件最后设置了该值：`$ git config --show-origin rerere.autoUpdate file:/home/johndoe/.gitconfig	false`
+> Note： 由于 Git 会从多个文件中读取同一配置变量的不同值，因此你可能会在其中看到意料之外的值而不知道为什么。 此时，你可以查询 Git 中该变量的 **原始** 值，它会告诉你哪一个配置文件最后设置了该值：`$ git config --show-origin rerere.autoUpdate file:/home/johndoe/.gitconfig false`
 
 # Git Basics
 
@@ -126,9 +126,9 @@ $ git config --global user.email johndoe@example.com
   如果在一个已存在文件的文件夹（而非空文件夹）中进行版本控制，你应该开始追踪这些文件并进行初始提交。 可以通过 `git add` 命令来指定所需的文件来进行追踪，然后执行 `git commit` ：
 
   ```console
-  $ git add *.c
-  $ git add LICENSE
-  $ git commit -m 'initial project version'
+  git add *.c
+  git add LICENSE
+  git commit -m 'initial project version'
   ```
 
 - 从其它服务器 **克隆** 一个已存在的 Git 仓库。
@@ -136,7 +136,7 @@ $ git config --global user.email johndoe@example.com
   克隆仓库的命令是 `git clone <url>`
 
   ```console
-  $ git clone https://github.com/libgit2/libgit2
+  git clone https://github.com/libgit2/libgit2
   ```
 
   这会在当前目录下创建一个名为 “libgit2” 的目录，并在这个目录下初始化一个 `.git` 文件夹， 从远程仓库拉取下所有数据放入 `.git` 文件夹，然后从中读取最新版本的文件的拷贝。
@@ -144,7 +144,7 @@ $ git config --global user.email johndoe@example.com
   如果你想在克隆远程仓库的时候，自定义本地仓库的名字，你可以通过额外的参数指定新的目录名：
 
   ```console
-  $ git clone https://github.com/libgit2/libgit2 mylibgit
+  git clone https://github.com/libgit2/libgit2 mylibgit
   ```
 
 ## 记录每次更新到仓库
@@ -218,7 +218,7 @@ $ git config --global user.email johndoe@example.com
   可以在 `commit` 命令后添加 `-m` 选项，将提交信息与命令放在同一行，如下所示：
 
   ```console
-  $ git commit -m "Story 182: Fix benchmarks for speed"
+  git commit -m "Story 182: Fix benchmarks for speed"
   ```
 
   > Note:更详细的内容修改提示可以用 `-v` 选项查看，这会将你所作的更改的 diff 输出呈现在编辑器中，以便让你知道本次提交具体作出哪些修改。
@@ -230,7 +230,7 @@ $ git config --global user.email johndoe@example.com
   只要在提交的时候，给 `git commit` 加上 `-a` 选项，Git 就会自动把所有**已经跟踪过的文件**暂存起来一并提交，从而跳过 `git add` 步骤
 
   ```console
-  $ git commit -a -m 'added new benchmarks'
+  git commit -a -m 'added new benchmarks'
   ```
 
 - #### 移除文件
@@ -242,7 +242,7 @@ $ git config --global user.email johndoe@example.com
   另外一种情况是，我们想把文件从 Git 仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。 换句话说，你想让文件保留在磁盘，但是并不想让 Git 继续跟踪。 当你忘记添加 `.gitignore` 文件，不小心把一个很大的日志文件或一堆 `.a` 这样的编译生成文件添加到暂存区时，这一做法尤其有用。 为达到这一目的，使用 `--cached` 选项：
 
   ```console
-  $ git rm --cached README
+  git rm --cached README
   ```
 
   > 如果只是简单地从工作目录中手工删除文件，运行 `git status` 时就会在 “Changes not staged for commit” 部分（也就是 *未暂存清单*）看到。
@@ -252,15 +252,15 @@ $ git config --global user.email johndoe@example.com
    要在 Git 中对文件改名，可以这么做：（Git足够聪明）
 
   ```console
-  $ git mv file_from file_to
+  git mv file_from file_to
   ```
 
   运行 `git mv` 就相当于运行了下面三条命令：
 
   ```console
-  $ mv README.md README
-  $ git rm README.md
-  $ git add README
+  mv README.md README
+  git rm README.md
+  git add README
   ```
 
   直接使用 `git mv` 方便得多。 不过在使用其他工具重命名文件时，记得在提交前 `git rm` 删除旧文件名，再 `git add` 添加新文件名。
@@ -292,7 +292,7 @@ $ git config --global user.email johndoe@example.com
 
 - 想看到每次提交的简略统计信息，可以使用 `--stat` 选项。在每次提交的下面列出所有被修改过的文件、有多少文件被修改了以及被修改过的文件的哪些行被移除或是添加了。 在每次提交的最后还有一个总结
 
--  `--pretty`。 这个选项可以使用不同于默认格式的方式展示提交历史。`oneline` 会将每个提交放在一行显示，在浏览大量的提交时非常有用。 另外还有 `short`，`full` 和 `fuller` 选项，它们展示信息的格式基本一致，但是详尽程度不一 。
+- `--pretty`。 这个选项可以使用不同于默认格式的方式展示提交历史。`oneline` 会将每个提交放在一行显示，在浏览大量的提交时非常有用。 另外还有 `short`，`full` 和 `fuller` 选项，它们展示信息的格式基本一致，但是详尽程度不一 。
 
    `git log --pretty=format`  `format` 接受的常用格式占位符的写法及其代表的意义（可以定制记录的显示格式）：
 
@@ -332,7 +332,7 @@ $ git config --global user.email johndoe@example.com
 - `--since`==`--after`(仅显示指定时间之后的提交)和 `--until` ==`--before`(仅显示指定时间之前的提交)这种按照时间作限制的选项很有用。 下面的命令会列出最近两周的所有提交：
 
   ```console
-  $ git log --since=2.weeks
+  git log --since=2.weeks
   ```
 
   该命令可用的格式十分丰富——可以是类似 `"2008-01-15"` 的具体的某一天，也可以是类似 `"2 years 1 day 3 minutes ago"` 的相对日期。
@@ -344,7 +344,7 @@ $ git config --global user.email johndoe@example.com
 - 另一个非常有用的过滤器是 `-S`,它接受一个字符串参数，并且只会显示那些添加或删除了该字符串的提交。 假设你想找出添加或删除了对某一个特定函数的引用的提交，可以调用：
 
   ```console
-  $ git log -S function_name
+  git log -S function_name
   ```
 
 - 隐藏合并提交
@@ -358,8 +358,6 @@ $ git config --global user.email johndoe@example.com
 - `git cherry-pick <提交号>...`
 
 如果你想将一些提交记录复制到当前所在的位置（`HEAD`）下面的话， Cherry-pick 是最直接的方式了
-
-
 
 ## 撤销操作
 
@@ -388,7 +386,7 @@ revert 之后就可以把你的更改推送到远程仓库与别人分享
 有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 `--amend` 选项的提交命令来重新提交：
 
 ```console
-$ git commit --amend
+git commit --amend
 ```
 
 > Tips:即用一个 **新的提交** 替换旧的提交
@@ -398,7 +396,7 @@ $ git commit --amend
 `git reset HEAD <file>…` 来取消暂存
 
 ```console
-$ git reset HEAD CONTRIBUTING.md
+git reset HEAD CONTRIBUTING.md
 ```
 
 > Tips:`git reset` 是个危险的命令，如果加上了 `--hard` 选项则更是如此。
@@ -408,12 +406,12 @@ $ git reset HEAD CONTRIBUTING.md
 并不想保留对 `CONTRIBUTING.md` 文件的修改
 
 ```console
-$ git checkout -- CONTRIBUTING.md
+git checkout -- CONTRIBUTING.md
 ```
 
 > Tips:请务必记得 `git checkout — <file>` 是一个危险的命令。 你对那个文件在本地的任何修改都会消失——Git 会用最近提交的版本覆盖掉它。 除非你确实清楚不想要对那个文件的本地修改了，否则请不要使用这个命令。
 
-如果你仍然想保留对那个文件做出的修改，但是现在仍然需要撤消，Git 分支](https://git-scm.com/book/zh/v2/ch00/ch03-git-branching) 介绍保存进度与分支，这通常是更好的做法。
+如果你仍然想保留对那个文件做出的修改，但是现在仍然需要撤消，Git 分支](<https://git-scm.com/book/zh/v2/ch00/ch03-git-branching>) 介绍保存进度与分支，这通常是更好的做法。
 
 记住，在 Git 中任何 **已提交** 的东西几乎总是可以恢复的。 甚至那些被删除的分支中的提交或使用 `--amend` 选项覆盖的提交也可以恢复。 然而，任何你未提交的东西丢失后很可能再也找不到了。
 
@@ -434,14 +432,14 @@ $ git checkout -- CONTRIBUTING.md
 ```console
 $ git remote add pb https://github.com/paulboone/ticgit
 $ git remote -v
-pb	https://github.com/paulboone/ticgit (fetch)
-pb	https://github.com/paulboone/ticgit (push)
+pb https://github.com/paulboone/ticgit (fetch)
+pb https://github.com/paulboone/ticgit (push)
 ```
 
 可以在命令行中使用字符串 `pb` 来代替整个 URL
 
 ```
-$ gir fetch pb
+gir fetch pb
 ```
 
 ### 从远程仓库中抓取与拉取
@@ -449,7 +447,7 @@ $ gir fetch pb
 从远程仓库中获得数据，可以执行：
 
 ```console
-$ git fetch <remote>
+git fetch <remote>
 ```
 
 这个命令会访问远程仓库，从中拉取所有你还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。
@@ -485,8 +483,8 @@ paul
 如果因为一些原因想要移除一个远程仓库（你已经从服务器上搬走了或不再想使用某一个特定的镜像了， 又或者某一个贡献者不再贡献了）以使用 `git remote remove` 或 `git remote rm` ：
 
 ```console
-$ git remote remove paul
-$ git remote
+git remote remove paul
+git remote
 ```
 
 一旦你使用这种方式删除了一个远程仓库，那么所有和这个远程仓库相关的远程跟踪分支以及配置信息也会一起被删除。
@@ -567,7 +565,7 @@ $ git log --pretty=oneline
 现在，假设在 v1.2 时你忘记给项目打标签，也就是在 “updated rakefile” 提交。 你可以在之后补上标签。 要在那个提交上打标签，你需要在命令的末尾指定提交的校验和（或部分校验和）：
 
 ```console
-$ git tag -a v1.2 9fceb02
+git tag -a v1.2 9fceb02
 ```
 
 ### 共享标签
@@ -575,13 +573,13 @@ $ git tag -a v1.2 9fceb02
 默认情况下，`git push` 命令并不会传送标签到远程仓库服务器上。 在创建完标签后你必须显式地推送标签到共享服务器上。 这个过程就像共享远程分支一样——你可以运行 `git push origin <tagname>`。
 
 ```console
-$ git push origin v1.5
+git push origin v1.5
 ```
 
 如果想要一次性推送很多标签，也可以使用带有 `--tags` 选项的 `git push` 命令。 这将会把所有不在远程仓库服务器上的标签全部传送到那里。
 
 ```console
-$ git push origin --tags
+git push origin --tags
 ```
 
 现在，当其他人从仓库中克隆或拉取，他们也能得到你的那些标签。
@@ -612,7 +610,7 @@ To /git@github.com:schacon/simplegit.git
 第二种**更直观**的删除远程标签的方式是：
 
 ```console
-$ git push origin --delete <tagname>
+git push origin --delete <tagname>
 ```
 
 ### 检出标签
@@ -620,7 +618,7 @@ $ git push origin --delete <tagname>
 如果你想查看某个标签所指向的文件版本，可以使用 `git checkout` 命令， 虽然这会使你的仓库处于“分离头指针（detached HEAD）”的状态——这个状态有些不好的副作用：
 
 ```console
-$ git checkout 2.0.0
+git checkout 2.0.0
 ```
 
 在“detached HEAD"状态下，如果你做了某些更改然后提交它们，标签不会发生变化， 但你的新提交将不属于任何分支，并且将无法访问，除非通过确切的提交哈希才能访问。 因此，如果你需要进行更改，比如你要修复旧版本中的错误，那么通常需要创建一个新分支：
@@ -637,8 +635,8 @@ Switched to a new branch 'version2'
 配置Git command，看你需要咯
 
 ```console
-$ git config --global alias.co checkout
-$ git config --global alias.br branch
+git config --global alias.co checkout
+git config --global alias.br branch
 ```
 
 # Git Branching
@@ -664,7 +662,7 @@ Git有一个名为 `HEAD` 的特殊指针，指向当前所在的本地分支（
 使用 `git branch` 命令：只是为我创建了一个新的指针
 
 ```console
-$ git branch testing
+git branch testing
 ```
 
 ![image-20250707222115988](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222115988.png)
@@ -678,7 +676,7 @@ $ git branch testing
 使用带 `-d` 选项的 `git branch` 命令来删除分支：
 
 ```console
-$ git branch -d <branch-name>
+git branch -d <branch-name>
 ```
 
 ## 分支检查
@@ -686,7 +684,7 @@ $ git branch -d <branch-name>
  `git log` 命令查看各个分支当前所指的对象。 提供这一功能的参数是 `--decorate`。（仅检查当前分支）
 
 ```console
-$ git log --oneline --decorate
+git log --oneline --decorate
 ```
 
 查看**分叉历史**。 运行 `git log --oneline --decorate --graph --all` 会输出你的提交历史、各个分支的指向以及项目的分支分叉情况。
@@ -696,13 +694,13 @@ $ git log --oneline --decorate
 使用 `git checkout` 命令
 
 ```console
-$ git checkout testing
+git checkout testing
 ```
 
 HEAD会随当前指针移动
 
 ```console
-$ git checkout master
+git checkout master
 ```
 
 - HEAD 指回 `master` 分支
@@ -716,15 +714,15 @@ $ git checkout master
  `git merge` 命令来达到上述目的：先切换到主分支，然后 `git merge <想要合并的branch>`
 
 ```console
-$ git checkout master
-$ git merge hotfix
+git checkout master
+git merge hotfix
 ```
 
 ### 一脉相承的分支合并
 
 当你试图合并两个分支时， 如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候， 只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）
 
-### diverged branches:
+### diverged branches
 
 ![image-20250707222133151](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222133151.png)
 
@@ -737,28 +735,28 @@ Git 会使用两个分支的末端所指的快照（`C4` 和 `C5`）以及这两
 如果你在两个不同的分支中，对同一个文件的同一个部分进行了不同的修改，Git 就没法干净的合并它们。
 
 ```console
-$ git merge iss53
+git merge iss53
 ```
 
 此时 Git 做了合并，但是没有自动地创建一个新的合并提交。 Git 会暂停下来，等待你去解决合并产生的冲突。 你可以在合并冲突后的任意时刻使用 `git status` 命令来查看那些因包含合并冲突而处于未合并（unmerged）状态的文件：
 
 ```console
-$ git status
+git status
 ```
 
  `<<<<<<<` , `=======` , 和 `>>>>>>>` 这些行被完全删除了。 在你解决了所有文件里的冲突之后，对每个文件使用 `git add` 命令来将其标记为冲突已解决。 一旦暂存这些原本有冲突的文件，Git 就会将它们标记为冲突已解决。
 
 ## Rebasing
 
-在 Git 中整合来自不同分支的修改主要有两种方法：`merge` (最容易)以及 `rebase`。 
+在 Git 中整合来自不同分支的修改主要有两种方法：`merge` (最容易)以及 `rebase`。
 
 **变基（rebase）**：使用 `rebase` 命令将提交到某一分支上的所有修改都移至另一分支上（先转到要rebase的分支上去，master是目标基底分支）
 
  变基是将一系列提交按照原有次序依次应用到另一分支上`git rebase <basebranch> <topicbranch>`
 
 ```console
-$ git checkout experiment
-$ git rebase master   
+git checkout experiment
+git rebase master
 ```
 
 首先找到这两个分支（即当前分支 `experiment`、变基操作的目标基底分支 `master`） 的最近共同祖先 `C2`然后对比当前分支相对于该祖先的历次提交，提取相应的修改并存为临时文件， 然后将当前分支指向目标基底 `C3`, 最后以此将之前另存为临时文件的修改依序应用。
@@ -766,8 +764,8 @@ $ git rebase master
 现在回到 `master` 分支，进行一次快进合并。
 
 ```console
-$ git checkout master
-$ git merge experiment
+git checkout master
+git merge experiment
 ```
 
 ### Rebasing 进阶
@@ -775,7 +773,7 @@ $ git merge experiment
 使用 `git rebase` 命令的 `--onto` 选项， 选中在 `client` 分支里但不在 `server` 分支里的修改（即 `C8` 和 `C9`），将它们在 `master` 分支上重放：
 
 ```console
-$ git rebase --onto master server client
+git rebase --onto master server client
 ```
 
 理解：取出 `client` 分支，找出它从 `server` 分支分歧之后的补丁， 然后把这些补丁在 `master` 分支上重放一遍，让 `client` 看起来像直接基于 `master` 修改一样
@@ -802,7 +800,7 @@ $ git branch
 - 查看每一个分支的最后一次提交
 
 ```console
-$ git branch -v
+git branch -v
 ```
 
 - --merged与 --no-merged 这两个有用的选项可以过滤这个列表中已经合并或尚未合并到当前分支的分支。 如果要查看哪些分支已经合并到当前分支，可以运行 `git branch --merged`
@@ -841,8 +839,6 @@ git branch -f main HEAD~3
 
 上面的命令会将 main 分支强制指向 HEAD 的第 3 级 parent 提交。
 
-
-
 ## 分支开发工作流
 
 ### 长期分支
@@ -861,7 +857,7 @@ git branch -f main HEAD~3
 
 ## 远程分支
 
-远程引用是对远程仓库的引用（指针），包括分支、标签等等。 你可以通过 `git ls-remote <remote>` 来显式地获得远程引用的完整列表， 或者通过 `git remote show <remote>` 获得远程分支的更多信息。 
+远程引用是对远程仓库的引用（指针），包括分支、标签等等。 你可以通过 `git ls-remote <remote>` 来显式地获得远程引用的完整列表， 或者通过 `git remote show <remote>` 获得远程分支的更多信息。
 
 ### 远程跟踪分支
 
@@ -879,7 +875,7 @@ Git 的 `clone` 命令会为你自动将其命名为 `origin`，拉取它的所�
 
 ### 同步远程仓库
 
-程仓库同步数据，运行 `git fetch <remote>` 
+程仓库同步数据，运行 `git fetch <remote>`
 
 ![image-20250707222219760](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222219760.png)
 
@@ -918,13 +914,13 @@ Switched to a new branch 'serverfix'
  这是一个十分常用的操作所以 Git 提供了 `--track` 快捷方式：
 
 ```console
-$ git checkout --track origin/serverfix
+git checkout --track origin/serverfix
 ```
 
 该捷径本身还有一个捷径。 如果你尝试检出的分支 (a) 不存在且 (b) 刚好只有一个名字与之匹配的远程分支，那么 Git 就会为你创建一个跟踪分支：
 
 ```console
-$ git checkout serverfix
+git checkout serverfix
 ```
 
 **设置已有的本地分支**跟踪一个刚刚拉取下来的远程分支，或者想要修改正在跟踪的上游分支， 你可以在任意时间使用 `-u` 或 `--set-upstream-to` 选项运行 `git branch` 来显式地设置。
@@ -941,12 +937,12 @@ Branch serverfix set up to track remote branch serverfix from origin.
 ### 拉取
 
 ```console
-$ git fetch --all; git branch -vv
+git fetch --all; git branch -vv
 ```
 
  `git fetch` 命令从服务器上抓取本地没有的数据时，它并不会修改工作目录中的内容。 它只会获取数据然后让你自己合并。
 
-> Tips:`git pull` 在大多数情况下它的含义是一个 `git fetch` 紧接着一个 `git merge` 命令。 
+> Tips:`git pull` 在大多数情况下它的含义是一个 `git fetch` 紧接着一个 `git merge` 命令。
 >
 > 由于 `git pull` 的魔法经常令人困惑所以通常单独显式地使用 `fetch` 与 `merge` 命令会更好一些。
 
@@ -955,12 +951,10 @@ $ git fetch --all; git branch -vv
 可以运行带有 `--delete` 选项的 `git push` 命令来删除一个远程分支。 如果想要从服务器上删除 `serverfix` 分支，运行下面的命令：
 
 ```console
-$ git push origin --delete serverfix
+git push origin --delete serverfix
 ```
 
 > Tips:基本上这个命令做的只是从服务器上移除这个指针。 Git 服务器通常会保留数据一段时间直到垃圾回收运行，所以如果不小心删除掉了，通常是很容易恢复的。
-
-
 
 # Git on the server
 
@@ -983,13 +977,13 @@ Git 可以使用四种不同的协议来传输资料：本地协议（Local）�
 如果你使用共享文件系统，就可以从本地版本库克隆（clone）、推送（push）以及拉取（pull）。 像这样去克隆一个版本库或者增加一个远程到现有的项目中，使用版本库路径作为 URL。 例如，克隆一个本地版本库，可以执行如下的命令：
 
 ```console
-$ git clone /srv/git/project.git
+git clone /srv/git/project.git
 ```
 
 或你可以执行这个命令：
 
 ```console
-$ git clone file:///srv/git/project.git
+git clone file:///srv/git/project.git
 ```
 
 如果在 URL 开头明确的指定 `file://`，那么 Git 的行为会略有不同。 如果仅是指定路径，Git 会尝试使用硬链接（hard link）或直接复制所需要的文件。 如果指定 `file://`，Git 会触发平时用于网路传输资料的进程，那样传输效率会更低。 指定 `file://` 的主要目的是取得一个没有外部参考（extraneous references） 或对象（object）的干净版本库副本——通常是在从其他版本控制系统导入后或一些类似情况需要这么做 （关于维护任务可参见 [Git 内部原理](https://git-scm.com/book/zh/v2/ch00/ch10-git-internals) ）。 在此我们将使用普通路径，因为这样通常更快。
@@ -997,7 +991,7 @@ $ git clone file:///srv/git/project.git
 要增加一个本地版本库到现有的 Git 项目，可以执行如下的命令：
 
 ```console
-$ git remote add local_proj /srv/git/project.git
+git remote add local_proj /srv/git/project.git
 ```
 
 然后，就可以通过新的远程仓库名 `local_proj` 像在网络上一样从远端版本库推送和拉取更新了。
@@ -1026,24 +1020,24 @@ Git 通过 HTTP 通信有两种模式。 在 Git 1.6.6 版本之前只有一个�
 
 智能 HTTP 协议或许已经是最流行的使用 Git 的方式了，它即支持像 `git://` 协议一样设置匿名服务， 也可以像 SSH 协议一样提供传输时的授权和加密。 而且只用一个 URL 就可以都做到，省去了为不同的需求设置不同的 URL。 如果你要推送到一个需要授权的服务器上（一般来讲都需要），服务器会提示你输入用户名和密码。 从服务器获取数据时也一样。
 
-事实上，类似 GitHub 的服务，你在网页上看到的 URL（比如 https://github.com/schacon/simplegit）， 和你在克隆、推送（如果你有权限）时使用的是一样的。
+事实上，类似 GitHub 的服务，你在网页上看到的 URL（比如 <https://github.com/schacon/simplegit），> 和你在克隆、推送（如果你有权限）时使用的是一样的。
 
 #### Dunb HTTP 协议
 
 如果服务器没有提供智能 HTTP 协议的服务，Git 客户端会尝试使用更简单的Dumb HTTP 协议。 Dumb HTTP 协议里 web 服务器仅把裸版本库当作普通文件来对待，提供文件服务。 Dumb HTTP 协议的优美之处在于设置起来简单。 基本上，只需要把一个裸版本库放在 HTTP 根目录，设置一个叫做 `post-update` 的挂钩就可以了 （见 [Git 钩子](https://git-scm.com/book/zh/v2/ch00/_git_hooks)）。 此时，只要能访问 web 服务器上你的版本库，就可以克隆你的版本库。 下面是设置从 HTTP 访问版本库的方法：
 
 ```console
-$ cd /var/www/htdocs/
-$ git clone --bare /path/to/git_project gitproject.git
-$ cd gitproject.git
-$ mv hooks/post-update.sample hooks/post-update
-$ chmod a+x hooks/post-update
+cd /var/www/htdocs/
+git clone --bare /path/to/git_project gitproject.git
+cd gitproject.git
+mv hooks/post-update.sample hooks/post-update
+chmod a+x hooks/post-update
 ```
 
 这样就可以了。 Git 自带的 `post-update` 挂钩会默认执行合适的命令（`git update-server-info`），来确保通过 HTTP 的获取和克隆操作正常工作。 这条命令会在你通过 SSH 向版本库推送之后被执行；然后别人就可以通过类似下面的命令来克隆：
 
 ```console
-$ git clone https://example.com/gitproject.git
+git clone https://example.com/gitproject.git
 ```
 
 这里我们用了 Apache 里设置了常用的路径 `/var/www/htdocs`，不过你可以使用任何静态 Web 服务器 —— 只需要把裸版本库放到正确的目录下就可以。 Git 的数据是以基本的静态文件形式提供的（详情见 [Git 内部原理](https://git-scm.com/book/zh/v2/ch00/ch10-git-internals)）。
@@ -1073,13 +1067,13 @@ $ git clone https://example.com/gitproject.git
 通过 SSH 协议克隆版本库，你可以指定一个 `ssh://` 的 URL：
 
 ```console
-$ git clone ssh://[user@]server/project.git
+git clone ssh://[user@]server/project.git
 ```
 
 或者使用一个简短的 scp 式的写法：
 
 ```console
-$ git clone [user@]server:project.git
+git clone [user@]server:project.git
 ```
 
 在上面两种情况中，如果你不指定可选的用户名，那么 Git 会使用当前登录的用的名字。
@@ -1103,8 +1097,6 @@ SSH 协议的缺点在于它不支持匿名访问 Git 仓库。 如果你使用 
 #### 缺点
 
 Git 协议缺点是缺乏授权机制。 把 Git 协议作为访问项目版本库的唯一手段是不可取的。 一般的做法里，会同时提供 SSH 或者 HTTPS 协议的访问服务，只让少数几个开发者有推送（写）权限，其他人通过 `git://` 访问只有读权限。 Git 协议也许也是最难架设的。 它要求有自己的守护进程，这就要配置 `xinetd`、`systemd` 或者其他的程序，这些工作并不简单。 它还要求防火墙开放 9418 端口，但是企业防火墙一般不会开放这个非标准端口。 而大型的企业防火墙通常会封锁这个端口。
-
-
 
 # Git Hook
 
@@ -1140,11 +1132,7 @@ Git 协议缺点是缺乏授权机制。 把 Git 协议作为访问项目版本�
    pre-commit uninstall
    ```
 
-   
-
 我常用的.pre-commit-config.yaml的配置见我的`.dotfiles`
-
-
 
 # References
 

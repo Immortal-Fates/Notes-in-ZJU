@@ -1,12 +1,5 @@
 
-
 [控制理论笔记 Automation (buckyi.github.io)](https://buckyi.github.io/Note-Automation/index.html)
-
-
-
-
-
-
 
 # References
 

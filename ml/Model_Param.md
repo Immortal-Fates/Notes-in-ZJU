@@ -1,9 +1,10 @@
 # 常见层的参数量公式（不含优化器开销）
 
 ## Conv2d（含偏置）
+
 $$
-\#\text{params} = C_{\text{out}}\times \frac{C_{\text{in}}}{\text{groups}}\times k_h\times k_w 
-+ 
+\#\text{params} = C_{\text{out}}\times \frac{C_{\text{in}}}{\text{groups}}\times k_h\times k_w
++
 \begin{cases}
 C_{\text{out}}, & \text{bias=True}\\
 0, & \text{bias=False}
@@ -13,9 +14,10 @@ $$
 ---
 
 ## Linear（含偏置）
+
 $$
-\#\text{params} = C_{\text{out}}\times C_{\text{in}} 
-+ 
+\#\text{params} = C_{\text{out}}\times C_{\text{in}}
++
 \begin{cases}
 C_{\text{out}}, & \text{bias=True}\\
 0, & \text{bias=False}
@@ -25,16 +27,18 @@ $$
 ---
 
 ## BatchNorm2d（affine=True）
+
 可学习参数：
 $$
 \#\text{params} = 2C
 $$
-对应两个通道维参数 $\gamma$（缩放）和 $\beta$（平移）；  
+对应两个通道维参数 $\gamma$（缩放）和 $\beta$（平移）；
 运行均值/方差为 buffer，不计入 `parameters()`。
 
 ---
 
 ## LayerNorm / GroupNorm（affine=True）
+
 $$
 \#\text{params} = 2\times (\text{归一化的特征维度})
 $$
@@ -42,6 +46,7 @@ $$
 ---
 
 ## Embedding
+
 $$
 \#\text{params} = \text{num\_embeddings} \times \text{embedding\_dim}
 $$
@@ -49,14 +54,13 @@ $$
 ---
 
 ## 无可学习参数
+
 ReLU、MaxPool、AvgPool、AdaptiveAvgPool 等：
 $$
 \#\text{params} = 0
 $$
 
 ---
-
-
 
 ## 数据类型换算（仅参数本体
 
@@ -115,4 +119,3 @@ def report_model(model, title="Model"):
 # summary(model, input_size=(1, C, H, W))  # 给出示例输入形状即可
 
 ```
-

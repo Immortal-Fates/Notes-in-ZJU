@@ -4,8 +4,6 @@
 - **Auto-Encoding Variational Bayes**. Diederik P Kingma et.al. **arxiv**, **2013**, ([pdf](..\..\..\papers\models\Auto-Encoding_Variational_Bayes.pdf))([link](http://arxiv.org/abs/1312.6114v11)).
 - **Denoising Diffusion Probabilistic Models**. Jonathan Ho et.al. **arxiv**, **2020**, ([pdf](..\..\..\papers\models\Denoising_Diffusion_Probabilistic_Models.pdf))([link](http://arxiv.org/abs/2006.11239v2)).
 
-
-
 # Cmd
 
 ```

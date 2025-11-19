@@ -4,8 +4,6 @@
 
 <!--more-->
 
-
-
 # 网站列表
 
 - arXiv：了防止自己的idea在论文被收录前被别人剽窃，我们会将预稿上传到arvix作为预收录，因此这就是个可以证明论文原创性（上传时间戳）的文档收录网站
@@ -20,9 +18,6 @@
 
 - DOI，全称是Digital Object Unique Identifier，意思是数字对象唯一标识符
 
-
-
 # References
 
 - [(36 封私信 / 80 条消息) 什么是arXiv？ - 知乎](https://www.zhihu.com/question/31864895?sort=created)
-

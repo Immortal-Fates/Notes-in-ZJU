@@ -4,8 +4,6 @@ builders guide
 
 <!--more-->
 
-
-
 # Layers and Modules
 
 - 使用pytorch提供的块
@@ -14,9 +12,9 @@ builders guide
   import torch
   from torch import nn
   from torch.nn import functional as F
-  
+
   net = nn.Sequential(nn.Linear(20, 256), nn.ReLU(), nn.Linear(256, 10))
-  
+
   X = torch.rand(2, 20)
   net(X)
   ```
@@ -42,7 +40,7 @@ builders guide
           super().__init__()
           self.hidden = nn.Linear(20, 256)  # 隐藏层
           self.out = nn.Linear(256, 10)  # 输出层
-  
+
       # 定义模型的前向传播，即如何根据输入X返回所需的模型输出
       def forward(self, X):
           # 注意，这里我们使用ReLU的函数版本，其在nn.functional模块中定义。
@@ -68,8 +66,6 @@ builders guide
 
   在反向传播时，**它的梯度会自动累加来自多个使用位置的梯度**
 
-  
-
 # Deferred-Init
 
 深度学习框架无法判断网络的输入维度是什么。这里的诀窍是框架的**延后初始化**（defers initialization），即直到数据第一次通过模型传递时，框架才会动态地推断出每个层的大小。
@@ -77,8 +73,6 @@ builders guide
 ```
 net = nn.Sequential(nn.LazyLinear(256), nn.ReLU(), nn.LazyLinear(10))
 ```
-
-
 
 # Custom Layers
 
@@ -113,8 +107,6 @@ how to load and store both individual weight vectors and entire models
   clone.eval()
   ```
 
-
-
 # GPUs
 
 在PyTorch中，每个数组都有一个设备（device），我们通常将其称为环境（context）。默认情况下，所有变量和相关的计算都分配给CPU。有时环境可能是GPU。当我们跨多个服务器部署作业时，事情会变得更加棘手。通过智能地将数组分配给环境，我们可以最大限度地减少在设备之间传输数据的时间。例如，当在带有GPU的服务器上训练神经网络时，我们通常希望模型的参数在GPU上。
@@ -131,7 +123,7 @@ how to load and store both individual weight vectors and entire models
       if torch.cuda.device_count() >= i + 1:
           return torch.device(f'cuda:{i}')
       return torch.device('cpu')
-  
+
   ```
 
 - 我们可以[**查询张量所在的设备。**]，默认是cpu
@@ -148,8 +140,6 @@ how to load and store both individual weight vectors and entire models
   ```
 
   在不同GPU上进行操作需要使用cuda（到时候再学）
-
-
 
 # References
 

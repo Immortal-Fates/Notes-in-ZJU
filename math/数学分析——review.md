@@ -1,6 +1,6 @@
 **数学没有物理是瞎子，物理没有数学是跛子**
 
-[高等数学导数公式、微分公式和积分公式大全_常用微分公式 知乎-CSDN博客](https://blog.csdn.net/weixin_43148062/article/details/106302533#:~:text=总结了 高等数学 微 积分常用公式 ，适合快速查阅，本资源为word版本，方便进一编辑排版： 一、基本 导数公式 二、,6.万能 公式 7.平方关系 8.倒数关系 9.商数关系 十五、几种常见的 微分 方程)
+[高等数学导数公式、微分公式和积分公式大全_常用微分公式 知乎-CSDN博客](<https://blog.csdn.net/weixin_43148062/article/details/106302533#:~:text=总结了> 高等数学 微 积分常用公式 ，适合快速查阅，本资源为word版本，方便进一编辑排版： 一、基本 导数公式 二、,6.万能 公式 7.平方关系 8.倒数关系 9.商数关系 十五、几种常见的 微分 方程)
 
 ## 数列极限
 
@@ -28,7 +28,6 @@
   $$
   lim\frac{ln\frac{1}{u_n}}{lnn}=q,q>1收敛，q<1发散,a_n=\frac{1}{(f(n))^{g(n)}}可用
   $$
-  
 
 ### 幂级数及其和函数
 
@@ -80,8 +79,6 @@ $$
   $$
   \Gamma(z+1)=z\Gamma(z)
   $$
-
-  
 
 ## 矢量代数与空间解析几何
 
@@ -216,8 +213,6 @@ $$
   V=\iiint{f\rho^2sin\varphi}d\rho d\varphi d\theta
   $$
 
-  
-
 - 对称性化简!：奇偶性，轮换对称性
 
 ## 曲线曲面积分
@@ -256,8 +251,7 @@ $$
   $$
   \iint_D(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y})dxdy=\oint Pdx+Qdy
   $$
-  
-  
+
   - 利用Green公式求面积：$S=\frac{1}{2}\oint_\Gamma-ydx+xdy$
 
 ### 第一型曲面积分
@@ -326,7 +320,7 @@ rotA=\left[
 \matrix{
   i & j & k\\
   \frac{\partial}{\partial x} & \frac{\partial}{\partial y} &\frac{\partial}{\partial z}\\
-  P & Q &  R 
+  P & Q &  R
 }\right]，旋度和坐标轴的选取无关
 $$
 
@@ -344,8 +338,6 @@ $$
   $$
   \mu为常数，则average(x)=\frac{\int_\sigma xd\sigma}{\sigma}
   $$
-
-  
 
 - 转动惯量
   $$
@@ -384,7 +376,6 @@ $$
 
 - $|\int_cPdx+Qdy|<=LM,L为积分路径长度，M=max\sqrt{P^2+Q^2}$
 
-
 - 单位外法矢量一般写为：$n=${$cos\alpha+cos\beta+cos\eta$}
 
 - 比值判别法，根值判别法（先用根值，一般根值比较强）+$lima_n=0$
@@ -394,8 +385,6 @@ $$
   lim\frac{\sqrt[n]{n!}}{n}=\frac{1}{e},斯特林公式or取对数
   $$
   $1^p+2^P......+n^P$~$\frac{n^{P+1}}{P+1}$
-
-  
 
 - 见到根号差就用有理化
 

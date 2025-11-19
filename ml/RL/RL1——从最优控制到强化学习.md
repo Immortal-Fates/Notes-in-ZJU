@@ -5,6 +5,7 @@
 <!--more-->
 
 # 最优控制（Optimal Control）核心脉络
+
 - 基本目标
 
   在动态系统约束下，寻找最优控制策略 $  u^*(t)  $，使性能指标 $  J  $ 极小化：
@@ -46,13 +47,12 @@
   | 离散时间动态规划     | 深度Q网络 (DQN)      | 游戏AI决策（如AlphaGo） |
 
 # Conclusion
+
 强化学习本质是**最优控制理论在复杂系统（高维/不确定/无模型）中的工程化实现**。
 从庞特里亚金最大值原理到PPO算法，二者的理论同源性大于差异性——**贝尔曼方程始终是串联控制理论与学习的核心数学纽带**。
 
 接下来准备看看Pieter Abbeel
 
-
-
 # References
 
-- 【从最优控制到强化学习】https://www.bilibili.com/video/BV1MDWPzMEnw?vd_source=93bb338120537438ee9180881deab9c1
+- 【从最优控制到强化学习】<https://www.bilibili.com/video/BV1MDWPzMEnw?vd_source=93bb338120537438ee9180881deab9c1>

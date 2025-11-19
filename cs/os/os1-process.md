@@ -3,19 +3,19 @@
 ## Program vs Process
 
 - 进程process
-  
+
   - 存在于**磁盘上的一段静态代码和数据**，没有运行，只是一个可执行文件
 
 - 程序program
-  
+
   - 一次“正在执行的程序”的**动态实例（a program in execution）**
-  
+
   - 当你运行一个程序时，操作系统会为它创建一个进程：
-    
+
     - 分配内存（address space）
-    
+
     - 分配必要的资源（打开的文件、I/O、内核数据结构等）
-    
+
     - 初始化其运行状态（寄存器、程序计数器等）
 
 ## Process States
@@ -23,22 +23,22 @@
 OS 不只是“让进程跑”，而是要管理很多进程，所以需要给进程定义不同的**状态（State）**
 
 - **新建（New）**
-  
+
   - 进程正在被创建，还没准备好运行。
 
 - **就绪（Ready）**
-  
+
   - 进程已经具备运行条件，**等待 CPU** 分配时间片。
-  
+
   - 在内存中，随时可以上 CPU。
 
 - **运行（Running）**
   - 进程当前占用 CPU，正在执行指令。
-  
+
 - **阻塞 / 等待（Blocked / Waiting）**
-  
+
   - 进程暂时不能继续执行，比如在等待 I/O（读磁盘、等网络、等键盘输入）。
-  
+
   - 即使有 CPU 也跑不动，只能等事件发生。
 
 - **结束（Terminated）**
@@ -52,37 +52,37 @@ PCB 是 OS 用来“记录一个进程所有关键信息”的结构体。
 
 1. **进程标识信息（Process Identification）**
    - 进程 ID：**PID (Process ID)**
-   
+
    - 父进程 ID：**PPID (Parent Process ID)**
-   
+
    - 用户 ID（UID）、组 ID（GID）等
-   
+
 2. **处理器状态信息（CPU State）**
-   
+
    - 通用寄存器（Registers）
-   
+
    - 程序计数器（Program Counter, PC）：下一条要执行的指令地址
-   
+
    - 程序状态字（PSW / Flags）
 
 3. **调度相关信息（Scheduling Info）**
-   
+
    - 进程状态（State）
-   
+
    - 优先级（Priority）
-   
+
    - 所在队列等
 
 4. **内存管理信息（Memory Management Info）**
-   
+
    - 基址寄存器 / 界限寄存器（Base & Limit Registers）
-   
+
    - 页表指针（Page Table Base Register）等
 
 5. **I/O 信息和文件信息（I/O and File Info）**
-   
+
    - 已打开文件列表（Open Files）
-   
+
    - I/O 设备分配情况等
 
 当发生**上下文切换（Context Switch）**时，OS 会：
@@ -100,23 +100,23 @@ PCB 是 OS 用来“记录一个进程所有关键信息”的结构体。
 由低地址到高地址，大致分为：
 
 1. **代码段（Text Segment / Code Segment）**
-   
+
    - 存放程序的机器指令。
 
 2. **数据段（Data Segment）**
-   
+
    - 已初始化的全局变量、静态变量。
 
 3. **BSS 段（BSS Segment）**
-   
+
    - 未初始化的全局/静态变量。
 
 4. **堆（Heap）**
-   
+
    - 动态分配内存（如 `malloc` / `new`），向高地址增长。
 
 5. **栈（Stack）**
-   
+
    - 函数调用栈帧（Stack Frame）：局部变量、返回地址等，一般向低地址增长。
 
 大概示意（逻辑上）：
@@ -183,13 +183,13 @@ PCB 是 OS 用来“记录一个进程所有关键信息”的结构体。
 典型写法：
 
 ```
-pid_t pid = fork(); 
-if (pid == 0) {    
-    // 子进程     
-    execve("/bin/ls", "ls", NULL); 
+pid_t pid = fork();
+if (pid == 0) {
+    // 子进程
+    execve("/bin/ls", "ls", NULL);
 } else if (pid > 0) {
-    // 父进程     
-    wait(NULL); // 等子进程结束 
+    // 父进程
+    wait(NULL); // 等子进程结束
 }
 ```
 
@@ -199,13 +199,11 @@ if (pid == 0) {
 >
 > ```
 > :(){:|:&};:   # bash: 允许冒号作为 identifier
-> 
+>
 > :() {         # 格式化一下
 >   : | : &
 > }; :
 > ```
-
-
 
 ### 2. 进程的终止（Process Termination）
 
@@ -216,7 +214,7 @@ if (pid == 0) {
 - 出错退出（Error Exit）
 
 - 被其他进程杀死（Killed by Another Process）
-  
+
   - 比如 `kill` 命令，`SIGKILL`, `SIGTERM` 等信号
 
 - 被操作系统因为某些错误强制终止（如非法内存访问）
@@ -231,4 +229,4 @@ if (pid == 0) {
 
 # Test
 
-多做测试 
+多做测试

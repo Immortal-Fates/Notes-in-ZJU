@@ -11,12 +11,6 @@
 
   所以模板类就写一个.cpp文件就好了，全写在这个里面
 
-
-
-
-
-
-
 # 绪论
 
 - 过程式：程序=算法+数据结构
@@ -56,8 +50,6 @@ Object Orientation面向对象技术
 
 - Hierarchy层次
 
-
-
 ## 多态性和泛化
 
 - 多态性Polymorphism：多态性是能够把多种不同的实现隐藏在一个单一的接口后面的能力
@@ -68,8 +60,6 @@ Object Orientation面向对象技术
 
   - 添加全新的函数 is-like-a
   - 只改变基类中函数的行为，即“重载”函数 is-a
-
-
 
 # 初探
 
@@ -88,8 +78,6 @@ Object Orientation面向对象技术
   int sum=0;//两种在赋初值的时候是等价的
   ```
 
-  
-
 - iosteam
 
   ```
@@ -98,7 +86,7 @@ Object Orientation面向对象技术
   int main() {
   cout << "Hello, world" << endl; //函数的链式调用，一个<<调用一次
   //endl，这将在每一行后插入一个换行符
-  }  
+  }
   ```
 
 > C++输入输出是类型安全的输入输出（会自动检查）
@@ -106,17 +94,15 @@ Object Orientation面向对象技术
 - new and delete 来代替malloc/free
 
   ```
-  int* ip = new int(7);		//分配一个空间来放整数7（自动计算空间大小）
+  int* ip = new int(7);  //分配一个空间来放整数7（自动计算空间大小）
   delete ip;
-  int* iap = new int[10];		//分配10个整数数组的空间
+  int* iap = new int[10];  //分配10个整数数组的空间
   delete []iap;
   ```
 
   用new分配的是堆空间，自己创建的是栈空间
 
   delete释放堆空间（这里与C不一样，C++需要告诉他是数组[ ]）
-
-
 
 - 三字符组
 
@@ -133,8 +119,6 @@ Object Orientation面向对象技术
   | ??-      | ~    |
 
   想保留??要用转义?\?
-
-
 
 ## 类型转换
 
@@ -184,8 +168,6 @@ Object Orientation面向对象技术
   float f = reinterpret_cast<float&>(i); // 重新解释将int类型转换为float类型
   ```
 
-
-
 ## 对象
 
 automatic initialization/cleanup构造和析构函数，构造函数/析构函数名和类名相同，析构函数前面还要加一个~
@@ -193,14 +175,12 @@ automatic initialization/cleanup构造和析构函数，构造函数/析构函�
 ```
 class StackOfInt {
 public:
-	StackOfInt(int); //构造函数，生成对象时自动执行
-	~StackOfInt(); //析构函数，撤销对象时自动执行
+ StackOfInt(int); //构造函数，生成对象时自动执行
+ ~StackOfInt(); //析构函数，撤销对象时自动执行
 //
 protected:
-	string m_name; //外部不可见
+ string m_name; //外部不可见
 ```
-
-
 
 ## Templates
 
@@ -209,9 +189,9 @@ protected:
 generic programming：泛型编程
 
 ```
-template<class T>	//typename和class都可以用
+template<class T> //typename和class都可以用
 class Stack{
-	T pop();
+ T pop();
 }
 
 template<class T>
@@ -222,9 +202,7 @@ Stack<T>::pop()
 Stack<float> stk(5);
 ```
 
-> card=rank+suit（花色） 
-
-
+> card=rank+suit（花色）
 
 ## virtual
 
@@ -233,8 +211,6 @@ Stack<float> stk(5);
 ```
 virtual bool IsHitting() const=0;  //纯虚函数
 ```
-
-
 
 # C++中的C
 
@@ -250,22 +226,22 @@ virtual bool IsHitting() const=0;  //纯虚函数
 
   ```
   class_name::member
-  ::name	//全局作用域分辨符
-  
+  ::name //全局作用域分辨符
+
   int x;
   void f()
   {
-  	int x;
-  	x=2;
-  	::x=10;
+   int x;
+   x=2;
+   ::x=10;
   }
-  
+
   ```
 
 - 堆分配/回收运算符：new,delete
 
 ```
-char a[10]="hello";	//不会报错，这里=不是赋值运算符，相当于char a[10]("hello");
+char a[10]="hello"; //不会报错，这里=不是赋值运算符，相当于char a[10]("hello");
 //给创建函数传了参
 ```
 
@@ -275,7 +251,7 @@ char a[10]="hello";	//不会报错，这里=不是赋值运算符，相当于cha
   - volatile：告诉编译程序，该变量值可能按程序中没有显示说明的方式改变，防止编译器作不正确的的优化
   - opertor(重载)：[C++编程语言中重载运算符（operator）介绍_c++ operator-CSDN博客](https://blog.csdn.net/liitdar/article/details/80654324)
 
-> 注： C的规范(C++继承)并不说明每一个内部类型必须有多少位，而是规定内部类型必须能存储的最大值和最小值。因此，内部类型的字长跟硬件相关  
+> 注： C的规范(C++继承)并不说明每一个内部类型必须有多少位，而是规定内部类型必须能存储的最大值和最小值。因此，内部类型的字长跟硬件相关
 
 - bool类型：C++: 内部常量true表示“真”， false表示“假”  （不能用0和！0来表示）
 
@@ -291,8 +267,6 @@ char a[10]="hello";	//不会报错，这里=不是赋值运算符，相当于cha
   x = (*fun)()             //函数指针的调用方式1
   x = fun()                //函数指针的调用方式2
   ```
-
-  
 
 - 引用（Reference）:引用是通过**别名**直接访问某个变量，对引用的操作就是对被引用的变量的操作
 
@@ -313,8 +287,6 @@ char a[10]="hello";	//不会报错，这里=不是赋值运算符，相当于cha
   - 链表等数据结构必须配合指针和动态内存使用
   - 尽量只在动态内存管理时使用指针
 
-
-
 ## 程序结构和编译环境
 
 由类和函数组成
@@ -332,7 +304,7 @@ int main(){
     std::ofstream square_file; //建立文件操作流对象
     square_file.open(“squares.txt”);
     for (int i=0;i<10;++i)
-    	square_file<<i<<“^2=”<<i*i<<std::endl;
+     square_file<<i<<“^2=”<<i*i<<std::endl;
     square_file.close();
 }
 ```
@@ -362,8 +334,6 @@ int main(){
     #define NDEBUG
     #include <cassert>
     ```
-
-    
 
 - 异常处理
 
@@ -395,15 +365,15 @@ int main(){
         …
         keep_trying=false; //没有异常抛出，修改flag
     } catch (cannot_open_file& e){
-    	cout<<“Could not open the file. Try again!\n”;
+     cout<<“Could not open the file. Try again!\n”;
     } catch (…) { // 捕获所有其它异常
     …
     }
     } while (keep_trying);
-    
-    
+
+
     //e:err就是里面throw出来的错误
-    
+
     ```
 
 - 智能指针：C++的智能指针主要方便内存管理，定义在头文件<memory>
@@ -434,8 +404,6 @@ int main(){
 #include<ofstream>  //写入文件
 ```
 
-
-
 # 变量
 
 ## 引用
@@ -462,8 +430,6 @@ const int& z=x;//通过z不能修改x
   register int i=0;
   ```
 
-
-
 - ???
 
   ```
@@ -471,10 +437,6 @@ const int& z=x;//通过z不能修改x
   namespace lib2{ int a; }
   lib1::a
   ```
-
-  
-
-
 
 # 函数
 
@@ -495,10 +457,10 @@ const int& z=x;//通过z不能修改x
   ```
   void swap3(int &v1,int &v2)
   {
-  	int temp = v2; v2 =v1; v1 = temp;
+   int temp = v2; v2 =v1; v1 = temp;
   }
   void main(){
-  	int a=5,b=9; swap3(a,b);
+   int a=5,b=9; swap3(a,b);
   }
   ```
 
@@ -510,11 +472,11 @@ const int& z=x;//通过z不能修改x
 
 传引用使用时不需要加&,只需要在定义时加上&
 
-- 
+-
 
 ## 内联函数
 
-inline function——对宏替换的改进  
+inline function——对宏替换的改进
 
 告诉编译器，在编译时用函数代码的“拷贝替换函数调用
 
@@ -523,7 +485,7 @@ inline function——对宏替换的改进
 ```
 inline int power_int(int x)
 {
-	return x*x;
+ return x*x;
 }
 ```
 
@@ -534,8 +496,6 @@ inline int power_int(int x)
 > -- 编译器不保证所有被定义为inline 的函数编译成内联函数。Eg:递归函数
 
 > Tips:类内实现的函数自动内联
-
-
 
 ## 默认参数
 
@@ -552,7 +512,7 @@ second=0){
 
 - 若有实际参数值，则缺省值无效
 
-> Tips:带有缺省值的参数**必须全部放置在参数的最后**，即在带有缺省值的参数的右边不再出现无缺省值的参数  
+> Tips:带有缺省值的参数**必须全部放置在参数的最后**，即在带有缺省值的参数的右边不再出现无缺省值的参数
 
 ![image-20231204143359390](https://raw.githubusercontent.com/Immortal-Fates/image_host/main/blog/image-20231204143359390.png)
 
@@ -585,8 +545,6 @@ second=0){
   //强迫C++编译器按照C的函数命名规则去连接相应的目标代码
   ```
 
-
-
 ## 标准模板库
 
 容器定义在C++标准模板库中
@@ -595,11 +553,9 @@ std::vector是一种常用的容器，功能与数组相似
 
 - 标准模板库（STL）提供标准容器和算法
 
-  方便，大量预定义的数据结构和封装好的算法  
+  方便，大量预定义的数据结构和封装好的算法
 
 - 迭代器（Iterator）用于连接容器和算法
-
-
 
 # 类
 
@@ -612,8 +568,6 @@ std::vector是一种常用的容器，功能与数组相似
 - 显示调用析构函数
 
   如果只想执行析构函数中的执行的操作，而不释放对象的空间，则可以显式调用析构函数
-
-
 
 - 拷贝构造函数？
 
@@ -630,8 +584,6 @@ std::vector是一种常用的容器，功能与数组相似
 
 friend class ClassTwo;
 ```
-
-
 
 ## 组合
 
@@ -665,7 +617,7 @@ example:
 class Student1: public Student
 {
 public:
-	void display_1( )
+ void display_1( )
     { display();
     cout<<″age: ″<<age<<endl;
     cout<<″address: ″<<addr<<endl;}
@@ -715,7 +667,6 @@ C++中支持三种不同的继承方式：
   class Teacher : private Person
   ```
 
-
 - protected继承
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200210211449294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1Nsb3dJc0Zhc3RMZW1vbg==,size_16,color_FFFFFF,t_70)
@@ -732,11 +683,11 @@ C++中支持三种不同的继承方式：
     //.h
     class Derived: public Base{
     public:
-    	virtual void func1(); //纯虚函数重写后，这样才能实例化。
-    	void func3(int a,int b){ Base::func3(a);...} //方式1：作用域运算符
-    	virtual void func1(int a){Base::func1(a);} // 派生类声明同名函数，函数中调用基类同名函数，这被称为转交函数
+     virtual void func1(); //纯虚函数重写后，这样才能实例化。
+     void func3(int a,int b){ Base::func3(a);...} //方式1：作用域运算符
+     virtual void func1(int a){Base::func1(a);} // 派生类声明同名函数，函数中调用基类同名函数，这被称为转交函数
     }
-    
+
     ```
 
   - 利用using声明
@@ -745,18 +696,18 @@ C++中支持三种不同的继承方式：
     //.h
     class Derived: public Base{
     public:
-    	using Base::func1; //让基类中名为func1的所有函数都可用，无论特征标是什么
-    	using Base::func3; //让基类中名为func3的所有函数都可用，无论特征标是什么
-    	virtual void func1(); //纯虚函数重写后，这样才能实例化。
-    	void func3(int a,int b){ Base::func3(a);...} //方式1：作用域运算符
+     using Base::func1; //让基类中名为func1的所有函数都可用，无论特征标是什么
+     using Base::func3; //让基类中名为func3的所有函数都可用，无论特征标是什么
+     virtual void func1(); //纯虚函数重写后，这样才能实例化。
+     void func3(int a,int b){ Base::func3(a);...} //方式1：作用域运算符
     }
-    
+
     //.cpp
     Derived d;
     d.func1(2); //正确，调用基类Base中func1(int)。
     d.func3(5); //正确，调用基类Base中func3(int)。
     d.func3(); //正确，调用基类Base中func3()。
-    
+
     ```
 
 - 析构函数不能继承——派生类的构造函数只需要对新增的成员进行初始化即可，对所有从基类继承来的成员，其初始化工作还是由基类的构造函数完成
@@ -783,7 +734,6 @@ C++继承了两个类都调用了相同的函数，如何让它只调用一次�
 [C++多重继承重复调用的解决_c++ 多继承 父类 方法相同-CSDN博客](https://blog.csdn.net/qq_15029743/article/details/79418795)
 
 - 父类有相同函数名的函数（重载）；子类若有与父类相同的函数（函数名+参数表）——则父类该函数名函数全部隐藏
-
 
 > C++函数的重载之间没关系，其他语言有
 
@@ -842,10 +792,6 @@ virtual <类型说明符><函数名>(<参数表>) =0;
 
 ![image-20231228160256508](https://raw.githubusercontent.com/Immortal-Fates/image_host/main/blog/image-20231228160256508.png)
 
-
-
-
-
 ## 运算符重载
 
 运算符重载是通过定义函数来实现。运算符重载实质是函数的重载
@@ -879,15 +825,11 @@ Complex operator+ (int x,Complex &c)
 ```
 classA& operator+(classA &a, classA &b)
 {
-	classA temp;
-	//加法运算
-	return *temp;
+ classA temp;
+ //加法运算
+ return *temp;
 }
 ```
-
-
-
-
 
 ## 拷贝构造函数
 
@@ -909,8 +851,6 @@ Student(const Student&);//const防止修改原来引用对象的值
 
 - 浅拷贝指向相同空间
 
-
-
 可以使用delete指定不生成拷贝构造函数和赋值
 
 ```
@@ -926,8 +866,8 @@ class Student
 ```
 
 ```
-class MyStr str2; 
-str2 = str1; 
+class MyStr str2;
+str2 = str1;
 //注意这两种方式不同, 前者是赋值运算, 后者是拷贝构造
 class MyStr str3 = str2;
 ```
@@ -947,11 +887,7 @@ if(this == &s) {
 }
 ```
 
-
-
 # STL
-
-
 
 # Bonus
 
@@ -967,29 +903,10 @@ if(this == &s) {
       int a = 200;
   }
   A::a=10;
-  
+
   ```
 
   - 命名空间只能全局范围内定义
   - 可以嵌套
 
 - [c++11新特性，所有知识点都在这了！](https://zhuanlan.zhihu.com/p/139515439)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

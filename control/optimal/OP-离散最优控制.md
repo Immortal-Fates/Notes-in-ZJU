@@ -10,8 +10,6 @@
 
 <!--more-->
 
-
-
 # 连续线性系统离散化
 
 连续时间线性系统：
@@ -79,6 +77,7 @@ B_d &= \left(\int_0^T e^{A\tau}d\tau\right)B = A^{-1}(e^{AT} - I)B
 \end{align}
 $$
 矩阵指数计算:
+
 - 级数展开：$e^{AT} = I + AT + \frac{(AT)^2}{2!} + \frac{(AT)^3}{3!} + \cdots$
 - MATLAB: `expm(A*T)`
 - 对角化方法：若$A = PDP^{-1}$，则$e^{AT} = Pe^{DT}P^{-1}$
@@ -100,8 +99,6 @@ $$
 其中，$e^{AT}$ 是矩阵指数函数。
 
 适用场景: 控制输入变化较快的系统
-
-
 
 # 离散最优控制理论
 
@@ -142,7 +139,7 @@ $$\mathbf{x} = [x(1) x(2) \ldots x(N)],\mathbf{u} = [u(0) u(1) \ldots u(N-1)]$$
 $$
 \begin{cases}
 x(1) = Ax(0) + Bu(0) \\
-x(2) = A^2x(0) + [AB \, B] \begin{bmatrix} u(0) \\ u(1) \end{bmatrix} \rightarrow Ax(1) + Bu(1) \\ 
+x(2) = A^2x(0) + [AB \, B] \begin{bmatrix} u(0) \\ u(1) \end{bmatrix} \rightarrow Ax(1) + Bu(1) \\
 x(3) = A^3x(0) + [A^2B \, AB \, B] \begin{bmatrix} u(0) \\ u(1) \\ u(2) \end{bmatrix} \\
 \vdots \\
 x(N) = A^Nx(0) + [A^{N-1}B \, A^{N-2}B \, \ldots \, AB \, B] \begin{bmatrix} u(0) \\ u(N-2) \\ \vdots \\ u(N-1) \end{bmatrix}
@@ -177,12 +174,9 @@ $$
 u^* = -\bar{\mathbf{H}}^{-1} \bar{\mathbf{F}} x(0)
 $$
 
-
 ## 开环最优控制序列计算(有约束)
 
 quadprog使用时代入上下界LB,UB
-
-
 
 ## Model Predictive Control
 
@@ -192,15 +186,13 @@ quadprog使用时代入上下界LB,UB
 
 - **线性系统**：线性二次调节器（LQR）功能强大，但其运行条件是系统状态需保持在近似线性化点附近
 - **限制条件**：
-    - LQR 往往会忽略约束条件。
-    - 许多约束条件，比如扭矩限制，都可以被编码为一个凸集。然而，在最小化状态值函数时，这些约束可能会导致无法解析的解决方案。
-    - 前向展开使得对 `x` 所施加的约束变得难以满足。
-    - 约束会扰乱Riccati解，但我们仍然可以在线解决二次规划（QP）问题。
-      - 所有约束都可以表示为 Cx ≤ d 的形式。
-      - 这可以通过增广拉格朗日方法来解决。
+  - LQR 往往会忽略约束条件。
+  - 许多约束条件，比如扭矩限制，都可以被编码为一个凸集。然而，在最小化状态值函数时，这些约束可能会导致无法解析的解决方案。
+  - 前向展开使得对 `x` 所施加的约束变得难以满足。
+  - 约束会扰乱Riccati解，但我们仍然可以在线解决二次规划（QP）问题。
+    - 所有约束都可以表示为 Cx ≤ d 的形式。
+    - 这可以通过增广拉格朗日方法来解决。
 - **计算效率**：随着计算机运行速度的提升，凸优化模型预测控制（Convex MPC）得到了极大的普及。通过转换为二次规划（QP），我们能够利用海森矩阵的稀疏性来加快计算速度。
-
-
 
 ### MPC基本原理
 
@@ -308,7 +300,7 @@ graph TD
 
   现在我们来看一下如何确定各种参数
 
-  如何确定$k+1$时刻的预测初值$Y_{N0}(k+1)$——通过平移的方法  
+  如何确定$k+1$时刻的预测初值$Y_{N0}(k+1)$——通过平移的方法
 
   $Y_{N0}(k+1)$表示在 $  \Delta u(k+1)=0, \Delta u(k+2)=0, \ldots  $ 时$k+2$到$k+N+1$的预测输出序列
 
@@ -410,7 +402,7 @@ graph TD
 
   参考轨迹计算公式
   $$
-  w(k+i) = y(k) + \left[ r - y(k) \right] \left( 1 - e^{-iT/\tau} \right) 
+  w(k+i) = y(k) + \left[ r - y(k) \right] \left( 1 - e^{-iT/\tau} \right)
   $$
 
   > $\tau$是参考轨迹的时间常数
@@ -428,8 +420,6 @@ graph TD
 - 自适应MPC：在自适应MPC中，线性模型随着工作条件的变化而动态计算，优化问题的结构在不同工作点上保持不变。
 - 增益调度MPC：在增益调度MPC中，会在感兴趣的工作点进行离线线性化，并为每个工作点设计一个线性MPC 控制器，各控制器彼此独立，可能具有不同数量的状态和约束。
 
-
-
 ## Model Predictive Tracking Control
 
 模型预测跟踪控制
@@ -446,7 +436,7 @@ $$
 
 $$
 y(k) = \begin{bmatrix} C & 0 \end{bmatrix} \tilde{x}(k)
-= \tilde{C} \tilde{x}(k) ,\quad e(k) = r(k) - y(k) 
+= \tilde{C} \tilde{x}(k) ,\quad e(k) = r(k) - y(k)
 $$
 
 $$
@@ -464,11 +454,6 @@ $$
 = \frac{1}{2} \tilde{x}^T\bar{\bar{\mathbf{Q}}} \tilde{x} - r^T \bar{\bar{\mathbf{T}}} \tilde{x} + \frac{1}{2} \Delta \mathbf{u}^T \bar{\bar{\mathbf{R}}} \Delta \mathbf{u}
 $$
 上述公式可继续化简求得最后控制表达式，但是后续表达没什么推导意义，在此不做赘述
-
-
-
-
-
 
 # 离散系统的动态规划
 
@@ -507,9 +492,9 @@ $$
 J_N^*[x(0)] =& \min_{\{u(k)\}_{k=0}} \left\{ \sum_{k=0}^{N-1} L[x(k), u(k), k] \right\}
 \\
 =& \min_{u(0), u(1), \ldots, u(N-1)} \left\{ \sum_{k=0}^{N-1} L[x(k), u(k), k] \right\} \\
-=& \min \left\{ L[x(0), u^*(0), 0] + L[x(1), u^*(1), 1] + \cdots + L[x(N-1), u^*(N-1), N-1]\right\} 
+=& \min \left\{ L[x(0), u^*(0), 0] + L[x(1), u^*(1), 1] + \cdots + L[x(N-1), u^*(N-1), N-1]\right\}
 \\
-=& \min_{u(0)} \left\{ L[x(0), u^*(0), 0] + J_{N-1}^*[x(1)] \right\} 
+=& \min_{u(0)} \left\{ L[x(0), u^*(0), 0] + J_{N-1}^*[x(1)] \right\}
 \end{flalign}
 $$
 
@@ -523,17 +508,15 @@ $$
 
 > 该原理是动态规划将复杂多阶段决策问题分解为子问题求解的理论基础，通过不断利用后续子问题的最优解来构建原问题的最优解。——即整体最优决策的子过程也必然最优，进而形成递推
 
-
-
 ## 离散系统线性调节器问题DLQR
 
-给定离散线性系统状态方程 
+给定离散线性系统状态方程
 $$
 x(k+1) = A(k)x(k) + B(k)u(k)
 $$
 其中 $k = 0, 1, \cdots, N-1$。这里 $x(k)$ 是 $n$ 维状态向量，描述系统在 $k$ 时刻的状态；$u(k)$ 是 $m$ 维控制向量（$m \leq n$），用于对系统进行控制操作；$A(k)$ 是 $n \times n$ 系数矩阵，反映状态转移关系；$B(k)$ 是 $n \times m$ 控制矩阵，体现控制向量对状态转移的影响。并且始端状态 $x(0) = x_0$ 固定，终端步数 $N$ 固定，终端状态 $x(N)$ 自由。
 
-性能指标 
+性能指标
 $$
 J = \frac{1}{2} x^T(N) F x(N) + \frac{1}{2} \sum_{k=0}^{N-1} \left\{ x^T(k) Q(k) x(k) + u^T(k) R(k) u(k) \right\}
 $$
@@ -555,7 +538,7 @@ $$
    $$
    \left[ x^T(N-1) A^T(N-1) F B(N-1) u(N-1) \right]^T = u^T(N-1) B^T(N-1) F A(N-1) x(N-1)
    $$
-   
+
    $$
    \begin{flalign}
    J_1^*[x(N-1)] &= \frac{1}{2} x^T(N-1) A^T(N-1) F A(N-1) x(N-1) + Q(N-1) x(N-1) + \nonumber \\
@@ -572,7 +555,7 @@ $$
    B^T(N-1) F A(N-1) x(N-1) + \left[ B^T(N-1) F B(N-1) + R(N-1) \right] u(N-1) = 0
    $$
    因为 $R$ 是正定矩阵，$F$ 是半正定矩阵，根据矩阵正定的性质，两个正定（半正定）矩阵经过一定运算得到的 $B^T(N-1) F B(N-1) + R(N-1)$ 为正定矩阵。正定矩阵是可逆的，所以可以在方程两边同时左乘 $\left[ B^T(N-1) F B(N-1) + R(N-1) \right]^{-1}$，进而求解出 $u^*(N-1)$ 的表达式：
-   
+
    $$
    u^*(N-1) = -\left[ B^T(N-1) F B(N-1) + R(N-1) \right]^{-1} B^T(N-1) F A(N-1) x(N-1)
    $$
@@ -581,7 +564,7 @@ $$
    u^*(N-1) = -P(N-1) x^*(N-1)
    $$
    这一简化形式明确体现出最优控制 $u^*(N-1)$ 与状态 $x^*(N-1)$ 存在线性关系，这种线性关系在实际应用中非常重要，因为它使得我们可以通过测量系统状态，按照线性关系来确定控制输入，便于设计反馈控制器。
-   
+
 2. 递推
 
    将 $u^*(N-1) = -P(N-1) x^*(N-1)$ 代入：
@@ -610,11 +593,11 @@ $$
 
    $$
    P(N-j) = \left[ B^T(N-j) K(N-j+1) B(N-j) + R(N-j) \right]^{-1} B^T(N-j) K(N-j+1) A(N-j) \\
-   
+
    K(N-j) = \left[ A^T(N-j) - B^T(N-j) P(N-j+1) \right] K(N-j+1) \left[ A(N-j) - B(N-j) P(N-j+1) \right] + Q(N-j) \\
-   
+
    u^*(N-j) = -P(N-j) x^*(N-j) \\
-   
+
    J_j^*[x(N-j)] = \frac{1}{2} x^T(N-j) K(N-j) x^*(N-j)
    $$
    明确了最优控制与状态的线性关系，上述方程常称为Riccati黎卡提方程，它在离散系统线性调节器问题中起着关键作用，通过不断递推求解$K(k)$等矩阵，可确定整个系统在各个时刻的最优性能指标和最优控制策略。我们可以将公式化简一下：
@@ -625,8 +608,6 @@ $$
    $$
    M(k) = K(k+1) - K(k+1) B(k) \left[ B^T(k) K(k+1) B(k) + R(k) \right]^{-1} B^T(k) K(k+1)
    $$
-
-
 
 ## LQR as a QP
 
@@ -690,7 +671,7 @@ From the KKT conditions:
 $$
 \begin{align}
     \nabla_z L &= H z + C^T \lambda = 0 \\
-    \nabla_{\lambda} L &= C z - d = 0 
+    \nabla_{\lambda} L &= C z - d = 0
 \end{align}
 $$
 
@@ -698,21 +679,19 @@ Solving this KKT system yields:
 
 $$
 \begin{bmatrix}
-        H & C^T \\ 
-        C & 0 
+        H & C^T \\
+        C & 0
     \end{bmatrix}
     \begin{bmatrix}
         z \\
         \lambda
     \end{bmatrix}
-    = 
+    =
     \begin{bmatrix}
         0 \\
         d
     \end{bmatrix}
 $$
-
-
 
 ## 连续控制系统的动态规划
 
@@ -723,13 +702,13 @@ $$
    \dot{x}(t) = f(x(t), u(t), t)
    $$
    其中 $x(t)$ 为状态变量，$u(t)$ 为控制变量。
-   
+
    性能指标：
    $$
    J = \int_{t_0}^{t_f} L(x(t), u(t), t) dt + \Phi(x(t_f), t_f)
    $$
    包含积分项（运行代价）和终端代价。
-   
+
 2. 值函数与贝尔曼原理
 
    定义值函数 $V(x(t), t)$：从时刻 $t$、状态 $x(t)$ 出发的最优性能指标。
@@ -755,8 +734,6 @@ $$
 - 这里DP是现代强化学习的基础
 - 动态规划对于随机问题也是通用的，只是把所有东西表示成期望的形式而已，而**极小值原理只适用于确定性问题**
 
-
-
 # 动态规划、经典变分法和最小值原理三者的关系
 
 > **核心洞察**: 变分法、极小值原理、动态规划在本质上是统一的
@@ -768,29 +745,27 @@ graph TD
     A[最优控制问题] --> B[变分法]
     A --> C[极小值原理PMP]
     A --> D[动态规划DP]
-    
+
     B --> E[Euler-Lagrange方程]
     C --> F[Hamilton函数极小化]
     D --> G[Bellman方程]
-    
+
     E --> H[必要条件]
     F --> H
     G --> H
-    
+
     H --> I[相同最优解]
-    
+
     J[适用范围] --> K[连续系统无约束]
     J --> L[连续系统有约束]
     J --> M[离散系统]
     J --> N[随机系统]
-    
+
     K --> B
     L --> C
     M --> D
     N --> D
 ```
-
-
 
 ## 相互关系推导
 
@@ -845,22 +820,22 @@ graph TD
    $$
    -\frac{\partial J^*[x(t), t]}{\partial t} = \min_{u(t) \in U} \left\{ L[x(t), u(t), t] + \left( \frac{\partial J^*[x(t), t]}{\partial x(t)} \right)^T f[x(t), u(t), t] \right\}
    $$
-   
+
    $$
    J^*[x(t_f), t_f] = \Phi[x(t_f), t_f]
    $$
-   
+
    动态规划与最小值原理
-   
+
    引用哈密顿函数 $H[x(t), u(t), \lambda(t), t] = L[x(t), u(t), t] + \lambda^T(t) f[x(t), u(t), t]$
-   
+
    且令 $\lambda(t) = \frac{\partial J^*[x(t), t]}{\partial x(t)}$
-   
+
    则方程可改写为：
    $$
    -\frac{\partial J^*[x(t), t]}{\partial t} = \min_{u(t) \in U} H[x(t), u(t), \lambda(t), t]
    $$
-   
+
    $$
    H[x^*(t), u^*(t), \lambda(t), t] = \min_{u(t) \in U} H[x(t), u(t), \lambda(t), t]
    $$
@@ -884,14 +859,12 @@ graph TD
    -\frac{\partial J^*[x(t), t]}{\partial t} = \min_{u(t) \in U} H[x(t), u(t), \lambda(t), t]
    则有
    $$
-   
+
    $$
-   H[x^*(t_f), u^*(t_f), \lambda(t_f), t_f] = -\frac{\partial J^*[x(t_f), t_f]}{\partial t_f} 
+   H[x^*(t_f), u^*(t_f), \lambda(t_f), t_f] = -\frac{\partial J^*[x(t_f), t_f]}{\partial t_f}
    $$
-   
+
    这也是最小值原理中的另一个横截条件。
-
-
 
 ## 三种方法的特点对比
 
@@ -929,7 +902,7 @@ graph TD
    - 例子：弹性梁振动（四阶PDE）、温度分布（抛物型方程）、弦振动（一维波动方程）。
 2. 控制目标：
    - 调节空间分布的状态（如抑制振动、跟踪参考信号）。
-   - 应用场景：飞行器颤振控制、管道泄漏检测、建筑结构振动抑制。 
+   - 应用场景：飞行器颤振控制、管道泄漏检测、建筑结构振动抑制。
 3. 挑战：
    - 无穷维状态空间导致传统集中参数方法不适用。
    - 需处理传感器/执行器的空间分布、数值计算复杂性及稳定性分析。

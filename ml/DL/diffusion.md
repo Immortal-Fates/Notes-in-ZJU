@@ -61,11 +61,11 @@ Diffusion Model就分为两步：
   $$
   \begin{equation}
   \begin{split}
-  \mathbf{x}_t &=\sqrt{\alpha_t} \mathbf{x}_{t-1} + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1}	\\
-  &	=\sqrt{\alpha_t} \left( \sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \mathbf{\epsilon}_{t-2} \right) + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1}	\\
-  &	= \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \left( \sqrt{\alpha_t - \alpha_t \alpha_{t-1}} \mathbf{\epsilon}_{t-2} + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1} \right)	\\
-  &	= \sqrt{\alpha_t \alpha_{t-1} \cdots \alpha_1} \mathbf{x}_0 + \sqrt{1 - \alpha_t \alpha_{t-1} \cdots \alpha_1} \mathbf{\epsilon}	\\
-  &	 = \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon	
+  \mathbf{x}_t &=\sqrt{\alpha_t} \mathbf{x}_{t-1} + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1} \\
+  & =\sqrt{\alpha_t} \left( \sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \mathbf{\epsilon}_{t-2} \right) + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1} \\
+  & = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \left( \sqrt{\alpha_t - \alpha_t \alpha_{t-1}} \mathbf{\epsilon}_{t-2} + \sqrt{1 - \alpha_t} \mathbf{\epsilon}_{t-1} \right) \\
+  & = \sqrt{\alpha_t \alpha_{t-1} \cdots \alpha_1} \mathbf{x}_0 + \sqrt{1 - \alpha_t \alpha_{t-1} \cdots \alpha_1} \mathbf{\epsilon} \\
+  &  = \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon
   \end{split}
   \end{equation}
   $$
@@ -176,8 +176,6 @@ Diffusion Model就分为两步：
   $$
   ![image-20250425212552436](assets/diffusion.assets/image-20250425212552436.png)
 
-
-
 # How to train a diffusion model and infer it
 
 有了上面的数学推导我们来举一个完整的过程实现diffusion model的训练和推理
@@ -210,10 +208,6 @@ Diffusion Model就分为两步：
 
      ![image-20250425214619701](assets/diffusion.assets/image-20250425214619701.png)
 
-     
-
-
-
 ## Model Architecture
 
 There are two common backbone architecture choices for diffusion models: U-Net and Transformer
@@ -226,17 +220,9 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 
   DDPM使用的Unet是time-condition Unet，采用正弦位置编码（Sinusoidal Positional Embeddings），既需要位置编码有界又需要两个时间步长之间的距离与句子长度无关，很容易想到$sin$ and $cos$
 
-  
-
-  
-
 - Diffusion Transformer
 
   ![image-20250426213043281](assets/diffusion.assets/image-20250426213043281.png)
-
-
-
-
 
 # Other Models
 
@@ -246,14 +232,12 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 
 > TODO
 
-
-
 # Application
 
 建议直接看原文[[2209.00796\] Diffusion Models: A Comprehensive Survey of Methods and Applications (arxiv.org)](https://arxiv.org/abs/2209.00796)
 
 - Image Super Resolution, Inpainting, Restoration, Translation, and Editing
--  Text-to-Image Generation（文本生成图像）
+- Text-to-Image Generation（文本生成图像）
 - Scene Graph to Image Generation
 - 高度可控的图像生成
 - Text-to-video generation/editing
@@ -263,10 +247,6 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 - 文本生成
 - 基于diffusion model的时间序列，时序信号生成
 - 进行药物分子和蛋白质分子、抗体的生成
-
-
-
-
 
 # References
 

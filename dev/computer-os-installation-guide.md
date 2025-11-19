@@ -4,15 +4,12 @@
 
 <!--more-->
 
-
 # 刷机装系统
 
 1. 下载iso
 2. 分区压缩卷
 3. U盘使用rufus登制作启动盘
 4. 目标电脑进BIOS关闭安全模式，选择U盘启动然后install
-
-
 
 # 新电脑环境配置
 
@@ -73,8 +70,6 @@
 
 - chezmoi
 
-
-
 ### Terminal and Shell
 
 **Terminal 是“显示/输入的窗口（终端模拟器）仪表盘+方向盘”，Shell 是“命令解释器（你跟系统对话的大脑）引擎”。** 它们常一起出现，但不是一回事。
@@ -99,7 +94,7 @@
     ```
     # 安装 zsh
     apt install zsh
-    
+
     # 将 zsh 设置为系统默认 shell
     sudo chsh -s $(which zsh)
     ```
@@ -110,7 +105,7 @@
     curl -sS https://starship.rs/install.sh | sh
     ```
 
-    if can`t, install Homebrew, then 
+    if can`t, install Homebrew, then
 
     ```
     brew install starship
@@ -130,16 +125,16 @@
     apt install autojump
     # 使用
     j Document/
-    
+
     zsh-autosuggestions：命令行命令键入时的历史命令建议插件
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    
+
     zsh-syntax-highlighting：命令行语法高亮插件
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    
+
     zsh-sudo: 两次Esc加入sudo
     git clone git@github.com:none9632/zsh-sudo.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-sudo
-    
+
     zsh-vi-mode: 在zsh中使用vim
     git clone https://github.com/jeffreytse/zsh-vi-mode \
       $ZSH_CUSTOM/plugins/zsh-vi-mode
@@ -165,14 +160,14 @@
   # Nerd Font
   mkdir -p ~/.local/share/fonts
   cd ~/.local/share/fonts
-  
+
   # 下载最新版 JetBrainsMono Nerd Font
   wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-  
+
   # 解压并更新缓存
   unzip -o JetBrainsMono.zip
   fc-cache -fv
-  
+
   ```
 
 - CMatrix黑客帝国
@@ -180,7 +175,7 @@
   ```
   # 安装
   sudo apt install cmatrix
-  
+
   # 运行（加上 -lba 参数看起来更像电影，加上 -ol 参数起来更像 Win/Mac 的屏保）
   cmatrix
   ```
@@ -188,7 +183,6 @@
 - neovim:
 
   - installation: 上github下载新版，CIL下载的是很老的版本
-
 
 ### 软件安装
 
@@ -209,13 +203,10 @@
 
 - vscode/cursor
 
-
-
 ### 桌面美化
 
 - transparent window: used to set any window to transparent
-TODO 
-
+TODO
 
 TODO
 
@@ -247,10 +238,6 @@ TODO
     sed -i "s#https\?://mirror.msys2.org/#https://mirrors.tuna.tsinghua.edu.cn/msys2/#g" /etc/pacman.d/mirrorlist*
     ```
 
-    
-
-
-
 ## MacOS
 
 # CheetSheet
@@ -266,16 +253,6 @@ TODO
   Ubuntu / GNOME 桌面自带最小化功能：
 
   - **`Super + H`** → 隐藏（最小化）当前窗口
-
-
-
-
-
-
-
-
-
-
 
 # References
 

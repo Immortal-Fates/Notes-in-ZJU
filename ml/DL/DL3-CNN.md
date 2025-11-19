@@ -121,7 +121,7 @@ torch.nn.Conv2d(
 
   > as it can be regarded as the learned representations (features) in the spatial dimensions (e.g., width and height) to the subsequent layer.
   >
-  
+
 - 感受野：是指在前向传播期间可能影响$x$计算的所有元素（来自所有先前层）
 
 ### Spatial arrangement
@@ -178,7 +178,7 @@ $$
 
   - why：在最流行的神经网络架构中，随着神经网络层数的加深，我们常会增加输出通道的维数，通过减少空间分辨率以获得更大的通道深度。直观地说，我们可以将每个通道看作对不同特征的响应。而现实可能更为复杂一些，因为每个通道不是独立学习的，而是为了共同使用而优化的。因此，多输出通道并不仅是学习多个单通道的检测器。
   - what：用$c_i$和$c_o$分别表示输入和输出通道的数目，并让$k_h$和$k_w$为卷积核的高度和宽度。为了获得多个通道的输出，我们可以为每个输出通道创建一个形状为$c_i\times k_h\times k_w$的卷积核张量，这样卷积核的形状是$c_o\times c_i\times k_h\times k_w$。在互相关运算中，每个输出通道先获取所有输入通道，再以对应该输出通道的卷积核计算出结果。
-  
+
 - $1\times 1$ Convolutional Layer
 
   $1 \times 1$卷积，即$k_h = k_w = 1$，看起来似乎没有多大意义。它不是用来提取相邻像素间的相关特征，而是用来在通道维度上进行线性组合。$1 \times 1$十分流行，经常包含在复杂深层网络的设计中。让我们详细地解读一下它的实际作用。
@@ -188,16 +188,16 @@ $$
     ![image-20251103152759772](./assets/DL3-CNN.assets/image-20251103152759772.png)
 
     这里输入和输出具有相同的高度和宽度，输出中的每个元素都是从输入图像中同一位置的元素的线性组合。我们可以将$1\times 1$卷积层看作在每个像素位置应用的全连接层，以$c_i$个输入值转换为$c_o$个输出值。因为这仍然是一个卷积层，所以跨像素的权重是一致的。同时，$1\times 1$卷积层需要的权重维度为$c_o\times c_i$，再额外加上一个偏置。
-    
+
     - cheap
   - how：
-  
+
     - 通道压缩或升维（维度变换）
     - 跨通道特征融合
     - 增加网络深度 / 非线性表达
     - 用于 bottleneck
     - 实现分组卷积后的通道融合
-  
+
 - **Dilated convolutions**: As an example, in one dimension a filter `w` of size 3 would compute over input `x` the following: `w[0]*x[0] + w[1]*x[1] + w[2]*x[2]`. This is dilation of 0. For dilation 1 the filter would instead compute `w[0]*x[0] + w[1]*x[2] + w[2]*x[4]`; In other words there is a gap of 1 between the applications.
 
   - This can be very useful in some settings to use in conjunction with 0-dilated filters because it allows you to merge spatial information across the inputs much more aggressively with fewer layers.
@@ -207,14 +207,8 @@ $$
 
 - The local regions in the input image are stretched out into columns in an operation commonly called **im2col**.
 
-- drawback: This approach has the downside that it can use a lot of memory, since some values in the input volume are replicated multiple times in `X_col`. 
+- drawback: This approach has the downside that it can use a lot of memory, since some values in the input volume are replicated multiple times in `X_col`.
 - advantage: However, the benefit is that there are many very efficient implementations of Matrix Multiplication that we can take advantage of (for example, in the commonly used [BLAS](http://www.netlib.org/blas/) API). Moreover, the same *im2col* idea can be reused to perform the pooling operation.
-
-
-
-
-
-
 
 ## Pooling Layer
 
@@ -311,16 +305,16 @@ Many types of normalization layers have been proposed for use in ConvNet archite
 
   - 卷积层
     同样，对于卷积层，我们可以在卷积层之后和非线性激活函数之前应用批量规范化。当卷积有多个输出通道时，我们需要对这些通道的“每个”输出执行批量规范化，每个通道都有自己的拉伸（scale）和偏移（shift）参数，这两个参数都是标量。假设我们的小批量包含$m$个样本，并且对于每个通道，卷积的输出具有高度$p$和宽度$q$。那么对于卷积层，我们在每个输出通道的$m \cdot p \cdot q$个元素上同时执行每个批量规范化。因此，在计算平均值和方差时，我们会收集所有空间位置的值，然后在给定通道内应用相同的均值和方差，以便在每个空间位置对值进行规范化。
-  
+
   - 预测过程中的批量规范化
-  
+
     正如我们前面提到的，批量规范化在训练模式和预测模式下的行为通常不同。
-  
+
     - 首先，将训练好的模型用于预测时，我们不再需要样本均值中的噪声以及在微批次上估计每个小批次产生的样本方差了。
     - 其次，例如，我们可能需要使用我们的模型对逐个样本进行预测。
-  
+
     一种常用的方法是通过移动平均估算整个训练数据集的样本均值和方差，并在预测时使用它们得到确定的输出。可见，和暂退法一样，批量规范化层在训练模式和预测模式下的计算结果也是不一样的。
-  
+
     ```python
     net = nn.Sequential(
         nn.Conv2d(1, 6, kernel_size=5), nn.BatchNorm2d(6), nn.Sigmoid(),
@@ -331,9 +325,6 @@ Many types of normalization layers have been proposed for use in ConvNet archite
         nn.Linear(120, 84), nn.BatchNorm1d(84), nn.Sigmoid(),
         nn.Linear(84, 10))
     ```
-  
-
-
 
 # ConvNet Architectures
 
@@ -345,11 +336,9 @@ The most common form of a ConvNet architecture stacks a few CONV-RELU layers, fo
 INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 ```
 
-
-
 ## Case Studies
 
-> https://cs231n.github.io/convolutional-networks/#layerpat: see the Case studies part
+> <https://cs231n.github.io/convolutional-networks/#layerpat>: see the Case studies part
 
 经典的CNN网络有LeNet-5、AlexNet、VGG、GoogleNet、ResNet、DenseNet等。这些经典CNN网络结构中总是包含一些对于神经网络架构设计有巨大启发性的东西。
 
@@ -360,6 +349,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 3. 汇聚层，如最大汇聚层。
 
 下面介绍一些经典CNN网络
+
 - LeNet（最基础的模型）
 
   - 结构：大致两个部分组成
@@ -374,7 +364,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
     ![lenet](./assets/DL3-CNN.assets/lenet.svg)
   - 使用权重衰减
-  
+
 - Deep Convolutional Neural Networks (AlexNet)
 
   - 结构：
@@ -397,20 +387,20 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
   ![alexnet](./assets/DL3-CNN.assets/alexnet.svg)
 
   没有提供一个通用模板来知道后续研究
-  
+
 - Networks Using Blocks(VGG)
 
   - 结构
 
     ![vgg](./assets/DL3-CNN.assets/vgg.svg)
     - 一个VGG块：使用了带有$3\times3$卷积核、填充为1（保持高度和宽度）的卷积层，和带有$2 \times 2$汇聚窗口、步幅为2（每个块后的分辨率减半）的最大汇聚层
-    
+
       > 发现深层且窄的卷积比浅层且宽的卷积更有效
 
     - 与AlexNet、LeNet一样，VGG网络可以分为两部分：第一部分主要由卷积层和汇聚层组成，第二部分由全连接层组成。
-    
+
     - 原始VGG网络有5个卷积块，其中前两个块各有一个卷积层，后三个块各包含两个卷积层。
-    
+
       第一个模块有64个输出通道，每个后续模块将输出通道数量翻倍，直到该数字达到512。由于该网络使用8个卷积层和3个全连接层，因此它通常被称为VGG-11。
 
 上面两种网络都是在LeNet的基础上改进的，但是有两个主要的缺点：
@@ -582,12 +572,11 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
   - 使用残差连接（ResNet）
   - 采用稠密连接（DenseNet）
 
-
 ### 控制网络宽度（Width）
 
 **宽度**表示通道数（feature map 数量）。
 
-- 浅层：少通道 → 提取低级特征（边缘、纹理）  
+- 浅层：少通道 → 提取低级特征（边缘、纹理）
 - 深层：多通道 → 提取高级特征（语义）
 
 **经验：**
@@ -614,6 +603,7 @@ $$
 $$
 
 **优点：**
+
 - 捕获多尺度特征；
 - 使用 1×1 卷积“降维”显著减少参数量；
 - 高效融合不同感受野的特征。
@@ -697,18 +687,15 @@ $$
 ### 现代趋势
 
 现代 CNN（如 ConvNeXt、EfficientNetV2）融合以下特征：
+
 - 继承卷积结构的高效性；
 - 吸收 Transformer 的归一化与注意力机制；
 - 自动化结构搜索（NAS）；
 - 模块化设计（Bottleneck, Squeeze-Excite, Inverted Residual 等）。
 
-
-
 # In practice
 
 **In practice: use whatever works best on ImageNet**. If you’re feeling a bit of a fatigue in thinking about the architectural decisions, you’ll be pleased to know that in 90% or more of applications you should not have to worry about these. I like to summarize this point as “*don’t be a hero*”: Instead of rolling your own architecture for a problem, you should look at whatever architecture currently works best on ImageNet, download a pretrained model and finetune it on your data. You should rarely ever have to train a ConvNet from scratch or design one from scratch.
-
-
 
 ## Computational Considerations
 
@@ -725,30 +712,6 @@ Once you have a rough estimate of the total number of values (for activations, g
 - Computation grows **quadratically** with kernel size $k^2$
 - Larger kernels → more MACs, memory pressure, parameters
 - Embedded devices strongly favor **1×1 and 3×3**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # References
 

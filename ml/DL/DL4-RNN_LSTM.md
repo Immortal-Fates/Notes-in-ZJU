@@ -8,13 +8,11 @@ LSTM从被设计之初就被用于解决一般递归神经网络中普遍存在�
 
 - 直觉解释：“长短期记忆”——只有一部分的信息需要长期的记忆，而有的信息可以不记下来。
 
-
-
 ## 重要结构
 
 RNN什么信息它都存下来，因为它没有挑选的能力，而LSTM不一样，它会选择性的存储信息，因为它能力强，它有**门控装置**，它可以尽情的选择。
 
-长短期记忆网络引入了*记忆元*（memory cell），或简称为*单元*（cell）。 有些文献认为记忆元是隐状态的一种特殊类型， 它们与隐状态具有相同的形状，其设计目的是用于记录附加的信息。 为了控制记忆元，我们需要许多门。 
+长短期记忆网络引入了*记忆元*（memory cell），或简称为*单元*（cell）。 有些文献认为记忆元是隐状态的一种特殊类型， 它们与隐状态具有相同的形状，其设计目的是用于记录附加的信息。 为了控制记忆元，我们需要许多门。
 
 其隐藏层输出包括“隐状态”和“记忆元”，只有隐状态会传递到输出层，而记忆元完全属于内部信息。
 
@@ -68,8 +66,6 @@ RNN什么信息它都存下来，因为它没有挑选的能力，而LSTM不一�
 
 长短期记忆网络是典型的具有重要状态控制的隐变量自回归模型。 多年来已经提出了其许多变体，例如，多层、残差连接、不同类型的正则化。 然而，由于序列的长距离依赖性，训练长短期记忆网络 和其他序列模型（例如门控循环单元）的成本是相当高的。 在后面的内容中，我们将讲述更高级的替代模型，如Transformer。
 
-
-
 # 经验
 
 - teacher foring
@@ -90,8 +86,6 @@ RNN什么信息它都存下来，因为它没有挑选的能力，而LSTM不一�
 
 - 模型均值坍缩
 
-
-
 # Papers
 
 ```
@@ -102,8 +96,6 @@ autoliter -i ./LSTM.md -o ../../../papers/models/LSTM/
 - **Long Short-Term Memory**. Hochreiter Sepp et.al. **Neural Computation**, **1997-11-1**, ([pdf](..\..\..\papers\models\LSTM\Long_Short-Term_Memory.pdf))([link](https://doi.org/10.1162/neco.1997.9.8.1735)).
 - **LSTM: A Search Space Odyssey**. Greff Klaus et.al. **IEEE Trans. Neural Netw. Learning Syst.**, **2017-10**, ([pdf](..\..\..\papers\models\LSTM\LSTM:_A_Search_Space_Odyssey.pdf))([link](https://doi.org/10.1109/tnnls.2016.2582924)).
 - **Bidirectional LSTM Networks for Improved Phoneme Classification and Recognition**. Graves Alex et.al. **No journal**, **2005**, ([pdf](..\..\..\papers\models\LSTM\Bidirectional_LSTM_Networks_for_Improved_Phoneme_Classification_and_Recognition.pdf))([link](https://doi.org/10.1007/11550907_126)).
-
-
 
 # References
 

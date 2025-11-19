@@ -4,14 +4,12 @@
 
 <!--more-->
 
-
-
 # 关系图
 
 ```mermaid
 flowchart TD
     subgraph Core_Tools
-        Conda[[conda\n核心包/环境管理工具]] 
+        Conda[[conda\n核心包/环境管理工具]]
         Mamba[[mamba\nC++实现的conda替代\n速度极快]]
     end
 
@@ -31,14 +29,14 @@ flowchart TD
     Anaconda -->|包含| Miniconda
     Miniforge -->|基于| Miniconda
     Micromamba -->|类似| Miniconda
-  
+
     %% 工具关系
     Conda -->|管理| Channels
     Mamba -->|管理| Channels
     Miniconda -->|内置| Conda
     Miniforge -->|可选内置| Mamba
     Micromamba -->|内置| Mamba
-  
+
     %% 频道配置
     Miniforge -->|默认优先| CondaForge
     Micromamba -->|默认优先| CondaForge
@@ -63,8 +61,6 @@ flowchart TD
 2. **需要开箱即用的完整科学栈？选 Anaconda**。
 3. **追求安装/更新速度？用 Mamba (或 micromamba) 替换 `conda` 命令**。安装 Miniforge/micromamba 通常会自带 `mamba`。
 4. **想用最新、最全的包？配置 `conda-forge` 为优先频道**。Miniforge/micromamba 默认就做好了此配置。手动配置可在 `.condarc` 中设置 `channel_priority: strict` 并添加 `conda-forge`。
-
-
 
 # python项目管理
 
@@ -91,19 +87,13 @@ flowchart TD
 因此我们现在都使用pyproject.toml文件作为配置文件
 
 ```
-pip install -e . 
+pip install -e .
 ```
 
 > Problem：但是这些依赖都需要手动添加，非常麻烦
 
 因此出现了Poetry **UV** PDM，帮助我们自动完成上述的所有事情（包括创建环境，添加依赖，自动编写pyproject.toml）
 
-
-
-
-
-
-
 # References
 
-- 【15分钟彻底搞懂！Anaconda Miniconda conda-forge miniforge Mamba】https://www.bilibili.com/video/BV1Fm4ZzDEeY?vd_source=93bb338120537438ee9180881deab9c1
+- 【15分钟彻底搞懂！Anaconda Miniconda conda-forge miniforge Mamba】<https://www.bilibili.com/video/BV1Fm4ZzDEeY?vd_source=93bb338120537438ee9180881deab9c1>

@@ -4,16 +4,12 @@ Feedforward Neural Network (FNN)
 
 <!--more-->
 
-
-
 # FNN
 
 ![image-20251019190237038](./assets/FNN.assets/image-20251019190237038.png)
 
 - 前向传播
 - 反向传播
-
-
 
 ## 缺点
 
@@ -23,11 +19,6 @@ Feedforward Neural Network (FNN)
 2. 参数过多效率低下，训练困难；
 3. 大量的参数也很快会导致网络过拟合。
 
-
-
-
-
 # References
 
 - [(37 封私信 / 80 条消息) 深度学习基础——前馈神经网络（FNN）](https://zhuanlan.zhihu.com/p/55168032)
-

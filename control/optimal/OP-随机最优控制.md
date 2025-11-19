@@ -2,17 +2,13 @@
 
 随机最优控制Stochastic Optimal Control
 
-
 - [ ] 掌握观测器，滤波器
 - [ ] 理解随机系统的数学建模
 - [ ] 熟练掌握卡尔曼滤波器原理与实现
 - [ ] 掌握LQG控制器设计
 - [ ] 掌握最优估计理论（MAP, MMSE）
 
-
 <!--more-->
-
-
 
 # 随机系统基础理论
 
@@ -106,8 +102,6 @@ $$
 \begin{bmatrix} x_{k+1} \\ e_{k+1} \end{bmatrix} = \begin{bmatrix} A - BK & BK \\ 0 & A - LC \end{bmatrix} \begin{bmatrix} x_k \\ e_k \end{bmatrix}
 $$
 由于闭环系统矩阵是三角形的，特征值是 $A - BK$ 和 $A - LC$ 的特征值。因此，反馈控制器和观测器的稳定性是独立的
-
-
 
 # 随机变量与概率论基础
 
@@ -205,20 +199,18 @@ LQG = LQR + 卡尔曼滤波：
 1. 使用卡尔曼滤波器估计状态：$\hat{x}_{n|n}$
 2. 将估计状态代入LQR控制律：$u_n = -K_n\hat{x}_{n|n}$
 
-
-
 # 最优估计理论
 
 ## Objective of Optimization
 
 - **最大后验估计MAP (Maximum a Posteriori Estimation)**:
-  
+
     $$
     \hat{x} = \arg\max_x p(x|y)
     $$
 
 - **最小均方误差估计MMSE (Minimum Mean-Squared Error)**:
-  
+
     $$
     \begin{align*}
     \hat{x} &= \arg\min_{\hat{x}} E[(x-\hat{x})^T(x-\hat{x})] \\
@@ -227,7 +219,6 @@ LQG = LQR + 卡尔曼滤波：
     &= \arg\min_{\hat{x}} tr(\Sigma)
     \end{align*}
     $$
-
 
 ## Kalman Filter
 
@@ -238,11 +229,11 @@ $$
 $$
 
 - **Prediction Step**:
-  
+
     $$
     \hat{x}_{n+1|n} = A\hat{x}_{n|n} + Bu_n
     $$
-    
+
     $$
     \Sigma_{n+1|n} = A\Sigma_{n|n}A^T + W
     $$
@@ -280,45 +271,43 @@ $$
 - ⭐ **Kalman Filter Algorithm Summary**:
 
     **Initialize**:
-    
+
     $$
     \hat{x}_{0|0}, \Sigma_{0|0}, W, v
     $$
-    
+
     **Predict**:
-    
+
     $$
     \hat{x}_{n+1|n} = A\hat{x}_{n|n} + Bu_n
     $$
     $$
     \Sigma_{n+1|n} = A\Sigma_{n|n}A^T + W
     $$
-    
+
     **Calculate Innovation + Covariance**:
-    
+
     $$
     z_{n+1} = y_{n+1} - C\hat{x}_{n+1|n}
     $$
     $$
     S_{n+1} = C\sigma_{n+1|n}C^T + V
     $$
-    
+
     **Calculate Kalman Gain**:
-    
+
     $$
     L_{n+1} = \Sigma_{n+1|n}C^TS^{-1}_{n+1}
     $$
-    
+
     **Update**:
-    
+
     $$
     \hat{x}_{n+1|n+1} = \hat{x}_{n+1|n} + L_{n+1}z_{n+1}
     $$
     $$
     \Sigma_{n+1|n+1} = (I-L_{n+1}C)\Sigma_{n+1|n} (I-L_{n+1}C)^T + L_{k+1}VL_{k+1}
     $$
-
-
 
 # 鲁棒控制
 

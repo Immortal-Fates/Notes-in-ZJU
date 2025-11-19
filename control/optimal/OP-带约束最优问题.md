@@ -2,8 +2,6 @@
 
 连续最优控制问题
 
-
-
 - [ ] 掌握KKT条件的推导和应用
 - [ ] 理解对偶理论与拉格朗日方法
 - [ ] 熟练使用各种约束优化算法
@@ -11,8 +9,6 @@
 - [ ] 理解罚函数法和增广拉格朗日法
 
 <!--more-->
-
-
 
 # 约束优化理论基础
 
@@ -52,7 +48,7 @@ $$
 
 - 活跃约束: 在点$x$处，第$j$个不等式约束满足 $g_j(x) = 0$
 
-- 活跃集: 
+- 活跃集:
   $$
   J(x) = \{j \in \{m_1 + 1, \ldots, m_1 + m_2\} : g_j(x) = 0\}
   $$
@@ -69,7 +65,7 @@ KKT条件是确认候选点是否为严格局部极小值的**一阶必要条件
 
 Suppose that $x^* \in \mathcal{X}$ is a local minimizer of the constrained optimization problem.
 
-If $x^*$ is a regular point (i.e., the LICQ holds), then there exists a vector of Lagrange multipliers $\lambda^* = [\lambda_1^*, \ldots, \lambda_{m_1+m_2}^*]^\top$ 
+If $x^*$ is a regular point (i.e., the LICQ holds), then there exists a vector of Lagrange multipliers $\lambda^* = [\lambda_1^*, \ldots, \lambda_{m_1+m_2}^*]^\top$
 $$
 L(x^*, \lambda^*) = f(x)+\sum_{i=1}^{m_1}\lambda_i g_i(x)+\sum_{i=m_1+1}^{m_1+m_2}\lambda_i g_i(x)
 $$
@@ -118,8 +114,8 @@ $$
 $$
 \begin{aligned}
 &\min_{x} f(x) + P_{\infty}(h(x)) \\
-&\text{where } P_{\infty}(x) = 
-\begin{cases} 
+&\text{where } P_{\infty}(x) =
+\begin{cases}
 0, & x = 0 \\
 +\infty, & x \neq 0
 \end{cases}
@@ -129,8 +125,8 @@ $$
 $$
 d(\lambda) := \min_x \left[ f(x) + \lambda^\top h(x) \right]
 \\
-\min_x \max_\lambda \left[ 
-  f(x) + \lambda^\top h(x) 
+\min_x \max_\lambda \left[
+  f(x) + \lambda^\top h(x)
 \right]
 $$
 
@@ -201,7 +197,6 @@ $$
 
 #### 弱对偶和强对偶
 
-
 - 弱对偶定理：对于任何优化问题，弱对偶总是成立：$$d^* \leq p^*$$
   证明: 设$\tilde{x}$为原问题的任意可行解，$(\lambda, \nu)$为对偶问题的任意可行解。
   $$
@@ -217,7 +212,7 @@ $$
   g(\lambda, \nu) = \inf_x L(x, \lambda, \nu) \leq L(\tilde{x}, \lambda, \nu) \leq f_0(\tilde{x})
   $$
   对所有可行解取下确界得到弱对偶
-  
+
 - 对偶间隙：$p^* - d^*$称为对偶间隙（duality gap）
 
   分类:
@@ -245,6 +240,7 @@ $$
 互补松弛性的深层含义：
 
 经济学解释: $\lambda_i^*$可视为第$i$个约束的"影子价格"
+
 - 若$\lambda_i^* > 0$，则约束$i$是"紧的"（$f_i(x^*) = 0$），放松该约束会改善目标函数
 - 若$f_i(x^*) < 0$，则约束$i$是"松的"，其影子价格为零（$\lambda_i^* = 0$）
 
@@ -272,6 +268,7 @@ $$
 $$
 
 对偶关系:
+
 - 若原问题有$n$个变量和$m$个约束，对偶问题有$m$个变量
 - QP的对偶仍为QP（保持问题结构）
 
@@ -421,7 +418,7 @@ KKT条件只能找到驻点，无法区分极小、极大或鞍点。
 
 Consider the Hessian (with respect to $x$) of the Lagrangian function $L(x, \lambda)$:
 $$
-\nabla_x^2 L(x, \lambda) = 
+\nabla_x^2 L(x, \lambda) =
 \begin{bmatrix}
 \frac{\partial^2 L}{\partial x_1^2} & \frac{\partial^2 L}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 L}{\partial x_1 \partial x_n} \\
 \frac{\partial^2 L}{\partial x_2 \partial x_1} & \frac{\partial^2 L}{\partial x_2^2} & \cdots & \frac{\partial^2 L}{\partial x_2 \partial x_n} \\
@@ -468,19 +465,17 @@ graph TD
     A[约束优化问题] --> B{是否凸问题?}
     B -->|是| C{约束类型?}
     B -->|否| D[SQP + 正则化]
-    
+
     C -->|仅等式| E[直接求解KKT]
     C -->|混合约束| F{规模大小?}
-    
+
     F -->|小规模| G[Active Set]
     F -->|大规模| H[内点法]
-    
+
     E --> I[对角正则化]
     G --> J[BFGS正则化]
     H --> K[中心路径]
 ```
-
-
 
 ## Active set method
 
@@ -499,7 +494,6 @@ graph TD
    - 若所有活跃不等式约束的拉格朗日乘子 $\lambda_j \geq 0$，则找到最优解
    - 否则，从活跃集中移除 $\lambda_j < 0$ 的约束
 
-
 算法优缺点：
 
 - 当有一个很好的heuristic的时候，这个是很快的。教授在课上举例说，MIT的某个组在DARPA挑战赛中设计了一堆合理的启发函数来估计active set，进而解机器人QP问题，这个启发函数在95%的情况都是正确的，在剩下的5%的情况就再继续估计，这样做可以做到几千赫兹
@@ -508,7 +502,6 @@ graph TD
 ## Penalty Methods
 
 核心思想：将约束优化转化为一系列无约束优化问题
-
 
 | 方法           | 优点                 | 缺点                       | 适用场景             |
 | -------------- | -------------------- | -------------------------- | -------------------- |
@@ -558,49 +551,48 @@ graph TD
     <img src="markdown-img/OP-带约束最优问题.assets/image-20250612165114823.png" alt="image-20250612165114823" style="zoom:50%;" />
 
     ![image-20250402142754627](markdown-img/ZJU-OP-Lec5-8.assets/image-20250402142754627.png)
-    
+
     > 注意墙角的非光滑性
-    
+
     - 优点：实现很简单，有限$\rho$即可得精确解
-    
+
     - 缺陷：
-    
+
       - 需要处理非光滑性（墙角效应），难以达到高精度，无法保证最终的约束得到满足。
-    
+
       - 会使整个KKT系统的Hessian矩阵变得病态ill-conditioned(由于这些非线性优化项引入的系统的Hessian，会使Hessian阵的特征值分布广，使条件数很大)
-    
+
         要让约束完全得到满足，则约束的权重ρ要取到无穷大，这在实际情况是不能接受的，也会造成矩阵病态
-      
+
       > Tips: 工程上trick，先用先使用惩罚项来polish问题，再切换其它方法
-    
+
   - L2罚函数（二次罚函数）：
     $$
     F_\rho(x) = f(x) +\frac{ \rho}{2} (\sum_{j=1}^{m_1} g_j(x)^2 +  \sum_{j=m_1+1}^{m_1+m_2} \max\{g_j(x), 0\}^2)
     $$
-    
-  
-       - $\rho > 0$：罚参数，控制惩罚强度
-       - 等式约束惩罚：$g_j(x)^2$（强制$g_j(x) \to 0$）
-       - 不等式约束惩罚：$\max(g_j(x),0)^2$（仅在违反约束时激活）
+
+    - $\rho > 0$：罚参数，控制惩罚强度
+    - 等式约束惩罚：$g_j(x)^2$（强制$g_j(x) \to 0$）
+    - 不等式约束惩罚：$\max(g_j(x),0)^2$（仅在违反约束时激活）
 
     要求问题光滑，数值稳定性有限。求解过程如下：
-  
+
     ![image-20250402134202549](markdown-img/ZJU-OP-Lec5-8.assets/image-20250402134202549.png)
-  
+
     - 缺点：
-  
+
       罚因子$\rho$增大时，解逐渐逼近原问题的最优解。但$\rho$过大会导致Hessian矩阵病态。对于无约束优化问题的数值方法拟牛顿法与共轭梯度法存在数值困难，且需要多次迭代求解子问题
-    
+
       这里只给出等式约束的罚函数的Hessian矩阵：
       $$
       \nabla_{xx}^2F(x,\rho) \approx \nabla_{xx}^2L(x,\lambda^*)+\sigma\nabla c(x)\nabla c(x)^T
       $$
       右边为一个定值矩阵和一个最大特征值趋于正无穷的矩阵，这导致$\nabla_{xx}^2F(x,\rho)$条件数越来越大，求解子问题的难度也会相应地增加
-  
+
       ![image-20250402134011637](markdown-img/ZJU-OP-Lec5-8.assets/image-20250402134011637.png)
-  
+
       > 可以看到求解的区域越来越狭长
-    
+
       - 对于存在不等式约束的function可能不存在二次可微性质，光滑性降低
       - 不精确，与原问题最优解存在距离
 
@@ -614,8 +606,6 @@ graph TD
 | 障碍函数法       | 保证内点解                   | 无法处理等式约束         |
 | 增广Lagrangian法 | 允许有限$\rho$收敛           | 需估计Lagrange乘子       |
 
-
-
 ## Sequential Quadratic Programming(SQP)
 
 > Notes：处理非线性约束的最有效方法之一
@@ -624,7 +614,7 @@ graph TD
 
 针对带等式和不等式约束的问题
 
-SQP 方法是通过在当前点 $x^k$ 处对优化问题进行建模，构建一个 QP 子问题来实现的，该子问题可以利用二次规划技术来求解。该子问题的解将用于确定下一个点 $x^{k+1}$ 
+SQP 方法是通过在当前点 $x^k$ 处对优化问题进行建模，构建一个 QP 子问题来实现的，该子问题可以利用二次规划技术来求解。该子问题的解将用于确定下一个点 $x^{k+1}$
 
 设 $x^k \in \mathbb{R}^n$ 为当前点，设 $\lambda^k \in \mathbb{R}^n$ 为与之对应的拉格朗日乘子向量。
 
@@ -636,6 +626,7 @@ Linear approximation of the constraints:
 $$
 g_j(x^k + p) \approx g_j(x^k) + \nabla g_j(x^k)^T p = 0
 $$
+
 ### QP子问题
 
 $$
@@ -655,7 +646,7 @@ $$
 \frac{\partial^2 L}{\partial x_1^2} & \cdots & \frac{\partial^2 L}{\partial x_1 \partial x_n} \\
 \vdots & \ddots & \vdots \\
 \frac{\partial^2 L}{\partial x_n \partial x_1} & \cdots & \frac{\partial^2 L}{\partial x_n^2}
-\end{bmatrix} 
+\end{bmatrix}
 = \frac{\partial}{\partial x} \left[ \frac{\partial L(x, \lambda)}{\partial x} \right]^\top
 $$
 > Tips：为什么用$\nabla^2_x L$而非$\nabla^2 f$：是为了将约束的曲率也考虑进去
@@ -680,8 +671,6 @@ commercial：
 - **NPSQP**
    Nonlinear Programming Sequential Quadratic Programming
 
-
-
 ## 增广拉格朗日法（ALM）
 
 增广拉格朗日法PHR Augmented Lagrangian Method
@@ -705,8 +694,8 @@ $$
 $$
 \begin{aligned}
 &\min_{x} f(x) + P_{\infty}(h(x)) \\
-&\text{where } P_{\infty}(x) = 
-\begin{cases} 
+&\text{where } P_{\infty}(x) =
+\begin{cases}
 0, & x = 0 \\
 +\infty, & x \neq 0
 \end{cases}
@@ -717,8 +706,8 @@ $$
 d(\lambda) := \min_x \left[ f(x) + \lambda^\top h(x) \right]
 $$
 $$
-\min_x \max_\lambda \left[ 
-  f(x) + \lambda^\top h(x) 
+\min_x \max_\lambda \left[
+  f(x) + \lambda^\top h(x)
 \right]
 $$
 
@@ -743,8 +732,8 @@ Uzawa方法的局限：
 
 因此在PHR方法中，通过引入**邻近点(proximal point)正则化项**平滑极小化极大（Minimax）问题，同时避免交换min和max顺序的复杂性
 $$
-\min_x \max_\lambda \left[ 
-  f(x) + \lambda^\top h(x) - \frac{1}{2\rho} \|\lambda - \bar{\lambda}\|^2 
+\min_x \max_\lambda \left[
+  f(x) + \lambda^\top h(x) - \frac{1}{2\rho} \|\lambda - \bar{\lambda}\|^2
 \right]
 $$
 
@@ -752,6 +741,7 @@ $$
 - $ \bar{\lambda} $：先验拉格朗日乘子估计值，如上一轮迭代结果
 
 优势：
+
 1. 避免对偶梯度上升的不可行性
 2. 直接优化原始极小化极大问题，不需要进行Uzawa的交替优化
 3. 正则化项$ \frac{1}{2\rho}\|\lambda - \bar{\lambda}\|^2 $迫使乘子更新不过度偏离历史值，提升数值稳定性
@@ -760,8 +750,8 @@ $$
 
 先进行内层问题求解
 $$
-\max_\lambda \left[ 
-f(x) + \lambda^\top h(x) - \frac{1}{2\rho} \|\lambda - \bar{\lambda}\|^2 
+\max_\lambda \left[
+f(x) + \lambda^\top h(x) - \frac{1}{2\rho} \|\lambda - \bar{\lambda}\|^2
 \right]
 $$
 通过求导可得闭式解：
@@ -772,13 +762,13 @@ $$
 外层问题转换：将解析解代入原问题，推导无约束优化形式：
 $$
 \begin{align*}
-\min_x \max_\lambda \left[ \cdot \right] 
-&= \min_x \left[ 
-f(x) + (\bar{\lambda} + \rho h(x))^\top h(x) 
-- \frac{\rho}{2} \|h(x)\|^2 
+\min_x \max_\lambda \left[ \cdot \right]
+&= \min_x \left[
+f(x) + (\bar{\lambda} + \rho h(x))^\top h(x)
+- \frac{\rho}{2} \|h(x)\|^2
 \right] \\
-&= \min_x \left[ 
-f(x) + \bar{\lambda}^\top h(x) + \frac{\rho}{2} \|h(x)\|^2 
+&= \min_x \left[
+f(x) + \bar{\lambda}^\top h(x) + \frac{\rho}{2} \|h(x)\|^2
 \right]
 \end{align*}
 $$
@@ -794,20 +784,18 @@ $$
 2. 迭代步骤：
    - 求解无约束子问题：
      $$
-     x_k = \arg\min_x \left[ 
-          f(x) + \bar{\lambda}_k^\top h(x) + \frac{\rho_k}{2} \|h(x)\|^2 
+     x_k = \arg\min_x \left[
+          f(x) + \bar{\lambda}_k^\top h(x) + \frac{\rho_k}{2} \|h(x)\|^2
           \right]
      $$
-   
+
    - 更新乘子：
 
 $$
      \bar{\lambda}_{k+1} = \bar{\lambda}_k + \rho_k h(x_k)
 $$
 
-3. 精度控制：当 $\|h(x_k)\| < \epsilon$ 时终止
-
-
+1. 精度控制：当 $\|h(x_k)\| < \epsilon$ 时终止
 
 现在我们重新来看$x_k$的计算公式，相当于求解
 $$
@@ -818,8 +806,6 @@ $$
 L(x,\lambda,\rho) =f(x) + \bar{\lambda}_k^\top h(x) + \frac{\rho_k}{2} \|h(x)\|^2
 $$
 因此被称为融合拉格朗日法+惩罚法
-
-
 
 ### For Inequality-Constrained Cases
 
@@ -834,7 +820,7 @@ $$
 \begin{cases}
 \min_{x, s} f(x) \\
 \text{s.t.} \quad g(x) + [s]^2 = 0 \\
-\quad \ \ s \geq 0 
+\quad \ \ s \geq 0
 \end{cases}
 $$
 
@@ -896,8 +882,6 @@ QP的重要地位
 - 最优控制的LQR问题
 - 机器人运动规划
 - 投资组合优化
-
-
 
 ## 等式约束二次规划(EQP)
 
@@ -1030,7 +1014,7 @@ $$
 
 ## 控制论思想下的约束问题
 
-- Proximal Gradient Dynamics and Feedback Control for Equality-Constrained Composite Optimization  
+- Proximal Gradient Dynamics and Feedback Control for Equality-Constrained Composite Optimization
 
   解决等式约束的复合凸优化问题：
   $$
@@ -1040,7 +1024,7 @@ $$
 
   ![image-20250401164130590](markdown-img/ZJU-OP-Lec5-8.assets/image-20250401164130590.png)
 
-- Control-Barrier-Function-Based Design of Gradient Flows for Constrained Nonlinear Programming  
+- Control-Barrier-Function-Based Design of Gradient Flows for Constrained Nonlinear Programming
 
   在带约束的非线性优化问题中，传统梯度流方法难以保证解的**可行性**（始终满足约束）和**稳定性**（收敛到可行集的局部/全局最优）。论文提出一种结合**控制屏障函数（CBF）**的梯度流方法，解决以下问题：
 
@@ -1050,8 +1034,6 @@ $$
 
   方法：**Safe Gradient Flow**，核心思想：将优化问题视为闭环控制系统
 
-
-
 ## HW
 
 ![e2474e7b99bcf003186710282cbbf34](markdown-img/ZJU-OP-Lec5-8.assets/e2474e7b99bcf003186710282cbbf34.jpg)
@@ -1060,12 +1042,9 @@ $$
 
 罚函数如何让增广函数越来越病态？画图看看
 
-
-
-
 # References
 
-- https://zhuanlan.zhihu.com/p/629131647
+- <https://zhuanlan.zhihu.com/p/629131647>
 - [2023-2024春夏许超老师最优化与最优控制课程分享 - CC98论坛](https://www.cc98.org/topic/5923253)
 
 - [Tutorial — Ceres Solver (ceres-solver.org)](http://ceres-solver.org/tutorial.html)

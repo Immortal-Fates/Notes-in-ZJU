@@ -16,8 +16,6 @@ cmake生成makefile文件给make执行
 
 - cmake跨平台项目管理的工具生成Makefile文件给make去执行，实现跨平台。cmake它仍然是目标、依赖之类的抽象的东西，根据一个叫CMakeLists.txt的文件（还是自己手写）生成Makefile的
 
-
-
 # Makefile
 
 ### 关于程序的编译和链接
@@ -32,12 +30,11 @@ makefile关系到了整个工程的编译规则
 
 makefile定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为makefile就像一个Shell 脚本一样，其中也可以执行操作系统的命令
 
-
 ### 好处
 
 makefile带来的好处就是——“自动化编译”，一旦写好，只需要一个make命令，整个工程完全自动编译，极大的提高了软件开发的效率
 
-大部分IDE中都有 
+大部分IDE中都有
 
 更省事、准确。对于大的工程（文件多，一个.c对应了一个.o文件，最后还涉及.o文件和.a文件链接）编译汇编工作如果手动操作就会变得繁琐且重复，那么makefile出现能极大的简化这个重复繁琐的过程，而且对于不同的操作系统，也需要让编译自动适应
 
@@ -64,7 +61,7 @@ command
 ...
 ...
 
-或是这样： 
+或是这样：
 
 targets : prerequisites ; command
 command
@@ -202,7 +199,7 @@ MakeFile里面大致是先处理一些环境变量或者参数，然后从某一
 
 # 常用命令行
 
-- cc、gcc、g++、CC的区别概括：[(17条消息) cc、gcc、g++、CC的区别概括_如小丧的博客-CSDN博客](https://blog.csdn.net/liaoshengshi/article/details/40424397#:~:text=cc是Unix系统的C Compiler，而gcc则是GNU Compiler Collection，GNU编译器套装。.,gcc原名为Gun C语言编译器，因为它原本只能处理C语言，但gcc很快地扩展，包含很多编译器（C、C%2B%2B、Objective-C、Ada、Fortran、Java）。. 因此，它们是不一样的，一个是古老的C编译器，一个是GNU编译器集合，gcc里面的C编译器比cc强大多了，因此没必要用cc。. 下载不到cc的原因在于：cc来自于昂贵的Unix系统，cc是商业软件。.)
+- cc、gcc、g++、CC的区别概括：[(17条消息) cc、gcc、g++、CC的区别概括_如小丧的博客-CSDN博客](<https://blog.csdn.net/liaoshengshi/article/details/40424397#:~:text=cc是Unix系统的C> Compiler，而gcc则是GNU Compiler Collection，GNU编译器套装。.,gcc原名为Gun C语言编译器，因为它原本只能处理C语言，但gcc很快地扩展，包含很多编译器（C、C%2B%2B、Objective-C、Ada、Fortran、Java）。. 因此，它们是不一样的，一个是古老的C编译器，一个是GNU编译器集合，gcc里面的C编译器比cc强大多了，因此没必要用cc。. 下载不到cc的原因在于：cc来自于昂贵的Unix系统，cc是商业软件。.)
 - 超全整理！Linux shell及常用36类命令汇总：[超全整理！Linux shell及常用36类命令汇总 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/50448669)
 
 -g 可执行程序包含调试信息，为了调试用的：加个-g 是为了gdb 用，不然gdb用不到
@@ -219,15 +216,7 @@ gcc filename.c -o filename
 
 产生.o文件，就是obj文件，不产生执行文件
 
-
-
 # Cmake
-
-
-
-
-
-
 
 # References
 
@@ -236,4 +225,4 @@ gcc filename.c -o filename
 - [Makefile详解（超级好）【mingw吧】_百度贴吧 (baidu.com)](https://tieba.baidu.com/p/591519800?red_tag=2203856275)
 - [(17条消息) 静态库与动态库的区别与优缺点_静态库和动态库的优缺点_雨荔@秋垣的博客-CSDN博客](https://blog.csdn.net/weixin_51483516/article/details/120837316)
 
-- 【GNU Makefile编译C/C++教程（Linux系统、VSCODE)】https://www.bilibili.com/video/BV1EM41177s1?p=22&vd_source=93bb338120537438ee9180881deab9c1!!!
+- 【GNU Makefile编译C/C++教程（Linux系统、VSCODE)】<https://www.bilibili.com/video/BV1EM41177s1?p=22&vd_source=93bb338120537438ee9180881deab9c1>!!!

@@ -9,8 +9,6 @@
 - **Improving Language Understanding
  by Generative Pre-Training**. ([pdf](..\..\..\papers\models\GPT-1.pdf)).
 
-
-
 # Cmd
 
 ```

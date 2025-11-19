@@ -1,4 +1,5 @@
 # Main Takeaway
+
 无约束最优问题的求解
 
 - [ ] 掌握多元函数的梯度与Hessian计算
@@ -28,7 +29,7 @@
 
    求其梯度和Hessian矩阵。
 
-### Problem1 
+### Problem1
 
 Gradient Hessian
 $$
@@ -38,7 +39,7 @@ $$
 所有二阶偏导数为零：
 
 $$
-\nabla^2 f(\mathbf{x}) = 
+\nabla^2 f(\mathbf{x}) =
 \begin{bmatrix}
 0 & 0 & \cdots & 0 \\
 0 & 0 & \cdots & 0 \\
@@ -55,7 +56,7 @@ Hessian：
 展开函数：
 $$
    f(\mathbf{x}) = \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j + \sum_{k=1}^n b_k x_k + c
- 
+
 $$
 
 我们先来看$f(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x}$这个部分
@@ -103,19 +104,16 @@ Jacobi：
 
 - 对 $f_1$ 求偏导：
 
-
 $$
      \begin{cases}
      \dfrac{\partial f_1}{\partial x_1} = 3 \\
      \dfrac{\partial f_1}{\partial x_2} = e^{x_2}x_3 \\
      \dfrac{\partial f_1}{\partial x_3} = e^{x_2}
      \end{cases}
-   
+
 $$
 
-   - 对 $f_2$ 求偏导：
-
-
+- 对 $f_2$ 求偏导：
 
 $$
 \begin{cases}
@@ -134,7 +132,6 @@ $$
 $$
 
 ## 方向导数
-
 
 > “形式”很重要：先有鸡还是先有蛋？先接受这个形式再最优化求解
 
@@ -242,8 +239,6 @@ $$
 - 焦点（focus）：在动力系统的相平面分析中，**焦点**是一类**平衡点**（即系统状态变化率为零的点），其周围轨迹呈现螺旋状收敛或发散的特征。焦点分为**稳定焦点**和**不稳定焦点**两种类型
 - 鞍点（saddle point）
 
-
-
 # 变分法
 
 这一节主要是为了介绍变分法并得到E-L方程这个大杀器
@@ -301,8 +296,6 @@ $$
   - 经典力学的数学基础
   - 推广到y是多元函数的情形
 
-
-
 ## 经典变分问题
 
 - 最速下降线[什么是最速降线？它又有何奇妙的性质呢？](https://zhuanlan.zhihu.com/p/68140784)
@@ -319,9 +312,8 @@ $$
 
 介绍一些常见的优化算法
 
-
-
 ## 梯度下降
+
 梯度下降：gradient flow梯度流的介绍：[梯度流：探索通向最小值之路](https://kexue.fm/archives/9660)
 
 梯度流是将我们在用梯度下降法中寻找最小值的过程中的各个点连接起来，形成一条随（虚拟的）时间变化的轨迹，这条轨迹便被称作“梯度流”。梯度流核心思想就是将**离散的优化算法（如梯度下降）转化为连续的动力学系统**，通过微分方程描述参数随时间的演化轨迹
@@ -392,8 +384,8 @@ Hessian矩阵求逆太难了，找了个$H_K$来替代，对$H_K$的要求：
 
 **拟牛顿条件**：在迭代优化中，希望近似Hessian逆矩阵 $  H_{k+1}  $ 满足：
 $$
-H_{k+1} y_k = s_k \quad \text{其中} \quad 
-\begin{cases} 
+H_{k+1} y_k = s_k \quad \text{其中} \quad
+\begin{cases}
 s_k = x_{k+1} - x_k \\
 y_k = \nabla f(x_{k+1}) - \nabla f(x_k)
 \end{cases}
@@ -455,8 +447,8 @@ $$
 
 拟牛顿条件：在迭代优化中，希望近似Hessian逆矩阵 $  H_{k+1}  $ 满足：
 $$
-H_{k+1} \Delta g_k = \Delta x_k \quad \text{其中} \quad 
-\begin{cases} 
+H_{k+1} \Delta g_k = \Delta x_k \quad \text{其中} \quad
+\begin{cases}
 \Delta x_k = x_{k+1} - x_k \\
 \Delta g_k = \nabla f(x_{k+1}) - \nabla f(x_k)
 \end{cases}
@@ -513,19 +505,19 @@ $$
 将DFP公式分解为两个秩1修正项：
 $$
 H_{k+1} = H_k + \underbrace{\frac{\Delta x_k \Delta x_k^\top}{\Delta x_k^\top \Delta g_k}}_{\text{秩1项}} - \underbrace{\frac{H_k \Delta g_k \Delta g_k^\top H_k}{\Delta g_k^\top H_k \Delta g_k}}_{\text{秩1项}}
- 
+
 对每个秩1修正项分别应用Sherman-Morrison公式（SMW的秩1特例）。
 $$
 第一项修正（正项）：
 $$
      H^{(1)} = H_k + \frac{\Delta x_k \Delta x_k^\top}{\Delta x_k^\top \Delta g_k}
-   
+
 $$
 
  设 $  u = \Delta x_k  $, $  v = \frac{\Delta x_k}{\Delta x_k^\top \Delta g_k}  $，则：
 $$
      H^{(1)} = H_k + u v^\top
-   
+
 $$
 
  应用SMW逆公式：
@@ -536,13 +528,13 @@ $$
 第二项修正（负项）：
 $$
          H_{k+1} = H^{(1)} - \frac{H_k \Delta g_k \Delta g_k^\top H_k}{\Delta g_k^\top H_k \Delta g_k}
-       
+
 $$
 
  设 $  u = -H_k \Delta g_k  $, $  v = \frac{H_k \Delta g_k}{\Delta g_k^\top H_k \Delta g_k}  $，则：
 $$
          H_{k+1} = H^{(1)} + u v^\top
-       
+
 $$
 再次应用SMW公式得到最终DFP的$B_{k+1}$更新公式
 $$
@@ -556,7 +548,7 @@ $$
        &= H_k \Delta g_k + \Delta x_k - H_k \Delta g_k \\
        &= \Delta x_k
        \end{aligned}
-     
+
 $$
 
  结论：公式满足拟牛顿条件。
@@ -567,8 +559,8 @@ $$
 
 拟牛顿条件：在迭代优化中，希望近似Hessian矩阵的逆 $  H_{k+1}  $ 满足：
 $$
-H_{k+1} \Delta g_k = \Delta x_k \quad \text{其中} \quad 
-\begin{cases} 
+H_{k+1} \Delta g_k = \Delta x_k \quad \text{其中} \quad
+\begin{cases}
 \Delta x_k = x_{k+1} - x_k \\
 \Delta g_k = \nabla f(x_{k+1}) - \nabla f(x_k)
 \end{cases}
@@ -625,8 +617,6 @@ $$
 
 既然DFP和BFGS是互为对偶的，那用哪一个比较好呢？你当然可以通过若干组实验来测试哪个的性能的更优，或者对其收敛一通验证。但是一个比较的朴素的做法就是“我都要”，也就是取DFP迭代式和BFGS迭代式的正加权组合
 
-
-
   1. 问题定义
 
       目标：求解线性最小二乘问题 $  \min_x \|Ax - b\|^2  $，并在新增数据点时**增量更新解** $  x  $，避免重新计算逆矩阵。
@@ -638,7 +628,6 @@ $$
       - $  P_k = (A_k^\top A_k)^{-1}  $: 信息矩阵的逆（协方差矩阵）
       - $  x_k = P_k A_k^\top b_k  $: 第 $  k  $ 步的最小二乘解
 
-
   2. 增量更新推导
 
       当新增一个样本 $  (a_{k+1}, b_{k+1})  $ 时，设计矩阵和观测向量扩展为：
@@ -646,7 +635,7 @@ $$
       A_{k+1} = \begin{bmatrix} A_k \\ a_{k+1}^\top \end{bmatrix}, \quad b_{k+1} = \begin{bmatrix} b_k \\ b_{k+1} \end{bmatrix}
       $$
 
-      1.   更新信息矩阵逆 $  P_{k+1}  $
+      1. 更新信息矩阵逆 $  P_{k+1}  $
 
          定义$  P_k = (A_k^\top A_k)^{-1}  $: 信息矩阵的逆（协方差矩阵），因为
          $$
@@ -691,7 +680,6 @@ $$
      $$
      x_{k+1} = x_k + K_{k+1} e_{k+1}
      $$
-     
 
 #### 扩展：Woodbury公式批量更新
 
@@ -711,11 +699,9 @@ $$
 
 #### 数值稳定性
 
-  - 正则化：初始 $  P_0 = \lambda^{-1} I  $ 避免 $  A^\top A  $ 奇异。
+- 正则化：初始 $  P_0 = \lambda^{-1} I  $ 避免 $  A^\top A  $ 奇异。
 
 - 数值误差控制：定期重置 $  P_k  $ 或使用Cholesky分解更新。
-
-
 
 ## HW
 
@@ -726,13 +712,6 @@ $$
   要求使用sherman-Morrison-Woodbarry
 
 - BFGS，DFP公式证明（SMW推导）
-
-
-
-
-
-
-
 
 # References
 

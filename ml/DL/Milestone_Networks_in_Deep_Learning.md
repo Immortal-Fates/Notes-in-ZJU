@@ -55,13 +55,8 @@
 
 - **Attention Is All You Nee**{{1706.03762v7}}([pdf](..\..\..\papers\models\Attention_Is_All_You_Need.pdf))
 
-
-
-
-
-
-
 # Relations
+
 TODO:
 ![alt text](assets/Milestone_Networks_in_Deep_Learning.assets/5b7aa2cd1bb9d10b98150072fdf97f9b.png)
 
@@ -87,8 +82,6 @@ graph TD
   L -->|squeeze-excite| O[SENet]
 
 ```
-
-
 
 # Cmd
 

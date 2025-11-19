@@ -69,8 +69,6 @@ $$
 
 具体来说，对于任何具有$d$个输入和$q$个输出的全连接层，参数开销为$\mathcal{O}(dq)$，这个数字在实践中可能高得令人望而却步。幸运的是，将$d$个输入转换为$q$个输出的成本可以减少到$\mathcal{O}(\frac{dq}{n})$，其中超参数$n$可以由我们灵活指定，以在实际应用中平衡参数节约和模型有效性
 
-
-
 # Softmax-Regression
 
 > classification
@@ -189,8 +187,6 @@ $$
 
 对于$\mathbf{O}$的每一行，我们先对所有项进行幂运算，然后通过求和对它们进行标准化。
 
-
-
 ## Loss Function
 
 - 均方误差（MSE）损失函数
@@ -202,7 +198,6 @@ $$
   $$
    l(\mathbf{y}, \hat{\mathbf{y}}) = - \sum_{j=1}^q y_j \log \hat{y}_j
   $$
-  
 
 # 实现
 
@@ -232,7 +227,7 @@ $$
                                num_workers=get_dataloader_workers()),
                data.DataLoader(mnist_test, batch_size, shuffle=False,
                                num_workers=get_dataloader_workers()))
-   
+
        train_iter, test_iter = load_data_fashion_mnist(32, resize=64)
    ```
 
@@ -241,7 +236,7 @@ $$
    ```
    # nn是神经网络的缩写
    from torch import nn
-   
+
    net = nn.Sequential(nn.Linear(2, 1))
    ```
 

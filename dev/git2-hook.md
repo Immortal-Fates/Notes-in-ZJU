@@ -72,10 +72,6 @@ It is language-agnostic and supports everything from Python, JavaScript, Go, and
 
 通过这些步骤，你可以确保在提交代码时，各种语言的代码都会经过相应的检查和格式化，从而提高代码质量。
 
-
-
-
-
 ### Example
 
 ```yaml
@@ -190,15 +186,9 @@ repos:
 
 - **Fail the build** if hooks fail.
 
-
-
-
-
-
-
 # References
 
 - [The Comprehensive Guide to `pre-commit`](https://gist.github.com/MangaD/6a85ee73dd19c833270524269159ed6e)
-- https://git-scm.com/docs/githooks
-- https://github.com/pre-commit/action
-- https://pre-commit.ci/
+- <https://git-scm.com/docs/githooks>
+- <https://github.com/pre-commit/action>
+- <https://pre-commit.ci/>

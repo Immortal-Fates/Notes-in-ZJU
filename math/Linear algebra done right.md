@@ -17,30 +17,24 @@ This encounter will focus on abstract vector spaces and linear maps.
 
   Suppose U and W are subspaces of V. Then U+W is a direct sum if and only if U∩W={0};
 
-
-
 # CH2 Finite-Dimensional Vector Spaces
 
 learning objectives：span, linear independence, bases, dimension
 
 - span：就是向量线性组合张成的空间 $span(v_1,...,v_m)=\{a_1v_1+...+a_mv_m:a_1,...a_m∈F\}$
 
-- $p(F)$ is the set of all polynomials with coefficients in 𝐅  
+- $p(F)$ is the set of all polynomials with coefficients in 𝐅
   $$
   p(z) = a_0+a_1z+a_2z^2+...+a_mz^m
   $$
 
-  > a polynomial (thought of as a function from 𝐅 to 𝐅)  
-
-
+  > a polynomial (thought of as a function from 𝐅 to 𝐅)
 
 # CH3 Linear Maps
 
 ![image-20250228103147350](assets/Linear algebra done right.assets/image-20250228103147350.png)
 
 “由局部决定整体”的典型体现，揭示了基向量在定义线性映射中的核心地位
-
-
 
 - V->W线性映射的集合就是vector space
 
@@ -55,8 +49,6 @@ $$
 $$
 dimV=dim\space null\space T+dim\space range\space T
 $$
-
-
 
 矩阵乘法的含义[【2.3】正式谈谈矩阵的乘法和矩阵的逆 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/126548944)
 
@@ -73,7 +65,7 @@ linear combination of columns
 
 ![image-20250228145446686](assets/Linear algebra done right.assets/image-20250228145446686.png)
 
-matrix multiplication as linear combinations of columns or rows  
+matrix multiplication as linear combinations of columns or rows
 
 - column rank=row rank=rank
 
@@ -87,23 +79,11 @@ How to find CR for every A ? Elimination !
 
 ![image-20250228151054443](assets/Linear algebra done right.assets/image-20250228151054443.png)
 
-
-
 Invertibility and Isomorphisms(同构)
 
 ![image-20250302140835073](assets/Linear algebra done right.assets/image-20250302140835073.png)
 
 ![image-20250302141148959](assets/Linear algebra done right.assets/image-20250302141148959.png)
-
-
-
-
-
-
-
-
-
-
 
 # References
 

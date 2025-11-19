@@ -31,16 +31,12 @@ $$
 
 # 梯度下降（GD）及其变种
 
-
-
 ## GD(Gradient Descent)
 
 **定义**：沿着负梯度方向更新参数，使函数值逐步减小。
 $$
 \theta_{t+1} = \theta_t - \eta \nabla f(\theta_t)
 $$
-
-
 
 ## 批量 / 随机 / 小批量梯度下降
 
@@ -101,8 +97,6 @@ SGD（stochastic gradient descent）
   $$
 
 > Tips：参数像一个有质量的小球，梯度是坡度的“重力”。小球累积动量，使其在平坦方向加速，在陡峭方向平滑振荡。
-
-
 
 ## Nesterov加速梯度（Nesterov Accelerated Gradient, NAG）
 
@@ -200,7 +194,7 @@ Adadelta是AdaGrad的另一种变体
 
      维护历史梯度平方的指数加权平均（ρ为衰减因子）：
      $$
-     s_t = \rho s_{t-1} + (1 - \rho) g_t'^2 
+     s_t = \rho s_{t-1} + (1 - \rho) g_t'^2
      $$
 
   2. 参数更新规则
@@ -223,7 +217,6 @@ Adadelta是AdaGrad的另一种变体
      $$
      \Delta x_t = \rho \Delta x_{t-1} + (1 - \rho) g_t'^2
      $$
-
 
 ## Adam and AdamW
 
@@ -256,25 +249,25 @@ Adadelta是AdaGrad的另一种变体
        g_t = \nabla_\theta L(\theta_{t-1})
     $$
 
-    2. 更新一阶矩（动量）：
+    1. 更新一阶矩（动量）：
 
     $$
       m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t
     $$
 
-    3. 更新二阶矩（自适应学习率）：
+    1. 更新二阶矩（自适应学习率）：
 
     $$
       v_t = \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g_t^2
     $$
 
-    4. 偏差校正（消除初始零偏置）：
+    1. 偏差校正（消除初始零偏置）：
 
     $$
       \hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
     $$
 
-    5. 更新参数：
+    1. 更新参数：
 
     $$
       \theta_t = \theta_{t-1} - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t
@@ -321,4 +314,3 @@ Adadelta是AdaGrad的另一种变体
 | AdaDelta   | 去除全局 η      | 鲁棒       | 慢         | 调参困难时         |
 | Adam       | 一阶+二阶矩估计 | 快速收敛   | 泛化差     | 初期实验           |
 | AdamW      | 解耦权重衰减    | 更稳       | 略慢       | Transformer 类模型 |
-

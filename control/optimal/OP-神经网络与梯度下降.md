@@ -7,8 +7,6 @@
 
 <!--more-->
 
-
-
 # 神经网络的基本原理
 
 凸优化问题有助于分析算法的特点。 毕竟对大多数非凸问题来说，获得有意义的理论保证很难，但是直觉和洞察往往会延续。所以我们研究一个优化算法，常常将其运用于如下问题：
@@ -31,14 +29,9 @@ $$
 
 - 计算挑战：当$m$极大时，全梯度计算需要巨大计算量，甚至在$m$为无穷时无法实现。
 
-
 - 解决策略：用随机子函数的梯度来估计目标函数的全梯度，这类方法称为随机方法。在实际应用中，这类方法通常比确定性的梯度下降方法更快
 
-
-
 # 梯度下降方法的变体
-
-
 
 ## 随机梯度下降SGD
 
@@ -52,11 +45,11 @@ SGD（stochastic gradient descent）
   $$
 
 - 算法步骤
-  
+
   1. 在每次迭代中随机选择一个样本 $i \sim \text{Uniform}(1,m)$
-  
+
   2. 计算单个样本的梯度$\nabla f_i(x_t)$
-  
+
   3. 参数更新$x_{t+1} = x_t - \eta \nabla f_i(x_t)$，其中 $\eta$ 为学习率 (learning rate)
 
 - 特性分析
@@ -75,13 +68,12 @@ SGD（stochastic gradient descent）
 
   好的副作用：使用平均梯度减小了方差
 
-## 动量算法：
+## 动量算法
 
 - 核心思想：在迭代过程中引入动量项，利用历史梯度信息来加速收敛并减少震荡
   $$
   v_t = \beta v_{t-1}+g_{t,t-1},~\beta \in(0,1)
   $$
-  
 
 ## Nesterov加速梯度方法（Nesterov Accelerated Gradient, NAG）
 
@@ -114,21 +106,21 @@ SGD（stochastic gradient descent）
 Adagrad是一种随机梯度下降的方法[11.7. AdaGrad算法](https://zh-v2.d2l.ai/chapter_optimization/adagrad.html)
 
 - 引言：稀疏特征，鉴于学习率下降，我们可能最终会面临这样的情况：常见特征的参数相当迅速地收敛到最佳值，而对于不常见的特征，我们仍缺乏足够的观测以确定其最佳值。 换句话说，学习率要么对于常见特征而言降低太慢，要么对于不常见特征而言降低太快。
-  
+
   解决此问题的一个方法就是记录我们看到特定特征的次数，然后将其用作调整学习率：$\eta_i = \frac{\eta_0}{\sqrt{s(i,t)+c}},~s(i,t)$这里计下了我们截至$t$观察到功能$i$的次数
 
 - 核心思想：为每个参数动态调整学习率，是一种**自适应学习率优化算法**
-  
+
   通过将上面粗略的计数器$s(i,t)$替换为先前观察所得梯度的平方之和来解决这个问题
   $$
   s(i,t+1)=s(i,t)+(\partial_if(x))^2
   $$
-  
+
   - **高频参数**（梯度大且频繁更新的参数）降低学习率，避免震荡；
   - **低频参数**（梯度小或稀疏的参数）增大学习率，加速收敛。 通过累积历史梯度平方和，Adagrad 自动适应不同参数的特征，特别适合稀疏数据（如自然语言处理任务）
-  
+
   AdaGrad算法会在单个坐标层面动态降低学习率
-  
+
 - 算法步骤：
 
   - 初始化：
@@ -178,17 +170,17 @@ Adadelta是AdaGrad的另一种变体
   维护历史梯度平方的指数加权平均（ρ为衰减因子）：
   $$s_t = \rho s_{t-1} + (1 - \rho) g_t'^2 \tag{11.9.1}$$
 
-  2. 参数更新规则
+  1. 参数更新规则
 
   使用调整后的梯度进行参数更新：
   $$x_t = x_{t-1} - g_t' \tag{11.9.2}$$
 
-  3. 梯度调整计算
+  1. 梯度调整计算
 
   通过历史参数更新量缩放原始梯度（ϵ为数值稳定项）：
   $$g_t' = \frac{\sqrt{\Delta x_{t-1} + \epsilon}}{\sqrt{s_t + \epsilon}} \odot g_t \tag{11.9.3}$$
 
-  4. 参数更新量更新
+  1. 参数更新量更新
 
   维护参数更新量的指数加权平均：
   $$\Delta x_t = \rho \Delta x_{t-1} + (1 - \rho) g_t'^2 \tag{11.9.4}$$
@@ -221,27 +213,27 @@ Adadelta是AdaGrad的另一种变体
     $$
        g_t = \nabla_\theta L(\theta_{t-1})
     $$
-    
-    2. 更新一阶矩（动量）：
-  
+
+    1. 更新一阶矩（动量）：
+
     $$
       m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t
     $$
-  
-    3. 更新二阶矩（自适应学习率）：
+
+    1. 更新二阶矩（自适应学习率）：
 
     $$
       v_t = \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g_t^2
     $$
-  
-    4. 偏差校正（消除初始零偏置）：
-  
+
+    1. 偏差校正（消除初始零偏置）：
+
     $$
       \hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
     $$
-  
-    5. 更新参数：
-  
+
+    1. 更新参数：
+
     $$
       \theta_t = \theta_{t-1} - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t
     $$
@@ -262,8 +254,6 @@ Adadelta是AdaGrad的另一种变体
   | **局部最优风险**     | 在部分非凸问题中可能陷入鞍点，需结合预热（Warmup）或学习率衰减。 |
   | **长期训练性能下降** | 因自适应学习率随训练衰减，后期可能不如带动量的SGD            |
 
-
-
 # 控制论视角下的神经网络
 
 Nature Communication上的PIDAO论文：
@@ -274,7 +264,7 @@ gradient-based optimizations can be interpreted as continuous-time dynamical sys
 
 作业：机器学习中的优化算法
 
-- 学习神经网络的基本原理，主要从无约束优化的角度，了解反向传播的求解方法，主要参考资料：[An Introduction to Optimization: With Applications to Machine Learning - Edwin K. P. Chong, Wu-Sheng Lu, Stanislaw H. Zak - Google Books](https://books.google.co.jp/books?hl=en&lr=&id=uEDUEAAAQBAJ&oi=fnd&pg=PR15&dq=info:WSaWZthIywYJ:scholar.google.com&ots=qAtUVnxFtM&sig=Sl77RBaLcYWOmv7FMLzQZg-qcGg&redir_esc=y#v=onepage&q&f=false)——这本书的ch13 Unconstrained Optimization and Neural Networks  
+- 学习神经网络的基本原理，主要从无约束优化的角度，了解反向传播的求解方法，主要参考资料：[An Introduction to Optimization: With Applications to Machine Learning - Edwin K. P. Chong, Wu-Sheng Lu, Stanislaw H. Zak - Google Books](https://books.google.co.jp/books?hl=en&lr=&id=uEDUEAAAQBAJ&oi=fnd&pg=PR15&dq=info:WSaWZthIywYJ:scholar.google.com&ots=qAtUVnxFtM&sig=Sl77RBaLcYWOmv7FMLzQZg-qcGg&redir_esc=y#v=onepage&q&f=false)——这本书的ch13 Unconstrained Optimization and Neural Networks
 - 学习机器学习中重要的梯度类算法
   - SGD、Nestonov等
   - Adagrad优化算法
@@ -282,12 +272,9 @@ gradient-based optimizations can be interpreted as continuous-time dynamical sys
 - 针对以上的学习内容：撰写一篇小论文，阐述机器学习中的优化问题与加速算法
 - 附加研究兴趣题目：深度学习优化中的梯度流、信息几何、动力系统等方法，参考Nature Communication上的PIDAO论文
 
-
-
-
 # References
 
-- https://zhuanlan.zhihu.com/p/629131647
+- <https://zhuanlan.zhihu.com/p/629131647>
 - [Tutorial — Ceres Solver (ceres-solver.org)](http://ceres-solver.org/tutorial.html)
 
 - MlT,theprincipleofoptimal control,thefirsttwolectures

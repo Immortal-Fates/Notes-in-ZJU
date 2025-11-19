@@ -7,7 +7,7 @@
 
 ### 一阶
 
-- 
+-
 
 - 左右同时乘上积分因子乘上integrating factor积分因子
   $$
@@ -28,7 +28,7 @@
 
 - 一阶的齐次性/非齐次性的判断
 
-A diferential equation $y\prime=f(t,y)$ is homogeneous if 
+A diferential equation $y\prime=f(t,y)$ is homogeneous if
 $$
 f(kt,ky)=f(t,y)
 $$
@@ -59,7 +59,7 @@ $$
   \mu(t)=\frac{c\space exp(-\int p(t)dt)}{y^2_1(t)}=\frac{dv}{dt}
   $$
 
-- 
+-
 
 ## 常系数线性微分方程
 
@@ -92,11 +92,9 @@ $$
 在此基础上，2\lambda+p=0（即上式的导数仍未0)，还要再×t
 $$
 
-
-
 ## 常微分方程的常数变易法
 
-https://zhuanlan.zhihu.com/p/387631989
+<https://zhuanlan.zhihu.com/p/387631989>
 
 ## 常系数齐次线性方程组
 
@@ -114,15 +112,12 @@ $$
 y对x的一阶导=\frac{1}{x^3}(D^3-3D^2+2D)
 $$
 
-
-
 ### 特征根为单根
 
 含复数根（成对），将$$e^{a+bi}$$展开，然后将特征向量写为实数+复数的形式再相乘，即得实数部分为一个解，复数部分为一个解（不含i）
 $$
 e^{at}(pcos\beta t-qsin\beta t),e^{at}(psin\beta t+qcos\beta t)
 $$
-
 
 ### 特征根为重根
 
@@ -152,11 +147,9 @@ $$
 
 ![QQ图片20230617105541](E:\notes\课程\常微分方程\常微分复习\QQ图片20230617105541.jpg)
 
-
-
 ## 常系数非齐次线性方程组
 
-#### 常数变易法：
+#### 常数变易法
 
 $$
 let\space x(t)=X(t)u(t),X\prime(t)=AX(t)

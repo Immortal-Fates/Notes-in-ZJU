@@ -1,7 +1,5 @@
 # 机械臂动力学
 
-
-
 ## 刚体的加速度传递
 
 $$
@@ -11,24 +9,19 @@ $$
 
 线加速度公式：
 
-
 $$
 \begin{align*}
 ^A\dot{V}_Q &= ^A\dot{V}_{BORG} + ^A_B R ^B\dot{V}_Q + 2 ^A\Omega_B \times ^A_B R ^BV_Q + ^A\dot{\Omega}_B \times ^A_B R ^B Q + ^A\Omega_B \times (^A\Omega_B \times ^A_B R ^B Q) \\
 \end{align*}
 $$
 
-
 当 $ ^B Q $ 是常数，即
-
 
 $$
 ^B V_Q = ^B \dot{V}_Q = 0
 $$
 
-
 加速度的推导公式化简为：
-
 
 $$
 \begin{align*}
@@ -41,7 +34,6 @@ $$
 $$
 
 角加速度公式：
-
 
 $$
 ^A\dot{\Omega}_C = ^A\dot{\Omega}_B + ^A_B R ^B\dot{\Omega}_C + ^A\Omega_B \times ^A_B R ^B\Omega_C
@@ -85,9 +77,8 @@ I_{yz} &= \iiint_V yz \, \rho \, dv
 \end{align*}
 $$
 
-
 $$
-{^CI} = 
+{^CI} =
 \begin{bmatrix}
 \sum m_i (y_i^2 + z_i^2) & -\sum m_i x_i y_i & -\sum m_i x_i z_i \\
 -\sum m_i x_i y_i & \sum m_i (x_i^2 + z_i^2) & -\sum m_i y_i z_i \\
@@ -118,8 +109,6 @@ $$
 
 - 如果由坐标系的两个坐标轴构成的平面为刚体质量分布的对称平面，则正交于这个对称平面的坐标轴与另一个坐标轴的惯量积为0
 - 惯量矩永远是正值，而惯量积可能正，可能负
-
-
 
 下面介绍一下欧拉方程：
 $$
@@ -172,15 +161,15 @@ $$
   > - ${^{i+1}Z_{i+1}} = [0,0,1]^\top$是轴i+1在$\{i+1\}$中的表示
   > - $\dot{\theta}_{i+1}$是旋转关节i+1的关节转速即为${^i\omega_i}$
   > - ${^BQ} = {^iP_{i+1}}$为$\{i+1\}$的原点在$\{i\}$中的表示，是定常向量，因此${^B V_Q}=0$
-  
+
   $$
   {^{i+1}\nu_{i+1}} = {^{i+1}_i}R({^i\nu_i}+{^{i}\omega}_{i}\times{^{i}P_{i+1}})
   $$
-  
+
   $$
   ^{i+1}\dot{\upsilon}_{i+1}={}_{i}^{i+1}R[{}^{i}\dot{\upsilon}_{i}+{}^{i}\dot{\omega}_{i}\times{}^{i}P_{i+1}+{}^{i}\omega_{i}\times({}^{i}\omega_{i}\times{}^{i}P_{i+1})]
   $$
-  
+
 - 当关节$i+1$是移动关节时
   $$
   {^{i+1}\omega_{i+1}} = {^{i+1}_i}R{^i\omega_i}
@@ -221,7 +210,7 @@ $$
  & ^iN_i={}^{C_i}I_i{}^i\dot{\omega}_i+{}^i\omega_i\times{}^{C_i}I_i{}^i\omega_i
 \end{aligned}
 $$
-科里奥利力是质点在旋转参照系中做直线运动情形下出现的一种惯性力  
+科里奥利力是质点在旋转参照系中做直线运动情形下出现的一种惯性力
 
 然后向内迭代计算各连杆的力和力矩。最后重新排列力和力矩方程：
 $$
@@ -259,10 +248,6 @@ $$
 
 ![image-20250326000954659](markdown-img/ROBOT_I_动力学.assets/image-20250326000954659.png)
 
-
-
-
-
 ## 操作臂动力学方程的结构
 
 $$
@@ -282,11 +267,9 @@ $$
 
 牛顿-欧拉方程在操作臂动力学分析中的形式：
 
-
 $$
 \tau = M(\Phi) \ddot{\Phi} + V(\Phi, \dot{\Phi}) + G(\Phi)
 $$
-
 
 - $  M(\Phi)  $：操作臂的质量矩阵（$ n \times n $）
 - $  V(\Phi, \dot{\Phi})  $：离心力和哥氏力矢量（$ n \times 1 $）
@@ -296,11 +279,9 @@ $$
 
 将速度项写成另一种形式：
 
-
 $$
 \tau = M(\Phi) \ddot{\Phi} + B(\Phi) [\dot{\Phi} \dot{\Phi}] + E(\Phi) [\dot{\Phi}^2] + G(\Phi)
 $$
-
 
 - $  B(\Phi)  $：哥氏力系数矩阵（$  n \times \frac{n(n-1)}{2}  $）
 - $  E(\Phi)  $：离心力系数矩阵（$  n \times n  $）
@@ -311,8 +292,6 @@ $$
 - $  [\dot{\Phi}^2]  $：表示 $ \dot{\Phi} $ 各元素的平方
 
 > $  M(\Phi)  $、$  B(\Phi)  $、$  E(\Phi)  $、$  G(\Phi)  $ 随操作臂的运动不断更新
-
-
 
 ## 拉格朗日方程
 
@@ -344,10 +323,9 @@ $$
 
 - 连杆i的动能表达式：
 
-
 $$
-k_i = \frac{1}{2} m_i v_{C_i}^T v_{C_i} + \frac{1}{2} {^i{\omega}_i^T}~ {^{C_i} I_i} ~{^i{\omega}_i}  
-  
+k_i = \frac{1}{2} m_i v_{C_i}^T v_{C_i} + \frac{1}{2} {^i{\omega}_i^T}~ {^{C_i} I_i} ~{^i{\omega}_i}
+
    =  \frac{1}{2} m_i v_{C_i}^T v_{C_i} + \frac{1}{2} {\omega}_i^T{^0_iR}~ {^{C_i} I_i} ~{^0_iR^T}{\omega}_i
 $$
 
@@ -377,11 +355,11 @@ $$
 
   然后进行连杆势能的计算：先是几个假设：
 
-  - $^0g$表示世界坐标系中的重力加速度响铃
+- $^0g$表示世界坐标系中的重力加速度响铃
 
     eg：如果以y轴为竖直向上方向则$^0g=[0,-g,0]^T$
 
-  - $P_{C_i}$是连杆$i$质心的位置矢量
+- $P_{C_i}$是连杆$i$质心的位置矢量
 
 连杆势能与拉格朗日方程：
 
@@ -389,8 +367,8 @@ $$
   u_i = -m_i \, ^0g^T \, ^0P_{C_i}
 $$
 
-  - $ ^0g $：基坐标系下的重力加速度矢量（3×1）
-  - $ ^0P_{C_i} $：第i个连杆质心在基坐标系的位置矢量（依赖于$\Phi$）
+- $ ^0g $：基坐标系下的重力加速度矢量（3×1）
+- $ ^0P_{C_i} $：第i个连杆质心在基坐标系的位置矢量（依赖于$\Phi$）
 
   总势能表达式：
 
@@ -419,7 +397,7 @@ g_i(\Phi) = \tau_i - b_i \dot{\phi}_i, \quad i = 1, 2, \ldots, N
 $$
 又因为
 $$
-\sum_{j=1}^{N} \sum_{k=1}^{N} \left( \frac{\partial m_{ij}}{\partial \phi_k} \right) \dot{\phi}_k \dot{\phi}_j = 
+\sum_{j=1}^{N} \sum_{k=1}^{N} \left( \frac{\partial m_{ij}}{\partial \phi_k} \right) \dot{\phi}_k \dot{\phi}_j =
 \frac{1}{2}
 \sum_{j=1}^{N} \sum_{k=1}^{N} \left( \frac{\partial m_{ij}}{\partial \phi_k} + \frac{\partial m_{ik}}{\partial \phi_j} \right) \dot{\phi}_k \dot{\phi}_j
 $$
@@ -543,10 +521,6 @@ $$
 
 ![image-20250401203656830](markdown-img/ROBOT_I_动力学.assets/image-20250401203656830.png)
 
-
-
-
-
 ## 笛卡尔状态空间方程
 
 应用笛卡尔变量的一般形式建立操作臂的动力学方程：
@@ -556,7 +530,7 @@ F = M_{\chi}(\Phi) \ddot{\chi} + V_{\chi}(\Phi, \dot{\Phi}) + G_{\chi}(\Phi)
 $$
 
 - $  F  $：末端执行器虚拟操作力-力矩矢量（6×1）
-- $  \chi  $：笛卡尔空间末端位姿矢量（6×1） 
+- $  \chi  $：笛卡尔空间末端位姿矢量（6×1）
 - $  M_{\chi}(\Phi)  $：笛卡尔质量矩阵（6×6，时变对称正定）
 - $  V_{\chi}(\Phi, \dot{\Phi})  $：速度相关项（离心力/科氏力，6×1）
 - $  G_{\chi}(\Phi)  $：重力补偿项（6×1）
@@ -583,7 +557,4 @@ G_{\chi}(\Phi) &= J^{-T}(\Phi) G(\Phi)
 $$
 $J(\Phi),F,\chi$在同一坐标系下，**这个坐标系的选择是任意的**
 
-> 当操作臂达到奇异位置时，笛卡尔空间动力学方程中的某些量将趋于无穷大  
-
-
-
+> 当操作臂达到奇异位置时，笛卡尔空间动力学方程中的某些量将趋于无穷大

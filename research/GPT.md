@@ -1,13 +1,13 @@
 # Main Takeaway
+
 NLP(Natural Language Processing)
 
 # BERT
 
-
-
 # GPT
 
 ## GPT1
+
 - self supervised
   - unsupervised pre-training: transformer decoder
   - supervised fine-tuning
@@ -18,8 +18,7 @@ NLP(Natural Language Processing)
 - add zero-shot
   - Receives no labeled examples for a task
   - Receives only instructions or descriptions of the task
-  - Must complete the task using knowledge learned from other data 
-
+  - Must complete the task using knowledge learned from other data
 
 # References
 

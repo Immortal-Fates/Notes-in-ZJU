@@ -3,14 +3,13 @@
 连续最优控制
 
 本章要点
+
 - [ ] 掌握变分法基本思想
 - [ ] 理解Hamilton函数构造
 - [ ] 会应用PMP求解实际问题
 - [ ] 熟练使用Riccati方程
 
 <!--more-->
-
-
 
 # 理论基础
 
@@ -69,13 +68,13 @@ $J(x,u)$有三种表达形式$Lagrange,Mayer,Bolza$，是可以相互转换的
   引入新状态变量：
   $$
      \dot{x}_{n+1}(t) = L(t, x(t), u(t)), \quad x_{n+1}(t_0) = 0
-   
+
   $$
 
   那么性能指标就转换为Mayer形式：
   $$
      J = \int_{t_0}^{t_f} L(t, x(t), u(t)) dt \quad \Rightarrow \quad J = x_{n+1}(t_f)
-   
+
   $$
 
   同时条件变为扩展状态方程组：
@@ -84,7 +83,7 @@ $J(x,u)$有三种表达形式$Lagrange,Mayer,Bolza$，是可以相互转换的
      \dot{x}(t) = f(t, x(t), u(t)) \\
      \dot{x}_{n+1}(t) = L(t, x(t), u(t))
      \end{cases}
-   
+
   $$
 
 - Mayer to Lagrange
@@ -117,8 +116,6 @@ $J(x,u)$有三种表达形式$Lagrange,Mayer,Bolza$，是可以相互转换的
 - 测地线方程－几何观点
 - 拉格朗日力学基础
 - 几个算例
-
-
 
 ## Review
 
@@ -190,7 +187,6 @@ $$
 y(x) = \frac{b}{a} x
 $$
 
-
 ## Geodesic
 
 测地线（Geodesic）是微分几何中的核心概念，表示流形上两点之间的“最短路径”
@@ -201,7 +197,7 @@ $$
 
 - 定义：在完整保守系统中，系统从初始时刻 t1 到终了时刻 t2 的真实运动轨迹，使得作用量（Action）取驻值（极值或鞍点）——作用量极值决定真实轨迹
   $$
-  \delta S = \delta \int_{t_1}^{t_2} L(q,\dot q,t)dt = 0 
+  \delta S = \delta \int_{t_1}^{t_2} L(q,\dot q,t)dt = 0
   $$
 
 - 平面上的测地线：表现为直线
@@ -240,7 +236,7 @@ $$
 
 证明为直线
 
-  - 力学观点
+- 力学观点
 
     > 力学与微分几何的内在联系
 
@@ -264,8 +260,8 @@ $$
     通过整理导数项，定义克氏符：
 
     $$
-    \Gamma^i_{jk} = \frac{1}{2} g^{il} \left( 
-    \partial_j g_{lk} + \partial_k g_{jl} - \partial_l g_{jk} 
+    \Gamma^i_{jk} = \frac{1}{2} g^{il} \left(
+    \partial_j g_{lk} + \partial_k g_{jl} - \partial_l g_{jk}
     \right)
     $$
 
@@ -286,7 +282,7 @@ $$
 
     代入E-L方程
     $$
-    \frac{d}{d\theta} \left( \frac{\partial}{\partial \phi'} \sqrt{1 + \sin^2 \theta \, (\phi')^2} \right) =  \frac{\partial}{\partial \phi} \sqrt{1 + \sin^2 \theta \, (\phi')^2} 
+    \frac{d}{d\theta} \left( \frac{\partial}{\partial \phi'} \sqrt{1 + \sin^2 \theta \, (\phi')^2} \right) =  \frac{\partial}{\partial \phi} \sqrt{1 + \sin^2 \theta \, (\phi')^2}
     = 0
     $$
 
@@ -342,8 +338,6 @@ $$
     \frac{d}{ds} (a^2 \sin^2 \theta \dot{\phi}) = 0 \quad \Rightarrow \quad \ddot{\phi} + 2 \cot \theta \dot{\theta} \dot{\phi} = 0
     $$
 
-    
-
 ## some example
 
 A sliding point mass on a sliding wedge
@@ -380,7 +374,6 @@ $$
 \frac{d}{dt} \left( \frac{\partial L}{\partial \dot{X}} \right) - \frac{\partial L}{\partial X} = 0 \quad \Rightarrow \quad (M + m) \ddot{X} + m \ddot{x} = 0
 $$
 
-
 广义坐标 x 方程：
 
 $$
@@ -392,12 +385,9 @@ $$
 \ddot{x} = -\frac{(M + m)g \sin\alpha \cos\alpha}{M + m \sin^2\alpha}
 $$
 
-
 $$
 \ddot{X} = \frac{mg \sin\alpha \cos\alpha}{M + m \sin^2\alpha}
 $$
-
-
 
 ## HW
 
@@ -412,10 +402,6 @@ $$
 3. 三角块与小球系统建模及matlab/simscope仿真
 
 ![lQDPJwMj13pGsPfNA8DNBQCwjqqIMQElyiEH3PS4sZbuAA_1280_960](markdown-img/OP-连续最优控制.assets/lQDPJwMj13pGsPfNA8DNBQCwjqqIMQElyiEH3PS4sZbuAA_1280_960.jpg)
-
-
-
-
 
 # 最优控制求解方法的发展
 
@@ -522,10 +508,10 @@ $$
 $$
 \begin{aligned}
 \left( \frac{\partial L^a}{\partial \mathbf{x}} \right)_* - \frac{d}{dt} \left( \frac{\partial L^a}{\partial \dot{\mathbf{x}}} \right)_* &= 0 \quad \text{co-states}\\
-\left( \frac{\partial L^a}{\partial \lambda} \right)_* - \frac{d}{dt} \left( \frac{\partial L^a}{\partial \dot{\lambda}} \right)_* &= 0 \quad \Rightarrow \quad \frac{\partial L^a}{\partial \lambda} = 0 
+\left( \frac{\partial L^a}{\partial \lambda} \right)_* - \frac{d}{dt} \left( \frac{\partial L^a}{\partial \dot{\lambda}} \right)_* &= 0 \quad \Rightarrow \quad \frac{\partial L^a}{\partial \lambda} = 0
 \quad \text{the state dynamics}
 \\
-\left( \frac{\partial L^a}{\partial \mathbf{u}} \right)_* &= 0 
+\left( \frac{\partial L^a}{\partial \mathbf{u}} \right)_* &= 0
 \quad \text{optimal control}
 \\
 \left( \frac{\partial L^a}{\partial \mathbf{x}} \right)_*^T \delta \mathbf{x}(t_f) + L^a |_{t_f} \delta t_f &= 0
@@ -586,25 +572,25 @@ $$
 
 外力向量 $  \mathbf{f}  $
 $$
-\mathbf{f} = \begin{bmatrix} 
-x_2(t) \\ 
--2x_2(t) + u(t) 
+\mathbf{f} = \begin{bmatrix}
+x_2(t) \\
+-2x_2(t) + u(t)
 \end{bmatrix}
 $$
 
 拉格朗日乘子向量 $  \lambda  $
 $$
-\lambda = \begin{bmatrix} 
-\lambda_1(t) \\ 
-\lambda_2(t) 
+\lambda = \begin{bmatrix}
+\lambda_1(t) \\
+\lambda_2(t)
 \end{bmatrix}
 $$
 将上述公式代入重写目标函数的形式得到
 
 Augmented Lagrangian:
 $$
-L^a = \frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + 2(x_1(t) - 3)\dot{x}_1(t) + (x_2(t) - 5)\dot{x}_2(t) \\ 
-+ \lambda_1(t)[x_2(t) - \dot{x}_1(t)] + \lambda_2(t)[-2x_2(t) + u(t) - \dot{x}_2(t)]
+L^a = \frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + 2(x_1(t) - 3)\dot{x}_1(t) + (x_2(t) - 5)\dot{x}_2(t) \\
++ \lambda_1[t](x_2(t) - \dot{x}_1(t)) + \lambda_2[t](-2x_2(t) + u(t) - \dot{x}_2(t))
 $$
 Necessary Conditions:
 
@@ -615,7 +601,7 @@ $$
    \quad \Rightarrow \quad \dot{\lambda}_1^*(t) = -x_1^*(t)
 $$
 
-2. For $  x_2(t)  $:
+1. For $  x_2(t)  $:
 
 $$
 3x_2(t) + \dot{x}_2(t) + \lambda_1(t) - 2\lambda_2(t) - \frac{d}{dt}(x_2(t) - 5 - \lambda_2(t)) = 0 \\
@@ -632,18 +618,15 @@ $$
 $$
 Expanded form:
 $$
-\frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + 2[x_1(t) - 3]\dot{x}_1(t) + [x_2(t) - 5]\dot{x}_2(t) \\ 
-+ \lambda_1(t)[x_2(t) - \dot{x}_1(t)] + \lambda_2(t)[-2x_2(t) + u(t) - \dot{x}_2(t)] \\
+\frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + 2[x_1(t) - 3]\dot{x}_1(t) + [x_2(t) - 5]\dot{x}_2(t) \\
++ \lambda_1[t](x_2(t) - \dot{x}_1(t)) + \lambda_2[t](-2x_2(t) + u(t) - \dot{x}_2(t)) \\
 - 2[x_1(t) - 3 - \lambda_1(t)]\dot{x}_1(t) - [x_2(t) - 5 - \lambda_2(t)]\dot{x}_2(t) = 0
 $$
 Simplified result:
 $$
-\frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + \lambda_1(t)x_2(t) + \lambda_2(t)[-2x_2(t) + u(t)] = 0
+\frac{1}{2} \left[ x_1^2(t) + 3x_2^2(t) + 2u^2(t) \right] + \lambda_1(t)x_2(t) + \lambda_2[t](-2x_2(t) + u(t)) = 0
 $$
 然后写代码求解
-
-
-
 
 # Hamilton Formulation
 
@@ -664,7 +647,6 @@ $$
 考虑连续时间最优控制问题，状态变量$x(t): [t_0, t_f] \rightarrow \mathbb{R}^n$和控制变量$u(t): [t_0, t_f] \rightarrow \mathbb{R}^m$都是连续可微函数。
 
 - 被控对象：状态方程为$\dot{x}(t) = f(x(t), u(t), t), t \in [t_0, t_f]$，描述系统状态随时间动态变化；初值条件$x(t_0) = x_0$给定系统初始状态。
-
 
 - 性能指标：要最小化 Lagrange 形式的性能指标$J(u) = h(x(t_f), t_f) + \int_{t_0}^{t_f} g(x(t), u(t), t) dt$，其中$h$刻画终端代价，$\int_{t_0}^{t_f} g(x(t), u(t), t) dt$表示运行过程累积代价，$f, g, h$二阶连续可微。
 
@@ -706,13 +688,13 @@ $$
 
        再结合分部积分可化简
 
-
    因此，得到整体的泛函变分为：
+
 $$
    \delta \int_{t_0}^{t_f} \{\mathcal{H}(x(t), u(t), p(t), t) - p(t) \cdot \dot{x}(t)\} dt = \int_{t_0}^{t_f} \left[ \frac{\partial \mathcal{H}}{\partial x} \delta x + \frac{\partial \mathcal{H}}{\partial u} \delta u + \frac{\partial \mathcal{H}}{\partial p} \delta p - \delta p \cdot \dot{x} - p \cdot \delta \dot{x} \right] dt
 $$
 
-2. 然后我们推导最优控制的必要条件
+1. 然后我们推导最优控制的必要条件
 
    令 $\delta \bar{J} = 0$：
 
@@ -731,11 +713,11 @@ $$
      $$
      0 = \left[ \frac{\partial h}{\partial x}(x(t_f), t_f) - p(t_f) \right] \cdot \delta x_f
      $$
-     
+
      $$
      0 = \left[ \frac{\partial h}{\partial t}(x(t_f), t_f) + \mathcal{H}(x(t_f), u(t_f), t_f) \right] \cdot \delta t_f
      $$
-     
+
      在不同终端条件（终端时刻和状态固定或自由等）下，这些边界条件会有不同表现形式。例如终端时刻固定时，$\delta t_f = 0$，第二个边界条件自然满足；终端状态部分固定时，固定状态分量的变分 $\delta x_{if} = 0$，相应边界条件等式有特定形式。
 
 于是我们就得到了最后的最优化条件：
@@ -802,7 +784,7 @@ $$
   \mathcal{H}(x(t), u(t), p(t), t) \leq \mathcal{H}(x(t), u'(t), p(t), t)
   $$
   即将之前的$\frac{\partial \mathcal{H}}{\partial u}(x(t), u(t), p(t), t) = 0$条件换成了上述极小值条件
-  
+
 - 状态方程：
   $$
   \dot{x}(t) = +\frac{\partial \mathcal{H}}{\partial p}(x(t), u(t), p(t), t) \delta x(t)
@@ -825,8 +807,6 @@ $$
 
 - Bang-Bang控制
 - 饱和控制系统
-
-
 
 # 线性二次最优控制(LQR)
 
@@ -933,8 +913,6 @@ Riccati 方程求解（状态反馈控制律）
 
 ## 动态规划求解
 
-
-
 ### HJB方程介绍
 
 Hamilton-Jacobi-Bellman (HJB) 方程这是一个用于描述**最优控制问题的偏微分方程**
@@ -953,22 +931,21 @@ HJB方程提供了求解动态规划问题的一个有效工具，尤其是在�
 
 > Note: 在HJB方程中，$  \frac{\partial V}{\partial t} + f(x, u, t) \cdot \nabla V + L(x, u, t) = 0  $ 强调的是价值函数对状态变化的敏感性，而不是对时间或状态变化速度的敏感性。状态变化速度的敏感性已经包含在动力学模型中，通过求解HJB方程，我们可以得到最优控制策略，即在每个时间点和每个状态下，使得成本函数最小化的控制输入。
 
-
 ### DP求解
 
 定义值函数 $V(x,t)$ 为从时刻 $t$、状态 $x$ 开始到终端时刻的最小代价：
 $$
 V(x,t) = \min_{u(\cdot)} \left\{ \frac{1}{2} x^T(t_f) Q_f x(t_f) + \frac{1}{2} \int_{t}^{t_f} \left( x^T(\tau) Q(\tau) x(\tau) + u^T(\tau) R(\tau) u(\tau) \right) d\tau \right\}
 $$
-贝尔曼方程HJB方程 Hamilton-Jacobi-Bellman方程： 
+贝尔曼方程HJB方程 Hamilton-Jacobi-Bellman方程：
 $$
 -\frac{\partial V}{\partial t} = \min_u \left\{ \frac{1}{2} x^T Q x + \frac{1}{2} u^T R u + \frac{\partial V}{\partial x} (Ax + Bu) \right\}
 $$
-对控制量 $u$ 求偏导并令其为零： 
+对控制量 $u$ 求偏导并令其为零：
 $$
 \frac{\partial}{\partial u} \left\{ \frac{1}{2} u^T R u + \frac{\partial V}{\partial x} Bu \right\} = Ru + B^T \frac{\partial V}{\partial x} = 0
 $$
-得到最优控制： $$ u^* = -R^{-1} B^T \frac{\partial V}{\partial x} $$ 
+得到最优控制： $$ u^* = -R^{-1} B^T \frac{\partial V}{\partial x} $$
 
 假设值函数具有二次形式：$V(x,t) = \frac{1}{2} x^T P(t) x$ 则：
 $$
@@ -1006,11 +983,7 @@ $$
 
    3. 应用场景：广泛用于机器人控制、航空航天、电力系统等需要兼顾性能与控制能量的场景。
 
-   
-
 通过上述推导，线性二次最优控制问题转化为求解 Riccati 方程的代数或微分方程，从而获得显式的最优反馈控制律
-
-
 
 # 特殊最优控制问题
 
@@ -1119,7 +1092,7 @@ $$
 >
 > 的秩为 $n$。
 >
-> 2. $n \times (n + p)$ 矩阵：
+> 1. $n \times (n + p)$ 矩阵：
 >
 > $$
 > \begin{bmatrix} A - \lambda I & B \end{bmatrix}
@@ -1131,7 +1104,6 @@ $$
 $$
 W(t_0, t_f) = \int_{t_0}^{t_f} e^{A(t_0 - \tau)} B B^T e^{A^T (t_0 - \tau)} d\tau
 $$
-
 
 $$
 \lambda_0 = W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right)
@@ -1149,26 +1121,21 @@ $$
 W_R(t_0, t_f) = \int_{t_0}^{t_f} e^{A(t_f - \tau)} B B^T e^{A^T (t_f - \tau)} d\tau
 $$
 
-
 $$
 u^*(t) = B^T e^{A^T (t_f - t)} W_R^{-1}(t_0, t_f) \left( x_f - e^{A(t_f - t_0)} x_0 \right)
 $$
-
 
 $$
 J^* = \frac{1}{2} \int_{t_0}^{t_f} \| u^*(t) \|^2 dt
 $$
 
-
 $$
 = \frac{1}{2} \int_{t_0}^{t_f} \left[ -B^T e^{A^T (t_0 - t)} W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right) \right]^T
 $$
 
-
 $$
 \times \left[ -B^T e^{A^T (t_0 - t)} W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right) \right] dt
 $$
-
 
 $$
 = \frac{1}{2} \left( x_0 - e^{A(t_0 - t_f)} x_f \right)^T W^{-1}(t_0, t_f) \left( \int_{t_0}^{t_f} e^{A(t_0 - t)} B B^T e^{A^T (t_0 - t)} dt \right)\\ \times W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right)
@@ -1178,11 +1145,9 @@ $$
 = \frac{1}{2} \left( x_0 - e^{A(t_0 - t_f)} x_f \right)^T W^{-1}(t_0, t_f) W(t_0, t_f)\\ \times W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right)
 $$
 
-
 $$
 = \frac{1}{2} \left( x_0 - e^{A(t_0 - t_f)} x_f \right)^T W^{-1}(t_0, t_f) \left( x_0 - e^{A(t_0 - t_f)} x_f \right)
 $$
-
 
 $$
 J^* = \frac{1}{2} \left( x_f - e^{A(t_f - t_0)} x_0 \right)^T W_R^{-1}(t_0, t_f) \left( x_f - e^{A(t_f - t_0)} x_0 \right)
@@ -1195,13 +1160,11 @@ $$
 \frac{d}{dt} W(t, t_f) - A W(t, t_f) - W(t, t_f) A^T + B B^T = 0
 $$
 
-
 $$
 初始条件:\quad W(t_f, t_f) = 0
 $$
 
 这个微分方程描述了Controllability Gramian矩阵随时间的变化规律，是其重要性质之一。通过求解该微分方程，可以得到Controllability Gramian矩阵的具体表达式。
-
 
 ## 参数最优化问题
 
@@ -1218,6 +1181,7 @@ x(0) = x^0(\zeta)
 $$
 
 where
+
 - $  x(t) = [x_1(t), \ldots, x_n(t)]^T \in \mathbb{R}^n  $ is the state vector at time $  t  $
 - $  \zeta = [\zeta_1, \ldots, \zeta_r]^T \in \mathbb{R}^r  $ is the system parameter vector
 - $  T > 0  $ is a given terminal time
@@ -1228,13 +1192,13 @@ The solution of (A)-(B) is called the **state trajectory**
 It is clear that the state trajectory depends on $  \zeta  $. Let $  x(\cdot | \zeta)  $ denote the state trajectory corresponding to $  \zeta \in \mathbb{R}^r  $.
 
 Assumptions:
+
 1. The given functions $  f  $ and $  x^0  $ are continuously differentiable.
 
 2. For each $  \zeta \in \mathbb{R}^r  $, there exists a corresponding $  K > 0  $ such that:
    $$
    \| f(t, x, \zeta) \| \leq K (1 + \| x \|) \quad \text{for all } (t, x) \in [0, T] \times \mathbb{R}^n
    $$
-   
 
 于是我们可以将上述的state trajectory改写为
 $$
@@ -1384,8 +1348,6 @@ $$
 
    通过这种方法，可以轻松地将状态限制因素纳入考虑范围。
 
-   
-
 ### Solving
 
 两种求解方法
@@ -1416,10 +1378,9 @@ a_i \leq \zeta_i \leq b_i, \quad i = 1, \ldots, r
 $$
 
 This problem can be solved using SQP methods. At each iteration:
+
 - 目标值和约束值是通过求解状态系统来计算得出的
 - 目标函数和约束条件的梯度是通过 either the variational method or the costate method 求解得到
-
-
 
 ## BVP Problem
 
@@ -1446,8 +1407,6 @@ $$f, f_y, f_{y'} \text{ 需要在区间 }$$
 $$D = \{ (x, y, y') \mid a \leq x \leq b, -\infty < y < \infty, -\infty < y' < \infty \} \text{ 上连续。}$$
 
 $$\text{在区间 } D \text{ 上 } f_{y'} > 0$$,$$f_{y'} \text{ 在区间 } D \text{ 上有界。}$$
-
-
 
 ### 打靶法(shooting method)
 
@@ -1494,16 +1453,11 @@ $$
    $$
    此非线性方程可以用牛顿法、弦截法、二分法等迭代方法进行求解。
 
-
-
-
-
-
 # References
 
 - PMP[module3.pdf (nd.edu)](https://www3.nd.edu/~lemmon/courses/ee565/lectures/module3.pdf)
 - 里面有非常详细的变分法对变动端点的变分问题的推导和应用：[数字人生](https://www.zhihu.com/column/c_1703789122005610496)
-- [最优运输（Optimal Transfort） ](https://www.cnblogs.com/liuzhen1995/p/14524932.html)
+- [最优运输（Optimal Transfort）](https://www.cnblogs.com/liuzhen1995/p/14524932.html)
 
 - [怎么理解SQP算法？](https://www.zhihu.com/question/279186014)
 

@@ -21,39 +21,38 @@
   $$
    T_{ei}(t) = C_{Ti} I_{mi}(t) \quad (C_{Ti}: \text{转矩系数})
   $$
-  
+
   转子转动时，电枢切割定子磁力线，电枢电路中出现**反电动势**：
   $$
    E_{mi}(t) = k_{ei} \omega_{mi}(t) \quad (k_{ei}: \text{电动势系数})
   $$
-  
+
   **电枢电路方程**（忽略电枢电感）：
   $$
    U_{mi}(t) = R_{mi} I_{mi}(t) + E_{mi}(t) \quad (R_{mi}: \text{电枢电阻})
   $$
-  
+
   电机驱动器可视为电压放大模块：
   $$
   U_{mi}(t) = k_{ui} U_{ci}(t)
   $$
-  
+
   $$
    k_{ui}: \text{电压放大倍数}，U_{ci}(t)为第i关节控制电压
   $$
-  
+
   **转速公式**
   $$
   \omega_{mi} = \frac{k_{ui}}{k_{ei}} U_{ci} - \frac{R_{mi}}{k_{ei}} I_{mi}
   $$
   转矩公式和转速公式构成了带驱动器的直流有刷电机模型
 
-
 - 减速器及关节模型
 
   一般来说，机器人关节电机的额定转速远高于其关节的设计转速，而机器人关节电机的额定力矩远低于其关节的设计力矩。这就需要减速器在电机与关节之间进行匹配
 
   摩擦：干摩擦、边界摩擦、流体（粘性）摩擦
-  
+
   - 干摩擦：摩擦副表面直接接触 = 法向力$\times$干摩擦系数
   - 粘性摩擦：流体润滑状态下的摩擦 = 物体相对运动速度$\times$粘性摩擦系数
 
@@ -62,7 +61,7 @@
   电机$i$的转子通过传动比为$\eta_i:1$的齿轮减速器与第$i$连杆相连
 
   电机转角与关节角度的关系：
-  
+
   $$
   \theta_{mi}(t) = \eta_i \theta_i(t)
   $$
@@ -72,12 +71,12 @@
   T_{ai}(t) = \eta_i T_{li}(t)
   $$
   由$\mathrm{d}\theta_i/\mathrm{d}t = \omega_i$及$\mathrm{d}\theta_{mi}/\mathrm{d}t = \omega_{mi}$，知减速器的减速公式为
-  
+
   $$
   \omega_{mi}(t) = \eta_i \omega_i(t)
   $$
   电机转子侧的动力学方程为
-  
+
   $$
   J_{mi} \dot{\omega}_{mi} = T_{ei} - T_{li} - b_{mi} \omega_{mi}
   $$
@@ -85,7 +84,7 @@
   $J_{mi}$是转子侧刚体绕电机轴的转动惯量；$b_{mi}$是转子轴承的粘滞摩擦系数
 
   关节侧的动力学方程为
-  
+
   $$
   J_{ai} \dot{\omega}_i = T_{ai} - T_{ci} - b_{ai} \omega_i
   $$
@@ -93,33 +92,32 @@
   $J_{ai}$是关节侧关于关节轴的等效转动惯量；$b_{ai}$是关节轴承的粘滞摩擦系数，$T_{ci}$是干扰力矩
 
   > 注意这里的粘性摩擦是力矩$\tau_d = -b\dot{\theta}$
-  
+
   基于前述公式，有
-  
+
   $$
   T_{ei} = \frac{C_{Ti} k_{ui}}{R_{mi}} U_{ci} - \frac{\eta_i C_{Ti} k_{ei}}{R_{mi}} \omega_i
   $$
   并进一步得到关节模型
-  
+
   $$
   J_{ci} \ddot{\theta}_i + B_{ci} \dot{\theta}_i = J_{ci} \dot{\omega}_i + B_{ci} \omega_i = K_{ci} U_{ci} - T_{ci}
   $$
   式中，关节$i$的总等效惯量$J_{ci}$、等效阻尼$B_{ci}$和控制系数$K_{ci}$的表达式为
-  
+
   $$
   J_{ci} = J_{ai} + \eta_i^2 J_{mi}
   $$
-  
+
   $$
   B_{ci} = b_{ai} + \eta_i^2 b_{mi} + \frac{\eta_i^2 C_{Ti} k_{ei}}{R_{mi}}
   $$
-  
+
   $$
   K_{ci} = \frac{\eta_i C_{Ti} k_{ui}}{R_{mi}}
   $$
-  
-  从形式上看，单关节模型是一个控制输入为$U_{ci}$、干扰输入为$T_{ci}$、输出为$\theta_i$的线性系统
 
+  从形式上看，单关节模型是一个控制输入为$U_{ci}$、干扰输入为$T_{ci}$、输出为$\theta_i$的线性系统
 
 - 旋转编码器及关节传递函数模型
 
@@ -152,9 +150,9 @@
 
     其中：
 
-    - $\tilde{\theta}_i(s) = \theta_{di}(s) - \theta_i(s)$（角度偏差信号）
-    - $\theta_{di}$ 为期望关节角度轨迹
-    - $k_{P}$ 为比例增益，$k_{D}$ 为微分增益
+  - $\tilde{\theta}_i(s) = \theta_{di}(s) - \theta_i(s)$（角度偏差信号）
+  - $\theta_{di}$ 为期望关节角度轨迹
+  - $k_{P}$ 为比例增益，$k_{D}$ 为微分增益
 
   ![image-20250416153509808](markdown-img/ROBOT_I_运动控制.assets/image-20250416153509808.png)
 
@@ -218,7 +216,7 @@
   $$
   若扰动输人为零，系统对单位阶跃参考输人的静态误差可由终值定理计算得
   $$
-  \lim_{t \to \infty} \tilde{\theta}_i(t) = \lim_{s \to 0} \frac{J_{ci} s^2 + (B_{ci} + k_{DI} K_{ci}) s}{J_{ci} s^2 + (B_{ci} + k_{DI} K_{ci}) s + k_{PI} K_{ci}} \cdot \frac{1}{s} = 0 
+  \lim_{t \to \infty} \tilde{\theta}_i(t) = \lim_{s \to 0} \frac{J_{ci} s^2 + (B_{ci} + k_{DI} K_{ci}) s}{J_{ci} s^2 + (B_{ci} + k_{DI} K_{ci}) s + k_{PI} K_{ci}} \cdot \frac{1}{s} = 0
   $$
 
   这表明在无扰动情况下，独立关节PD控制可以做到阶跃响应无静差。若扰动输人为单位阶跃信号，类似可得系统对阶跃参考输人的静态误差为
@@ -251,7 +249,6 @@
 
   注意到 $  J_{ci}  $、$  B_{ci}  $ 和 $  K_{ci}  $ 都是大于零的参数，由劳斯判据可知：设计 $  k_{PI}  $、$  k_{DI}  $ 为正系数且
 
-
 $$
   (B_{ci} + k_{DI} K_{ci}) k_{PI} > J_{ci} k_{DI} \tag{1}
 $$
@@ -283,17 +280,13 @@ $$
 
   在阶跃扰动下，**无静差跟踪**任何二阶可导的期望轨迹时，对任意的二次可导参考轨迹，跟踪误差以**渐近方式趋于零**
 
-
-
 ## 计算转矩前馈控制
 
 实际机器人的关节干扰往往比阶跃干扰复杂得多
 
-利用所有关节运动的期望指令信息**对关节干扰进行推算**，并在推算结果的基础上，增加补偿控制量主动消减干扰的影响，这就是计算转矩前馈控制的思路  
+利用所有关节运动的期望指令信息**对关节干扰进行推算**，并在推算结果的基础上，增加补偿控制量主动消减干扰的影响，这就是计算转矩前馈控制的思路
 
 ![image-20250401221616230](markdown-img/ROBOT_I_运动控制.assets/image-20250401221616230.png)
-
-
 
 势能计算
 $$
@@ -302,7 +295,7 @@ $$
 
 连杆1动能：
 $$
- 
+
 k_1 = \frac{1}{2} (m_1 l_1^2 + J_1) \dot{\theta}_1^2
 $$
 
@@ -310,7 +303,7 @@ $$
 
 连杆2动能：
 $$
- 
+
 k_2 = \frac{1}{2} A \dot{\theta}_2^2 + B \dot{\theta}_1 \dot{\theta}_2 + \frac{1}{2} C \dot{\theta}_1^2
 $$
 
@@ -324,7 +317,7 @@ $$
 - 电机1转子：
 
 $$
-  k_{r1} = \frac{1}{2} \eta_1^2 J_{r1} \dot{\theta}_1^2 
+  k_{r1} = \frac{1}{2} \eta_1^2 J_{r1} \dot{\theta}_1^2
 $$
 
 - 电机2转子：
@@ -352,8 +345,6 @@ $$
 机器人独立关节控制方法以单输人单输出线性模型为基础，将非线性项、关节耦合和重力等未能在线性模型中显现的因素均纳入干扰，具有设计简单方便的优点。但对于操作速度快或采用减速比；较小甚至直接驱动的机器人，剧烈的干扰远超独立关节控制的抗扰能力，即使加入转矩前馈控制，也常出现较大的跟踪误差
 
 建议采用以多输入多输出非线性模型为基础的集中控制方法
-
-
 
 ## 集中控制
 
@@ -403,25 +394,21 @@ $$
 T_{ci} = \frac{C_{Ti} k_{ui} \pi_{pi}}{k_{ui} \pi_{pi} + R_{mi}} V_{ci} - \frac{\eta_1 C_{Ti} k_{ui}}{k_{ui} \pi_{pi} + R_{mi}} \omega_{mi}
 $$
 
-
 电流反馈下的关节模型动态方程：
 
 $$
-J_{ci} \dot{\omega}_i + B_{ci} \omega_i = K_{ci} V_{ci} - T_{ci} 
+J_{ci} \dot{\omega}_i + B_{ci} \omega_i = K_{ci} V_{ci} - T_{ci}
 $$
-
 
 在引入电流反馈之后，原等效阻尼$B_{ci}$和原控制系数$K_{ci}$分别变为：
 
 $$
-\bar{B}_{ci} = b_{ui} + \eta_1^2 b_{mi} + \frac{\eta_i C_{Ti} k_{ei}}{k_{ui} \pi_{pi} + R_{mi}} 
+\bar{B}_{ci} = b_{ui} + \eta_1^2 b_{mi} + \frac{\eta_i C_{Ti} k_{ei}}{k_{ui} \pi_{pi} + R_{mi}}
 $$
-
 
 $$
 \bar{K}_{ci} = \frac{\eta_i C_{Ti} k_{ui} \pi_{pi}}{k_{ui} \pi_{pi} + R_{mi}}
 $$
-
 
 在无电流反馈中传递函数：
 
@@ -429,16 +416,13 @@ $$
 G_{Ti}(s) = \frac{\omega_i}{T_{ci}} = \frac{1}{J_{ci} s + B_{ci}} = \frac{K_{Ti}}{T_{Ji} s + 1}
 $$
 
-
 $$
 T_{Ji} = \frac{J_{ci}}{B_{ci}}
 $$
 
-
 $$
 K_{Ti} = \frac{1}{B_{ci}}
 $$
-
 
 含电流反馈的传递函数：
 
@@ -455,8 +439,6 @@ $$
 $$
 
 接着我们来分析一下，$\bar B_{ci}<B_{ci}$，$\bar K_{Ti}>K_{Ti}$使得干扰对输出的影响更大，因此在独立关节控制中不使用电流反馈，但是在集中控制中要使用
-
-
 
 ### 集中控制的被控对象模型
 
@@ -546,7 +528,7 @@ M^{-1}\Lambda_p & -M^{-1}(C + L + \Lambda_D)
 \end{bmatrix} \xi
 $$
 
-这是一个自治系统且原点是系统的平衡状态  
+这是一个自治系统且原点是系统的平衡状态
 
 构造李雅普诺夫函数：
 
@@ -566,12 +548,10 @@ $$
 $$
 
 $$
-= \frac{1}{2} \dot{{\Phi}}^T (\dot{M} - 2C) \dot{\Phi} - \dot{{\Phi}}^T (L + \Lambda_D) \dot{{\Phi}} 
+= \frac{1}{2} \dot{{\Phi}}^T (\dot{M} - 2C) \dot{\Phi} - \dot{{\Phi}}^T (L + \Lambda_D) \dot{{\Phi}}
 $$
 
-
 注意到 $ \dot{M} - 2C $ 的反对称性使得 $ \dot{{\Phi}}^T (\dot{M} - 2C) \dot{\Phi} = 0 $，于是
-
 
 $$
 \dot{V}_L = -\dot{{\Phi}}^T (L + \Lambda_D) \dot{{\Phi}}
@@ -592,7 +572,7 @@ $$
 逆动力学控制：
 
 - 核心思想：先设计非线性反馈式子将复杂的多变量非线性模型式变换为N个彼此无耦合的单变量线性模型，然后后针对各单变量模型进行线性反馈设计
-  
+
 - 缺点：系统参数必须精确已知
 
 动力学方程：
@@ -620,9 +600,9 @@ $$
 
 下面举一个栗子：
 
-以二阶系统的控制为例：如果二阶机械系统的响应并不满足我们的要求。 假定求得的系统是欠阻尼系统或振荡系统，而我们需要临界阻尼系统； 或者系统的弹性完全消失(k=0) ，因此当受到扰动时，系统永远也不能返回到x=0的位置  
+以二阶系统的控制为例：如果二阶机械系统的响应并不满足我们的要求。 假定求得的系统是欠阻尼系统或振荡系统，而我们需要临界阻尼系统； 或者系统的弹性完全消失(k=0) ，因此当受到扰动时，系统永远也不能返回到x=0的位置
 
-在控制反馈作用下，通过设定控制增益$k_p$和$k_v$可以使闭环系统呈现期望的二阶阻尼特性（比如临界阻尼ζ =1）  
+在控制反馈作用下，通过设定控制增益$k_p$和$k_v$可以使闭环系统呈现期望的二阶阻尼特性（比如临界阻尼ζ =1）
 
 为了设计更为复杂的系统的控制规律，把控制器分为**基于模型控制部分**和**位置校正部分**。并使得系统的参数仅出现在基于模型的部分，而与位置校正控制部分是完全独立的。
 
@@ -648,9 +628,7 @@ $$
 $$
 \ddot x + k_v\dot x + k_p x=0
 $$
-根据期望的控制性能确定$k_p$和$k_v$  
-
-
+根据期望的控制性能确定$k_p$和$k_v$
 
 ### 鲁棒控制
 
@@ -680,8 +658,6 @@ $$
 
 通过实时计算的$\Xi$保证对$\Delta$的鲁棒性，使其依旧能稳定跟踪二阶可导的$\Phi_d$
 
-
-
 接下来我们介绍如何使用鲁棒控制进行设计：
 
 由 $\widetilde{\Phi} = {\Phi}_d - \Phi$，有闭环系统方程：$\ddot{\widetilde{\Phi}} = -K_P\widetilde{\Phi} - K_D\dot{\widetilde{\Phi}} + (\Delta - \Xi)$
@@ -707,10 +683,10 @@ $$
 
 然后设计$\Xi = B_r(\varphi)$应对$\Delta$
 $$
-\Xi = B_r(\varphi) = \begin{cases} 
+\Xi = B_r(\varphi) = \begin{cases}
 (\rho_1 + \rho_2 \|\varphi\|) \frac{\bar{B}^T P_L \varphi}{\|\bar{B}^T P_L \varphi\|}, & \text{当 } \|\bar{B}^T P_L \varphi\| \neq 0 \text{ 时} \\
 0, & \text{当 } \|\bar{B}^T P_L \varphi\| = 0 \text{ 时}
-\end{cases} 
+\end{cases}
 $$
 保证在不确定性$\Delta$下$\Phi$对$\Phi_d$的渐近跟踪。
 
@@ -740,7 +716,7 @@ $$
 \ddot{\theta}_1 \\
 \ddot{\theta}_2
 \end{pmatrix}
-+ 
++
 \begin{pmatrix}
 -\Psi_2\sin{\theta_2}\dot{\theta_2} & -\Psi_2\sin{\theta_2}\dot{\theta_1}--\Psi_2\sin{\theta_2}\dot{\theta_2} \\
 \Psi_2\sin{\theta_2}\dot{\theta_1} & 0
@@ -789,14 +765,14 @@ $$
 内环控制律：
 $$
 % 内环控制律
-\tau_d = Y(\Phi, \dot{\Phi}, \alpha_\Phi) \hat{\Psi} 
+\tau_d = Y(\Phi, \dot{\Phi}, \alpha_\Phi) \hat{\Psi}
 = \hat{M}(\Phi) \alpha_\Phi + \hat{C}(\Phi, \dot{\Phi}) \dot{\Phi} + \hat{L} \dot{\Phi} + \hat{G}(\Phi)
 $$
 外环控制律：仍和之前的控制率一致
 $$
 % 外环控制律
-\alpha_\Phi = \ddot{\Phi}_d 
-+ \underbrace{K_P (\Phi_d - \Phi)}_{\text{比例项}} 
+\alpha_\Phi = \ddot{\Phi}_d
++ \underbrace{K_P (\Phi_d - \Phi)}_{\text{比例项}}
 + \underbrace{K_D (\dot{\Phi}_d - \dot{\Phi})}_{\text{微分项}}
 $$
 由上述条件，我们可以证明：
@@ -809,12 +785,12 @@ $$
 \end{pmatrix}$，得状态方程：
 $$
 % 状态方程 (误差动态)
-\dot{\phi} = 
+\dot{\phi} =
 \begin{pmatrix}
 0 & I \\
 -K_P & -K_D
 \end{pmatrix}
-\phi + 
+\phi +
 \begin{pmatrix}
 0 \\
 I
@@ -851,4 +827,3 @@ $$
 于是我们可以证明$\dot{V}_L = -\phi^T Q_L \phi \quad$是半负定的。
 
 因此$\Phi$能够渐进跟踪$\Phi_d$，参数估计误差$\widetilde{\Psi}$是有界的。
-
