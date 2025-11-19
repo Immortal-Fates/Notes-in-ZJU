@@ -87,7 +87,7 @@ $$
 
 > 实际上卷积层是个错误的叫法，实际上的运算是**互相关**（cross-correlation）
 
-# Conv Layer
+# ConvNet Layers
 
 > 以图像为例
 
@@ -109,15 +109,24 @@ torch.nn.Conv2d(
 )
 ```
 
-## 特征映射和感受野Feature Map and Receptive Field
+## Convolutional Layer
+
+- local connectivity
+- spatial arrangement
+- parameter sharing
+
+### 特征映射和感受野Feature Map and Receptive Field
 
 - 特征映射：the convolutional layer output有时被称为特征映射
 
   > as it can be regarded as the learned representations (features) in the spatial dimensions (e.g., width and height) to the subsequent layer.
   >
+  
 - 感受野：是指在前向传播期间可能影响$x$计算的所有元素（来自所有先前层）
 
-# Padding and Stride
+### Spatial arrangement
+
+Three hyperparameters control the size of the output volume: the **depth, stride** and **zero-padding**.
 
 假设输入形状为$n_h\times n_w$，卷积核形状为$k_h\times k_w$，那么输出形状将是（无填充和步幅）
 
@@ -127,7 +136,7 @@ $$
 
 卷积的输出形状取决于输入形状和卷积核的形状，还有填充和步幅
 
-- 填充
+- 填充Padding
 
   - why：有时，在应用了连续的卷积之后，我们最终得到的输出远小于输入大小。这是由于卷积核的宽度和高度通常大于$1$所导致的。比如，一个$240 \times 240$像素的图像，经过$10$层$5 \times 5$的卷积后，将减少到$200 \times 200$像素。如此一来，原始图像的边界丢失了许多有用信息。而**填充**是解决此问题最有效的方法；
   - what：如果我们添加$p_h$行填充（大约一半在顶部，一半在底部）和$p_w$列填充（左侧大约一半，右侧一半），则输出形状将为
@@ -144,7 +153,7 @@ $$
     >
     > 卷积神经网络中卷积核的高度和宽度通常为奇数，例如1、3、5或7。选择奇数的好处是，保持空间维度的同时，我们可以在顶部和底部填充相同数量的行，在左侧和右侧填充相同数量的列。
     >
-- 步幅：
+- 步幅Stride
 
   - why：有时，我们可能希望大幅降低图像的宽度和高度。例如，如果我们发现原始的输入分辨率十分冗余。**步幅**则可以在这类情况下提供帮助。
   - what：通常，当垂直步幅为$s_h$、水平步幅为$s_w$时，输出形状为
@@ -161,13 +170,15 @@ $$
 
     更进一步，如果输入的高度和宽度可以被垂直和水平步幅整除，则输出形状将为$(n_h/s_h) \times (n_w/s_w)$。
 
-# Multiple Input and Multiple Output Channels
+### Multiple Input and Multiple Output Channels
 
 - 多输入通道：简而言之，我们所做的就是对每个通道执行互相关操作，然后将结果相加
+
 - 多输出通道
 
   - why：在最流行的神经网络架构中，随着神经网络层数的加深，我们常会增加输出通道的维数，通过减少空间分辨率以获得更大的通道深度。直观地说，我们可以将每个通道看作对不同特征的响应。而现实可能更为复杂一些，因为每个通道不是独立学习的，而是为了共同使用而优化的。因此，多输出通道并不仅是学习多个单通道的检测器。
   - what：用$c_i$和$c_o$分别表示输入和输出通道的数目，并让$k_h$和$k_w$为卷积核的高度和宽度。为了获得多个通道的输出，我们可以为每个输出通道创建一个形状为$c_i\times k_h\times k_w$的卷积核张量，这样卷积核的形状是$c_o\times c_i\times k_h\times k_w$。在互相关运算中，每个输出通道先获取所有输入通道，再以对应该输出通道的卷积核计算出结果。
+  
 - $1\times 1$ Convolutional Layer
 
   $1 \times 1$卷积，即$k_h = k_w = 1$，看起来似乎没有多大意义。它不是用来提取相邻像素间的相关特征，而是用来在通道维度上进行线性组合。$1 \times 1$十分流行，经常包含在复杂深层网络的设计中。让我们详细地解读一下它的实际作用。
@@ -177,15 +188,35 @@ $$
     ![image-20251103152759772](./assets/DL3-CNN.assets/image-20251103152759772.png)
 
     这里输入和输出具有相同的高度和宽度，输出中的每个元素都是从输入图像中同一位置的元素的线性组合。我们可以将$1\times 1$卷积层看作在每个像素位置应用的全连接层，以$c_i$个输入值转换为$c_o$个输出值。因为这仍然是一个卷积层，所以跨像素的权重是一致的。同时，$1\times 1$卷积层需要的权重维度为$c_o\times c_i$，再额外加上一个偏置。
+    
+    - cheap
   - how：
-
+  
     - 通道压缩或升维（维度变换）
     - 跨通道特征融合
     - 增加网络深度 / 非线性表达
     - 用于 bottleneck
     - 实现分组卷积后的通道融合
+  
+- **Dilated convolutions**: As an example, in one dimension a filter `w` of size 3 would compute over input `x` the following: `w[0]*x[0] + w[1]*x[1] + w[2]*x[2]`. This is dilation of 0. For dilation 1 the filter would instead compute `w[0]*x[0] + w[1]*x[2] + w[2]*x[4]`; In other words there is a gap of 1 between the applications.
 
-# Pooling
+  - This can be very useful in some settings to use in conjunction with 0-dilated filters because it allows you to merge spatial information across the inputs much more aggressively with fewer layers.
+  - If we use dilated convolutions then this effective receptive field would grow much quicker.
+
+### Implementation as Matrix Multiplication
+
+- The local regions in the input image are stretched out into columns in an operation commonly called **im2col**.
+
+- drawback: This approach has the downside that it can use a lot of memory, since some values in the input volume are replicated multiple times in `X_col`. 
+- advantage: However, the benefit is that there are many very efficient implementations of Matrix Multiplication that we can take advantage of (for example, in the commonly used [BLAS](http://www.netlib.org/blas/) API). Moreover, the same *im2col* idea can be reused to perform the pooling operation.
+
+
+
+
+
+
+
+## Pooling Layer
 
 两个目的：
 
@@ -197,7 +228,7 @@ $$
 - 最大汇聚层（maximum pooling）：取最大
 - 平均汇聚层（average pooling）：取平均
 
-汇聚层也会改变输出形状，因此我们也可以通过填充和步幅来获得所需的输出形状。默认情况下，(***\*深度学习框架中的步幅与汇聚窗口的大小相同\****)。
+汇聚层也会改变输出形状，因此我们也可以通过填充和步幅来获得所需的输出形状。默认情况下，(\***深度学习框架中的步幅与汇聚窗口的大小相同**\*)。
 
 ```
 pool2d = nn.MaxPool2d(3, padding=1, stride=2)
@@ -206,7 +237,17 @@ pool2d = nn.MaxPool2d((2, 3), stride=(2, 3), padding=(0, 1))
 
 pooling层在每个输入通道上单独运算（不会改变输入和输出通道数）
 
-# Batch Normalization
+- Many people dislike the pooling operation and think that we can get away without it. To reduce the size of the representation they suggest using larger stride in CONV layer once in a while.
+
+  Discarding pooling layers has also been found to be important in training good generative models, such as variational autoencoders (VAEs) or generative adversarial networks (GANs). It seems likely that future architectures will feature very few to no pooling layers.
+
+## Normalization Layer
+
+Many types of normalization layers have been proposed for use in ConvNet architectures. However, these layers have since fallen out of favor because in practice their contribution has been shown to be minimal, if any.
+
+- For various types of normalizations, see the discussion in Alex Krizhevsky’s [cuda-convnet library API](http://code.google.com/p/cuda-convnet/wiki/LayerParams#Local_response_normalization_layer_(same_map)).
+
+### Batch Normalization
 
 批量规范法：训练深层神经网络是十分困难的，特别是在较短的时间内使他们收敛更加棘手。批量规范化（batch normalization） :cite:`Ioffe.Szegedy.2015`，这是一种流行且有效的技术，**可持续加速深层网络的收敛速度**。再结合在之后中将介绍的残差块，批量规范化使得研究人员能够训练100层以上的网络。
 
@@ -291,23 +332,24 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
         nn.Linear(84, 10))
     ```
   
-    
-
-# Function Classes
-
-我们实际上是用神经网络来拟合一个函数，但是经过修改网络其拟合能力可能更差
-
-![functionclasses](./assets/DL3-CNN.assets/functionclasses.svg)
-
-右侧的嵌套函数（nested function）类$\mathcal{F}_1 \subseteq \ldots \subseteq \mathcal{F}_6$，我们可以避免上述问题。这样改进的函数表达能力相比之前会更强
-
-因此，只有当较复杂的函数类包含较小的函数类时，我们才能确保提高它们的性能。
-对于深度神经网络，如果我们能将新添加的层训练成*恒等映射*（identity function）$f(\mathbf{x}) = \mathbf{x}$，新模型和原模型将同样有效。同时，由于新模型可能得出更优的解来拟合训练数据集，因此添加层似乎更容易降低训练误差。于是提出了残差网络ResNet
 
 
 
+# ConvNet Architectures
 
-# 经典CNN网络
+## Layer Patterns
+
+The most common form of a ConvNet architecture stacks a few CONV-RELU layers, follows them with POOL layers, and repeats this pattern until the image has been merged spatially to a small size. At some point, it is common to transition to fully-connected layers. The last fully-connected layer holds the output, such as the class scores. In other words, the most common ConvNet architecture follows the pattern:
+
+```
+INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
+```
+
+
+
+## Case Studies
+
+> https://cs231n.github.io/convolutional-networks/#layerpat: see the Case studies part
 
 经典的CNN网络有LeNet-5、AlexNet、VGG、GoogleNet、ResNet、DenseNet等。这些经典CNN网络结构中总是包含一些对于神经网络架构设计有巨大启发性的东西。
 
@@ -432,6 +474,17 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
 
 - Residual Networks (ResNet) and ResNeXt
 
+  > Function Classes
+  >
+  > 我们实际上是用神经网络来拟合一个函数，但是经过修改网络其拟合能力可能更差
+  >
+  > ![functionclasses](./assets/DL3-CNN.assets/functionclasses.svg)
+  >
+  > 右侧的嵌套函数（nested function）类$\mathcal{F}_1 \subseteq \ldots \subseteq \mathcal{F}_6$，我们可以避免上述问题。这样改进的函数表达能力相比之前会更强
+  >
+  > 因此，只有当较复杂的函数类包含较小的函数类时，我们才能确保提高它们的性能。
+  > 对于深度神经网络，如果我们能将新添加的层训练成*恒等映射*（identity function）$f(\mathbf{x}) = \mathbf{x}$，新模型和原模型将同样有效。同时，由于新模型可能得出更优的解来拟合训练数据集，因此添加层似乎更容易降低训练误差。于是提出了残差网络ResNet
+
   - 核心思想：每个附加层都应该更容易地包含原始函数作为其元素之一
 
   - 结构
@@ -506,7 +559,7 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
 
       由于每个稠密块都会带来通道数的增加，使用过多则会过于复杂化模型。而过渡层可以用来控制模型复杂度。它通过$1\times 1$卷积层来减小通道数，并使用步幅为2的平均汇聚层减半高和宽，从而进一步降低模型复杂度。
 
-# Designing Convolution Network Architectures
+## Designing Convolution Network Architectures
 
 > 无中文版[8.8. Designing Convolution Network Architectures — Dive into Deep Learning 1.0.3 documentation](https://d2l.ai/chapter_convolutional-modern/cnn-design.html)
 
@@ -521,7 +574,7 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
 
 ---
 
-## 设计思想 1：增加网络深度（Depth）
+### 增加网络深度（Depth）
 
 - 背景：深层网络能学习更复杂特征，但太深会导致梯度消失或退化。
 - 解决方法：
@@ -530,7 +583,7 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
   - 采用稠密连接（DenseNet）
 
 
-## 设计思想 2：控制网络宽度（Width）
+### 控制网络宽度（Width）
 
 **宽度**表示通道数（feature map 数量）。
 
@@ -543,7 +596,7 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
 - 但参数量和计算量也随之增加；
 - 常使用 **1×1 卷积** 来调整通道维度。
 
-## 设计思想 3：卷积核大小（Kernel Size）
+### 卷积核大小（Kernel Size）
 
 | 卷积核大小             | 优点           | 缺点         | 典型应用       |
 | ---------------------- | -------------- | ------------ | -------------- |
@@ -553,7 +606,7 @@ pooling层在每个输入通道上单独运算（不会改变输入和输出通�
 
 小核堆叠 ≈ 大核卷积，但参数更少、非线性更强。 例如两个 3×3 卷积的感受野等价于一个 5×5。
 
-## 设计思想 4：多分支结构（Inception 思想）
+### 多分支结构（Inception 思想）
 
 **Inception 模块（GoogLeNet）**并行使用不同卷积核捕获多尺度特征。输出在通道维度拼接：
 $$
@@ -567,7 +620,7 @@ $$
 
 ---
 
-## 设计思想 5：跨层连接（Shortcut / Dense Connections）
+### 跨层连接（Shortcut / Dense Connections）
 
 ✳️ ResNet：恒等映射
 
@@ -597,7 +650,7 @@ $$
 
 ---
 
-## 设计思想 6：轻量化与高效化
+### 轻量化与高效化
 
 ✅ 全局平均池化 (Global Average Pooling)
 
@@ -615,7 +668,7 @@ $$
 
 ---
 
-## 设计平衡：深度 × 宽度 × 分辨率
+### 设计平衡：深度 × 宽度 × 分辨率
 
 现代网络（如 **EfficientNet、ConvNeXt**）通过自动搜索找到平衡比例：
 $$
@@ -628,7 +681,7 @@ $$
 
 ---
 
-## 总结：现代 CNN 设计的核心原则
+### 总结：现代 CNN 设计的核心原则
 
 | 设计维度     | 原则                           | 示例      |
 | ------------ | ------------------------------ | --------- |
@@ -641,7 +694,7 @@ $$
 
 ---
 
-## 现代趋势
+### 现代趋势
 
 现代 CNN（如 ConvNeXt、EfficientNetV2）融合以下特征：
 - 继承卷积结构的高效性；
@@ -651,9 +704,54 @@ $$
 
 
 
+# In practice
+
+**In practice: use whatever works best on ImageNet**. If you’re feeling a bit of a fatigue in thinking about the architectural decisions, you’ll be pleased to know that in 90% or more of applications you should not have to worry about these. I like to summarize this point as “*don’t be a hero*”: Instead of rolling your own architecture for a problem, you should look at whatever architecture currently works best on ImageNet, download a pretrained model and finetune it on your data. You should rarely ever have to train a ConvNet from scratch or design one from scratch.
+
+
+
+## Computational Considerations
+
+The largest bottleneck to be aware of when constructing ConvNet architectures is the memory bottleneck. Many modern GPUs have a limit of 3/4/6GB memory, with the best GPUs having about 12GB of memory. There are three major sources of memory to keep track of:
+
+- From the intermediate volume sizes: These are the raw number of **activations** at every layer of the ConvNet, and also their gradients (of equal size). Usually, most of the activations are on the earlier layers of a ConvNet (i.e. first Conv Layers). These are kept around because they are needed for backpropagation, but a clever implementation that runs a ConvNet only at test time could in principle reduce this by a huge amount, by only storing the current activations at any layer and discarding the previous activations on layers below.
+- From the parameter sizes: These are the numbers that hold the network **parameters**, their gradients during backpropagation, and commonly also a step cache if the optimization is using momentum, Adagrad, or RMSProp. Therefore, the memory to store the parameter vector alone must usually be multiplied by a factor of at least 3 or so.
+- Every ConvNet implementation has to maintain **miscellaneous** memory, such as the image data batches, perhaps their augmented versions, etc.
+
+Once you have a rough estimate of the total number of values (for activations, gradients, and misc), the number should be converted to size in GB. Take the number of values, multiply by 4 to get the raw number of bytes (since every floating point is 4 bytes, or maybe by 8 for double precision), and then divide by 1024 multiple times to get the amount of memory in KB, MB, and finally GB. If your network doesn’t fit, a common heuristic to “make it fit” is to decrease the batch size, since most of the memory is usually consumed by the activations.
+
+## How Kernel Size Affects Computation
+
+- Computation grows **quadratically** with kernel size $k^2$
+- Larger kernels → more MACs, memory pressure, parameters
+- Embedded devices strongly favor **1×1 and 3×3**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # References
 
 - 非常好的综述：[(37 封私信 / 80 条消息) 【综述】一文读懂卷积神经网络(CNN)](https://zhuanlan.zhihu.com/p/561991816)
+- highly recommendhttps://cs231n.github.io/convolutional-networks/
 - [8.8. Designing Convolution Network Architectures — Dive into Deep Learning 1.0.3 documentation](https://d2l.ai/chapter_convolutional-modern/cnn-design.html)

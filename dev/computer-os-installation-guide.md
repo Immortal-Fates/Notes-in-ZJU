@@ -213,12 +213,8 @@
 
 ### 桌面美化
 
-- picom 设置软件透明化
-
+- transparent window: used to set any window to transparent
 TODO 
-
-
-
 
 
 TODO

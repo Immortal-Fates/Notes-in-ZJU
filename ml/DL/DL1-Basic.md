@@ -237,3 +237,7 @@
 - 处理离散值
 
   - 独热编码
+
+# References
+
+- super detailed: [CNN basics]https://cs231n.github.io/convolutional-networks/

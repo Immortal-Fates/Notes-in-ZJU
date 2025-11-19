@@ -1,6 +1,6 @@
 # Main Takeaway
 
-Git进阶
+git intro
 
 希望通过[Git - Book (git-scm.com)](https://git-scm.com/book/zh/v2)+[Learn Git Branching](https://learngitbranching.js.org/?locale=zh_CN)来进一步掌握Git
 
