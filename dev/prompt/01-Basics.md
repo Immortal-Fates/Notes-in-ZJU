@@ -1,13 +1,11 @@
-# Main Takeaway
+# Basics
+
+Prompt Engineering
 
 - 理解 AI， 生成式 AI 和提示
 - 理解生成式 AI 为何有用
 
 <!--more-->
-
-# 基础
-
-Prompt Engineering
 
 ## Basic Prompt Structure and Key Parts
 
@@ -41,7 +39,7 @@ prompt由几个关键组件构成
 
   圆括号()中的内容表示您写作的角度。 花括号中的内容表示您所涉及的主题。 方括号[]中的内容表示您应该采取的行动。 例子：(学生){哲学}[回答] 在大学里选择这门课程相比其他课程有什么优势？
 
-# 通用
+## 通用
 
 妙妙 Prompt：
 
@@ -49,11 +47,11 @@ prompt由几个关键组件构成
 >
 > 我可以如何将这件事做得更专业一些？
 
-# 常用工具
+## 常用工具
 
 - 绘图：[excalidraw](./excalidraw_prompt)
 - PPT：gamma
 
-# References
+## References
 
 - [提示工程指南](https://learnprompting.org/zh-Hans/docs/introduction)

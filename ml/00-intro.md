@@ -6,7 +6,7 @@
 
 ![relation](./assets/ML0-intro.assets/a388b49cb06e128515de182fc3e51800.png)
 
-# preliminaries
+## Preliminaries
 
 - 深度学习是关于优化的学习
 
