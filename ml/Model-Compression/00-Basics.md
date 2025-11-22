@@ -24,5 +24,5 @@ Model compression techniques aim to make deep learning models smaller, faster, a
 
 ## References
 
-- [(39 封私信 / 80 条消息) 量化、剪枝、蒸馏、二值化](https://zhuanlan.zhihu.com/p/1888965050078839746)
-- <https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/37631.pdf>
+- **Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding**. Song Han et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1510.00149v5)).
+- [MIT course](https://hanlab.mit.edu/courses/2024-fall-65940)
