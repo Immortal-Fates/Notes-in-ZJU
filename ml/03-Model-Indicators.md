@@ -19,3 +19,27 @@ Introduce indicators for measuring the complexity of a model.
 | Bitwidth / Numerical Precision  | Model              | Bits used per weight/activation (FP32, FP16, INT8, INT4, etc.). | Defined by quantization scheme; effective size per param = `bitwidth` bits. | Reduces model size and memory bandwidth; often speeds up inference on LP units. |
 | Network Depth                   | Architecture       | Number of layers in the network.                             | Count of sequential learnable layers (e.g., 50 in ResNet-50). | Fewer layers → fewer params/FLOPs but lower representational power. |
 | Network Width                   | Architecture       | Number of channels/units per layer.                          | Channel/hidden size per layer; e.g., width multiplier `α` scales channels: `C' = α * C`. | Narrower network → fewer params/FLOPs; too narrow hurts accuracy. |
+
+## Calculation
+
+- activation memory
+  $$
+  \text{memory}_{act} = H\times W\times Channel_{out} \times \text{bytes per element}
+  $$
+  
+
+## Misunderstandings
+
+1. **FLOPs reduction guarantees latency reduction**
+    False — memory access dominates many operations.
+2. **Unstructured pruning helps in practice**
+    Sparse weight matrices often require specialized kernels; otherwise speedup is negligible.
+3. **Quantization always reduces accuracy**
+    INT8 QAT usually yields <1% drop.
+4. **Model size equals memory usage**
+    Activation memory often larger than weight memory.
+5. **Compression works without retraining**
+    Most methods require fine-tuning.
+
+
+
