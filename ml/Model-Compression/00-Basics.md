@@ -16,7 +16,27 @@ Model compression techniques aim to make deep learning models smaller, faster, a
 | **Dynamic Inference / Conditional Computation** | Adjust compute at inference time (skip layers, prune tokens, early exit, MoE routing). | Saves substantial runtime compute; adaptive to input difficulty. | Hard to make stable; requires special hardware/compilers; unpredictable latency. |
 | **Activation Compression**                      | Quantize, sparsify, or compress intermediate activations to reduce memory. | Reduces peak memory; enables large models on small devices; useful for training. | Hard to avoid accuracy degradation; complicates backprop; not always supported in deployment. |
 
+## Latency benchmarking
+
+Latency benchmark measure wall-clock inference time in ms. FLOPs reduction does not guarantee actual speedup. Latency benchmarking is the *only* way to verify true performance.
+
 ## References
 
 - **Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding**. Song Han et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1510.00149v5)).
+
+  -  “deep compression”, a three stage pipeline: pruning, trained quantization and Huffman coding
+
+    ![image-20251123144309518](./assets/00-Basics.assets/image-20251123144309518.png)
+    
+    - pruning: For each layer $l$, compute weight standard deviation $\sigma_l$. Define a **threshold** $t_l = s\cdot \sigma_l$ to filter the weights.
+    
+    - quantization and weight shared
+    
+      ![image-20251123160315680](./assets/00-Basics.assets/image-20251123160315680.png)
+    
+      1. Centroid initialization: **Linear initialization** between min and max weight values is reported best
+      2. Run 1D **k-means** clustering to obtain **centroids**
+    
+    - Huffman coding
+
 - [MIT course](https://hanlab.mit.edu/courses/2024-fall-65940)，[HW](https://github.com/yan-roo/MIT-6.5940)

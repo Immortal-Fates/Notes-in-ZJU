@@ -18,6 +18,23 @@ SSH (Secure Shell) is a protocol for secure remote login and command execution. 
 
 - rsync (fast, incremental sync): `rsync -avz ./project/ user@server:/home/user/project/`
 
+  - Very important: the trailing slash
+  
+    - With trailing slash `rsync -av ./project/ user@server:~/project/`
+  
+      Meaning: “copy the *contents* of `./project/` into `~/project/`”.
+  
+  
+    - Without trailing slash `rsync -av ./project user@server:~/project/`
+  
+      Meaning: “copy the directory `project` itself (as a folder) into `~/project/` → you get `~/project/project/`”.
+  
+  - Keeping folders exactly in sync: `--delete`
+  
+    `--delete`: delete files on the target that don’t exist on the source.
+  
+  - Excluding files/directories: `--exclude`
+
 ## SSH Key Pair Authentication
 
 ### Generate a Key Pair (local machine)
@@ -55,6 +72,6 @@ After this, you can log in without password.
 ## Lessons Learned
 
 - If you want to use AI to assist you and running on your local computer. There are three ways
-  1. Mount the project file on your local folder and edit it like the other local files.
-  2. Use rsync cmd to sync the project
-  3. Use git to sync.
+  1. (slow)Mount the project file on your local folder and edit it like the other local files.
+  2. (highly recommended)Use rsync cmd to sync the project
+  3. (with collaborators)Use git to sync.

@@ -51,3 +51,78 @@ I am studying the section **[Section Title or Topic]** from my study plan.
 9. Optional: advanced or research-oriented extensions for deeper study.
 
 Answer in a clear, professional, and concise structure suitable for a graduate-level learner.
+
+## Read Paper
+
+I am reading the paper: **[Insert Title / Abstract / or Full Paper Text Here]**. Please help me analyze it by providing:
+
+- **High-level overview**
+
+  - Research problem
+  - Motivation
+  - Why this problem matters
+  - What gap the paper fills
+
+- **Core contributions**
+
+  - List each contribution explicitly
+  - Clarify what is new vs. what is incremental
+
+- **Method details (structured and rigorous)**
+
+  - Key assumptions
+  - Model/algorithm formulation
+  - Important equations (explain each term)
+  - Pipeline or architecture (diagram if needed)
+  - Step-by-step breakdown
+
+- **Experimental setup**
+
+  - Data
+  - Baselines
+  - Metrics
+  - Key decisions that influence results
+
+- **Results and interpretation**
+
+  - What the results actually prove
+  - Comparative analysis
+  - Any hidden limitations from the numbers
+
+- **Strengths and weaknesses**
+
+  - Technical strengths
+  - Methodological weaknesses
+  - Risks of overclaiming
+  - Realistic impact
+
+- **Connections**
+
+  - How this relates to prior work
+  - What category of approach this fits into
+  - Similar ideas in other top-tier papers
+
+- **If code is available**
+
+  - How the implementation corresponds to the paper
+  - What parts deserve more attention
+
+- **Deep understanding tools**
+
+  - Intuitive analogies
+  - Concrete examples
+  - Simplified explanation for core mechanisms
+  - Potential exam/interview questions based on this paper
+
+- **Future directions**
+
+  - What follow-up research is possible
+
+  - What is missing
+
+  - What this paper enables for the field
+
+> Tips: choose the prompts to integrated.
+
+
+

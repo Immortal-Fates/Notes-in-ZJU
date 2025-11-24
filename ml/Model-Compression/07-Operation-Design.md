@@ -29,6 +29,12 @@
 
 ## Weight Sharing
 
+ Weight sharing by scalar quantization (top) and centroids fine-tuning (bottom).
+
+![image-20251123150437396](./assets/07-Operation-Design.assets/image-20251123150437396.png)
+
+
+
 - HashNet-style weight hashing
 - Shared-weight architectures (Cell-based NAS blocks)
 
