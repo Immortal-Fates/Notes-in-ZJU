@@ -1,5 +1,4 @@
-# Main Takeaway
-
+# Diffusion Model
 之前看到一个使用diffusion model做的LLM，其生成的快速性直接打爆一众现有的LLM模型，是深度生成模型中新的SOTA
 
 在此记录一下学习diffusion model

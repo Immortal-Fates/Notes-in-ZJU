@@ -11,7 +11,27 @@ show workflow when training on local or remote server.
 | Tail logs             | `tail -f log.txt`                       | Monitor logs live.                    |
 | Run TensorBoard       | `tensorboard --logdir runs --port 6006` | Launch TensorBoard in its own window. |
 
+- [check nn architecture](https://netron.app/)
+
 ## Remote Server
+
+- first connect
+
+  Generate a Key Pair(local machine)
+
+  ```
+  ssh-keygen -t rsa(whatever, you may already have)
+  ```
+
+  Copy Public Key to Remote Server
+
+  ```
+  ssh-copy-id username@remote_ip
+  ```
+
+  After this, you can log in without password.
+
+- normal
 
 | Task                     | Command                                                      | Explanation                               |
 | ------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
@@ -24,3 +44,7 @@ show workflow when training on local or remote server.
 | Local open TB            | `ssh -L 6006:localhost:6006 user@server`<br />[http://localhost:6006](http://localhost:6006/) | Check TB on local machine                 |
 | Open log window          | `Ctrl-b c` → `tail -f log.txt`                               | Monitor logs separately.                  |
 | Open GPU monitor         | Split pane → `watch -n 1 nvidia-smi`                         | Real-time GPU usage.                      |
+
+## Hyperparameter tuning
+
+use **Optuna** for hyperparameter tuning

@@ -52,6 +52,10 @@ I am studying the section **[Section Title or Topic]** from my study plan.
 
 Answer in a clear, professional, and concise structure suitable for a graduate-level learner.
 
+## Notebook
+
+introduce the [section] in the following way - Takeaway - Prior - Core Mechanism - Pipeline - Pros - Cons
+
 ## Read Paper
 
 I am reading the paper: **[Insert Title / Abstract / or Full Paper Text Here]**. Please help me analyze it by providing:

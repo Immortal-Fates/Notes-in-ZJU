@@ -2,6 +2,8 @@
 
 Introduce indicators for measuring the complexity of a model.
 
+## Summary
+
 | Indicator                       | Type               | What it measures                                             | How to calculate (short)                                     | Effect when reduced (if accuracy maintained)                 |
 | ------------------------------- | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | FLOP                            | Unit               | A single floating-point arithmetic operation (e.g., `+`, `-`, `*`, `/`). | Atomic unit; algorithms are counted as a sum of many FLOPs.  | Fewer FLOPs in an algorithm → less compute, potentially lower latency/energy. |
@@ -9,6 +11,7 @@ Introduce indicators for measuring the complexity of a model.
 | FLOPS (FLOP/s, throughput)      | Hardware           | Floating-point operations per second (hardware compute capability). | Given by hardware spec, e.g., `10 TFLOPS = 10 * 10^12 FLOP/s`. | Not a model property; higher FLOPS → lower latency for same model FLOPs. |
 | MACs                            | Model              | Multiply–accumulate operations per inference.                | Conv MACs: `H_out * W_out * C_out * (k_h * k_w * C_in)` (1 MAC = 1 or 2 FLOPs depending on convention). | Same trend as FLOPs; good proxy for compute.                 |
 | Parameter Count (#params)       | Model              | Number of learnable weights (capacity / structural complexity). | Sum of params over all layers; Conv: `k_h * k_w * C_in * C_out (+ bias)`; Linear: `in_dim * out_dim (+ bias)`. | Smaller weight memory, easier deployment, but less representational capacity. |
+| Memory Access                   | Unit               | The total amount of data that must be read from or written to memory during an operation (feature maps + weights). | Approximate as: Input size + Output size + Weight size  (in number of elements or bytes). | Lower bandwidth demand → faster inference on memory-bound hardware; reduced energy; better real-time performance. |
 | Model Size on Disk              | Model              | File size of stored weights (storage / download cost).       | Approx. `#params * bits_per_param / 8` (bytes) `+` metadata. | Smaller files, faster download, fits into limited flash/ROM. |
 | Peak Runtime Memory             | Model+<br>Hardware | Max RAM/VRAM usage (weights + activations + buffers) during inference. | ≈ `model_memory + max_live_activations_memory`; usually measured empirically on target device. | Enables deployment on memory-limited devices; allows larger batch sizes. |
 | Latency                         | Runtime            | Wall-clock time for one inference (or per batch).            | Measure average `end_time - start_time` over many runs on target hardware. | Directly impacts responsiveness / fps in real-time systems.  |
@@ -22,24 +25,86 @@ Introduce indicators for measuring the complexity of a model.
 
 ## Calculation
 
+- model size
+  
+  - conv layer
+    $$
+    \text{param}_{w} = K\times K \times channel_{in} \times channel_{out}
+    $$
+  
+    $$
+    \text{param}_{b} = K\times K \times channel_{out}
+    $$
+  
+    $$
+    so \quad \text{param}  =  \text{param}_{w}+\text{param}_{b}
+    $$
+  
+  - FC layer
+    $$
+    \text{param}_{w} = N_{in}\times N_{out}
+    $$
+  
+    $$
+    \text{param}_{b} = N_{out}
+    $$
+  
+    $$
+    so \quad \text{param}  =  \text{param}_{w}+\text{param}_{b}
+    $$
+  
 - activation memory
   $$
   \text{memory}_{act} = H\times W\times Channel_{out} \times \text{bytes per element}
   $$
+
+
+- FLOPs
+
+  - conv layer(consider bais)
+
+    只需在 parameters 的基础上再乘以 feature map 的大小即可，即对于某个卷积层，它的 FLOPs 数量为：
+
+    $$
+    \text{FLOPs} = 2 K_{in} \times K_{out} \times C_{in} \times C_{out} \times H_{out} \times W_{out} \tag{1} \\
+    addition:(K_{in} \times K_{out} \times C_{in} - 1) \times C_{out} \times H_{out} \times W_{out} \\
+    multiplication:K_{in} \times K_{out} \times C_{in} \times C_{out} \times H_{out} \times W_{out} \\
+    bais:1 \times C_{out} \times H_{out} \times W_{out}
+    $$
+
+  - FC layer
+    $$
+    FLOPs = 2(N_{in}-1) N_{out} \\
+    addition: (N_{in}-1)N_out \\
+    multiplication: N_{in}N_{out}
+    $$
+
+- MACs
+  $$
+  1MACs \approx 2FLOPs
+  $$
+
+- Memory Access
+
+  - conv layer
+    $$
+    \text{Memory Access} = H_{in}W_{in} C_{in} + H_{out}W_{out} C_{out} + C_{out}C_{in} K^2
+    $$
+
+- Computation / Memory Access Ratio
+
+  - High ratio → computation dominates (GPU-friendly)
+  - Low ratio → memory access dominates (mobile/edge bottleneck)
+
   
 
-## Misunderstandings
+## Model Compression
 
-1. **FLOPs reduction guarantees latency reduction**
-    False — memory access dominates many operations.
-2. **Unstructured pruning helps in practice**
-    Sparse weight matrices often require specialized kernels; otherwise speedup is negligible.
-3. **Quantization always reduces accuracy**
-    INT8 QAT usually yields <1% drop.
-4. **Model size equals memory usage**
-    Activation memory often larger than weight memory.
-5. **Compression works without retraining**
-    Most methods require fine-tuning.
+When comes to model compression. We usually care about the three parameters:
 
-
+- Model Size
+- Runtime Memory
+- Number of computing operations: two ways to calculate: 
+  - FLOPS
+  - MACs
 
