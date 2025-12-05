@@ -4,9 +4,7 @@
 
 <!--more-->
 
-# 水测
-
-# 六级
+## 六级
 
 - 速通经验：[六级速通教学经验文 | FastPass速通宝典 (fastpassai.com)](https://app.fastpassai.com/docs/articles/cet6.html)
 
@@ -82,18 +80,10 @@
 
 - In conclusion,_.If we spare no efforts to_ ,the future of will be both hopeful and rosy.
 
-# 托福雅思
+## 托福雅思
 
-# Some Words
 
-- proofreading 校对
-- dissertation 论文
-- viable 可行的
-- methodology 方法论
-- irritated 激怒
-- restless 不安的
-
-# References
+## References
 
 - 托福雅思：<https://ielts.papaen.com/center/mock>
 

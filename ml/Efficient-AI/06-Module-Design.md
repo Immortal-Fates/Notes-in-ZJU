@@ -49,7 +49,7 @@ introduce different module design
 
   This reduces the number of parameters and the computational complexity.
 
-  ```
+  ```python
   # a tiny example
   class DepthwiseSeparableConv(nn.Module):
       def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0):

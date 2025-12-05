@@ -80,11 +80,87 @@
 
   combine shift and AdderNet
 
-## Structural Reparameterization
+## Structural Re-parameterization
+
+- __RepVGG: Making VGG-style ConvNets Great Again.__ *Xiaohan Ding et al.* __2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021__ [(Arxiv)](https://arxiv.org/abs/2101.03697) [(S2)](https://www.semanticscholar.org/paper/2b8088253e2378fce001a090fe923b81e8dedf25)([code_link](https://github.com/DingXiaoH/RepVGG)). (Citations 2015)
+
+  > You can also check the **Structural Re-parameterization Universe** on [code_link](https://github.com/DingXiaoH/RepVGG).
 
 - Takeaway: Train with complex multi-branch blocks → deploy as single-path conv.
 
-  Example: Mobileone
+  > [!NOTE]
+  >
+  > Train big, infer small. Train flexible, infer fast.
+  >
+  > 大就是猛，多就是好，大力出奇迹
+
+- Prior
+
+  - What we mean by "VGG style" is:
+
+    1. There is no branching structure. It is commonly known as plain or feed-forward architecture.
+
+    2. Only use 3x3 convolution.
+
+    3. Only use ReLU as activation function.
+
+  - High accuracy (thanks to complex training-time topology)
+
+  - High inference speed (thanks to simple runtime topology)
+
+  - Fuse Conv + BN → Conv(吸BN)
+
+    Absorb the parameters of BN ($γ, β, μ, σ^2$) into the convolution kernel weights and biases, thereby turning Conv+BN into a separate Conv during inference. How:
+    $$
+    y  = BN(Conv(x)) \\
+    BN:\quad BN(z) = z\cdot\frac{\gamma}{ \sqrt{\sigma^2+\epsilon}}+( \beta - \frac{\gamma \mu}{\sqrt{\sigma^2+\epsilon}})
+    $$
+    Which means we can transpose the Conv weight and bais to:
+    $$
+    W\prime = \frac{\gamma W}{ \sqrt{\sigma^2+\epsilon}}, b\prime = \beta - \frac{\gamma \mu}{\sqrt{\sigma^2+\epsilon}}
+    $$
+    so that when inferring just calculate: $y =Conv(x;W\prime,b\prime)$. BN disappears.
+
+
+- Core Mechanism
+
+  ![image-20251130173838185](./assets/07-Operation-Design.assets/image-20251130173838185.png)
+
+  1. Use multi-branch blocks during training, eg: 3×3 Conv + BN/1×1 Conv + BN/Identity + BN/Depthwise Conv/Asymmetric Conv (e.g., 1×3 + 3×1)
+
+  2. Fuse all branches into one convolution kernel + bias for inference
+
+     Because convolution is linear, these branches can be algebraically merged:
+     $$
+     \text{Conv}_{3\times 3}+\text{Conv}_{1\times 1} + \text{Identity} \Rightarrow \text{Equivalent Conv}_{3\times 3}
+     $$
+     BatchNorm layers are also folded:
+     $$
+     W\prime = \frac{\gamma W}{ \sqrt{\sigma^2+\epsilon}}, b\prime = \beta - \frac{\gamma \mu}{\sqrt{\sigma^2+\epsilon}}
+     $$
+     
+     > [!NOTE]
+     >
+     > The performance of 1x1 + 3x3 is significantly better than 3x3 + 3x3, which means that a strong structure plus a weak structure is better than the sum of two strong structures.
+
+- Pros
+  
+  - High inference speed. Better accuaracy.
+  - Hardware-friendly.
+
+- Cons
+  
+  - Cannot train after fusion
+  - More memory during trainin
+  - Not all operations are reparameterizable. Only linear ops (conv/bn) are perfectly convertible.
+
+---
+
+- __RepMLP: Re-parameterizing Convolutions into Fully-connected Layers for Image Recognition.__ *Xiaohan Ding et al.* __ArXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2105.01883) [(S2)](https://www.semanticscholar.org/paper/b8885d2078b2367c17aec2d1e13852f30242784b) (Citations __106__)
+
+- Takeaway: 
+
+  ![image-20251130215436189](./assets/07-Operation-Design.assets/image-20251130215436189.png)
 
 ## Huffman Coding
 
