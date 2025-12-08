@@ -6,8 +6,6 @@ Focus on lightweight models and their optimizations for embedded systems.
 
 ## Model Zoo
 
-
-
 ### MobileNet Zoo
 
 - **MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications**. Andrew G. Howard et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1704.04861v1)).
@@ -337,7 +335,45 @@ Focus on lightweight models and their optimizations for embedded systems.
 
 - __GhostNets on Heterogeneous Devices via Cheap Operations.__ *Kai Han et al.* __International Journal of Computer Vision, 2022__ [(Arxiv)](https://arxiv.org/abs/2201.03297) [(S2)](https://www.semanticscholar.org/paper/c3a302ed0a8687f8b7bc50e4a1dff0f96b4fbf52) (Citations __165__)
 
+  - Takeaway: This paper generalizes GhostNet to **heterogeneous hardware (CPU and GPU)** by:
+
+    - Designing a **CPU-efficient Ghost module (C-Ghost)** that operates at the feature-map level with cheap operations, and
+    - Designing a **GPU-efficient Ghost stage (G-Ghost)** that exploits **stage-wise redundancy** while avoiding GPU-inefficient ops like heavy depthwise conv.
+
+  - Prior: 
+
+    - 
+
+  - Core Mechanism: G-Ghost
+
+    
+
+    ![image-20251207095649092](./assets/09-Lightweight-Models.assets/image-20251207095649092.png)
+
+    why mix: There might be a lack of deep information that needs to be extracted in multiple layers later on, so add the rich expressive power of the middle layer, and then mix
+
+    how mix: Global average pooling
+
+    ![add based fusion](./assets/09-Lightweight-Models.assets/image-20251207095707549.png)
+
+  - Pros
+
+    - plug-and-play
+    - GPU-friendly
+
+  - Cons
+
+    - Less “unified” than a single-architecture solution
+
 - __RepGhost: A Hardware-Efficient Ghost Module via Re-parameterization.__ *Chengpeng Chen et al.* __ArXiv, 2022__ [(Arxiv)](https://arxiv.org/abs/2211.06088) [(S2)](https://www.semanticscholar.org/paper/d8d754d93d4a4fcc62838429fd36f795cb8f5d98) (Citations __144__)
+
+  - Takeaway: RepGhost replaces the original Ghost module’s feature concatenation with a re-parameterizable, add-based design that implicitly reuses features in the weight space instead of the feature space.
+  - Prior: 
+    - [CPU vs GPU] We call the original Ghost as C-Ghost because cheap operations such as Depthwise are more friendly to mobile devices such as pipelined CPUs and ARM, but are not so "cheap" for GPUs with strong parallel computing capabilities. Because the computational density of Depthwise operations is relatively low. So we want to dive into a module more GPU-friendly.
+    - [Concat vs Add] `concat` vs `add` on ARM:
+      - Same params and FLOPs,
+      - But `concat` is about **2× slower** than `add` due to memory access overhead.
+
 
 ### Yolo Zoo
 

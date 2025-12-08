@@ -317,3 +317,4 @@ When comes to model compression. We usually care about the three parameters:
 ## References
 
 - [6. Builders’ Guide — Dive into Deep Learning 1.0.3 documentation](https://d2l.ai/chapter_builders-guide/index.html)
+- [python-numpy-tutorial](https://cs231n.github.io/python-numpy-tutorial/)
