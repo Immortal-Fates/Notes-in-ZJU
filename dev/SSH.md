@@ -56,6 +56,28 @@ ssh-copy-id username@remote_ip
 
 After this, you can log in without password.
 
+If you set a alias in the ssh/config, just `ssh-copy-id $(alias)`
+
+## Port Forwarding
+
+In many scenarios you will run into software that listens to specific ports in the machine.
+
+`localhost:PORT` or `127.0.0.1:PORT`
+
+But what do you do with a remote server that does not have its ports directly available through the network/internet? -- *port forwarding*
+
+- Local Port Forwarding
+
+  ![Local Port Forwarding](https://missing.csail.mit.edu/static/media/images/local-port-forwarding.png)
+
+- Remote Port Forwarding
+
+  ![Remote Port Forwarding](https://missing.csail.mit.edu/static/media/images/remote-port-forwarding.png)
+
+
+
+
+
 ## SSHFS (mount remote directory locally)
 
 - install: `sudo apt install sshfs`

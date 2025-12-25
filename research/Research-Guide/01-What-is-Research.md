@@ -1,10 +1,10 @@
-# Main Takeaway
+# What is Research
 
 作为一个从来没有加入实验室的研0生，了解一下什么是科研应该是非常重要的
 
 <!--more-->
 
-# 什么是科研
+## 什么是科研
 
 科研大致分为两种，基础（理论）研究和应用研究
 
@@ -13,7 +13,7 @@
 
 > 举例说明一下理论研究和应用研究的问题和任务的区别。理论研究的问题可能是“重力和质量是什么关系？”“子代性状和父母的性状、基因有何关系？”；而应用研究的任务可能是“提高粮食产量”“预测异常事件”等等
 
-# 理论研究
+## 理论研究
 
 按照科学研究目的的不同，理论研究又可以分为探索性研究、叙述性研究和解释性研究。
 
@@ -21,7 +21,7 @@
 - **叙述性研究：**综述论文，《A Survey on XXX》《XXX: A Survey》 之类的。这类论文虽然创新性不大，但是对于新手快速了解课题非常友好，而且可以一定程度上让发展现状、对比标准等清晰化。
 - **解释性研究：**解释性研究会对现有的猜想进行证明，或者对现有的方法进行理论解释。数学学科中有证明猜想的巨佬论文。在 AI 领域，经典的大乐透假说 [The Lottery Ticket Hypothesis](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1803.03635)，就是为模型剪枝提供了一种理论解释。
 
-# 应用研究
+## 应用研究
 
 ![ad61a1577a153b6e033e59bf8f7e81cb](./assets/%E7%A7%91%E7%A0%94%E6%8C%87%E5%8D%970%E2%80%94%E2%80%94%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%91%E7%A0%94.assets/ad61a1577a153b6e033e59bf8f7e81cb.png)
 
@@ -35,6 +35,6 @@
 
 **减少成本：**从算法的思维来讲，减少成本即优化算法的时间与空复杂度。例如在确定算法上，素性测试算法的时间复杂度就在一直降低。AI 领域上的[轻量化模型](https://zhida.zhihu.com/search?content_id=192298263&content_type=Article&match_order=1&q=轻量化模型&zhida_source=entity)、[模型压缩](https://zhida.zhihu.com/search?content_id=192298263&content_type=Article&match_order=1&q=模型压缩&zhida_source=entity)/剪枝等论文就是减少方法成本的研究。
 
-# References
+## References
 
-- [(36 封私信 / 80 条消息) 科研指南(0)——什么是科研？ - 知乎](https://zhuanlan.zhihu.com/p/468752956)
+- [科研指南(0)——什么是科研？](https://zhuanlan.zhihu.com/p/468752956)

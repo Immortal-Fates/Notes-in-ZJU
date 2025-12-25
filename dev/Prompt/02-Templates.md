@@ -56,77 +56,20 @@ Answer in a clear, professional, and concise structure suitable for a graduate-l
 
 introduce the [section] in the following way - Takeaway - Prior - Core Mechanism - Pipeline - Pros - Cons
 
-## Read Paper
+summarize they in English and lay they in typora format like this
 
-I am reading the paper: **[Insert Title / Abstract / or Full Paper Text Here]**. Please help me analyze it by providing:
+- Takeaway
 
-- **High-level overview**
+- Prior
 
-  - Research problem
-  - Motivation
-  - Why this problem matters
-  - What gap the paper fills
+...
 
-- **Core contributions**
+and show out the math formula
 
-  - List each contribution explicitly
-  - Clarify what is new vs. what is incremental
+## Discussion Roles
 
-- **Method details (structured and rigorous)**
+Scientific Peer Reviewer. The paper has not been published yet and is currently submitted to a top conference where you’ve been assigned as a peer reviewer. Complete a full review of the paper answering all prompts of the official review form of the top venue in this research area (e.g., NeurIPS). This includes recommending whether to accept or reject the paper
 
-  - Key assumptions
-  - Model/algorithm formulation
-  - Important equations (explain each term)
-  - Pipeline or architecture (diagram if needed)
-  - Step-by-step breakdown
+Academic Researcher. You’re a researcher who is working on a new project in this area. Propose an imaginary follow-up project not just based on the current but only possible due to the existence and success of the current paper.
 
-- **Experimental setup**
-
-  - Data
-  - Baselines
-  - Metrics
-  - Key decisions that influence results
-
-- **Results and interpretation**
-
-  - What the results actually prove
-  - Comparative analysis
-  - Any hidden limitations from the numbers
-
-- **Strengths and weaknesses**
-
-  - Technical strengths
-  - Methodological weaknesses
-  - Risks of overclaiming
-  - Realistic impact
-
-- **Connections**
-
-  - How this relates to prior work
-  - What category of approach this fits into
-  - Similar ideas in other top-tier papers
-
-- **If code is available**
-
-  - How the implementation corresponds to the paper
-  - What parts deserve more attention
-
-- **Deep understanding tools**
-
-  - Intuitive analogies
-  - Concrete examples
-  - Simplified explanation for core mechanisms
-  - Potential exam/interview questions based on this paper
-
-- **Future directions**
-
-  - What follow-up research is possible
-
-  - What is missing
-
-  - What this paper enables for the field
-
-> Tips: choose the prompts to integrated.
-
-
-
+Hacker. You’re a hacker who needs a demo of this paper ASAP. Implement a small part orsimplified version of the paper on a small dataset or toy problem. Prepare to share the core code of the algorithm to the class and demo your implementation. Do not simply download and run an existing implementation – though you are welcome to use (and give credit to) an existing implementation for “backbone” code.

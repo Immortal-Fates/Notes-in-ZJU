@@ -1,0 +1,868 @@
+# Convex Analysis
+
+Convex Analysis凸优化
+
+凸优化的世界完全不一样：它像一片光滑的山谷，**只有一个最低点**。你往下走一定能走到它，这就是凸优化最迷人的地方。
+
+[TOC]
+
+## 凸集
+
+### Concepts
+
+#### 仿射
+
+- 线性子空间V：对线性组合运算封闭的集合（加法+数乘）
+  1. 含有零元素
+  2. 齐次线性方程组Ax=0的解集$\Leftrightarrow$线性子空间
+  3. 几何上是过原点的超平面
+
+- 仿射(Affine)组合: $\theta_1 x_1 + \cdots + \theta_k x_k,\quad \sum_{i=1}^k \theta_i = 1$
+
+- 仿射集（affine set）：若集合对仿射组合封闭，则称为**仿射集（affine set）**。
+
+  property:
+
+  1. 仿射集是子空间的平移,也称仿射子空间
+  2. 线性方程组 Ax=b的解集$\Leftrightarrow$仿射集。
+  3. 几何上是经平移的超平面,称为仿射超平面。
+
+- 仿射包（Affine Hull）：集合S中点$x_i$的所有仿射组合构成的集合
+  $$
+  \text{aff}(S) = \left\{ \sum_{i=1}^k \theta_i x_i \,\middle|\, x_i\in S,\ \sum \theta_i =1 \right\}
+  $$
+  性质:仿射包为包含S的最小仿射集
+
+- 集合S的仿射维数 = 其仿射包的维数。
+
+PDF page 5 图示说明：
+
+- 一个三维空间中的平面，其仿射维数为 2。
+
+- 相对内部：是相对仿射包而言的内部点集合。
+  $$
+  \operatorname{relint} S
+  = \left\{\, x \in S \,\middle|\, B(x,r) \cap \operatorname{aff} S \subseteq S \text{ for some } r>0 \right\}
+  $$
+
+  > [!NOTE]
+  >
+  > 为什么需要相对内部，我们先来看看普通内部
+  >
+  > - 普通内部：如果你可以在点 $x$ 周围画一个小球（小圆），并且这个小球完全落在集合里面，那么 $x$ 是内部点。
+  >   - Con: 很多集合在所在的空间里根本没有“内部”！比如在二维平面中的一条线段，它是没有普通内部的，但是我们的常识认为中间的点就是其内部，为什么会这样呢 —— 我们在错误的维度中看它。线段本身是一维的，不是二维的。
+  > - 相对内部：它不是把集合放在整个空间里看，而是放在集合自己的“维度”里看。如果只在集合所在的仿射维度里活动，这个点是不是内部点？
+  >
+  > 因此相对内部解决了**仿射维数低于空间维数的降维集合**的内部描述问题
+
+#### 凸组合与凸集
+
+- 凸组合（convex combination）：
+  $$
+  \sum_{i=1}^k \theta_i x_i,\quad \theta_i\ge 0,\ \sum \theta_i = 1
+  $$
+
+- 凸集 C：
+  $$
+  x_1,x_2\in C,\ \theta\in[0,1] \Rightarrow \theta x_1 + (1-\theta)x_2\in C
+  $$
+
+- 凸包( Convex hull)：
+  $$
+  \operatorname{conv} S
+  = \left\{
+  x = \theta_1 x_1 + \cdots + \theta_m x_m \;\middle|\;
+  \sum_{i=1}^m \theta_i = 1,\; \theta_i \ge 0,\; x_i \in S,\; i=1,\ldots,m
+  \right\}
+  $$
+  性质:凸包为包含S的最小凸集
+
+- 严格凸集：中间点落在相对内部
+  $$
+  x_1,x_2\in C,\ \theta\in[0,1] \Rightarrow \theta x_1 + (1-\theta)x_2\in \text{relint} C
+  $$
+
+- 锥(cone)：$\forall x\in S, \theta\ge 0$ we have $\theta x \in S$。朝一个方向无限伸展的区域
+
+- 锥组合：非负线性组合
+  $$
+  \theta_1 x_1 + \theta_2 x_2,\quad \theta_i\ge 0
+  $$
+
+- 凸锥：对锥组合运算封闭的集合
+  $$
+  x_1,x_2\in C \Rightarrow \theta_1 x_1 + \theta_2 x_2 \in C
+  $$
+  Property:
+
+  - 凸锥是包含零元素的凸集
+  - 不是所有的锥都是凸锥!因为锥只要求“对非负缩放封闭”，但不要求“对加法封闭”
+
+- 锥包（conic hull）：
+  $$
+  \operatorname{conic} S
+  = \left\{
+  x = \theta_1 x_1 + \cdots + \theta_m x_m
+  \;\middle|\;
+  \theta_i \ge 0,\; x_i \in S,\; i = 1,\ldots,m
+  \right\}
+  $$
+  性质：锥包是最小包含S的凸锥
+
+- 像集：像集是把可行域 $\chi$ 通过向量函数：
+  $$
+  f(x) = (f_1(x), f_2(x), \dots, f_M(x))
+  $$
+  **映射到目标空间（f-space）后的所有点的集合。**
+
+  数学表达：
+  $$
+  f(\chi) = \{ f(x) \mid x\in\chi \}
+  $$
+  比如如果 $M=2$（两目标问题），那么像集就是所有可能的：
+  $$
+  (f_1(x), f_2(x))
+  $$
+  组成的点在二维平面上形成的集合。
+
+  > [!NOTE]
+  >
+  > - $\chi$ 是凸的
+  > - 每个 $f_i(x)$ 都是凸的
+  >
+  > 也**不保证**
+  > $$
+  > f(\chi) \subseteq \mathbb{R}^M
+  > $$
+  > 是凸集。
+
+### 典型凸集
+
+2.1 常见凸集
+
+- 空集、单点集
+- 线段、射线、直线
+- 凸锥（如正交第一象限）
+- 多面体（polyhedron）
+- 多胞形（polytope）：有界多面体（page 13）
+- 单纯形（simplex）：k+1 个仿射无关点的凸包
+
+------
+
+#### 超平面与半空间
+
+- 超平面（hyperplane）：
+  $$
+  H = \{ x \mid a^T x = b \},\ a\ne 0
+  $$
+
+- 半空间（halfspace）：
+  $$
+  H_- = \{ x \mid a^T x \le b ， a\ne 0\}
+  $$
+  a 是超平面的法向量（梯度）。
+
+- 支撑超平面( supporting hyperplane):若存在非零向量a满足，
+  $$
+  a^T x \le a^T x_0,\quad x \in S,\quad x_0 \in bd\, S,
+  $$
+
+  则称
+
+  $$
+  \{\, x \mid a^T x = a^T x_0 \,\}
+  $$
+
+  为支撑超平面。
+
+  > [!TIP]
+  >
+  > 这里不要求 S 是凸集
+
+  > [!NOTE]
+  >
+  > 支撑超平面就是：一个贴着集合边界、但是不穿进去的超平面。就像是托住/支撑这个集合
+  >
+  > - 支撑超平面：托住集合，不要求“函数可微”
+  > - 切平面：是函数在某点的线性近似（要求可微）
+
+- 现在我们来看看如何用支撑超平面解释对偶问题的值空间（value space）very important!
+
+  > 看完你会真正理解：**为什么对偶函数总是凹函数、为什么弱对偶必然成立、为什么最大化对偶值等价于找支撑超平面。**
+
+  我们先定义值空间G：为所有肯呢个“函数值”的集合
+  $$
+  G = \{ (t, u, v) \mid t = f(x),\; u = g(x),\; v = h(x),\; x \in D \}
+  $$
+  对偶问题：
+  $$
+  g(\lambda,\nu) = \inf_x \bigl( f(x)+\lambda^T g(x)+\nu^T h(x) \bigr)
+  $$
+  在值空间中写成：
+  $$
+  L(t,u,v)=t+\lambda^T u + \nu^T v.
+  $$
+  你可以把它理解为对 G 上的一个 **线性函数（平面）**。
+
+  于是我们可以认为：**对偶函数值 g(λ,ν) 就是用一个平面在值空间 G 中“托着”（support）整个 G 时的最大截距。**
+
+  - 为什么 g(λ,ν) 一定是凹的：g(λ,ν) = 这些平面的 envelope（下凸包），所有线性函数的下确界必然是凹函数的形状。
+  - 为什么弱对偶自动成立：支撑超平面永远在 G 的下方（不会穿进去）。所以它提供的是下界（lower bound）。
+  - 强对偶 = 支撑超平面“刚好托住最佳点”
+
+#### 多面体、多胞形与单纯形
+
+- 多面体（polyhedron）：有限个半空间和（仿射）超平面的交集
+  $$
+  P = \{ x \mid a_j^T x \le b_j,\; j = 1,\ldots,m,\; c_i^T x = d_i,\; i = 1,\ldots,p \}
+       = \{ x \mid Ax \le b,\; Cx = d \}.
+  $$
+  例：线性化可行方向锥
+  $$
+  F(x) = \{ p \mid \nabla h_i(x)^T p = 0,\; i \in E;\;
+                \nabla g_j(x)^T p \le 0,\; j \in J(x) \}.
+  $$
+
+  > [!NOTE]
+  >
+  > 线性规划的可行域是多面体。
+
+- 多胞形（polytope）：有界的多面体。它由有限个顶点 $v_1,\ldots,v_k,v_{k+1}$ 的凸包表示：
+  $$
+  \left\{
+    \theta_1 v_1 + \cdots + \theta_k v_k
+    \;\middle|\;
+    \sum_{i=1}^m \theta_i = 1,\;
+    \theta_j \ge 0,\; j = 1,\ldots,k
+  \right\}
+  $$
+
+  > [!NOTE]
+  >
+  > 线性规划的可行域为多胞形时，存在最优解。
+
+- 单纯形（simplex）：由 $k+1$ 个仿射无关点形成的最简单多面体
+  $$
+  \left\{
+    \theta_1 v_1 + \cdots + \theta_k v_k + \theta_{k+1} v_{k+1}
+    \;\middle|\;
+    \sum_{i=1}^{k+1} \theta_i = 1,\;
+    \theta_j \ge 0,\; j = 1,\ldots,k+1
+  \right\}
+  $$
+
+  > [!NOTE]
+  >
+  > $v_1,\ldots,v_{k+1}$ **仿射无关**：$v_2 - v_1, \ldots, v_{k+1} - v_1$ 线性无关 ⇒ 仿射维数 = $k$
+  >
+  > $k+1$ 个顶点的单纯形，是仿射维数 $k$ 的最简单多面体，例如：线段（三角形）、三角形、四面体。****
+
+#### 锥
+
+- Euclid球：
+  $$
+  B(x_c,r)=\{x\mid \|x-x_c\|_2 \le r\}
+  $$
+
+- Euclid椭球(ellipsoid)（P 为正定矩阵）：
+  $$
+  E(x_c,P)=\{x \mid (x-x_c)^T P (x-x_c)\le 1\}
+  $$
+
+- Euclid锥(二阶锥,second order cone)：SOC 非常强大，能表达多种常见约束。SOC 是比线性规划（LP）更强的模型，但又比 SDP 便宜，非常常用
+  $$
+  C = \{ (x,t)\in \mathbb{R}^{n+1} \mid \|x\|_2 \le t\}
+  $$
+
+  > [!TIP]
+  >
+  > 球和锥的概念均可推广的其他范数,称为范数球、范数锥。
+
+------
+
+- 半正定锥(positive semidefinite cone)：PSD 锥是**高维矩阵空间中的二阶锥推广**。它包含所有“没有负弯曲”的矩阵。
+  $$
+  S_+^n = \{ X\in\mathbb{S}^n \mid X\succeq 0\}
+  $$
+  半正定锥是凸锥
+
+- 正定锥(positive semidefinite cone)
+  $$
+  S_+^n = \{ X\in\mathbb{S}^n \mid X> 0\}
+  $$
+
+- 旋转二阶锥(二维半正定锥Rotated SOC)：这是 SOC 的一种等价形式，但能表达更多结构，特别是**双线性项的凸化**
+
+- 凸函数的t下水平集： f(x)的t下水平集
+  $$
+  C_t = \{x\in dom f | f(x) \le t \}, t\in R
+  $$
+  Property
+
+  - f(x)是凸函数$\Rightarrow$任意的t下水平集是凸集
+
+- 凸函数的上境图：上境图(上方图)epigraph:(epi- :之上)
+  $$
+  epi f = \{(x,t) | f(x) \le t,x\in dom f \}, t\in R
+  $$
+  Property
+
+  1. f(x)是凸函数$\Leftrightarrow$epi f 是凸集
+  2. $f(x) = \inf_t \{ t|(x,t)\in epi f \}$
+
+### 保凸运算
+
+集合运算：交集，和，直积/笛卡尔积，部分和
+
+- 交集：凸集的交仍为凸集
+- Minkowski 和：C₁ + C₂ 仍为凸集
+- 直积：保持凸性
+
+------
+
+仿射变换：伸缩，平移，投影
+
+若 f(x) = Ax + b，则：
+$$
+x\in C \Rightarrow f(x) \in f(C)
+$$
+
+- 仿射变换保持凸性
+
+------
+
+仿射原像
+$$
+f^{-1}(C)=\{ x\mid f(x)\in C\}
+$$
+
+- 凸集的仿射原象(affine inverse image)是凸集，原像保持凸性
+
+------
+
+透视变换（Perspective Transform）：$P:R^{n+1}\rightarrow R^n$
+$$
+P(x,t)=x/t,\quad t>0
+$$
+透视后的像仍保持凸性。
+
+此变换在几何与优化中用于将比值问题转化为凸问题。
+
+------
+
+线性分式映射（Linear-Fractional）
+
+- 线性分式函数(Linear-fractional function)
+  $$
+  f(x)=\frac{a^T x+b}{c^T x+d}
+  $$
+  Property
+
+  1. 线性分式函数是透视函数和仿射函数的复合
+  2. 凸集在线性分式变换下的像和原像都是凸集。
+
+------
+
+### 凸集分离定理
+
+- 凸集分离定理：若凸集 C 与 D 不相交，则存在非零 a 和标量 b，使得：
+  $$
+  a^T x \le b,\ \forall x\in C,\quad
+  a^T x \ge b,\ \forall x\in D
+  $$
+  则$\{x| a^T x = b \}$为分离超平面(separating hyperplane)
+
+  证明思路:寻找C、D中距离最近点c、d连线的中垂线
+
+------
+
+- 严格分离定理：若 C, D 不相交，且其中一个为紧集，另一个为闭集，则存在非零向量a和常数b,使
+  $$
+  a^T x < b\ \forall x\in C,\quad
+  a^T x > b\ \forall x\in D
+  $$
+  则$\{x| a^T x = b \}$为分离超平面(separating hyperplane)
+
+  推论:若C为闭凸集,$x_0~not ~\in C$,则 x0和C可严格分离。原因:单点集是紧集。
+
+Gordan 引理与 Farkas 引理正是回答：
+
+- 某个系统**可解**还是**不可解？**
+- 当它不可解时，**有没有另一组条件必然成立？**
+
+它们都是“二选一”的定理，即：两种情况中必有一种成立，但不能都成立。因此称为择一定理
+
+- Gordan 引理
+  - 要么**Ax < 0 有解**；
+  - 要么**存在 y ≥ 0, y ≠ 0，使得 Aᵀy = 0**；
+
+- Farkas 引理
+  - 对于系统 Ax = b, x ≥ 0，要么系统有解
+  - 要么存在 y，使得$A^T y \ge 0,\quad b^T y < 0$，证明系统无解
+
+## 凸函数
+
+### Concepts
+
+若D = dom f 为凸集且满足Jensen不等式
+$$
+f(\theta x_1 + (1-\theta)x_2) \le \theta f(x_1) + (1-\theta)f(x_2)
+$$
+
+- 一阶充分必要条件
+  $$
+  f(y) \ge f(x) + \nabla f(x)^T (y-x)
+  $$
+
+- 
+
+- 二阶充分必要条件
+  $$
+  \nabla^2 f(x) \succeq 0
+  $$
+
+- 
+
+凸函数性质
+
+1. 凸函数f(x)$\Rightarrow$下水平集为凸集
+
+2. f(x)为凸函数$\Leftrightarrow$epi f(x)为凸集
+
+3. 方向凸性（restriction to line:
+
+   \(f(x)\) 是凸函数  \( \Longleftrightarrow \)  对任意 \(v \in \mathbb{R}^n\)、\(x \in D\)，函数 $g(t) = f(x + tv)$ 是关于 \(t\) 的凸函数。
+
+   几何意义：沿着定义域内直线变化的函数曲线仍是凸函数。
+
+4. \(f(x)\) 为凸函数  \( \Longleftrightarrow \)  \(\nabla f(x)\) 为单调映射（定义域 dom\(f\) 为凸集）
+   $$
+   \bigl[\nabla f(x_2) - \nabla f(x_1)\bigr]^T (x_2 - x_1) \ge 0,
+   \qquad \forall x_1, x_2 \in D
+   $$
+
+   避免求二阶导数。
+
+### 典型凸函数
+
+- 指数函数
+- 负对数
+- 范数
+- 负 log det
+- 最大值函数
+- 二次函数（若 Q≽0）
+
+### 保凸运算
+
+- 逐点最大值（pointwise max）
+- 逐点上确界
+
+- 部分最小化保持凸性：如果f(x,y)和C都是凸的,则部分最小化函数 g(x)是凸函数
+
+  若 f(x,y) 对 (x,y) 均凸，则：
+  $$
+  g(x)=\inf_y f(x,y)
+  $$
+  仍为凸函数。
+
+- 透视函数
+  $$
+  g(x,t)=t f(x/t)
+  $$
+  Property
+
+  - 若f是凸函数,则透视函数g也是凸函数。保持凸性
+
+------
+
+- 相对熵 / KL 散度：是凸函数
+  $$
+  \mathrm{KL}(p\|q)=\sum_i p_i \log\frac{p_i}{q_i}
+  $$
+
+  > [!NOTE]
+  >
+  > - KL散度是两个概率分布差异的度量,完全相同时为0
+  > - KL散度不具有对称性, $KL(p||q)\ne KL(q||p)$
+
+这里我们来看看一个最小交互熵的问题
+
+- (香农)信息熵(Information entropy):(不确定)信息量的最小平均编码长度
+  $$
+  H(P) = -\sum p_i \log p_i
+  $$
+
+- 交叉熵(cross-entropy):用分布q 描述分布p的平均编码长度
+  $$
+  H(p,q) = -\sum p_i \log q_i
+  $$
+
+- 相互关系
+  $$
+  H(p,q) = H(p) +  KL(p||q)
+  $$
+  在机器学习中,可以令p为教师分布/真实分布,q为神经网络输出分布/模型分布,则最小交叉熵和最小KL散度学习等价
+
+- 函数复合（scalar/vector composition）: $f(x)$= h(g(x))
+
+  若$x \in R^n$如果下列条件之一满足, 则f 是凸函数
+
+  > [!TIP]
+  >
+  > 若$g:R^n\rightarrow R^m$，则条件会发生变化
+
+  - h是凸且非减函数,g为凸函数
+  - h是凸且非增函数,g为凹函数
+
+### 共轭函数
+
+有限个凸函数的最大值仍为凸函数：
+$$
+f(x)=\max_i f_i(x)
+$$
+
+#### 定义
+
+Fenchel 共轭：
+$$
+f^*(y)=\sup_{x\in \mathrm{dom}f} \{ y^T x - f(x)\}
+$$
+
+- Intuition: 共轭函数 $f^*$ 是用来描述“所有线性下界（支撑超平面）”的函数。它把原函数 $f$ 换成一个“斜率空间”里的新函数。
+
+  可以将y视为斜率，f∗(y) 就是：斜率为 $y$ 时，所有在 $f$ 下方的直线里，能取到的最大截距。
+
+#### 性质
+
+- 凸性：共轭函数(conjugate function)必为凸函数
+
+- Fenchel 不等式：
+  $$
+  f(x)+f^*(y)\ge x^Ty
+  $$
+
+- 自返性：若 f 闭且凸，则 $f^{**}=f$
+
+------
+
+#### 对偶函数构造
+
+在 Lagrange 对偶中使用共轭将：
+$$
+\inf_x [f(x) + (\lambda^T A + \nu^T C)x]
+$$
+写成：
+$$
+- f^*(A^T\lambda + C^T\nu)
+$$
+下面给个具体的例子
+
+给定 primal：
+$$
+\min_x f(x) \quad 
+\text{s.t.}\; g(x)\le 0,\; h(x)=0.
+$$
+Step 1：写 Lagrangian
+$$
+L(x,\lambda,\nu)
+= f(x) + \lambda^T g(x) + \nu^T h(x)
+$$
+Step 2：收集所有与 $x$ 相关的项
+
+通常可写成：
+$$
+L(x,\lambda,\nu)
+= f(x) + (A^T\lambda + C^T\nu)^T x - \text{(常数)}.
+$$
+形状类似：
+$$
+f(x) + y^T x.
+$$
+一旦变成这种形式，你就可以使用共轭函数。
+
+------
+
+Step 3：用共轭函数求 $\inf_x L$
+
+按公式：
+$$
+g(\lambda,\nu)
+= \inf_x L(x,\lambda,\nu)
+= - f^*\!\left( - (A^T\lambda + C^T\nu) \right)
+\;-\;\text{常数项}
+$$
+
+------
+
+Step 4：写出对偶问题
+$$
+\max_{\lambda\ge 0,\ \nu} g(\lambda,\nu)
+$$
+
+#### 共轭函数例子
+
+- 仿射函数
+  $$
+  f(x)=a^Tx+b \Rightarrow f^*(y)=
+  \begin{cases}
+  -b, & y=a\\
+  +\infty, & \text{else}
+  \end{cases}
+  $$
+
+- 二次函数
+  $$
+  f(x)=\frac12 x^T Q x \Rightarrow f^*(y)=\frac12 y^T Q^{-1} y
+  $$
+
+- 示性函数
+  $$
+  I_S(x)=0(\text{if }x\in S) \Rightarrow I_S^*(y)=\sup_{x\in S} y^T x
+  $$
+
+- 范数
+  $$
+  f(x)=\|x\| \Rightarrow f^*(y)=
+  \begin{cases}
+  0,& \|y\|_* \le 1\\
+  +\infty,&\text{else}
+  \end{cases}
+  $$
+
+### Pareto 最优解
+
+- Pareto 最优解（Pareto Optimality）：在一个包含多个目标或多个个体的系统中，**如果不存在另一种可行方案，使得至少一个目标（或个体）变得更好，同时不使任何其他目标（或个体）变得更差**，那么该方案就称为**Pareto 最优解**。
+
+  > 无法在不牺牲任何一方利益的前提下，让至少一方变得更好。
+
+## 凸规划模型
+
+> [!IMPORTANT]
+>
+> 这一节把“看起来五花八门的优化问题”，统一放进“凸规划”的框架中，从而保证：好解、能解、可转化、可计算。
+
+各类模型的包含关系
+
+```
+LP ⊂ QP ⊂ QCQP ⊂ SOCP ⊂ SDP ⊂ CP
+```
+
+### 什么是凸规划（Convex Programming）
+
+一个优化问题如果满足：
+
+- **目标函数是凸函数**
+- **不等式约束是凸函数 ≤ 0**
+- **等式约束是仿射函数**
+- **可行域是凸集**
+
+那么它是一个**凸规划问题**。
+
+核心好处
+
+- 任意局部最优解 = 全局最优解
+- 对偶理论成立（强对偶）
+- 有成熟、稳定、高效的数值算法
+
+------
+
+### 线性规划（LP）
+
+Linear Program
+
+标准形式
+$$
+\min c^T x + d \\
+\text{s.t. } Gx \le h,\quad Ax = b
+$$
+几何直觉
+
+- 可行域是**多面体**
+- 目标函数是**超平面**
+- 最优解一定在**顶点**
+
+Property
+
+- 最简单、最快
+- 可处理百万规模变量
+- 但表达能力有限
+
+------
+
+#### 上境图等价（Epigraph Trick）
+
+Idea: 把目标函数：
+$$
+\max f(x)
+$$
+变成：
+$$
+\min t \\
+\text{s.t. } f(x) \le t
+$$
+关键结论
+
+- **不改变最优值**
+- **保凸性**
+- 是后续很多变换的基础
+
+------
+
+#### 等价变换的两种“等价”
+
+1. 形式等价（结构等价）：函数、约束、变量之间可逆变换
+
+   - 例如：映射变量替换；上境图等价；松弛变量引入
+
+2. 解等价（更重要）：最优解和最优值间有特定的换算关系（可以互相映射）
+
+   - 不一定一一映射
+   - 推论：满足强对偶性的原问题和对偶问题解等价；满足强对偶性的两个等价原问题的对偶问题解等价
+
+   - 工程上**只关心这个**
+
+------
+
+#### 线性分式规划
+
+原问题
+$$
+\min f(x) = \frac{c^T x + d}{a^T x + e}
+$$
+看起来**不是凸的**。
+
+方法：透视变换（Perspective Transform）
+
+- 新变量：$y = x / (a^T x + e), z = 1 / (a^T x + e)$
+- 转换后变成**线性规划**
+
+Conclusion: 线性分式规划是**隐藏的 LP**
+
+------
+
+### 几何规划（GP）
+
+原始形式
+
+- 变量必须 **正**
+- 目标和约束是：
+  - 单项式（monomial）
+  - 正项式（posynomial）
+
+关键变换
+
+1. 变量取对数：
+   $$
+   x = e^y
+   $$
+
+2. 对目标和约束取 log
+
+结果
+
+- 变成**凸优化问题**
+- 全部是 log-sum-exp 结构
+
+------
+
+#### 二次规划（QP）
+
+标准形式
+$$
+\min \frac{1}{2}x^T P x + q^T x + r \\
+\text{s.t. } Gx \le h,\ Ax = b
+$$
+其中：
+
+- $P \succeq 0$
+
+Property
+
+- LP 是 QP 的特例
+- 在控制、轨迹规划、投资中非常常见
+
+------
+
+#### 二次约束二次规划QCQP
+
+QCQP
+
+- 目标是二次
+- 约束也是二次
+
+核心技巧
+
+- 上境图等价
+- 变量平方根替换
+- 旋转二阶锥（Rotated SOC）
+
+Conclusion: 凸 QCQP ⊂ SOCP
+
+------
+
+### 二阶锥规划（SOCP）
+
+典型约束
+$$
+\|Ax + b\|_2 \le c^T x + d
+$$
+表达能力
+
+- 距离
+- 范数
+- 鲁棒约束
+- 概率约束（高斯）
+
+------
+
+### 半定规划（SDP）
+
+核心约束
+$$
+F(x) \succeq 0
+$$
+即：**线性矩阵不等式（LMI）**
+
+Property
+
+- 表达能力极强
+- 包含 SOCP
+- 控制理论的核心工具（Lyapunov）
+
+------
+
+### 锥规划（Cone Programming）
+
+最一般形式
+$$
+Fx + g \in K
+$$
+其中 $K$ 是**正常锥**：
+
+- 非负正交锥
+- 二阶锥
+- 半正定锥
+
+统一视角：所有凸规划，都是锥规划
+
+------
+
+### CVX / CVXPY 与 DCP 规则
+
+CVX 要求你写的不是“任意数学式”，而是：
+
+**DCP（规范凸规划）**
+
+核心规则
+
+- 最小化：凸函数
+- 最大化：凹函数
+- 约束：
+  - 凸 ≤ 凹
+  - 仿射 = 仿射
+
+系统会自动帮你转成标准凸规划模型 
+
+## TODO
+
+- 看看Boyd 教授书中关于强对偶性几何分析的方法
