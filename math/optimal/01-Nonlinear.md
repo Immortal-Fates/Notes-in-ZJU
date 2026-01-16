@@ -6,10 +6,8 @@
 
 ### Concepts
 
-> 介绍一些概念
-
 - 强制函数：当$||x||\to \infty,f(x)\to \infty$
-- 下水平集合：对$\forall ~constant ~\alpha ,L_{\alpha} = \{x\in R^n, f(x\le \alpha \}$
+- 下水平集合：对$\forall ~constant ~\alpha ,L_{\alpha} = \{x\in R^n, f(x\le \alpha ）\}$
 - 集合紧等价于闭且有界
 - 强制函数等价于所有下水平集紧
 
@@ -55,8 +53,8 @@
 #### 不等式约束与可行方向
 
 - 活跃约束与可行方向
-  在边界点，活跃集 $\mathcal{A}(x)=\{j\mid g_j(x)=0\}$$。
-  向量 $$d$ 为线性化可行方向需满足
+  在边界点，活跃集 $\mathcal{A}(x)=\{j\mid g_j(x)=0\}$。
+  向量 $d$ 为线性化可行方向需满足
   $\nabla h_i(x)^\top d=0,\ \ \nabla g_j(x)^\top d\le 0\ (j\in\mathcal{A}(x))$。
   若不存在“可行的下降方向”（使 $$\nabla f(x)^\top d<0$$），则是局部极小的直观必要性。
 
@@ -98,7 +96,9 @@
   
   2. $$\mu_0=0$$ 的“退化”情形提示约束奇异或资格条件不足。
   
-     在只考虑不等式约束的情况下$\mu_j不全为0\rightarrow 其作用约束梯度正线性相关\rightarrow不存在使所有\nabla g(x) p<0的可行方向 $，但是仍可能存在边界可行方向，即某些$\nabla g(x)p=0$。此时肯呢个对应三种典型极小点
+     - Intuition: μ0=0 出现，是因为 约束“太奇异/太紧”，导致最优点的“一阶最优性”完全由约束的梯度来平衡，目标函数的梯度在条件里可以被“忽略”。也就是说，不是目标函数在主导最优性，而是约束几何在主导
+  
+     在只考虑不等式约束的情况下$\mu_j不全为0\rightarrow 其作用约束梯度正线性相关\rightarrow不存在使所有\nabla g(x) p<0的可行方向 $，但是仍可能存在边界可行方向，即某些$\nabla g(x)p=0$。此时可能对应三种典型极小点
   
      - 孤立点：不存在可行方向
      - 特殊边界极小点：存在$\nabla g(x)=0$
@@ -297,9 +297,22 @@ $$
 性质：
 
 - 对偶函数一定是凹函数
+
+    - 对固定 (x)，
+      $$
+      L(x,\lambda,\nu)=f(x)+\sum_j\lambda_j g_j(x)+\sum_i \nu_i h_i(x)
+      $$
+      这是 ($\lambda,\nu$) 的仿射函数（直线/平面）。
+    - 对偶函数定义为
+      $$
+      g(\lambda,\nu)=\inf_x L(x,\lambda,\nu)
+      $$
+      相当于对无穷多条直线取最小值。
+    - 多条直线的“下包络”一定是凹的。
+
 - 对于任意的$\lambda\ge 0$和$\nu$，有$g(\lambda,\nu)\le p ^* = \inf\{f(x)| x\in \chi \}$
 
-当$g(\lambda,\nu) = -\infty$该下界为平凡下界，无有效信息，因此我们规定$\text{dom}~ g=\{(\lambda,\nu)|g(\lambda,\nu)> \infty\}$
+当$g(\lambda,\nu) = -\infty$该下界为平凡下界，无有效信息，因此我们规定$\text{dom}~ g=\{(\lambda,\nu)|g(\lambda,\nu)> -\infty\}$
 
 #### Lagrange 对偶问题（Dual Problem）
 
@@ -371,7 +384,12 @@ $$
   p^* = d^*
   $$
 
-- 强对偶性成立通常需要一定条件（例如凸问题+Slater 条件）。
+- 强对偶性成立通常需要一定条件，例如：
+
+  - 凸问题+Slater 条件
+  - 线性规划（LP）
+  - 凸锥规划（Conic Programs）
+
 
 ##### Slater 条件
 
@@ -436,6 +454,8 @@ $$
   
   若$K(x,y),X\times Y \rightarrow R$满足下列条件，则$K(x,y)$存在鞍点（充分条件）
   
+  - Intuition: 在凸—凹结构下，“先选后选”的顺序不影响最优值，原问题与对偶达到同一值
+  
   -  $X,Y$为非空紧集
   - 对于$\forall y\in Y,K(,y):X\rightarrow R$为连续的凸函数
   - 对于$\forall x\in Y,K(x,):Y\rightarrow R$为连续的凸函数
@@ -447,3 +467,215 @@ $$
 - Lagrangian 为博弈中的 payoff  
 
 在鞍点处，原问题与对偶问题达到一致的最优值。
+
+## Review
+
+1. 强制函数与下水平集紧性的等价关系
+
+  - 等价关系：
+    函数 (f) 强制（(|x|\to\infty \Rightarrow f(x)\to\infty)）
+    当且仅当对任意常数 (\alpha)，下水平集
+    $$
+    L_\alpha={x\mid f(x)\le \alpha}
+    $$
+    紧（闭且有界）。
+
+2. FJ 条件与 (\mu_0=0) 的含义
+
+  - FJ 必要条件：存在不全为零的乘子$$\mu_0\ge 0,\ \mu_j\ge 0,\ \nu_i\in\mathbb{R}$$使
+    $$
+    \mu_0\nabla f(x^)+\sum_j \mu_j \nabla g_j(x^)+\sum_i \nu_i \nabla h_i(x^*)=0
+    $$
+    $$
+    g_j(x^)\le 0,\quad h_i(x^*)=0
+    $$
+    $$
+    \mu_j g_j(x^)=0
+    $$
+  - (\mu_0=0) 表示：
+    退化情形，通常意味着 约束资格条件不满足（可行域几何退化），最优性主要由约束梯度平
+    衡，无法归一化为 KKT。
+
+  ———
+
+3. 一个 CQ 例子 + 直觉
+
+  - MFCQ（Mangasarian–Fromovitz CQ）：存在方向 $$d$$ 使 $$\nabla h_i^\top d=0$$ 且活跃不等式满足 $$\nabla g_j^\top d<0$$。
+  - 直觉：边界点仍有“往内的可行方向”，可行域几何不退化，保证乘子存在、KKT 成立。
+
+  ———
+
+4. 凸函数一阶判定条件 + 几何意义
+
+  - 一阶判定：
+    $$
+    f(x_2)\ge f(x_1)+\nabla f(x_1)^T(x_2-x_1),\quad \forall x_1,x_2
+    $$
+  - 几何意义：任意点的切线（切平面）都在函数图像下方，函数“向上弯”。
+
+  ———
+
+5. 对偶函数 (g(\lambda,\nu)) 为何是凹函数
+
+  - 定义：
+    $$
+    g(\lambda,\nu)=\inf_x L(x,\lambda,\nu)
+    $$
+  - 对固定 (x)，(L(x,\lambda,\nu)) 对 ((\lambda,\nu)) 是仿射函数。
+  - 仿射函数族的下确界必为凹函数，因此 (g(\lambda,\nu)) 必凹。
+
+1. 数学规划没有最优解的三种情况是什么？
+
+     - 可行域为空（问题不可行）。
+
+     - 目标函数在可行域上无下界（最优值为 $$-\infty$$）。
+
+     - 有下确界但不可达（最优值存在但不可取到，常见于可行域不紧或目标不“闭”）。
+
+
+2. 凸规划的拉格朗日函数为什么是凸函数？
+
+     - 对凸规划：$$f(x)$$ 与 $$g_j(x)$$ 为凸函数，$$h_i(x)$$ 为仿射函数，且 $$\lambda_j\ge 0$$。
+
+     - 拉格朗日函数
+       $$
+       L(x,\lambda,\nu)=f(x)+\sum_j \lambda_j g_j(x)+\sum_i \nu_i h_i(x)
+       $$
+       是“凸函数的非负线性组合 + 仿射函数”，因此对 $$x$$ 凸。
+
+
+3. 原问题和对偶问题从博弈角度分别是什么问题？强对偶性有什么意义？
+
+     - 原问题：
+       $$
+       \min_x \max_{\lambda\ge 0,\nu} L(x,\lambda,\nu)
+       $$
+       对应“最小化最大损失”。
+
+     - 对偶问题：
+       $$
+       \max_{\lambda\ge 0,\nu} \min_x L(x,\lambda,\nu)
+       $$
+       对应“最大化最小赢得”。
+
+     - 强对偶性：两者最优值相等，等价于存在鞍点
+    $$
+    \min_x \max_{\lambda,\nu} L \;=\; \max_{\lambda,\nu} \min_x L
+    $$
+
+4. 原问题和对偶问题从博弈角度分别是什么问题？强对偶性在博弈中的意义是什么？（回忆卷）
+
+  - 原问题：最小化最大损失
+    $$
+    \min_x \max_{\lambda\ge 0,\nu} L(x,\lambda,\nu)
+    $$
+  - 对偶问题：最大化最小赢得
+    $$
+    \max_{\lambda\ge 0,\nu} \min_x L(x,\lambda,\nu)
+    $$
+  - 强对偶性：双方最优值相等，等价于存在鞍点
+    $$
+    \min_x \max_{\lambda,\nu} L \;=\; \max_{\lambda,\nu} \min_x L
+    $$
+
+4. 写出无约束问题的二阶充分条件，并给出几何含义。
+
+     - 条件：
+       $$
+       \nabla f(x^*)=0,\quad \nabla^2 f(x^*)\succ 0
+       $$
+
+     - 几何含义：二次近似在所有方向“向上弯”，局部是“碗口向上”。
+
+
+5. 写出等式约束的拉格朗日一阶必要条件。
+
+     - 设约束 $$h(x)=0$$，拉格朗日函数
+       $$
+       L(x,\nu)=f(x)+\nu^T h(x)
+       $$
+
+     - 一阶必要条件：
+       $$
+       \nabla_x L(x^*,\nu^*)=0,\quad h(x^*)=0
+       $$
+
+
+6. 写出不等式约束下的 KKT 条件（含互补松弛）。
+
+     - 存在乘子 $$\lambda_j\ge 0,\ \nu_i$$ 使
+       $$
+       \nabla f(x^*)+\sum_j \lambda_j\nabla g_j(x^*)+\sum_i \nu_i\nabla h_i(x^*)=0
+       $$
+       $$
+       g_j(x^*)\le 0,\quad h_i(x^*)=0
+       $$
+       $$
+       \lambda_j g_j(x^*)=0
+       $$
+
+
+7. 写出一个常见 CQ（如 LICQ）并说明作用。
+
+     - LICQ：活跃约束梯度线性无关。
+
+       作用：保证乘子存在，使 KKT 成为必要条件。
+
+
+8. 说明“凸优化中 KKT 是充要条件”的条件与原因。
+
+     - 条件：凸目标 + 凸不等式约束 + 仿射等式约束，且满足 Slater 条件。
+
+     - 原因：凸问题满足强对偶，KKT 与最优性等价。
+
+
+9. 给出凸函数的一阶与二阶判定条件。
+
+     - 一阶条件：
+       $$
+       f(x_2)\ge f(x_1)+\nabla f(x_1)^T(x_2-x_1),\quad \forall x_1,x_2
+       $$
+
+     - 二阶条件：
+       $$
+       \nabla^2 f(x)\succeq 0,\quad \forall x
+       $$
+
+
+10. 对偶函数给出下界的理由（弱对偶性）。
+
+      - 对任意可行 $$x$$ 和 $$\lambda\ge 0$$：
+        $$
+        g(\lambda,\nu)=\inf_x L(x,\lambda,\nu)\le L(x,\lambda,\nu)\le f(x)
+        $$
+
+      - 因此
+        $$
+        d^*\le p^*
+        $$
+
+
+11. 写出强对偶成立的一个充分条件，并说明结果。
+
+      - 条件：凸优化 + Slater 条件。
+
+      - 结果：
+        $$
+        p^*=d^*
+        $$
+        且对偶解存在，KKT 成为充要条件。
+
+
+12. 写出二阶必要/充分条件（含临界锥表述）。
+
+      - 临界锥 $$C(x^*,\lambda^*,\nu^*)$$：线性化可行方向中同时满足互补关系的方向。
+
+      - 必要条件：
+        $$
+        p^T\nabla_{xx}^2 L(x^*,\lambda^*,\nu^*)p\ge 0,\quad \forall p\in C
+        $$
+
+      - 充分条件：
+        $$
+        p^T\nabla_{xx}^2 L(x^*,\lambda^*,\nu^*)p> 0,\quad \forall p\in C\setminus\{0\}
+        $$

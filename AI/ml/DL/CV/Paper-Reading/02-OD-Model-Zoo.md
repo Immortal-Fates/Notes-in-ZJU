@@ -10,7 +10,7 @@ Focus on object detection models
 
 - **MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications**. Andrew G. Howard et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1704.04861v1)).
 
-  - Takeaway: MobileNet v1 introduces [Depthwise Separable Convolutions(DSC)](06-Module-Design.md#Depthwise Separable Convolutions(DSC)) as a drop-in replacement for standard convs, using **depthwise conv + pointwise conv** to drastically reduce FLOPs and parameters while keeping acceptable accuracy for mobile/embedded deployment.
+  - Takeaway: MobileNet v1 replaces standard convs with **depthwise + pointwise** convs (DSC) to cut FLOPs/params for mobile.
 
   - Prior: Classical CNNs (VGG, ResNet) use full 3×3 convolutions with cost:
 
@@ -174,7 +174,7 @@ Focus on object detection models
 
 - **Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks**. Shaoqing Ren et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1506.01497v3)). 
 
-  - Takeaway: Faster R-CNN is a **two-stage object detector** that integrates **Region Proposal Network (RPN)** with the detection head, replacing external proposal methods and enabling end-to-end training with better speed and accuracy than R-CNN / Fast R-CNN.
+  - Takeaway: Faster R-CNN adds an **RPN** to generate proposals, enabling end-to-end two-stage detection without external proposal methods.
 
     Faster R-CNN’s key idea:  **Learn region proposals with a CNN (RPN) that shares features with the detector.**
 
@@ -382,7 +382,7 @@ Focus on object detection models
 
 - __You Only Look Once: Unified, Real-Time Object Detection.__ *Joseph Redmon et al.* __2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2015__ [(Arxiv)](https://arxiv.org/abs/1506.02640) [(S2)](https://www.semanticscholar.org/paper/f8e79ac0ea341056ef20f2616628b3e964764cfd) (Citations __41521__)
 
-  - Takeaway: YOLO reframes object detection as a single, unified regression problem from image pixels to bounding boxes and class probabilities, using **one convolutional network, one forward pass**.
+  - Takeaway: YOLO predicts boxes and classes in **one CNN forward pass** (one-stage detection).
 
   - Prior: Before YOLO, dominant detectors were region-based like R-CNN zoo which is multi-stage and slow at inference.
 
@@ -578,7 +578,7 @@ Focus on object detection models
 
 - **SSD: Single Shot MultiBox Detector**. Liu Wei et.al. **No journal**, **2016**, ([link](https://doi.org/10.1007/978-3-319-46448-0_2)).
 
-  - Takeaway: SSD is a **single-stage, anchor-based detector** that predicts bounding boxes and class scores **directly from multiple feature maps** in one forward pass, avoiding region proposals and enabling real-time detection with reasonable accuracy.
+  - Takeaway: SSD is a **single-stage, anchor-based** detector that predicts on **multi-scale feature maps** in one pass.
 
   - Prior: YOLO showed that single-stage detection is fast but initially had localization and small-object issues. There was a need for a detector that:
 
@@ -616,7 +616,7 @@ Focus on object detection models
 
 - **MobileOne: An Improved One millisecond Mobile Backbone**. Pavan Kumar Anasosalu Vasu et.al. **arxiv**, **2022**, ([link](https://arxiv.org/abs/2206.04040v2)).
 
-  - Takeaway: MobileOne uses **structural reparameterization**: train with a **multi-branch over-parameterized block** (for accuracy and optimization), then **fuse all branches into a single 3×3 conv** at inference, achieving extremely fast, deployment-friendly mobile backbones.
+  - Takeaway: MobileOne trains **multi-branch** blocks, then **fuses to a single conv** for fast mobile inference.
 
   - Prior: Structural reparameterization (e.g., RepVGG) shows we can **train multi-branch, infer single-branch** by fusing conv+BN branches into one conv.
 
@@ -654,7 +654,7 @@ Focus on object detection models
 
 - __Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition.__ *Kaiming He et al.* __IEEE Transactions on Pattern Analysis and Machine Intelligence, 2014__ [(Arxiv)](https://arxiv.org/abs/1406.4729) [(S2)](https://www.semanticscholar.org/paper/cbb19236820a96038d000dc629225d36e0b6294a) (Citations __12112__)
 
-  - Takeaway: Spatial Pyramid Pooling (SPP) removes the **fixed input-size constraint** of CNNs by introducing a **multi-level spatial pooling layer** that outputs a **fixed-length representation regardless of input resolution**, while simultaneously improving recognition accuracy through multi-scale spatial context aggregation.
+  - Takeaway: SPP uses **multi-level pooling** to produce fixed-length features from **any input size**.
   
   - Prior: Before SPP, standard CNN (e.g., AlexNet, VGG-style networks) required **fixed-size inputs**
   
@@ -672,7 +672,7 @@ Focus on object detection models
 
 - __PBADet: A One-Stage Anchor-Free Approach for Part-Body Association.__ *Zhongpai Gao et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2402.07814) [(S2)](https://www.semanticscholar.org/paper/1ba604d5766f632f5430b8a5d8f9d656645ac8a6) (Citations __1__)
 
-  - Takeaway: PBADet unifies *part detection* and *part-to-person association* in a **one-stage, anchor-free** detector by predicting a simple **part → body-center 2D offset**, enabling efficient and scalable association without multi-stage matching networks.
+  - Takeaway: PBADet predicts part boxes plus a **part → body-center offset** for one-stage association.
 
     ![x2](./assets/02-OD-Model-Zoo.assets/x2.png)
 

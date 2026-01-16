@@ -12,6 +12,8 @@ introduction to the engineer tips and tricks.
   - **How to use:** train with normal weights $\theta_t$, but **evaluate and/or export** using $\theta^{EMA}_t$.
   - **Why it helps:** reduces noise from SGD updates, improves stability, and often yields better validation/inference performance.
 - earlystop
+- label smoothing
+- multi-stage training
 
 
 
@@ -94,3 +96,6 @@ For a COCO‑like object detection training:
    **Precision:** AMP (FP16)
    **Regularization:** Label smoothing + weight decay schedule
    **Inference:** NMS/Soft‑NMS; TTA optional
+
+## References
+

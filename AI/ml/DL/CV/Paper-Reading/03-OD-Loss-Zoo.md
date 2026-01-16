@@ -45,7 +45,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
 - __Focal Loss for Dense Object Detection.__ *Tsung-Yi Lin et al.* __IEEE Transactions on Pattern Analysis and Machine Intelligence, 2017__ [(Arxiv)](https://arxiv.org/abs/1708.02002) [(S2)](https://www.semanticscholar.org/paper/1a857da1a8ce47b2aa185b91b5cb215ddef24de7) (Citations __3113__)
 
-  - Takeaway: Focal Loss addresses extreme foreground–background class imbalance in dense one-stage detectors by down-weighting easy examples and focusing learning on hard, misclassified examples. This enabled RetinaNet to reach two-stage level accuracy while keeping one-stage speed.
+  - Takeaway: Focal Loss down-weights easy negatives to handle dense class imbalance.
 
   - Prior:
 
@@ -282,7 +282,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
   >
   > 无cost，涨幅在1~2个点AP，良心
 
-  - Takeaway: GFLV2 improves dense one stage detection by making localization quality estimation more reliable. Instead of predicting IoU quality from generic convolution features, it predicts an IoU scalar from statistics of the learned bounding box distributions, using a tiny Distribution Guided Quality Predictor DGQP. The final NMS score is still a joint score that stays consistent between training and inference.
+  - Takeaway: GFLV2 predicts IoU quality from box **distribution statistics** via a tiny DGQP for more reliable quality estimation.
 
   - Prior
 
@@ -330,6 +330,66 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
       with ReLU $\delta$ and Sigmoid $\sigma$. The paper reports a typical setting $k=4$, hidden dim $p=64$.
 
       > Just sort or select make it lightwight
+
+- __VarifocalNet: An IoU-aware Dense Object Detector.__ *Haoyang Zhang et al.* __2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2020__ [(Arxiv)](https://arxiv.org/abs/2008.13367) [(S2)](https://www.semanticscholar.org/paper/14c3510e4f4b370d5cd0420037406024533f4b6f) (Citations __854__)
+
+  - Takeaway: predicts an IoU-aware classification score directly and trains it with Varifocal Loss (VFL), **aligning classification confidence with localization quality** and improving ranking for dense one-stage detectors.
+
+  - Prior
+
+    - Dense detectors often **decouple classification and localization quality**, then multiply scores at inference, causing train-test mismatch and poor ranking of low-quality boxes.
+    - Standard Focal Loss treats all positive samples equally, even if their IoU quality varies widely.
+
+  - Core Mechanism
+
+    ![VFNet](./assets/03-OD-Loss-Zoo.assets/VFNet.png)
+  
+    <img src="./assets/03-OD-Loss-Zoo.assets/VFNet_overview_final.png" alt="VFNet_overview_final" style="zoom:50%;" />
+  
+    > Figure 1:An illustration of our method. Instead of learning to predict the class label (a) for a bounding box, we learn the IoU-aware classification score (**IACS**) as its detection score which merges the object presence confidence and localization accuracy (b). We propose a **varifocal loss** for training a dense object detector to predict the IACS, and a star-shaped bounding box feature representation (the features at nine yellow sampling points) for IACS prediction. With the new representation, we refine the initially regressed box (in red) into a more accurate one (in blue).
+  
+    - **IoU-aware classification target**
+      Use a soft target $q \in [0,1]$ for each positive sample, typically the IoU between the predicted box and its matched GT. Negatives have $q=0$.
+  
+    - **Varifocal Loss (VFL)**
+      Modify Focal Loss to handle soft targets and emphasize high-quality positives while down-weighting easy negatives.
+  
+      Intuition:
+      - High-IoU positives get larger weights, so the classifier learns to rank high-quality boxes higher.
+      - Low-quality positives contribute less, reducing noisy gradients.
+      - Easy negatives are down-weighted similarly to Focal Loss.
+  
+      $$
+      \mathrm{VFL}(p,q)=
+      \begin{cases}
+      -q\big(q\log p + (1-q)\log(1-p)\big), & q>0 \\
+      -\alpha\,p^{\gamma}\log(1-p), & q=0
+      \end{cases}
+      $$
+      where $p$ is the predicted IoU-aware classification score and $q$ is the target (IoU).
+      
+      - $q>0$ (positive): soft IoU target, higher-quality positives get larger weight.
+      - $q=0$ (negative): focal-style down-weighting for easy negatives.
+  
+      > [!NOTE]
+      >
+      > - 正样本部分：模型希望 $p \approx q$, 类似于BCE(soft label: q)
+      
+    - **IoU-aware score for NMS**
+      The classification head directly outputs the quality-aware score used for ranking at inference (no extra quality branch).
+  
+  - Pros
+  
+    - Better score-ranking consistency between training and inference
+    - Improved AP, especially for higher IoU thresholds
+    - Drop-in for dense heads with minor changes
+  
+  - Cons
+  
+    - Requires IoU target computation for positives during training
+    - Gains depend on assignment strategy and regression quality
+    - Extra hyperparameters (VFL focusing terms) may need tuning
+
 
 ## IoU Loss
 
@@ -406,7 +466,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
 - __Distance-IoU Loss: Faster and Better Learning for Bounding Box Regression.__ *Zhaohui Zheng et al.* __ArXiv, 2019__ [(Arxiv)](https://arxiv.org/abs/1911.08287) [(S2)](https://www.semanticscholar.org/paper/63a243afcb133569a962c41e9db956c076c5c4f3) (Citations __4404__) DIoU/CIoU
 
-  - Takeaway: A Distance-IoU (DIoU) loss and Complete IoU Loss (CIoU) are proposed by incorporating the normalized distance between the predicted box and the target box, which converges much faster in training than IoU and GIoU losses, thereby leading to faster convergence and better performance.
+  - Takeaway: DIoU/CIoU add **center distance** (and **aspect ratio** for CIoU) to IoU loss for faster, better regression.
 
   - Prior:
 
@@ -465,6 +525,144 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
     - CIoU introduces additional terms and can be slightly more sensitive to noisy aspect ratios in some datasets.
     - Benefits depend on detector design and assignment strategy, some setups may see smaller gains.
 
+- __SIoU Loss: More Powerful Learning for Bounding Box Regression.__ *Zhora Gevorgyan.* __ArXiv, 2022__ [(Arxiv)](https://arxiv.org/abs/2205.12740) [(S2)](https://www.semanticscholar.org/paper/406b457cf2dc9a62417b05b755ef5434df0a4d33) (Citations __827__)
+
+  - Takeaway: SIoU extends IoU-based regression by adding **angle-aware distance** and **shape** costs, which guides boxes to move in a more direct path toward the target and speeds convergence.
+
+  - Prior
+
+    - GIoU/DIoU/CIoU improve overlap and center distance, but still ignore the **direction** of the required correction.
+    - When centers are far apart, regression can take inefficient paths, slowing convergence.
+
+  - Core Mechanism
+
+    SIoU = Angle cost + Distance cost + Shape cost + IoU cost
+
+    - **Angle cost**
+      Encourage the center offset to align with the axis that yields the most direct correction, reducing unnecessary movement.
+
+    - **Distance cost**
+      Uses normalized center distance, modulated by the angle term so the model favors axis-aligned corrections and converges faster.
+
+    - **Shape cost**
+      Penalizes width/height mismatch via scale-aware terms, encouraging consistent aspect ratios.
+
+    - **Overall loss**
+      $$
+      \Lambda=\sin\!\left(2\sin^{-1}\!\frac{\min(|x-x^{gt}|,\;|y-y^{gt}|)}{\sqrt{(x-x^{gt})^2+(y-y^{gt})^2+\epsilon}}\right)
+      $$
+      $$
+      \Delta=\frac{1}{2}\sum_{t\in\{x,y\}}\left(1-e^{-\gamma\rho_t}\right),\quad \gamma=2-\Lambda
+      $$
+      $$
+      \rho_x=\frac{(x-x^{gt})^2}{W_g^2},\quad \rho_y=\frac{(y-y^{gt})^2}{H_g^2}
+      $$
+      $$
+      \Omega=\frac{1}{2}\sum_{t\in\{w,h\}}\left(1-e^{-\omega_t}\right)^{\theta},\quad \theta=4
+      $$
+      $$
+      \omega_w=\frac{|w-w^{gt}|}{\max(w,w^{gt})},\quad \omega_h=\frac{|h-h^{gt}|}{\max(h,h^{gt})}
+      $$
+      $$
+      L_{\mathrm{SIoU}} = 1 - \mathrm{IoU} + \frac{\Delta+\Omega}{2}
+      $$
+      
+      - $\Lambda$ captures the angle between center offset and axes (direction guidance).
+      - $\Delta$ penalizes center distance, scaled by angle difficulty.
+      - $\Omega$ penalizes size mismatch (shape).
+
+  - Pros
+
+    - Faster convergence than CIoU in many setups
+    - More stable regression when boxes are far apart
+    - Simple drop-in replacement for other IoU losses
+
+  - Cons
+
+    - Additional hyperparameters and geometric terms
+    - Benefits can be smaller if assignment already yields close initial boxes
+    - More complex loss may be harder to tune across datasets
+
+- https://arxiv.org/pdf/2101.08158
+
+  > [!NOTE]
+>
+  > - FM（focus mechanism聚焦机制）：给每个样本的损失乘一个权重，权重由样本“难度/质量”决定（比如 IoU、loss 大小）。目标是抑制容易样本或噪声样本，把学习资源集中到更关键的样本上
+>
+  > - Non‑monotonic FM（非单调聚焦）：权重不是随着样本质量单调增加或减少，而是对“中等质量”样本给最大权重，同时压低“太差”和“太好”的样本。
+  >
+>   Intuition：
+  >
+>      - 太好（高 IoU）→ 已经学会了，少给梯度
+  >      - 太差（很低 IoU / 可能是噪声）→ 少给梯度
+  >      - 中等质量 → 最有学习价值，给最大权重
+
+- __Wise-IoU: Bounding Box Regression Loss with Dynamic Focusing Mechanism.__ *Zanjia Tong et al.* __ArXiv, 2023__ [(Arxiv)](https://arxiv.org/abs/2301.10051) [(S2)](https://www.semanticscholar.org/paper/f2a42960b362bc673638643257d65c309b7324dd) (Citations __744__)
+
+  - Takeaway: WIoU introduces a **dynamic focusing mechanism** that reweights IoU-based regression to reduce the influence of low-quality outliers and highlight more informative samples.
+
+  - Prior
+
+    - Standard IoU losses treat all positives similarly, so extreme outliers or very easy samples can dominate gradients.
+    - Static reweighting (e.g., fixed focal terms) cannot adapt to training dynamics.
+
+  - Core Mechanism
+
+    - **Distance-aware IoU**
+      Start from an IoU loss and add a distance penalty between box centers to improve non-overlap cases.
+
+    - **Dynamic focusing**
+      Reweight each sample based on its current IoU quality and training statistics, suppressing outliers and over-easy samples.
+
+    - **WIoU variants**
+      Multiple versions are proposed (v1/v2/v3) with different focusing schedules, including monotonic and non-monotonic weighting to emphasize mid-quality samples.
+
+    - **WIoU v1 (distance attention)**
+      $$
+      L_{\mathrm{WIoU}\,v1} = R_{\mathrm{WIoU}}\,L_{\mathrm{IoU}}
+      $$
+      $$
+      R_{\mathrm{WIoU}}=\exp\!\left(\frac{(x-x^{gt})^2+(y-y^{gt})^2}{W_g^2+H_g^2}\right)
+      $$
+      where $W_g,H_g$ are the size of the smallest enclosing box (detached).
+      
+      - $R_{\mathrm{WIoU}}$ increases penalty when centers are far apart.
+      - Detaching $W_g,H_g$ avoids unstable gradients from the enclosing box size.
+
+    - **WIoU v2 (monotonic focusing)**
+      $$
+      L_{\mathrm{WIoU}\,v2}=r\,L_{\mathrm{WIoU}\,v1},\quad r=\left(\frac{L^*_{\mathrm{IoU}}}{L_{\mathrm{IoU}}}\right)^{\gamma}
+      $$
+      where $L^*_{\mathrm{IoU}}$ is the EMA of $L_{\mathrm{IoU}}$.
+      
+      - Monotonic focus: smaller IoU loss (easier samples) get lower gradient gain.
+      - EMA normalization keeps gradients stable over training.
+
+    - **WIoU v3 (dynamic non-monotonic focusing)**
+      $$
+      \beta=\frac{L^*_{\mathrm{IoU}}}{L_{\mathrm{IoU}}},\quad r=\frac{\beta}{\delta\alpha\beta-\delta}
+      $$
+      $$
+      L_{\mathrm{WIoU}\,v3}=r\,L_{\mathrm{WIoU}\,v1}
+      $$
+      
+      - Non-monotonic focus: highest gain for mid-quality samples, suppresses outliers.
+      - $\beta$ adapts the focus to current batch statistics.
+
+  - Pros
+
+    - Better robustness to noisy or low-quality positives
+    - Improves regression stability across training stages
+    - Works as a drop-in replacement for IoU losses
+
+  - Cons
+
+    - Extra computation for dynamic weighting
+    - Requires careful tuning of focusing strategy and momentum statistics
+    - Gains may depend on detector architecture and assignment
+
+
+
 
 
 
@@ -476,12 +674,6 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 - Alpha-IoU
    Alpha-IoU: A Family of Power Intersection over Union Losses for Bounding Box Regression
    [https://arxiv.org/abs/2110.13675](https://arxiv.org/abs/2110.13675?utm_source=chatgpt.com) [arXiv](https://arxiv.org/abs/2110.13675?utm_source=chatgpt.com)
-- WIoU
-   Wise-IoU: Bounding Box Regression Loss with Dynamic Focusing Mechanism
-   [https://arxiv.org/abs/2301.10051](https://arxiv.org/abs/2301.10051?utm_source=chatgpt.com) [arXiv](https://arxiv.org/abs/2301.10051?utm_source=chatgpt.com)
-- SIoU
-   SIoU Loss for Bounding Box Regression
-   __SIoU Loss: More Powerful Learning for Bounding Box Regression.__ *Zhora Gevorgyan.* __ArXiv, 2022__ [(Arxiv)](https://arxiv.org/abs/2205.12740) [(S2)](https://www.semanticscholar.org/paper/406b457cf2dc9a62417b05b755ef5434df0a4d33) (Citations __827__) [arXiv](https://arxiv.org/pdf/2205.12740?utm_source=chatgpt.com)
 
 旋转框方向上也有一条很常见的相关发展线
 

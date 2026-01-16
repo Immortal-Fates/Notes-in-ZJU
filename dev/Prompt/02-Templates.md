@@ -73,3 +73,14 @@ Scientific Peer Reviewer. The paper has not been published yet and is currently 
 Academic Researcher. You’re a researcher who is working on a new project in this area. Propose an imaginary follow-up project not just based on the current but only possible due to the existence and success of the current paper.
 
 Hacker. You’re a hacker who needs a demo of this paper ASAP. Implement a small part orsimplified version of the paper on a small dataset or toy problem. Prepare to share the core code of the algorithm to the class and demo your implementation. Do not simply download and run an existing implementation – though you are welcome to use (and give credit to) an existing implementation for “backbone” code.
+
+## 给傻子（我）用的
+
+我是一名智力低下的博士生，我想学习一下这篇论文/文献/资料，请用傻子都能懂的语言详细给我讲一下这篇论文/文献/资料怎么做的，特别是模型和实证方面
+
+## Draw.io
+
+> check the [github](https://github.com/DayuanJiang/next-ai-draw-io)
+
+直接在Codex CLI中用mcp
+

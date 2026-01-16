@@ -4,6 +4,8 @@ Introduce the workflow using git and github.
 
 <!--more-->
 
+## PR Pipeline
+
 1. fork the original repo
 2. check a new feature branch from the dev branch. eg: `feature/confession`
 3. write the code and write the test
@@ -12,6 +14,12 @@ Introduce the workflow using git and github.
 6. push to your remote repo
 7. make a PR to the original repo with detailed functional changes and implementation ideas and @the judges
 8. After all the CI/CD, and getting the LGTM(looks good to me). The owner of the repo will consider to merge it.
+
+## Gitlens
+
+vscode extension
+
+
 
 ## References
 

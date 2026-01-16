@@ -76,7 +76,7 @@
 
 - **Attention Is All You Need**. Ashish Vaswani et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1706.03762v7))([details](../05-Attention.md)).
 
-  - Takeaway: The paper introduces the **Transformer**, a fully attention-based sequence-to-sequence architecture that eliminates recurrence and convolution. By relying solely on **self-attention** and **positional encoding**, Transformers achieve significantly higher parallelism, faster training, and state-of-the-art performance in machine translation and, eventually, almost all major AI domains.
+  - Takeaway: Transformer is a **self-attention-only** seq2seq model with **positional encoding**, enabling highly parallel training.
 
   - Prior: What’s Wrong with Seq2Seq Model?
 
@@ -145,7 +145,7 @@
 
 - __An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale.__ *Alexey Dosovitskiy et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2010.11929) [(S2)](https://www.semanticscholar.org/paper/268d347e8a55b5eb82fb5e7d2f800e33c75ab18a) (Citations __52634__)
 
-  - Takeaway: ViT applies the **pure Transformer encoder** architecture directly to images by splitting an image into fixed-size **patches**, embedding them as tokens, adding positional information, and processing them using **global self-attention**.
+  - Takeaway: ViT tokenizes image **patches** and runs a **Transformer encoder** with global self-attention.
 
   - Prior: Try transformer in vision.
 
@@ -173,7 +173,7 @@
 
 - __End-to-End Object Detection with Transformers.__ *Nicolas Carion et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2005.12872) [(S2)](https://www.semanticscholar.org/paper/962dc29fdc3fbdc5930a10aba114050b82fe5a3e)([code_link](https://github.com/facebookresearch/detr)) (Citations __15847__)
 
-  - Takeaway: Unlike traditional computer vision techniques, DETR(DEtecion TRansformer) approaches object detection as a direct set prediction problem. It consists of a set-based global loss, which forces unique predictions via bipartite matching, and a Transformer encoder-decoder architecture.
+  - Takeaway: DETR treats detection as **set prediction** using a Transformer encoder-decoder and **bipartite matching** loss.
 
   - Prior: Before DETR,  mainstream detectors followed a **two-stage** or **dense prediction** paradigm. One-stage detector heavily relies on anchors and hyperparameters.
 

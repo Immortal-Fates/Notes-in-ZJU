@@ -17,22 +17,19 @@ SSH (Secure Shell) is a protocol for secure remote login and command execution. 
 - Download a file: `scp user@server:/path/file.txt .`
 
 - rsync (fast, incremental sync): `rsync -avz ./project/ user@server:/home/user/project/`
-
   - Very important: the trailing slash
-  
     - With trailing slash `rsync -av ./project/ user@server:~/project/`
-  
-      Meaning: “copy the *contents* of `./project/` into `~/project/`”.
-  
-  
+
+      Meaning: “copy the _contents_ of `./project/` into `~/project/`”.
+
     - Without trailing slash `rsync -av ./project user@server:~/project/`
-  
+
       Meaning: “copy the directory `project` itself (as a folder) into `~/project/` → you get `~/project/project/`”.
-  
+
   - Keeping folders exactly in sync: `--delete`
-  
+
     `--delete`: delete files on the target that don’t exist on the source.
-  
+
   - Excluding files/directories: `--exclude`
 
 ## SSH Key Pair Authentication
@@ -46,7 +43,7 @@ ssh-keygen -t ed25519
 Files created:
 
 - Private key: `~/.ssh/id_ed25519`
-- Public key:  `~/.ssh/id_ed25519.pub`
+- Public key: `~/.ssh/id_ed25519.pub`
 
 ### Copy Public Key to Remote Server
 
@@ -64,7 +61,7 @@ In many scenarios you will run into software that listens to specific ports in t
 
 `localhost:PORT` or `127.0.0.1:PORT`
 
-But what do you do with a remote server that does not have its ports directly available through the network/internet? -- *port forwarding*
+But what do you do with a remote server that does not have its ports directly available through the network/internet? -- _port forwarding_
 
 - Local Port Forwarding
 
@@ -74,15 +71,11 @@ But what do you do with a remote server that does not have its ports directly av
 
   ![Remote Port Forwarding](https://missing.csail.mit.edu/static/media/images/remote-port-forwarding.png)
 
-
-
-
-
 ## SSHFS (mount remote directory locally)
 
 - install: `sudo apt install sshfs`
 
-- Mount: 
+- Mount:
 
   ```
   mkdir ~/remote
