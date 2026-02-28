@@ -1,5 +1,7 @@
 # Knowledge Distillation
 
+知识蒸馏是迁移学习的一种
+
 ## What is knowledge distillation
 
 ![image-20251126185706868](./assets/01-Knowledge-Distillation.assets/image-20251126185706868.png)

@@ -15,7 +15,7 @@ introduce the modern recipe of object detection
 
   - Takeaway: Focal loss was proposed to handle the class imbalance problem in **dense object detection**.
 
-  - Prior: extreme imbalance between foreground and background classes
+  - Motivation: extreme imbalance between foreground and background classes
 
   - Core Mechanism: a modification of the standard **Cross-Entropy Loss** using a **modulating factor**
     $$

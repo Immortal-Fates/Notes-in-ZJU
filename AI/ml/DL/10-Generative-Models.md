@@ -1,8 +1,8 @@
 # Generative Models
 
+介绍生成模型
 
-
-## Intro
+## Concepts
 
 Data: x. Label: y
 
@@ -23,7 +23,7 @@ Data: x. Label: y
   - Assign labels while rejecting outliers
   - Sample to generate data from labels
 
-"Generative models" means either of Generative Model and Conditional Generative Model; conditional generative models are most common in practice
+"Generative models" means either of Generative Model and Conditional Generative Model; **conditional generative models** are most common in practice
 
 ### Why
 
@@ -38,7 +38,7 @@ Generative models
   - Tractable density: Really compute P(x) -- Autoregressive
   - Approximate density: Approximate P(x) -- Variational Autoencoder (VAE)
 - Implicit density: Cannot compute p(x) but can sample from P(x)
-  - Direct: Can directly sample from P(x) -- Generative Adversarial  Network (GAN)
+  - Direct: Can directly sample from P(x) -- Generative Adversarial Network (GAN)
   - Indirect: Iterative procedure to approximate samples from P(x) -- Diffusion Models
 
 Now let`s check these models:
@@ -88,15 +88,17 @@ Now let`s check these models:
 
 - Example: Autoregressive Models of Images
 
-  - Treat an image as a sequence of 8-bit  subpixel values (scanline order). Model with an RNN or Transformer
+  - Treat an image as a sequence of 8-bit subpixel values (scanline order). Model with an RNN or Transformer
 
   - Cons: 
 
     - Too expensive. 1024x1024 image is a sequence of 3M subpixels
 
-      Sol: Model as sequence of tiles, not sequence of subpixels
+      Sol: Model as sequence of tiles (small block of pixels), not sequence of subpixels
 
 ## Variational Autoencoders (VAEs)
+
+### Autoencoders
 
 Before introduce the VAEs, we introduce the (Non-Variational) Autoencoders.
 
@@ -113,13 +115,37 @@ Before introduce the VAEs, we introduce the (Non-Variational) Autoencoders.
   If we could generate new z, could use the decoder to generate images.
 
   - Con: Generating new z is not any easier than generating new x
+  
   - What if we force all z to come from a known distribution?
+  
+    Here the VAEs is coming.
+  
 
-  Here the VAEs is coming.
+### VAEs
 
 Let`s take it step by step.
 
+> [!NOTE]
+>
+> - auto: comes from auto-associative models
+>   $$
+>   x \;\rightarrow\; \text{model} \;\rightarrow\; \hat{x} \approx x
+>   $$
+>
+> - variational: 
+>
+>   Instead of:
+>
+>   - Encoding $x$ → fixed code $z$
+>
+>   VAEs:
+>
+>   - Encode $x$ → **distribution over latent variables**
+>   - Learn this distribution via **variational inference**
+
 Assume training data $x_i$ is generated from unobserved (latent)  representation z. How can we train this -- **maximum likelihood**
+
+We don`t observe z, so marginalize it.
 $$
 \log p_\theta(x)
 = \log \int p_\theta(x, z)\,dz
@@ -230,7 +256,7 @@ This is our VAE training objective.
 
 
 
-
+## Diffusion
 
 
 

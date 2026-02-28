@@ -1,0 +1,4 @@
+# virtual env
+**/.venv/
+**/.env/
+**/.ruff_cache/

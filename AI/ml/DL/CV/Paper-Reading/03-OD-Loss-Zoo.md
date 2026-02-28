@@ -47,7 +47,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: Focal Loss down-weights easy negatives to handle dense class imbalance.
 
-  - Prior:
+  - Motivation:
 
     - **positive vs. negative class imbalance problem**: Dense detectors evaluate a huge number of candidate locations. Most are easy background.
 
@@ -143,7 +143,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
     1. predicting a **joint class score that already encodes localization quality** (so training and inference are consistent), 
     2. regressing boxes as **distributions** rather than single deterministic values, which better handles ambiguity and uncertainty.
 
-  - Prior:
+  - Motivation:
 
     Consider three fundamental elements: **quality estimation, classification and localization**
 
@@ -284,7 +284,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: GFLV2 predicts IoU quality from box **distribution statistics** via a tiny DGQP for more reliable quality estimation.
 
-  - Prior
+  - Motivation
 
     - Many methods estimate quality from shared **convolution features** in the classification or regression branches. localization quality estimation (LQE)
     - GFLV1 produces a general distribution. Since the shape of the distribution is very related to the real positioning quality, why don't we take advantage of it and use statistics that can express the shape of the distribution to guide the estimation of the final positioning quality?
@@ -335,7 +335,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: predicts an IoU-aware classification score directly and trains it with Varifocal Loss (VFL), **aligning classification confidence with localization quality** and improving ranking for dense one-stage detectors.
 
-  - Prior
+  - Motivation
 
     - Dense detectors often **decouple classification and localization quality**, then multiply scores at inference, causing train-test mismatch and poor ranking of low-quality boxes.
     - Standard Focal Loss treats all positive samples equally, even if their IoU quality varies widely.
@@ -425,7 +425,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: proposes **Generalized IoU** as both a **metric** and a **loss** for bounding box regression.
 
-  - Prior
+  - Motivation
 
     - when two boxes **do not overlap**, IoU is zero and provides **no useful gradient**
 
@@ -468,7 +468,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: DIoU/CIoU add **center distance** (and **aspect ratio** for CIoU) to IoU loss for faster, better regression.
 
-  - Prior:
+  - Motivation:
 
     - GIou just answers how much they overlap, doesn`t answer how well they overlap.
 
@@ -529,7 +529,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: SIoU extends IoU-based regression by adding **angle-aware distance** and **shape** costs, which guides boxes to move in a more direct path toward the target and speeds convergence.
 
-  - Prior
+  - Motivation
 
     - GIoU/DIoU/CIoU improve overlap and center distance, but still ignore the **direction** of the required correction.
     - When centers are far apart, regression can take inefficient paths, slowing convergence.
@@ -601,7 +601,7 @@ Just check the [Loss function document](https://docs.pytorch.org/docs/stable/gen
 
   - Takeaway: WIoU introduces a **dynamic focusing mechanism** that reweights IoU-based regression to reduce the influence of low-quality outliers and highlight more informative samples.
 
-  - Prior
+  - Motivation
 
     - Standard IoU losses treat all positives similarly, so extreme outliers or very easy samples can dominate gradients.
     - Static reweighting (e.g., fixed focal terms) cannot adapt to training dynamics.

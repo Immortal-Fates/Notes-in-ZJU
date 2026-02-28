@@ -164,7 +164,7 @@ flowchart LR
 
   ![image-20251128193601063](./assets/02-Pruning-and-Sparsity.assets/image-20251128193601063.png)
 
-- Prior: BatchNorm (BN) transforms an input channel $x$ as:
+- Motivation: BatchNorm (BN) transforms an input channel $x$ as:
   $$
   y = \gamma \cdot \frac{x-\mu}{\sqrt{\sigma^2}+\epsilon}+\beta
   $$

@@ -136,7 +136,7 @@ construct a good neural network model
 
 ### What is NAS
 
-- Prior: Hand-designed architectures (ResNet, MobileNet, ViT) are often sub-optimal for specific tasks and specific hardware.
+- Motivation: Hand-designed architectures (ResNet, MobileNet, ViT) are often sub-optimal for specific tasks and specific hardware.
 
 - Idea: NAS automates the design of neural networks to optimize for:
 

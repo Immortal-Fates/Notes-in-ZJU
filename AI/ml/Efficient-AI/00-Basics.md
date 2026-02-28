@@ -36,6 +36,17 @@ MCUNet integrates:
 
 ## Core Compression Taxonomy
 
+神经网络模型轻量化方法常分为四种
+
+1. 模型压缩：剪枝、量化、蒸馏等
+2. 模型结构优化
+3. 压缩--训练协同优化
+4. 轻量化神经网络部署与推理
+
+
+
+
+
 | Technique                                       | Main Idea                                                    | Advantages                                                   | Challenges                                                   |
 | ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | **Pruning / Sparsification**                    | Remove redundant weights, channels, or blocks to reduce model size and compute. | Reduces parameters and FLOPs; can preserve accuracy; structured pruning accelerates inference. | Unstructured pruning often yields no real speedup; requires retraining; hardware support varies. |

@@ -12,7 +12,7 @@ Focus on object detection models
 
   - Takeaway: MobileNet v1 replaces standard convs with **depthwise + pointwise** convs (DSC) to cut FLOPs/params for mobile.
 
-  - Prior: Classical CNNs (VGG, ResNet) use full 3×3 convolutions with cost:
+  - Motivation: Classical CNNs (VGG, ResNet) use full 3×3 convolutions with cost:
 
     - Computation: `H × W × Cin × Cout × K²`
     - Parameters: `Cin × Cout × K²`
@@ -60,7 +60,7 @@ Focus on object detection models
 
   - Takeaway: MobileNet v2 introduces the **Inverted Residual + Linear Bottleneck** block, improving over v1.
 
-  - Prior: MobileNet v1’s DSC is efficient but suffers from information loss in narrow intermediate layers. And there`s no residual connections in most layers.
+  - Motivation: MobileNet v1’s DSC is efficient but suffers from information loss in narrow intermediate layers. And there`s no residual connections in most layers.
 
   - Core Mechanism:
 
@@ -107,7 +107,7 @@ Focus on object detection models
     - **Squeeze-and-Excitation (SE)** for channel attention,
     - **NAS-based layer configuration** and customized **nonlinearities** (h-swish, h-sigmoid), to push mobile efficiency further while keeping FLOPs low.
 
-  - Prior: Google’s work on NAS and SE (SENet, EfficientNet) motivates an automated and more refined design.
+  - Motivation: Google’s work on NAS and SE (SENet, EfficientNet) motivates an automated and more refined design.
 
   - Core Mechanism:
 
@@ -178,7 +178,7 @@ Focus on object detection models
 
     Faster R-CNN’s key idea:  **Learn region proposals with a CNN (RPN) that shares features with the detector.**
 
-  - Prior
+  - Motivation
 
     - **R-CNN**: Selective Search proposals + per-region CNN; very slow.
     - **Fast R-CNN**: Single CNN per image + ROI pooling; faster but still depends on external region proposal (e.g., Selective Search), which is CPU-bound and slow.
@@ -288,7 +288,7 @@ Focus on object detection models
 
   - Takeaway: GhostNetV2 = GhostNet + long-range spatial modeling (DFC) with almost zero extra cost.
 
-  - Prior
+  - Motivation
 
     - Cheap operations (depthwise conv, linear transforms) are inherently local.
     - Transformers provide global attention, but are too costly for mobile.
@@ -340,7 +340,7 @@ Focus on object detection models
     - Designing a **CPU-efficient Ghost module (C-Ghost)** that operates at the feature-map level with cheap operations, and
     - Designing a **GPU-efficient Ghost stage (G-Ghost)** that exploits **stage-wise redundancy** while avoiding GPU-inefficient ops like heavy depthwise conv.
 
-  - Prior: 
+  - Motivation: 
 
     - 
 
@@ -368,7 +368,7 @@ Focus on object detection models
 - __RepGhost: A Hardware-Efficient Ghost Module via Re-parameterization.__ *Chengpeng Chen et al.* __ArXiv, 2022__ [(Arxiv)](https://arxiv.org/abs/2211.06088) [(S2)](https://www.semanticscholar.org/paper/d8d754d93d4a4fcc62838429fd36f795cb8f5d98) (Citations __144__)
 
   - Takeaway: RepGhost replaces the original Ghost module’s feature concatenation with a re-parameterizable, add-based design that implicitly reuses features in the weight space instead of the feature space.
-  - Prior: 
+  - Motivation: 
     - [CPU vs GPU] We call the original Ghost as C-Ghost because cheap operations such as Depthwise are more friendly to mobile devices such as pipelined CPUs and ARM, but are not so "cheap" for GPUs with strong parallel computing capabilities. Because the computational density of Depthwise operations is relatively low. So we want to dive into a module more GPU-friendly.
     - [Concat vs Add] `concat` vs `add` on ARM:
       - Same params and FLOPs,
@@ -384,7 +384,7 @@ Focus on object detection models
 
   - Takeaway: YOLO predicts boxes and classes in **one CNN forward pass** (one-stage detection).
 
-  - Prior: Before YOLO, dominant detectors were region-based like R-CNN zoo which is multi-stage and slow at inference.
+  - Motivation: Before YOLO, dominant detectors were region-based like R-CNN zoo which is multi-stage and slow at inference.
 
   - Core Mechanism:
 
@@ -540,6 +540,10 @@ Focus on object detection models
 
        ![image-20251215171217106](./assets/02-OD-Model-Zoo.assets/image-20251215171217106.png)
 
+- __YOLOv10: Real-Time End-to-End Object Detection.__ *Ao Wang et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2405.14458) [(S2)](https://www.semanticscholar.org/paper/3723f1406b8f65471030b81fb5045067f0e29c2d) (Citations __3550__)
+
+  - Takeaway: YOLOv10 eliminates NMS, marking a shift toward fully end-to-end detection.
+
 - __YOLOv11: An Overview of the Key Architectural Enhancements.__ *Rahima Khanam, Muhammad Hussain.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2410.17725) [(S2)](https://www.semanticscholar.org/paper/adccc00dbd0fe63e4e34bc3445a29bc2ec910cbc) (Citations __1398__)
 
   > YOLOv11(no formal paper, engineering release) but there are **third-party analysis papers** on “YOLOv11”
@@ -555,6 +559,42 @@ Focus on object detection models
     - C2PSA
 
 - __YOLOv12: Attention-Centric Real-Time Object Detectors.__ *Yunjie Tian et al.* __ArXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2502.12524) [(S2)](https://www.semanticscholar.org/paper/ae1d5360f2f556139cffd10d6e9d2e0241c937e0) (Citations __609__)
+
+- __YOLO-World: Real-Time Open-Vocabulary Object Detection.__ *Tianheng Cheng et al.* __2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2024__ [(Arxiv)](https://arxiv.org/abs/2401.17270) [(S2)](https://www.semanticscholar.org/paper/37c112454a236ab91c9c6b5cc165a6c3251e9206) (Citations __698__)
+
+### EfficientNet-Lite 
+
+
+
+### DERT Zoo
+
+- https://arxiv.org/abs/2010.04159
+
+- __RT-DETRv2: Improved Baseline with Bag-of-Freebies for Real-Time Detection Transformer.__ *Wenyu Lv et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2407.17140) [(S2)](https://www.semanticscholar.org/paper/1e030d91607e38b7b7fdd002123ca8baafbedc8f) [(Code)](https://github.com/lyuwenyu/RT-DETR?tab=readme-ov-file)(Citations __186__)
+
+- __RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models.__ *Zijun Liao et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2510.25257) 
+
+- __Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection.__ *Zhangchi Hu et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2505.05741) 
+  - [check here](./02-1-Small-Object.md)
+
+
+
+### DINO Zoo
+
+- __DINO-X: A Unified Vision Model for Open-World Object Detection and Understanding.__ *Tianhe Ren et al.* __arXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2411.14347) 
+
+- __Grounding DINO: Marrying DINO with Grounded Pre-Training for Open-Set Object Detection.__ *Shilong Liu et al.* __arXiv, 2023__ [(Arxiv)](https://arxiv.org/abs/2303.05499) [(Code)](https://github.com/IDEA-Research/GroundingDINO)
+
+### SAM
+
+- __Artificial General Intelligence for Medical Imaging Analysis.__ *Xiang Li et al.* __IEEE Reviews in Biomedical Engineering, 2023__ [(Arxiv)](https://arxiv.org/abs/2306.05480) [(S2)](https://www.semanticscholar.org/paper/d818f40ea693a335e02f32dab520351d271c58bf) (Citations __57__)
+
+### Small Object
+
+[check here](./02-1-Small-Object.md)
+
+
+
 
 ### Others
 
@@ -580,7 +620,7 @@ Focus on object detection models
 
   - Takeaway: SSD is a **single-stage, anchor-based** detector that predicts on **multi-scale feature maps** in one pass.
 
-  - Prior: YOLO showed that single-stage detection is fast but initially had localization and small-object issues. There was a need for a detector that:
+  - Motivation: YOLO showed that single-stage detection is fast but initially had localization and small-object issues. There was a need for a detector that:
 
     - is single-shot (no proposal stage),
 
@@ -618,7 +658,7 @@ Focus on object detection models
 
   - Takeaway: MobileOne trains **multi-branch** blocks, then **fuses to a single conv** for fast mobile inference.
 
-  - Prior: Structural reparameterization (e.g., RepVGG) shows we can **train multi-branch, infer single-branch** by fusing conv+BN branches into one conv.
+  - Motivation: Structural reparameterization (e.g., RepVGG) shows we can **train multi-branch, infer single-branch** by fusing conv+BN branches into one conv.
 
     > [!IMPORTANT]
     >
@@ -656,7 +696,7 @@ Focus on object detection models
 
   - Takeaway: SPP uses **multi-level pooling** to produce fixed-length features from **any input size**.
   
-  - Prior: Before SPP, standard CNN (e.g., AlexNet, VGG-style networks) required **fixed-size inputs**
+  - Motivation: Before SPP, standard CNN (e.g., AlexNet, VGG-style networks) required **fixed-size inputs**
   
   - Core Mechanism
   
@@ -676,7 +716,7 @@ Focus on object detection models
 
     ![x2](./assets/02-OD-Model-Zoo.assets/x2.png)
 
-  - Prior: Earlier pipelines often used **two-stage** designs (detect bodies and parts separately, then associate) or **body → part offsets** (e.g., predicting multiple offsets from each body to many parts), which can become **channel-heavy** as part types grow and can be brittle under occlusion/invisibility. PBADet instead flips the direction to **part → body** with a single universal offset.
+  - Motivation: Earlier pipelines often used **two-stage** designs (detect bodies and parts separately, then associate) or **body → part offsets** (e.g., predicting multiple offsets from each body to many parts), which can become **channel-heavy** as part types grow and can be brittle under occlusion/invisibility. PBADet instead flips the direction to **part → body** with a single universal offset.
 
   - Core Mechanism: For each part candidate (dense point/feature location), PBADet predicts:
 
@@ -746,8 +786,6 @@ Focus on object detection models
     $$
     L_{\text{reg}} = 1 - \mathrm{GIoU}(B, B^{gt})
     $$
-
-
 
 
 ## Loss Function

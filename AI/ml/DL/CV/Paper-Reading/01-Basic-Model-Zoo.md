@@ -78,7 +78,7 @@
 
   - Takeaway: Transformer is a **self-attention-only** seq2seq model with **positional encoding**, enabling highly parallel training.
 
-  - Prior: What’s Wrong with Seq2Seq Model?
+  - Motivation: What’s Wrong with Seq2Seq Model?
 
     The seq2seq model normally has an encoder-decoder architecture: the encoder compress the info into a context vector of fixed length. A critical and apparent disadvantage of this fixed-length context vector design is incapability of remembering long sentences. The attention mechanism was born ([Bahdanau et al., 2015](https://arxiv.org/pdf/1409.0473.pdf)) to resolve this problem.
 
@@ -147,7 +147,7 @@
 
   - Takeaway: ViT tokenizes image **patches** and runs a **Transformer encoder** with global self-attention.
 
-  - Prior: Try transformer in vision.
+  - Motivation: Try transformer in vision.
 
   - Core Machanism:
 
@@ -175,7 +175,7 @@
 
   - Takeaway: DETR treats detection as **set prediction** using a Transformer encoder-decoder and **bipartite matching** loss.
 
-  - Prior: Before DETR,  mainstream detectors followed a **two-stage** or **dense prediction** paradigm. One-stage detector heavily relies on anchors and hyperparameters.
+  - Motivation: Before DETR,  mainstream detectors followed a **two-stage** or **dense prediction** paradigm. One-stage detector heavily relies on anchors and hyperparameters.
 
     And transformer has begun to sweep other domains other than objection detection.
 

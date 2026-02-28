@@ -5,7 +5,7 @@
 
 <!--more-->
 
-# What are Diffusion Models?
+## What are Diffusion Models?
 
 扩散模型实现从噪声（采样自简单的分布）生成目标数据样本
 
@@ -13,13 +13,13 @@
 
 我们先来介绍Diffusion Model中的经典模型DDPM(stands for Denoising Diffusion Probabilistic Models)
 
-![image-20250425163409480](assets/diffusion.assets/image-20250425163409480.png)
+![image-20250425163409480](assets/09_1-diffusion.assets/image-20250425163409480.png)
 
 > The sculpture is already complete within the marble block before I start my work. It is already there, I just have to chisel away the superfluous material——Michelangelo
 
 来看看Diffusion Model到底是怎么实现的
 
-![image-20250425192824751](assets/diffusion.assets/image-20250425192824751.png)
+![image-20250425192824751](assets/09_1-diffusion.assets/image-20250425192824751.png)
 
 Diffusion Model就分为两步：
 
@@ -33,13 +33,13 @@ Diffusion Model就分为两步：
 
 下面我们来详细介绍这两步具体的数学推导
 
-# How to derive the diffusion model mathematically
+## How to derive the diffusion model mathematically
 
 - Forward Diffusion Process
 
   我们先来探究一下每个步是如何添加噪声的：
 
-  ![image-20250425194008111](assets/diffusion.assets/image-20250425194008111.png)
+  ![image-20250425194008111](assets/09_1-diffusion.assets/image-20250425194008111.png)
 
   > 引理：对任何$z\sim N(\mu,\sigma^2)$都可以表示成$z=\mu +\sigma \cdot \epsilon$，其中$\epsilon\sim N(0,1)$
 
@@ -54,7 +54,7 @@ Diffusion Model就分为两步：
 
   其中$\sqrt{\alpha_t}$取值如下，这样能让每一步噪声的影响不太大，使得$x_t$和$x_{t+1}$看起来比较一致，当样本变得愈加噪声时，可让其承担越来越大噪声。最后使其变为各向同性高斯分布的纯噪声的图像
 
-  ![image-20250425194613712](assets/diffusion.assets/image-20250425194613712.png)
+  ![image-20250425194613712](assets/09_1-diffusion.assets/image-20250425194613712.png)
 
   下面我们来进一步推导一下前向加噪的过程
   $$
@@ -68,7 +68,7 @@ Diffusion Model就分为两步：
   \end{split}
   \end{equation}
   $$
-  ![image-20250425164208186](assets/diffusion.assets/image-20250425164208186.png)
+  ![image-20250425164208186](assets/09_1-diffusion.assets/image-20250425164208186.png)
 
 - Reverse Diffusion Process
 
@@ -167,15 +167,15 @@ Diffusion Model就分为两步：
 
   > 在原论文中训练时直接将系数$\frac{1}{2 \sigma_q^2(t)} \frac{(1 - \alpha_t)^2}{(1 - \bar{\alpha}_t) \alpha_t}$去掉了
   >
-  > ![image-20250425212538404](assets/diffusion.assets/image-20250425212538404.png)
+  > ![image-20250425212538404](assets/09_1-diffusion.assets/image-20250425212538404.png)
 
   在得到训练的模型后我们可以进行反向denoise了
   $$
   \mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \right) + \sigma_t \mathbf{z}
   $$
-  ![image-20250425212552436](assets/diffusion.assets/image-20250425212552436.png)
+  ![image-20250425212552436](assets/09_1-diffusion.assets/image-20250425212552436.png)
 
-# How to train a diffusion model and infer it
+## How to train a diffusion model and infer it
 
 有了上面的数学推导我们来举一个完整的过程实现diffusion model的训练和推理
 
@@ -183,21 +183,21 @@ Diffusion Model就分为两步：
 
   1. Randomly select a time step and encode it.
 
-     ![image-20250425213320178](assets/diffusion.assets/image-20250425213320178.png)
+     ![image-20250425213320178](assets/09_1-diffusion.assets/image-20250425213320178.png)
 
   2. Add noise to image
 
-     ![image-20250425213932716](assets/diffusion.assets/image-20250425213932716.png)
+     ![image-20250425213932716](assets/09_1-diffusion.assets/image-20250425213932716.png)
 
   3. Train the UNet
 
-     ![image-20250425213940953](assets/diffusion.assets/image-20250425213940953.png)
+     ![image-20250425213940953](assets/09_1-diffusion.assets/image-20250425213940953.png)
 
      将Gaussian noise和推理出的Predicted noise进行$L_{L2}$损失反向传播
 
 - illustration of sampling
 
-  1. Iteratively denoise the image (T = 1000)![image-20250425214541943](assets/diffusion.assets/image-20250425214541943.png)
+  1. Iteratively denoise the image (T = 1000)![image-20250425214541943](assets/09_1-diffusion.assets/image-20250425214541943.png)
 
      > 注意这里有$+\sqrt{\beta_t} \epsilon$，加回了一部分噪声，即不完全信任神经网络的结果
 
@@ -205,9 +205,9 @@ Diffusion Model就分为两步：
 
   3. Iteratively denoise the image (T = 1)
 
-     ![image-20250425214619701](assets/diffusion.assets/image-20250425214619701.png)
+     ![image-20250425214619701](assets/09_1-diffusion.assets/image-20250425214619701.png)
 
-## Model Architecture
+### Model Architecture
 
 There are two common backbone architecture choices for diffusion models: U-Net and Transformer
 
@@ -215,15 +215,15 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 
   the architecture is as folows
 
-  ![image-20250426212255677](assets/diffusion.assets/image-20250426212255677.png)
+  ![image-20250426212255677](assets/09_1-diffusion.assets/image-20250426212255677.png)
 
   DDPM使用的Unet是time-condition Unet，采用正弦位置编码（Sinusoidal Positional Embeddings），既需要位置编码有界又需要两个时间步长之间的距离与句子长度无关，很容易想到$sin$ and $cos$
 
 - Diffusion Transformer
 
-  ![image-20250426213043281](assets/diffusion.assets/image-20250426213043281.png)
+  ![image-20250426213043281](assets/09_1-diffusion.assets/image-20250426213043281.png)
 
-# Other Models
+## Other Models
 
 原始扩散模型的三个主要缺点，采样速度慢，最大化似然差、数据泛化能力弱
 
@@ -231,7 +231,7 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 
 > TODO
 
-# Application
+## Application
 
 建议直接看原文[[2209.00796\] Diffusion Models: A Comprehensive Survey of Methods and Applications (arxiv.org)](https://arxiv.org/abs/2209.00796)
 
@@ -247,9 +247,9 @@ There are two common backbone architecture choices for diffusion models: U-Net a
 - 基于diffusion model的时间序列，时序信号生成
 - 进行药物分子和蛋白质分子、抗体的生成
 
-# References
+## References
 
-- [What are Diffusion Models? | Lil'Log (lilianweng.github.io)](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process)
+- [What are Diffusion Models? | Lil'Log (lilianweng.github.io)](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/####forward-diffusion-process)
 
 - 推导挺清晰的：[【大白话01】一文理清 Diffusion Model 扩散模型 | 原理图解+公式推导](https://www.bilibili.com/video/BV1xih7ecEMb/?spm_id_from=333.337.search-card.all.click&vd_source=3a8e3df5af30a81c441200ce3c96e8fc)
 

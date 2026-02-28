@@ -94,7 +94,7 @@
   >
   > 大就是猛，多就是好，大力出奇迹
 
-- Prior
+- Motivation
 
   - What we mean by "VGG style" is:
 

@@ -36,7 +36,7 @@ This repository contains documentation notes on computer vision and object detec
 - **Paper Citation**.
 
   - Takeaway: One-sentence summary of key contribution
-  - Prior: Background/motivation (optional)
+  - Motivation: Background/motivation (optional)
   - Core Mechanism: Detailed explanation
   - Pros: Advantages (bullet list)
   - Cons: Limitations (bullet list)

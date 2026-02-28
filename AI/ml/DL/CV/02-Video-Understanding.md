@@ -57,7 +57,7 @@ The following parts are trying to solve these challenges.
 
 ## Two-stream networks
 
-- Prior: Previously Recognizing Actions from Motion: Optical Flow.
+- Motivation: Previously Recognizing Actions from Motion: Optical Flow.
 
 - **Two-stream networks** consist of two separate neural networks that process different kinds of data from the same video.
 
