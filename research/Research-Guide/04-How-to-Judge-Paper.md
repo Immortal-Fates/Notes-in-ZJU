@@ -1,16 +1,18 @@
+---
+title: 04-How-to-Judge-Paper
+date: 2026-03-02
+tags:
+course: research
+status: draft
+---
 # How to judge a paper
+[TOC]
 
 $$
 \text{新意度}\times \text{有效性}\times \text{问题大小} = 价值
 $$
 
 measure each point with three levels: 1, 10, 100
-
-
-
-
-
-
 
 ## References
 

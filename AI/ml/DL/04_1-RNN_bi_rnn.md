@@ -1,4 +1,12 @@
+---
+title: 04_1-RNN_bi_rnn
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Bidirectional Recurrent Neural Networks
+[TOC]
 
 序列学习不一定全是预测未来，还有这种：
 
@@ -14,7 +22,7 @@
 
 双向循环神经网络（bidirectional RNNs）添加了反向传递信息的隐藏层，以便更灵活地处理此类信息。
 
-![birnn](./assets/DL4-RNN_bi_rnn.assets/birnn.svg)
+![birnn](assets/04_1-RNN_bi_rnn.assets/birnn.svg)
 
 事实上，这与隐马尔可夫模型中的动态规划的前向和后向递归没有太大区别。其主要区别是，在隐马尔可夫模型中的方程具有特定的统计意义。双向循环神经网络没有这样容易理解的解释，我们只能把它们当作通用的、可学习的函数。
 这种转变集中体现了**现代深度网络的设计原则**：首先使用经典统计模型的函数依赖类型，然后将其参数化为通用形式。

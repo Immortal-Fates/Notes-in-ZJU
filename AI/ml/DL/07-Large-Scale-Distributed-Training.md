@@ -1,4 +1,12 @@
+---
+title: 07-Large-Scale-Distributed-Training
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Large-Scale Distributed Training
+[TOC]
 
 ## What are GPUs
 
@@ -6,11 +14,11 @@ GPU = Graphics Processing Unit
 
 > computer architecture
 
-![image-20251204205431994](./assets/07-Large-Scale-Distributed-Training.assets/image-20251204205431994.png)
+![image-20251204205431994](assets/07-Large-Scale-Distributed-Training.assets/image-20251204205431994.png)
 
 Now we have a GPU, and stack many of them to a supercomputer
 
-![image-20251204205545179](./assets/07-Large-Scale-Distributed-Training.assets/image-20251204205545179.png)
+![image-20251204205545179](assets/07-Large-Scale-Distributed-Training.assets/image-20251204205545179.png)
 
 GPU cluster = one big computer.
 
@@ -40,7 +48,7 @@ A model with L layers operates on tensors of shape (Batch, Sequence, Dim)
 
 - Cons: Model size constrained by GPU memory.
 
-  [Sol](#Fully Sharded Data Parallelism (FSPD)): Split model weights across GPUs
+  [Sol](#fully-sharded-data-parallelism-fspd)): Split model weights across GPUs
 
   > [!TIP]
   >
@@ -116,7 +124,7 @@ So now we have HSDP + Activation Checkpointing.
 
 What fraction of the GPU’s theoretical peak FLOPs is being used for “useful” model computation?
 
-### Context Parallelism (CP) 
+### Context Parallelism (CP)
 
 > [!TIP]
 >
@@ -146,7 +154,7 @@ What fraction of the GPU’s theoretical peak FLOPs is being used for “useful�
 
 - Sol: With 2 consecutive TP layers, shard first over row and second over column to avoid communication
 
-  ![image-20251205005706323](./assets/07-Large-Scale-Distributed-Training.assets/image-20251205005706323.png)
+  ![image-20251205005706323](assets/07-Large-Scale-Distributed-Training.assets/image-20251205005706323.png)
 
   No need for communication after XW=Y! Each GPU computes one term of Z, then broadcasts to all other GPUs
 

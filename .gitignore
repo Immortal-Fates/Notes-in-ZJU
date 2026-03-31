@@ -2,3 +2,7 @@
 **/.venv/
 **/.env/
 **/.ruff_cache/
+
+# AI
+.codex/
+.sisyphus/

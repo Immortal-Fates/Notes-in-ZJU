@@ -1,0 +1,7 @@
+Guardrail for Task-8 inbound edits:
+- Do not modify plan file (.sisyphus/plans/{plan}.md).
+- Only modify inbound links that reference moved notes or moved asset roots as indicated by manifest inbound-reference fields and post-migration audit outputs.
+- Preserve all other links, especially stale ones not present in the manifest move scope; treat them as baseline debt.
+- Validate changes with resolver/audit against README.md roots and inbound-note READMEs listed in the manifest.
+- Append notepad updates to the designated plan’s notepads to reflect the action history.
+- Do not run any destructive operations (e.g., git push) unless explicitly requested by user.

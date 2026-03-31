@@ -1,3 +1,10 @@
+---
+title: 06-Optimization
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Optimization Algorithms
 
 神经网络与梯度下降
@@ -309,8 +316,8 @@ Adadelta是AdaGrad的另一种变体
 
 其中：
 
-- \(f(x)\)：可微、光滑、梯度 Lipschitz 连续  
-- \(g(x)\)：可能不可微（如 L1 正则）、可能是复杂结构的正则项  
+- \(f(x)\)：可微、光滑、梯度 Lipschitz 连续
+- \(g(x)\)：可能不可微（如 L1 正则）、可能是复杂结构的正则项
 
 常见场景包括：
 
@@ -402,12 +409,12 @@ x_k - \alpha \nabla f(x_k)
 \right)
 \]
 
-1. **梯度下降（处理可微部分 \(f\)）**  
+1. **梯度下降（处理可微部分 \(f\)）**
    \[
    y_k = x_k - \alpha \nabla f(x_k)
    \]
 
-2. **近端映射（处理不可微部分 \(g\)）**  
+2. **近端映射（处理不可微部分 \(g\)）**
    \[
    x_{k+1} = \text{prox}_{\alpha g}(y_k)
    \]

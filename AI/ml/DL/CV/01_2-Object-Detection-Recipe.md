@@ -1,4 +1,12 @@
+---
+title: 01_2-Object-Detection-Recipe
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Object Detection Recipe
+[TOC]
 
 introduce the modern recipe of object detection
 

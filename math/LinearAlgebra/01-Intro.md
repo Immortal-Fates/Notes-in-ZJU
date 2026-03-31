@@ -1,6 +1,12 @@
+---
+title: 01-Intro
+date: 2026-03-02
+tags:
+course: math
+status: draft
+---
 # Intro
-
-
+[TOC]
 
 ## References
 

@@ -1,4 +1,12 @@
+---
+title: 01-Intro
+date: 2026-03-02
+tags:
+course: math
+status: draft
+---
 # Intro
+[TOC]
 
 最优化问题概括
 
@@ -10,7 +18,7 @@
   $$
   \min \quad f(x),\\
   s.t. \quad x\in \mathcal{X} \\
-  
+
   \mathcal{X} = \{x \in \mathbb{R}^n \mid c_i(x) \leq 0, \quad i = 1, 2, \cdots, m, \\ \quad c_i(x) = 0, \quad i = m+1, m+2, \cdots, m+l\}.
   $$
 

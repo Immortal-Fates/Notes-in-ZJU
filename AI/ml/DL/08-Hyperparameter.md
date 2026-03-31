@@ -1,5 +1,10 @@
-
-
+---
+title: 08-Hyperparameter
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Hyperparameter
 
 [TOC]
@@ -26,7 +31,7 @@
 
       Use **W&B** for serious experiments, sharing, and reproducibility.
 
-  - Reproducing is hard, it relates to 
+  - Reproducing is hard, it relates to
 
     - Environment(hardware & library)
     - Code
@@ -39,11 +44,11 @@
 
   - Automate every step in applying ML to solve real-world problems: data cleaning, feature extraction, model selection…
 
-    ![image-20251205142050022](./assets/08-Hyperparameter.assets/image-20251205142050022.png)
+    ![image-20251205142050022](assets/08-Hyperparameter.assets/image-20251205142050022.png)
 
-  - [Hyperparameter optimization (HPO)](#HPO algorithms)
+  - [Hyperparameter optimization (HPO)](#hpo-algorithms)
 
-  - [Neural architecture search (NAS)](#NAS)
+  - [Neural architecture search (NAS)](#nas)
 
 ## HPO algorithms
 
@@ -68,7 +73,7 @@ Specify range for each hyperparameter
 
 - __Automated Machine Learning: State-of-The-Art and Open Challenges.__ *Radwa El Shawi et al.* __ArXiv, 2019__ [(Arxiv)](https://arxiv.org/abs/1906.02287) [(S2)](https://www.semanticscholar.org/paper/663108c231afdb91ca1e8af8ef8a6a937b5a6e20) (Citations __354__)
 
-![image-20251205213638385](./assets/08-Hyperparameter.assets/image-20251205213638385.png)
+![image-20251205213638385](assets/08-Hyperparameter.assets/image-20251205213638385.png)
 
 There are two main algorithms:
 
@@ -101,7 +106,7 @@ There are two main algorithms:
   - Estimate how the objective function depends on HP
   - Probabilistic regression models: Random forest, Gaussian process, …
 
-![image-20251205214446270](./assets/08-Hyperparameter.assets/image-20251205214446270.png)
+![image-20251205214446270](assets/08-Hyperparameter.assets/image-20251205214446270.png)
 
 ### Multi-fidelity
 
@@ -150,11 +155,9 @@ construct a good neural network model
 
   - Other constraints (e.g., memory, throughput)
 
-
 - Goal: The goal of NAS is to find the best neural network architecture in the search space, maximizing the objective of interest (e.g., accuracy, efficiency, etc).
 
-
-![image-20251126173102123](./assets/08-Hyperparameter.assets/image-20251126173102123.png)
+![image-20251126173102123](assets/08-Hyperparameter.assets/image-20251126173102123.png)
 
 ### Search space
 
@@ -174,7 +177,7 @@ construct a good neural network model
 
 - what: Search strategy defines how to explore the search space
 - how
-  - grid search 
+  - grid search
   - random search
   - reinforcement search
   - one-shot

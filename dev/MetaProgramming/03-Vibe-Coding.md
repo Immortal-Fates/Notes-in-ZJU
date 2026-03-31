@@ -1,6 +1,12 @@
+---
+title: 03-Vibe-Coding
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Vibe Coding
-
-
+[TOC]
 
 ## Main Takeaway
 
@@ -11,7 +17,6 @@ Vibe Coding 的本质是 **"规划就是一切"**，特别强调**规划驱动**
 > 胶水编程：解决传统 AI 辅助编程中的三大痛点：AI 幻觉、复杂性爆炸和技术门槛过高
 
 - Vibe Coding 采用分层架构设计，将整个开发流程结构化为可管理的模块
-
 
 - 三个基础支柱：胶水编程范式**、**语言层要素框架和递归自我优化
 
@@ -31,8 +36,6 @@ vibe-coding-cn/
 └── README.md                      # 项目主文档
 ```
 
-
-
 ## CLI Config
 
 - 启动命令
@@ -40,10 +43,10 @@ vibe-coding-cn/
   ```bash
   # codex
   codex --sandbox danger-full-access -m gpt-5.2-codex -c 'model_reasoning_summary_format=experimental' -c 'model_reasoning_effort=medium' --search
-  
+
   # Claude Code - 跳过所有确认
   claude --dangerously-skip-permissions
-   
+
   # Gemini CLI - YOLO 模式
   gemini --yolo
   ```
@@ -62,12 +65,6 @@ vibe-coding-cn/
 
 - codex config: `config.toml`
 - 其中的`prompts`可以在启动Codex CLI中进行`/`来调用
-
-
-
-
-
-
 
 ## 项目开发
 
@@ -105,7 +102,7 @@ vibe-coding-cn/
 
 直接让AI生成提示词：生成器设计与优化器机制
 
-![image-20251226191820810](./assets/03-Vibe-Coding.assets/image-20251226191820810.png)
+![image-20251226191820810](assets/03-Vibe-Coding.assets/image-20251226191820810.png)
 
 ## References
 

@@ -1,4 +1,12 @@
+---
+title: 09-Self-Supervised-Learning
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Self-supervised Learning
+[TOC]
 
 From this section, we are gonna into **Generative and Interactive Visual Intelligence**.
 
@@ -9,11 +17,11 @@ From this section, we are gonna into **Generative and Interactive Visual Intelli
 
 ## Pretext tasks from image transformations
 
-- Takeaway: Pretext tasks from image transformations are self-supervised learning tricks where you **apply a known transformation to an image and ask a network to predict something about that transformation** (e.g., which rotation was applied, which patch goes where, how to restore color). 
+- Takeaway: Pretext tasks from image transformations are self-supervised learning tricks where you **apply a known transformation to an image and ask a network to predict something about that transformation** (e.g., which rotation was applied, which patch goes where, how to restore color).
 
   By solving this “fake” task, the model learns useful visual representations without human labels.
 
-  <img src="./assets/09-Self-Supervised-Learning.assets/image-20251208193042428.png" alt="image-20251208193042428" style="zoom:50%;" />
+  <img src="assets/09-Self-Supervised-Learning.assets/image-20251208193042428.png" alt="image-20251208193042428" style="zoom:50%;" />
 
   Combined by two layers:
 
@@ -26,9 +34,7 @@ From this section, we are gonna into **Generative and Interactive Visual Intelli
 
   How to eval:
 
-  
-
-  ![image-20251208215654023](./assets/09-Self-Supervised-Learning.assets/image-20251208215654023.png)
+  ![image-20251208215654023](assets/09-Self-Supervised-Learning.assets/image-20251208215654023.png)
 
 - Motivation: What is the problem with large-scale training? -- We need a lot of labeled data
 
@@ -50,7 +56,7 @@ From this section, we are gonna into **Generative and Interactive Visual Intelli
 
 Masked Auto Encoders (MAE)
 
-![image-20251208220257082](./assets/09-Self-Supervised-Learning.assets/image-20251208220257082.png)
+![image-20251208220257082](assets/09-Self-Supervised-Learning.assets/image-20251208220257082.png)
 
 - The MSE (mean squared error loss) in the pixel space between the  input image and the reconstructed image is adopted.
 - Loss is only computed for masked patches
@@ -63,7 +69,7 @@ A more general pretext task: contrastive representation learning
 
 - Takeaway: Contrastive representation learning is a way to learn powerful feature embeddings without (or with minimal) labels by **pulling semantically similar samples close together** in embedding space and **pushing dissimilar ones apart**.
 
-  ![image-20251208203017602](./assets/09-Self-Supervised-Learning.assets/image-20251208203017602.png)
+  ![image-20251208203017602](assets/09-Self-Supervised-Learning.assets/image-20251208203017602.png)
 
 - Core Mechanism: we want
   $$
@@ -77,7 +83,7 @@ A more general pretext task: contrastive representation learning
   {\exp\big(s(f(x), f(x^+))\big) + \sum_{j=1}^{N-1} \exp\big(s(f(x), f(x_j^-))\big)}
   \right]
   $$
-  
+
   > [!TIP]
   >
   > Similar to cross entropy loss for a N-way softmax classifier
@@ -99,7 +105,7 @@ two types: Instance vs. Sequence Contrastive Learning
 
 SimCLR: A Simple Framework for Contrastive Representation Learning
 
-![image-20251208213327116](./assets/09-Self-Supervised-Learning.assets/image-20251208213327116.png)
+![image-20251208213327116](assets/09-Self-Supervised-Learning.assets/image-20251208213327116.png)
 
 - Key ideas: non-linear projection head to allow flexible representation learning
 - Pipeline
@@ -119,12 +125,11 @@ MoCo: Momentum Contrastive Learning
 
 - Takeaway: **MoCo (Momentum Contrast)** uses a **memory queue and a momentum-updated encoder** to maintain a large, consistent set of negative samples **without large batches**.
 
-  ![image-20251208213515714](./assets/09-Self-Supervised-Learning.assets/image-20251208213515714.png)
+  ![image-20251208213515714](assets/09-Self-Supervised-Learning.assets/image-20251208213515714.png)
 
 - Core Mechanism
 
   - Decouple min-batch size with the number of keys: can support a large number of negative samples.
-
 
 MoCo-v2
 
@@ -139,7 +144,7 @@ MoCo-v2
 
 CPC (Contrastive Predictive Coding): sequence-level contrastive learning
 
-![image-20260120235940062](./assets/09-Self-Supervised-Learning.assets/image-20260120235940062.png)
+![image-20260120235940062](assets/09-Self-Supervised-Learning.assets/image-20260120235940062.png)
 
 - Takeaway: Contrast “right” sequence with “wrong” sequence. Instead of reconstructing pixels/samples, it predicts which future embedding is correct among many candidates, pushing the model to capture high-level structure and long-range dependencies in time (or sequence position).
 - Pros: Can be applied to a variety of learning problems
@@ -147,7 +152,7 @@ CPC (Contrastive Predictive Coding): sequence-level contrastive learning
 
 ### Self-Distillation Without Labels, DINO
 
-![image-20260121000100987](./assets/09-Self-Supervised-Learning.assets/image-20260121000100987.png)
+![image-20260121000100987](assets/09-Self-Supervised-Learning.assets/image-20260121000100987.png)
 
 ## Unsupervised Learning
 

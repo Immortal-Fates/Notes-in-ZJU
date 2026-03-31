@@ -1,4 +1,12 @@
+---
+title: 03-Application
+date: 2026-03-02
+tags:
+course: math
+status: draft
+---
 # Application
+[TOC]
 
 优化应用
 
@@ -167,7 +175,7 @@
 
   - $l_0$：非常“轴对齐”的离散结构（最稀疏）
 
-  ![image-20251218150323534](./assets/03-Application.assets/image-20251218150323534.png)
+  ![image-20251218150323534](assets/03-Application.assets/image-20251218150323534.png)
 
 ### 正则化逼近
 
@@ -242,7 +250,7 @@
     $$
     用最小二乘就是 $\min\|\Phi w-y\|_2^2$。
     如果加 $l_1$ 正则（让 $w$ 稀疏），高阶多项式里很多系数会变 0，模型更简洁
-  
+
 - Square-root LASSO与回归向量筛选
   $$
   \min_x \|Ax-b\|_2 + \gamma\|x\|_1
@@ -255,7 +263,7 @@
 
 - Takeaway: 神经网络训练也是一个优化问题
 
-  ![image-20251229171417064](./assets/03-Application.assets/image-20251229171417064.png)
+  ![image-20251229171417064](assets/03-Application.assets/image-20251229171417064.png)
 
 ## 几何问题
 

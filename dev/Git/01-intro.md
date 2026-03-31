@@ -1,4 +1,12 @@
+---
+title: 01-intro
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 git intro
 
@@ -32,7 +40,7 @@ Git 有三种状态：**已提交（committed）**、**已修改（modified）**
 
 这会让我们的 Git 项目拥有三个阶段：工作区、暂存区以及 Git 目录。
 
-<img src="./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222024684.png" alt="image-20250707222024684" style="zoom:50%;" />
+<img src="assets/01-intro.assets/image-20250707222024684.png" alt="image-20250707222024684" style="zoom:50%;" />
 
 - 工作区是对项目的某个版本独立提取出来的内容。 这些从 Git 仓库的压缩数据库中提取出来的文件，放在磁盘上供你使用或修改。
 - 暂存区是一个文件，保存了下次将要提交的文件列表信息，一般在 Git 仓库目录中。 按照 Git 的术语叫做“索引”，不过一般说法还是叫“暂存区”。
@@ -151,7 +159,7 @@ git config --global user.email johndoe@example.com
 
 每一个文件都有两种状态：**已跟踪** 或 **未跟踪**。（已跟踪的文件就是 Git 已经知道的文件。）
 
-![image-20250707222045711](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222045711.png)
+![image-20250707222045711](assets/01-intro.assets/image-20250707222045711.png)
 
 - #### 检查当前文件状态
 
@@ -649,7 +657,7 @@ Git保存一系列不同时刻的snapshots,When you make a commit, Git stores a 
 
 现在，Git 仓库中有五个对象：三个 *blob* 对象（保存着文件快照）、一个 **树** 对象 （记录着目录结构和 blob 对象索引）以及一个 **提交** 对象（包含着指向前述树对象的指针和所有提交信息）。
 
-![image-20250707222100297](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222100297.png)
+![image-20250707222100297](assets/01-intro.assets/image-20250707222100297.png)
 
 Git 的分支，其实本质上仅仅是指向提交对象的可变指针
 
@@ -665,7 +673,7 @@ Git有一个名为 `HEAD` 的特殊指针，指向当前所在的本地分支（
 git branch testing
 ```
 
-![image-20250707222115988](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222115988.png)
+![image-20250707222115988](assets/01-intro.assets/image-20250707222115988.png)
 
 - **创建新分支的同时切换过去**
 
@@ -724,7 +732,7 @@ git merge hotfix
 
 ### diverged branches
 
-![image-20250707222133151](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222133151.png)
+![image-20250707222133151](assets/01-intro.assets/image-20250707222133151.png)
 
 Git 会使用两个分支的末端所指的快照（`C4` 和 `C5`）以及这两个分支的公共祖先（`C2`），做一个简单的三方合并。
 
@@ -778,7 +786,7 @@ git rebase --onto master server client
 
 理解：取出 `client` 分支，找出它从 `server` 分支分歧之后的补丁， 然后把这些补丁在 `master` 分支上重放一遍，让 `client` 看起来像直接基于 `master` 修改一样
 
-![image-20250707222147250](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222147250.png)
+![image-20250707222147250](assets/01-intro.assets/image-20250707222147250.png)
 
 ### 变基的风险
 
@@ -849,7 +857,7 @@ git branch -f main HEAD~3
 
 趋于稳定分支的流水线（“silo”）视图：
 
-![image-20250707222157032](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222157032.png)
+![image-20250707222157032](assets/01-intro.assets/image-20250707222157032.png)
 
 ### 主题分支
 
@@ -867,7 +875,7 @@ git branch -f main HEAD~3
 
 Git 的 `clone` 命令会为你自动将其命名为 `origin`，拉取它的所有数据， 创建一个指向它的 `master` 分支的指针，并且在本地将其命名为 `origin/master`。 Git 也会给你一个与 origin 的 `master` 分支在指向同一个地方的本地 `master` 分支，这样你就有工作的基础。
 
-![image-20250707222211935](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222211935.png)
+![image-20250707222211935](assets/01-intro.assets/image-20250707222211935.png)
 
 > Tips:运行 `git clone -o booyah`，那么你默认的远程分支名字将会是 `booyah/master`。-o远程库的命名。
 >
@@ -877,7 +885,7 @@ Git 的 `clone` 命令会为你自动将其命名为 `origin`，拉取它的所�
 
 程仓库同步数据，运行 `git fetch <remote>`
 
-![image-20250707222219760](./assets/Git%E8%BF%9B%E9%98%B6.assets/image-20250707222219760.png)
+![image-20250707222219760](assets/01-intro.assets/image-20250707222219760.png)
 
 > Tips:本地与远程的工作可以分叉
 

@@ -1,4 +1,12 @@
+---
+title: 00-Intro
+date: 2026-03-02
+tags:
+course: math
+status: draft
+---
 # Intro
+[TOC]
 
 研究生课，何衍《优化方法及应用》
 

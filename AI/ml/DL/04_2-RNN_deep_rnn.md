@@ -1,8 +1,16 @@
+---
+title: 04_2-RNN_deep_rnn
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Deep Recurrent Neural Networks
+[TOC]
 
 事实上，我们可以将多层循环神经网络堆叠在一起，通过对几个简单层的组合，产生了一个灵活的机制。
 
-![deep-rnn](./assets/DL4-RNN_deep_rnn.assets/deep-rnn.svg)
+![deep-rnn](assets/04_2-RNN_deep_rnn.assets/deep-rnn.svg)
 
 假设在时间步$t$有一个小批量的输入数据$\mathbf{X}_t \in \mathbb{R}^{n \times d}$（样本数：$n$，每个样本中的输入数：$d$）。同时，将$l^\mathrm{th}$隐藏层（$l=1,\ldots,L$）的隐状态设为$\mathbf{H}_t^{(l)}  \in \mathbb{R}^{n \times h}$（隐藏单元数：$h$），输出层变量设为$\mathbf{O}_t \in \mathbb{R}^{n \times q}$（输出数：$q$）。设置$\mathbf{H}_t^{(0)} = \mathbf{X}_t$，第$l$个隐藏层的隐状态使用激活函数$\phi_l$，则：
 

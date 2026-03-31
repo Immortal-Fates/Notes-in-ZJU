@@ -1,4 +1,12 @@
+---
+title: 01-Basic-Model-Zoo
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Basic Model Zoo
+[TOC]
 
 ## CNN Zoo
 
@@ -19,62 +27,108 @@
   - 到端的“CNN+RNN+强化学习”的主动感知/视觉决策
 
 - **Gradient-based learning applied to document recognition**. Lecun Y. et.al. **Proc. IEEE**, **1998**, ([link](https://doi.org/10.1109/5.726791)).
-  
+
   - LeNet-5
-  
+
 - **ImageNet classification with deep convolutional neural networks**. Krizhevsky Alex et.al. **Commun. ACM**, **2017-5-24**, ([link](https://doi.org/10.1145/3065386)).
-  
+
   - AlexNet：论文比较工程，效果在ImageNet上比较好
     ![alt text](assets/01-Basic-Model-Zoo.assets/image.png)
   - 使用数据增广来获得更多训练样本，通过平移、灰度变换等增广方式来扩充数据，使网络适应更多情况
   - 对网络中间层加入Dropout， 即随机使部分神经元不工作，提升模型对于整体特征的学习能力， 避免过拟合问题，提高泛化能力
   - 采用ReLU函数来替代Sigmoid函数，降低了计算量的同时，还避免了极端输入导致的梯度消失
   - 使用动量参数和学习率降低策略来加速收敛， 每当学习陷入瓶颈时学习率就会降低（手动）
-  
+
 - **Very Deep Convolutional Networks for Large-Scale Image Recognition**. Karen Simonyan et.al. **arxiv**, **2014**, ([link](http://arxiv.org/abs/1409.1556v6)).
-  
+
   - VGGNet
   - 不同于以往的大卷积核，此网络中卷积核尺寸均为3× 3，相对于更大的卷积核而言减少了参数， 使得网络的层数能够得到加深，这样也能更好地保留图像的特征
-  
+
 - **Going deeper with convolutions**. Szegedy Christian et.al. **No journal**, **2015-6**, ([link](https://doi.org/10.1109/cvpr.2015.7298594)).
-  
+
   - GoogLeNet (Inception v1)
-  
-- **Deep Residual Learning for Image Recognition**. He Kaiming et.al. **No journal**, **2016-6**,([link](https://doi.org/10.1109/cvpr.2016.90)).
-  
+
+- **Deep Residual Learning for Image Recognition**. He Kaiming et.al. **No journal**, **2016-6** ([link](https://doi.org/10.1109/cvpr.2016.90)).
+
   - ResNet：从求导来看即使梯度小，因为是加法所以还是能进行训练的
-  
-    ![image-20251029133629385](./assets/01-Basic-Model-Zoo.assets/image-20251029133629385.png)
-  
-    ![image-20251029134613108](./assets/01-Basic-Model-Zoo.assets/image-20251029134613108.png)
-  
+
+    ![image-20251029133629385](assets/01-Basic-Model-Zoo.assets/image-20251029133629385.png)
+
+    ![image-20251029134613108](assets/01-Basic-Model-Zoo.assets/image-20251029134613108.png)
+
   - bottleneck的设计：右边先降维，再升维，这样就能做得更深
-  
+
     做得深，就可以使用更多的通道数（可看作特征），用更复杂的特征向量来表示
-  
-    ![image-20251029135705447](./assets/01-Basic-Model-Zoo.assets/image-20251029135705447.png)
-  
-- **Densely Connected Convolutional Networks**. Huang Gao et.al. **No journal**, **2017-7**,([link](https://doi.org/10.1109/cvpr.2017.243)).
-  
+
+    ![image-20251029135705447](assets/01-Basic-Model-Zoo.assets/image-20251029135705447.png)
+
+- **Densely Connected Convolutional Networks**. Huang Gao et.al. **No journal**, **2017-7** ([link](https://doi.org/10.1109/cvpr.2017.243)).
+
   - DenseNet
-  
-- **Rethinking the Inception Architecture for Computer Vision**. Szegedy Christian et.al. **No journal**, **2016-6**,([link](https://doi.org/10.1109/cvpr.2016.308)).
-  
+
+- **Rethinking the Inception Architecture for Computer Vision**. Szegedy Christian et.al. **No journal**, **2016-6** ([link](https://doi.org/10.1109/cvpr.2016.308)).
+
   - Inception-v3
+
+- __Deformable Convolutional Networks.__ *Jifeng Dai et al.* __arXiv, 2017__ [(Arxiv)](https://arxiv.org/abs/1703.06211) 
+
+  - Takeaway: 
+
+    Deformable Convolutional Networks enhance standard convolution by learning spatial offsets for sampling locations, allowing the network to adapt its receptive field to object geometry. This significantly improves performance in tasks with geometric variations such as object detection and segmentation.
+
+  - Prior: 双线性插值
+
+    ![image-20260303105239600](assets/01-Basic-Model-Zoo.assets/image-20260303105239600.png)
+
+    1. 四个点先对x方向进行插值，得到两个点P1,P2
+    2. 再对P1,P2，对y方向进行插值
+
+  - Core Mechanism: deformable convolution + deformable RoI pooling
+
+    - deformable convolution
+
+      DCN augments each sampling location with a learnable offset $\Delta p_n$:
+      $$
+      y(p_0) = \sum_{p_n \in \mathcal{R}} w(p_n)\, x(p_0 + p_n + \Delta p_n)
+      $$
+      Since $p=p_0 + p_n + \Delta p_n$ is generally fractional, bilinear interpolation is used:
+      $$
+      x(p) = \sum_{q} G(q, p)\, x(q)
+      $$
+      Where $G(q, p)$ is the bilinear interpolation kernel.
+
+      $G$ 为二维，可拆为两个一维核之积
+      $$
+      G(q,p) = g(q_x,p_x)\, g(q_y,p_y)
+      $$
+      其中：
+      $$
+      g(a,b) = \max(0, 1 - |a-b|)
+      $$
+      This keeps the operation differentiable and trainable end-to-end. 用周围四个点双线性插值来代替这个可能不为整数的 $p$
+
+      ![image-20260303103244326](assets/01-Basic-Model-Zoo.assets/image-20260303103244326.png)
+
+      - 这里offset field的2N是因为有N个点，每个点有x,y两个坐标，所以一共2N个偏移的值
+      - 根据我们输入的值决定的：也是一种self attention
+
+    - deformable RoI pooling
+
+      ![x7](assets/01-Basic-Model-Zoo.assets/x7.png)
+
+
+- Deformable convolutional networks v2
+
 
 ## Attention Zoo
 
-
 - __Neural Machine Translation by Jointly Learning to Align and Translate.__ *Dzmitry Bahdanau et al.* __CoRR, 2014__ [(Arxiv)](https://arxiv.org/abs/1409.0473) [(S2)](https://www.semanticscholar.org/paper/fa72afa9b2cbc8f0d7b05d52548906610ffbb9c5) (Citations __28426__)
-
 
   - Takeaway: This paper introduces **attention-based neural machine translation (NMT)**.
 
-      ![encoder-decoder-attention](./assets/01-Basic-Model-Zoo.assets/encoder-decoder-attention.png)
+      ![encoder-decoder-attention](assets/01-Basic-Model-Zoo.assets/encoder-decoder-attention.png)
 
-
-
-- **Attention Is All You Need**. Ashish Vaswani et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1706.03762v7))([details](../05-Attention.md)).
+- **Attention Is All You Need**. Ashish Vaswani et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1706.03762v7))([details](../../05-Attention.md)).
 
   - Takeaway: Transformer is a **self-attention-only** seq2seq model with **positional encoding**, enabling highly parallel training.
 
@@ -85,146 +139,124 @@
   - Core Mechanism:
 
       - Scaled Dot-Product Attention
-      
+
           Given query Q, key K, value V:
           $$
           \text{Attention}(Q, K, V) = {\text{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)} {V}
           $$
-      
+
           Properties:
-      
+
           - Computes weighted interactions between all token pairs.
-          
+
           - Scaled normalization stabilizes gradients.
-      
+
         - Global receptive field in a single layer
-      
+
       - Multi-Head Self-Attention (MHSA): Instead of one attention map, use multiple projection heads:
-        
+
         - Each head learns different relational patterns.
         - Heads are concatenated and linearly projected.
-        
+
         $$
         \text{MultiHead}(Q, K, V) = [\text{head}_1; \ldots ; \text{head}_h]\, W^{O} \\
         \text{where}~ \text{head}_i = \text{Attention}(Q W_i^{Q},\, K W_i^{K},\, V W_i^{V})
         $$
-      
+
         where $W_i^{Q}$, $W_i^{K}$, $W_i^{V}$, and $W^{O}$ are parameter matrices to be learned.
-      
-        <img src="./assets/01-Basic-Model-Zoo.assets/multi-head-attention.png" alt="multi-head-attention" style="zoom:50%;" />
-      
+
+        <img src="assets/01-Basic-Model-Zoo.assets/multi-head-attention.png" alt="multi-head-attention" style="zoom:50%;" />
+
       - Positional Encodings
-      
+
         Since the architecture is **non-recurrent** and **non-convolutional**, positional information is injected via sinusoidal encodings.
-      
+
       - Encoder
-      
-        ![transformer-encoder](./assets/01-Basic-Model-Zoo.assets/transformer-encoder.png)
-      
+
+        ![transformer-encoder](assets/01-Basic-Model-Zoo.assets/transformer-encoder.png)
+
         The encoder generates an attention-based representation with capability to locate a specific piece of information from a potentially infinitely-large context.
-        
+
           - Residual Connections + LayerNorm: Ensures stable deep training and gradient flow.
           - Feed-Forward Network (FFN) Per Token: A two-layer MLP applied independently on each position:
           - Adds non-linearity: Increases expressive capacity
-        
+
       - Decoder
-      
-        ![transformer-decoder](./assets/01-Basic-Model-Zoo.assets/transformer-decoder.png)
-        
+
+        ![transformer-decoder](assets/01-Basic-Model-Zoo.assets/transformer-decoder.png)
+
         - Each layer has two sub-layers of multi-head attention mechanisms and one sub-layer of fully-connected feed-forward network.
         - The first multi-head attention sub-layer is **modified** to prevent positions from attending to subsequent positions, as we don’t want to look into the future of the target sequence when predicting the current position.
-        
+
         The full architecture:
-        
-        ![ The Transformer - model architecture](./assets/01-Basic-Model-Zoo.assets/ModalNet-21.png)
-  
+
+        ![ The Transformer - model architecture](assets/01-Basic-Model-Zoo.assets/ModalNet-21.png)
+
   - Pros: Transformer rule the world.
-  
+
   - Cons
     - A mainstream strategy to reduce attention’s complexity is splitting images into multiple windows and implementing the attention operation inside windows or crossing windows.
 
-- __An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale.__ *Alexey Dosovitskiy et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2010.11929) [(S2)](https://www.semanticscholar.org/paper/268d347e8a55b5eb82fb5e7d2f800e33c75ab18a) (Citations __52634__)
-
-  - Takeaway: ViT tokenizes image **patches** and runs a **Transformer encoder** with global self-attention.
-
-  - Motivation: Try transformer in vision.
-
-  - Core Machanism:
-
-    ViT replaces convolution with **patch-level tokens** processed by a **Transformer encoder**.
-
-    - the input of transformer encoder includes: $N$ patches vecters of $D$ dimension concats the `[CLS]` token which is one vector of D dimension. And add the positional embedding by element-wise addition.
-
-      ```
-      encoder input = patch embeddings + class token + positional embeddings.
-      ```
-
-    ![image-20251203210356823](./assets/01-Basic-Model-Zoo.assets/image-20251203210356823.png)
-
-    - Pros
-      - Global Receptive Field from the Start
-      - Foundation for Many Vision Transformers
-      
-    - Cons
-      - Requires Large-Scale Data
-        - Quadratic Cost of Self-Attention
-
-
-
-- __End-to-End Object Detection with Transformers.__ *Nicolas Carion et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2005.12872) [(S2)](https://www.semanticscholar.org/paper/962dc29fdc3fbdc5930a10aba114050b82fe5a3e)([code_link](https://github.com/facebookresearch/detr)) (Citations __15847__)
+- __End-to-End Object Detection with Transformers.__ *Nicolas Carion et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2005.12872) [(S2)](https://www.semanticscholar.org/paper/962dc29fdc3fbdc5930a10aba114050b82fe5a3e)([code_link](https://github.com/facebookresearch/detr)) (Citations __15847__) -- DETR
 
   - Takeaway: DETR treats detection as **set prediction** using a Transformer encoder-decoder and **bipartite matching** loss.
 
-  - Motivation: Before DETR,  mainstream detectors followed a **two-stage** or **dense prediction** paradigm. One-stage detector heavily relies on anchors and hyperparameters.
+  - Motivation: Before DETR, mainstream detectors followed a **two-stage** or **dense prediction** paradigm. One-stage detector heavily relies on anchors and hyperparameters.
 
     And transformer has begun to sweep other domains other than objection detection.
 
   - Core Mechanism:
 
-    ![image-20251201121642815](./assets/01-Basic-Model-Zoo.assets/image-20251201121642815.png)
+    ![image-20251201121642815](assets/01-Basic-Model-Zoo.assets/image-20251201121642815.png)
 
-    - Set Prediction via Hungarian Matching
-    
+    - Set Prediction via Hungarian Matching 替代后处理nms
+
       DETR predicts **N object queries**, each responsible for one object.
        Ground truth objects and predicted queries are matched **one-to-one** using **Hungarian bipartite matching** with a cost composed of:
-    
+
       - class probability $\sigma = \arg \min \sum L_{match}(y_i,y_{\sigma(i)})$
       - L1 box distance
       - GIoU loss
 
       This makes detections **order-invariant** and **unique**, removing NMS.
 
-    - Object Queries (Learnable Embeddings)
-    
-      ![image-20251203234812841](./assets/01-Basic-Model-Zoo.assets/image-20251203234812841.png)
-    
+      > [!NOTE]
+      >
+      > 二分图匹配（Bipartite Matching）
+      >
+      > 匈牙利算法（Hungarian Algorithm）就是一个解决二分图最有匹配问题的经典算法
+
+    - Object Queries (Learnable Embeddings) 替代生成anchor
+
+      ![image-20251203234812841](assets/01-Basic-Model-Zoo.assets/image-20251203234812841.png)
+
       Begins as a ramdom vector(n,learnable) and take the encoder output as side input.
-    
+
       > [!TIP]
       >
       > It seems like you trained n different people to ask different questions about the input image.
-    
+
     - Encoder: quadratic:
-    
-      <img src="./assets/01-Basic-Model-Zoo.assets/image-20251203235223451.png" alt="image-20251203235223451" style="zoom:50%;" />
-    
+
+      <img src="assets/01-Basic-Model-Zoo.assets/image-20251203235223451.png" alt="image-20251203235223451" style="zoom:50%;" />
+
       Let`s check why the encoder is useful for image detection. Now each point in the matrix connect two points in the $H\times W$ map and 2 points can define a bbox. Which means every element in the matrix stands for the information about different bboxes.
 
+    - Pipeline:
 
-  - Pipeline:
-    
-      ![image-20251201121620187](./assets/01-Basic-Model-Zoo.assets/image-20251201121620187.png)
-  - Pros
-    
-    fast, end-to-end
-    
-    > [!NOTE]
-    >
-    > RNNs for object detection were much slower and less effective, because they made predictions **sequentially rather than in parallel**.
+        ![image-20251201121620187](assets/01-Basic-Model-Zoo.assets/image-20251201121620187.png)
 
-  - Cons
-    
-    - slow convergence, hard to train
+    - Pros
+
+      fast, end-to-end
+
+      > [!NOTE]
+      >
+      > RNNs for object detection were much slower and less effective, because they made predictions **sequentially rather than in parallel**.
+
+    - Cons
+
+      - slow convergence, hard to train
       - Weak Small-Object Performance
       - high computational cost
 
@@ -232,7 +264,7 @@
 
 - __Transformers in Vision: A Survey.__ *Salman Hameed Khan et al.* __ACM Computing Surveys (CSUR), 2021__ [(Link)](https://doi.org/10.1145/3505244) [(S2)](https://www.semanticscholar.org/paper/3a906b77fa218adc171fecb28bb81c24c14dcc7b) (Citations __3005__)
 
-- **BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding**. Jacob Devlin et.al. **arxiv**, **2018**, ([pdf](..\..\..\papers\models\BERT.pdf))([link](http://arxiv.org/abs/1810.04805v2)).
+- **BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding**. Jacob Devlin et.al. **arxiv**, **2018**, ([link](http://arxiv.org/abs/1810.04805v2)).
 
 ## Relations
 

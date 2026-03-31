@@ -1,4 +1,12 @@
+---
+title: 02-Module-Design
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Module Design
+[TOC]
 
 introduce different module design
 
@@ -7,7 +15,6 @@ introduce different module design
 ## Shortcut
 
 - Takeaway: The shortcut ensures information and gradients can bypass the bottleneck stack, improving optimization stability.
-
 
 - How:
 
@@ -54,26 +61,26 @@ introduce different module design
   class DepthwiseSeparableConv(nn.Module):
       def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0):
           super(DepthwiseSeparableConv, self).__init__()
-  
+
           # Depthwise Convolution
           self.depthwise = nn.Conv2d(in_channels, in_channels, kernel_size=kernel_size,
                                       stride=stride, padding=padding, groups=in_channels)
-  
+
           # Pointwise Convolution
           self.pointwise = nn.Conv2d(in_channels, out_channels, kernel_size=1)
-  
+
       def forward(self, x):
           # Apply depthwise convolution
           x = self.depthwise(x)
           # Apply pointwise convolution
           x = self.pointwise(x)
           return x
-  
+
   # Example of using the Depthwise Separable Convolution layer
   input_tensor = torch.randn(1, 3, 64, 64)  # Example input with batch size 1, 3 channels, 64x64 image
   model = DepthwiseSeparableConv(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
   output_tensor = model(input_tensor)
-  
+
   print(f'Output shape: {output_tensor.shape}')
   ```
 
@@ -86,17 +93,18 @@ introduce different module design
 
 - **Squeeze-and-Excitation Networks**. Jie Hu et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1709.01507v4)).
 
-- Takeaway:  **Squeeze-and-Excitation (SE)** is a lightweight attention mechanism. Its purpose is to let the network **reweight feature channels adaptively**, so that important channels are emphasized and unimportant ones are suppressed.
+  - Takeaway:  **Squeeze-and-Excitation (SE)** is a lightweight attention mechanism. Its purpose is to let the network **reweight feature channels adaptively**, so that important channels are emphasized and unimportant ones are suppressed.
 
-  In essence, SE is **channel-wise attention**.
+    In essence, SE is **channel-wise attention**.
 
-- Motivation: Some channels are more discriminative than others. SE want the network to learn what channels are important for the current input.
+  - Motivation: Some channels are more discriminative than others. SE want the network to learn what channels are important for the current input.
 
-- Core Mechanism: The SE module has three steps:
+  - Core Mechanism: The SE module has three steps:
 
-  ![image-20251129154058320](./assets/06-Module-Design.assets/image-20251129154058320.png)
 
-  ![image-20251129161804142](./assets/06-Module-Design.assets/image-20251129161804142.png)
+  ![image-20251129154058320](assets/02-Module-Design.assets/image-20251129154058320.png)
+
+  ![image-20251129161804142](assets/02-Module-Design.assets/image-20251129161804142.png)
 
   1. Squeeze (Global Information Embedding): Perform global average pooling(better than max) to compress spatial information into a compact **channel descriptor**:
      $$
@@ -113,12 +121,14 @@ introduce different module design
      \hat{X}_c = s_c \cdot X_c
      $$
 
-- Pros
-  - Very small parameter overhead and significant accuracy improvement
-  - Easy to integrate into any CNN. Plug-and-play.
-- Cons
-  - Adds a small amount of latency
-  - Only models **channel attention**, not spatial attention
+  4. Pros
+
+     1. Very small parameter overhead and significant accuracy improvement
+     2. Easy to integrate into any CNN. Plug-and-play.
+  5. Cons
+
+     1. Adds a small amount of latency
+     2. Only models **channel attention**, not spatial attention
 
 ## AdderNet
 
@@ -162,10 +172,6 @@ CNN 中的卷积是计算特征和卷积核之间的互相关性，而这个互�
   > [!CAUTION]
   >
   > 但疑惑是核函数虽然能把输入特征和卷积核(滤波器)映射到高维空间上，但是文中的操作能否保证CNN和ANN的输出特征没有差异？这点缺乏理论的佐证。
-
-
-
-
 
 ## References
 

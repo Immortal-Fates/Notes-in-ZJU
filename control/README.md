@@ -1,7 +1,14 @@
-
+---
+title: README
+date: 2026-03-02
+tags:
+course: control
+status: draft
+---
 [控制理论笔记 Automation (buckyi.github.io)](https://buckyi.github.io/Note-Automation/index.html)
 
 # References
+[TOC]
 
 理解：
 

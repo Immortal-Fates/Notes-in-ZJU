@@ -1,4 +1,12 @@
+---
+title: 04_4-RNN_LSTM
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # LSTM
+[TOC]
 
 > LSTM（Long Short-Term Memory，长短期记忆网络）是一种特殊的循环神经网络（RNN）
 >
@@ -60,7 +68,7 @@ RNN什么信息它都存下来，因为它没有挑选的能力，而LSTM不一�
 
 只要输出门接近 1，我们就能够有效地将所有记忆信息传递给预测部分，而对于输出门接近 0，我们只保留记忆元内的所有信息，而不需要更新隐状态。
 
-![lstm-3](./assets/LSTM.assets/lstm-3.svg)
+![lstm-3](assets/04_4-RNN_LSTM.assets/lstm-3.svg)
 
 ## 总结
 
@@ -93,9 +101,9 @@ set PYTHONUTF8=1
 autoliter -i ./LSTM.md -o ../../../papers/models/LSTM/
 ```
 
-- **Long Short-Term Memory**. Hochreiter Sepp et.al. **Neural Computation**, **1997-11-1**, ([pdf](..\..\..\papers\models\LSTM\Long_Short-Term_Memory.pdf))([link](https://doi.org/10.1162/neco.1997.9.8.1735)).
-- **LSTM: A Search Space Odyssey**. Greff Klaus et.al. **IEEE Trans. Neural Netw. Learning Syst.**, **2017-10**, ([pdf](..\..\..\papers\models\LSTM\LSTM:_A_Search_Space_Odyssey.pdf))([link](https://doi.org/10.1109/tnnls.2016.2582924)).
-- **Bidirectional LSTM Networks for Improved Phoneme Classification and Recognition**. Graves Alex et.al. **No journal**, **2005**, ([pdf](..\..\..\papers\models\LSTM\Bidirectional_LSTM_Networks_for_Improved_Phoneme_Classification_and_Recognition.pdf))([link](https://doi.org/10.1007/11550907_126)).
+- **Long Short-Term Memory**. Hochreiter Sepp et.al. **Neural Computation**, **1997-11-1**, ([link](https://doi.org/10.1162/neco.1997.9.8.1735)).
+- **LSTM: A Search Space Odyssey**. Greff Klaus et.al. **IEEE Trans. Neural Netw. Learning Syst.**, **2017-10**, ([link](https://doi.org/10.1109/tnnls.2016.2582924)).
+- **Bidirectional LSTM Networks for Improved Phoneme Classification and Recognition**. Graves Alex et.al. **No journal**, **2005**, ([link](https://doi.org/10.1007/11550907_126)).
 
 # References
 

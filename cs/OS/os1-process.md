@@ -1,4 +1,12 @@
+---
+title: os1-process
+date: 2026-03-02
+tags:
+course: cs
+status: draft
+---
 # Process and Program
+[TOC]
 
 ## Program vs Process
 

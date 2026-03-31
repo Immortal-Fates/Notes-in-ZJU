@@ -1,4 +1,12 @@
+---
+title: cmake
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 记录笨人学习CMake的过程，对CMake形成一个初步的认识并且掌握CMake的基本语法。
 
@@ -16,7 +24,7 @@ CMake是服务于将源代码转换成可执行的文件的工具。本身是一
 
 CMake就是“协调器”——它清楚哪些步骤需要完成，理解最终目标是什么，以及忙碌于为构建工作找到合适的“工人”和“材料”。**这个过程有三个阶段：配置、生成、构建阶段**
 
-![img](assets/CMake.assets/v2-1edd76b046c374e8fb26f393e3bff4b0_720w.webp)
+![img](assets/cmake.assets/v2-1edd76b046c374e8fb26f393e3bff4b0_720w.webp)
 
 其实使用纯粹依靠 cmake 本身提供的基本指令来管理工程是一件非常复杂的事情，所以， cmake 设计成了可扩展的架构，可以通过编写一些通用的模块来扩展 cmake.
 
@@ -155,7 +163,7 @@ option(<option_variable> "description" [initial value])向用户显示一个选�
 
 ## 整体逻辑
 
-![18c46c9903dd0d9fdb64fbd47523869](assets/CMake.assets/18c46c9903dd0d9fdb64fbd47523869.jpg)
+![18c46c9903dd0d9fdb64fbd47523869](assets/cmake.assets/18c46c9903dd0d9fdb64fbd47523869.jpg)
 
 写组件库只需要改三个部分
 

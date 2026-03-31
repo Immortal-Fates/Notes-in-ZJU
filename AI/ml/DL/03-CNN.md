@@ -1,4 +1,12 @@
+---
+title: 03-CNN
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # CNN
+[TOC]
 
 Convolutional Neural Network (CNN)
 
@@ -86,6 +94,90 @@ $$
 这看起来类似于 :eqref:`eq_conv-layer`，但有一个主要区别：这里不是使用$(i+a, j+b)$，而是使用差值。然而，这种区别是表面的，因为我们总是可以匹配两个公式之间的符号。
 
 > 实际上卷积层是个错误的叫法，实际上的运算是**互相关**（cross-correlation）
+
+二维卷积可以展开为矩阵乘法：假设输入
+
+```
+X (H × W)
+```
+
+卷积核
+
+```
+K (k × k)
+```
+
+在实际实现中，会把输入通过 **im2col** 展开成一个矩阵：
+
+```
+X_col
+```
+
+例如
+
+```
+X_col ∈ R^(k² × N)
+```
+
+N 是所有滑动窗口的数量。
+
+卷积核也展开成向量：
+
+```
+w ∈ R^(k²)
+```
+
+卷积就变成
+
+```
+y = wᵀ X_col
+```
+
+如果有多个卷积核：
+
+```
+Y = W X_col
+```
+
+其中
+
+```
+W ∈ R^(C_out × k²)
+```
+
+所以普通卷积本质是矩阵乘法，即线性变换。
+
+这里补充介绍ConvTranspose2d，即先在输入像素之间插入 0，然后做普通卷积。
+
+- Core Mechanism
+
+  转置卷积来自矩阵转置
+
+  ```
+  x' = Cᵀ y
+  ```
+
+- Pros
+
+  - 实现可学习的上采样
+    - 插值上采样：不可学习
+
+- Cons
+
+  - 卷积核覆盖区域不均匀，不同像素贡献不一致
+
+  - 现代更喜欢
+
+    ```
+    Upsample
+    → Conv
+    ```
+
+    
+
+
+
+
 
 ## ConvNet Layers
 
@@ -187,7 +279,7 @@ $$
 
   - why：因为使用了最小窗口，$1\times 1$卷积失去了卷积层的特有能力——在高度和宽度维度上，识别相邻元素间相互作用的能力。其实$1\times 1$卷积的唯一计算发生在通道上。
 
-    ![image-20251103152759772](./assets/DL3-CNN.assets/image-20251103152759772.png)
+    ![image-20251103152759772](assets/03-CNN.assets/image-20251103152759772.png)
 
     这里输入和输出具有相同的高度和宽度，输出中的每个元素都是从输入图像中同一位置的元素的线性组合。我们可以将$1\times 1$卷积层看作在每个像素位置应用的全连接层，以$c_i$个输入值转换为$c_o$个输出值。因为这仍然是一个卷积层，所以跨像素的权重是一致的。同时，$1\times 1$卷积层需要的权重维度为$c_o\times c_i$，再额外加上一个偏置。
 
@@ -247,7 +339,6 @@ Many types of normalization layers have been proposed for use in ConvNet archite
 
 - Takeaway: Batch Normalization (Ioffe & Szegedy, 2015) is a technique used to stabilize and accelerate training by reducing **internal covariate shift**.
 
-
 - Why
 
   - 首先，数据预处理的方式通常会对最终结果产生巨大影响。回想一下我们应用多层感知机来预测房价的例子使用真实数据时，我们的第一步是标准化输入特征，使其平均值为0，方差为1。
@@ -279,21 +370,21 @@ Many types of normalization layers have been proposed for use in ConvNet archite
 
     > [!TIP]
     > $\boldsymbol{\gamma}$和$\boldsymbol{\beta}$是需要与其他模型参数一起学习的参数。
-    
+
     由于在训练过程中，中间层的变化幅度不能过于剧烈，而批量规范化将每一层主动居中，并将它们重新调整为给定的平均值和大小（通过$\hat{\boldsymbol{\mu}}_\mathcal{B}$和${\hat{\boldsymbol{\sigma}}_\mathcal{B}}$）。
-    
+
     从形式上来看，我们计算出中的$\hat{\boldsymbol{\mu}}_\mathcal{B}$和${\hat{\boldsymbol{\sigma}}_\mathcal{B}}$，如下所示：
-    
+
     $$
     \begin{aligned} \hat{\boldsymbol{\mu}}_\mathcal{B} &= \frac{1}{|\mathcal{B}|} \sum_{\mathbf{x} \in \mathcal{B}} \mathbf{x},\\
     \hat{\boldsymbol{\sigma}}_\mathcal{B}^2 &= \frac{1}{|\mathcal{B}|} \sum_{\mathbf{x} \in \mathcal{B}} (\mathbf{x} - \hat{\boldsymbol{\mu}}_{\mathcal{B}})^2 + \epsilon.\end{aligned}
     $$
     请注意，我们在方差估计值中添加一个小的常量$\epsilon > 0$，以确保我们永远不会尝试除以零，即使在经验方差估计值可能消失的情况下也是如此。估计值$\hat{\boldsymbol{\mu}}_\mathcal{B}$和${\hat{\boldsymbol{\sigma}}_\mathcal{B}}$通过使用平均值和方差的噪声（noise）估计来抵消缩放问题。乍看起来，这种噪声是一个问题，而事实上它是有益的。
-    
+
     > 事实证明，这是深度学习中一个反复出现的主题。由于尚未在理论上明确的原因，优化中的各种噪声源通常会导致更快的训练和较少的过拟合：这种变化似乎是正则化的一种形式。在一些初步研究中， :cite:`Teye.Azizpour.Smith.2018`和 :cite:`Luo.Wang.Shao.ea.2018`分别将批量规范化的性质与贝叶斯先验相关联。这些理论揭示了为什么批量规范化最适应$50 \sim 100$范围中的中等批量大小的难题。
-    
+
     另外，批量规范化层在”训练模式“（通过小批量统计数据规范化）和“预测模式”（通过数据集统计规范化）中的功能不同。
-    
+
     - 在训练过程中，我们无法得知使用整个数据集来估计平均值和方差，所以只能根据每个小批次的平均值和方差不断训练模型。
     - 而在预测模式下，可以根据整个数据集精确计算批量规范化所需的平均值和方差。
 
@@ -336,7 +427,7 @@ Many types of normalization layers have been proposed for use in ConvNet archite
 
 #### Group Normalization
 
-- Takeaway: **Group Normalization normalizes channels by dividing them into groups and computing mean/variance within each group**, instead of across the batch (BN) or across the entire channel dimension (LN).  
+- Takeaway: **Group Normalization normalizes channels by dividing them into groups and computing mean/variance within each group**, instead of across the batch (BN) or across the entire channel dimension (LN).
   It provides **stable normalization independent of batch size**, making it highly suitable for small-batch training, detection/segmentation tasks, and large Vision Transformers.
 
 ## ConvNet Architectures
@@ -351,7 +442,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
 ### Case Studies
 
-#> <https://cs231n.github.io/convolutional-networks/#layerpat>: see the Case studies part
+> <https://cs231n.github.io/convolutional-networks/#layerpat>: see the Case studies part
 
 经典的CNN网络有LeNet-5、AlexNet、VGG、GoogleNet、ResNet、DenseNet等。这些经典CNN网络结构中总是包含一些对于神经网络架构设计有巨大启发性的东西。
 
@@ -375,7 +466,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
       >
     - 全连接层密集块：由三个全连接层组成
 
-    ![lenet](./assets/DL3-CNN.assets/lenet.svg)
+    ![lenet](assets/03-CNN.assets/lenet.svg)
   - 使用权重衰减
 
 - Deep Convolutional Neural Networks (AlexNet)
@@ -390,14 +481,14 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
     - AlexNet通过暂退法（dropout）控制全连接层的模型复杂度，而LeNet只使用了权重衰减
     - 预处理：扩充数据，AlexNet在训练时增加了大量的图像增强数据，如翻转、裁切和变色。这使得模型更健壮，更大的样本量有效地减少了过拟合。
 
-  ![alexnet-original](./assets/DL3-CNN.assets/alexnet-original.svg)
+  ![alexnet-original](assets/03-CNN.assets/alexnet-original.svg)
 
   > 原始版本用两个小型GPU同时运算（论文中做了大量工程性的描述，现在看来不是很有必要）
   >
 
   以下是精简版
 
-  ![alexnet](./assets/DL3-CNN.assets/alexnet.svg)
+  ![alexnet](assets/03-CNN.assets/alexnet.svg)
 
   没有提供一个通用模板来知道后续研究
 
@@ -405,7 +496,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
   - 结构
 
-    ![vgg](./assets/DL3-CNN.assets/vgg.svg)
+    ![vgg](assets/03-CNN.assets/vgg.svg)
     - 一个VGG块：使用了带有$3\times3$卷积核、填充为1（保持高度和宽度）的卷积层，和带有$2 \times 2$汇聚窗口、步幅为2（每个块后的分辨率减半）的最大汇聚层
 
       > 发现深层且窄的卷积比浅层且宽的卷积更有效
@@ -427,7 +518,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
   - 结构：
 
-    ![nin](./assets/DL3-CNN.assets/nin.svg)
+    ![nin](assets/03-CNN.assets/nin.svg)
 
     NiN和AlexNet之间的一个显著区别是NiN完全取消了全连接层。相反，NiN使用一个NiN块，其输出通道数等于标签类别的数量。最后放一个*全局平均汇聚层*（global average pooling layer），生成一个对数几率（logits）。NiN设计的一个优点是，它显著减少了模型所需参数的数量。然而，在实践中，这种设计有时会增加训练模型的时间。
 
@@ -450,7 +541,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
     - 基本卷积块（Inception块）
 
-      ![inception](./assets/DL3-CNN.assets/inception.svg)
+      ![inception](assets/03-CNN.assets/inception.svg)
 
       Inception块由四条并行路径组成。通过不同窗口形状的卷积层和最大汇聚层来并行抽取信息
 
@@ -471,7 +562,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
     - 整体模型
 
-      ![inception-full](./assets/DL3-CNN.assets/inception-full.svg)
+      ![inception-full](assets/03-CNN.assets/inception-full.svg)
 
       GoogLeNet一共使用9个Inception块和全局平均汇聚层的堆叠来生成其估计值。Inception块之间的最大汇聚层可降低维度。第一个模块类似于AlexNet和LeNet，Inception块的组合从VGG继承，全局平均汇聚层避免了在最后使用全连接层。
 
@@ -481,7 +572,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
   >
   > 我们实际上是用神经网络来拟合一个函数，但是经过修改网络其拟合能力可能更差
   >
-  > ![functionclasses](./assets/DL3-CNN.assets/functionclasses.svg)
+  > ![functionclasses](assets/03-CNN.assets/functionclasses.svg)
   >
   > 右侧的嵌套函数（nested function）类$\mathcal{F}_1 \subseteq \ldots \subseteq \mathcal{F}_6$，我们可以避免上述问题。这样改进的函数表达能力相比之前会更强
   >
@@ -494,15 +585,15 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
     - 残差块
 
-      ![residual-block](./assets/DL3-CNN.assets/residual-block.svg)
+      ![residual-block](assets/03-CNN.assets/residual-block.svg)
 
       我们希望拟合$f(x)$，左边需要直接拟合$f(x)$，右边只需要拟合残差映射$f(x)-x$，残差映射在现实中往往更容易优化。在残差块中，输入可通过跨层数据线路更快地向前传播。
 
       ResNet沿用了VGG完整的$3\times 3$卷积层设计。残差块里首先有2个有相同输出通道数的$3\times 3$卷积层。每个卷积层后接一个批量规范化层和ReLU激活函数。然后我们通过跨层数据通路，跳过这2个卷积运算，将输入直接加在最后的ReLU激活函数前。这样的设计要求2个卷积层的输出与输入形状一样，从而使它们可以相加。如果想改变通道数，就需要引入一个额外的$1\times 1$卷积层来将输入变换成需要的形状后再做相加运算。
 
-      ![resnet-block](./assets/DL3-CNN.assets/resnet-block.svg)
+      ![resnet-block](assets/03-CNN.assets/resnet-block.svg)
 
-      ![resnet18](./assets/DL3-CNN.assets/resnet18.svg)
+      ![resnet18](assets/03-CNN.assets/resnet18.svg)
 
   - 改良：
 
@@ -516,7 +607,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
 
   - 结构
 
-    ![densenet-block](./assets/DL3-CNN.assets/densenet-block.svg)
+    ![densenet-block](assets/03-CNN.assets/densenet-block.svg)
 
     不再使用简单相加，因此，在应用越来越复杂的函数序列后，我们执行从$\mathbf{x}$到其展开式的映射：
     $$
@@ -529,7 +620,7 @@ INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC
     实现起来非常简单：我们不需要添加术语，而是将它们连接起来。
     DenseNet这个名字由变量之间的“稠密连接”而得来，最后一层与之前的所有层紧密相连。
 
-    ![densenet](./assets/DL3-CNN.assets/densenet.svg)
+    ![densenet](assets/03-CNN.assets/densenet.svg)
 
     稠密网络主要由2部分构成：*稠密块*（dense block）和*过渡层*（transition layer）。前者定义如何连接输入和输出，而后者则控制通道数量，使其不会太复杂。
 

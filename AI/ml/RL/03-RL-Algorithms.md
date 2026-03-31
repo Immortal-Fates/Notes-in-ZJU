@@ -1,9 +1,16 @@
+---
+title: 03-RL-Algorithms
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # RL Algorithms
+[TOC]
 
-![rl_algorithms_9_15](./assets/03-RL-Algorithms.assets/rl_algorithms_9_15.svg)
+![rl_algorithms_9_15](assets/03-RL-Algorithms.assets/rl_algorithms_9_15.svg)
 
 - Model Free vs. Model Base: **whether the agent has access to (or learns) a model of the environment**.
-
 
 - 学习什么
   - policies, either stochastic or deterministic,
@@ -33,8 +40,6 @@ Methods in this family represent a policy explicitly as ![\pi_{\theta}(a|s)](htt
 - Takeaway: The [Proximal Policy Optimization](https://arxiv.org/abs/1707.06347) algorithm combines ideas from A2C (having multiple workers) and TRPO (it uses a trust region to improve the actor).
 
   The main idea is that after an update, the new policy should be not too far from the old policy. For that, ppo uses clipping to avoid too large update.
-
-
 
 ### Q-Learning
 

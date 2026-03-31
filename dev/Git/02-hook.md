@@ -1,3 +1,10 @@
+---
+title: 02-hook
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Git Hook
 
 introduce git hook

@@ -1,3 +1,10 @@
+---
+title: 01-4-Transfer-Learning
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 #  Transfer Learning
 
 *Transfer learning* transfer the knowledge learned from the *source dataset* to the *target dataset*.
@@ -10,7 +17,7 @@
 
 - Pipeline:
 
-  ![finetune](./assets/04-Transfer-Learning.assets/finetune.svg)
+  ![finetune](assets/01-4-Transfer-Learning.assets/finetune.svg)
 
   1. Pretrain a neural network model, i.e., the *source model*, on a source dataset.
   2. Create a new neural network model, i.e., the *target model*. This copies all model designs and their parameters on the source model except the output layer.

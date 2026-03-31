@@ -1,14 +1,20 @@
-
-
+---
+title: 00-Intro
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Practical Machine Learning
+[TOC]
 
-from [stanford-cs329p](https://c.d2l.ai/stanford-cs329p/syllabus.html). Only notes some basic concepts, if you are interested in some sections, dive into it from the origin slides. 
+from [stanford-cs329p](https://c.d2l.ai/stanford-cs329p/syllabus.html). Only notes some basic concepts, if you are interested in some sections, dive into it from the origin slides.
 
 - [Challenges in Deploying Machine Learning](https://arxiv.org/pdf/2011.09926)
 
 ## Data
 
-![image-20251209114536249](./assets/00-Intro.assets/image-20251209114536249.png)
+![image-20251209114536249](assets/00-Intro.assets/image-20251209114536249.png)
 
 ### Data Acquisition
 
@@ -53,13 +59,13 @@ We should Discover What Data is Available
 
 ### Data labeling
 
-![flow chart](./assets/00-Intro.assets/image-20251209110352907.png)
+![flow chart](assets/00-Intro.assets/image-20251209110352907.png)
 
 - semi-supervised + crowdsouring
 
 - quality control
-- weak supervision: 
-  - data programming: heuristic programs to assign labels 
+- weak supervision:
+  - data programming: heuristic programs to assign labels
 
 ### Data cleaning
 

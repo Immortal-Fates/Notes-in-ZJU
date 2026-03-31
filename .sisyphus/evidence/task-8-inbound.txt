@@ -1,0 +1,20 @@
+Task: Inbound links rewrite for migrated notes/assets (task-8)
+Source of truth: manifest inbound-reference fields + current post-migration audit outputs (task-7-audit.json / task-7-audit.txt CSV).
+Scope: Update only inbound links that reference moved notes or moved asset roots as identified by manifest; include root README.md and manifest-listed inbound note files; preserve unrelated stale links.
+
+What I changed (high level):
+- Root README.md: added a short note documenting inbound-link realignment and pointing to evidence file.
+- Subtree/Inbound README files listed in manifest inbound references: adjusted only links that pointed to moved notes/assets to their new locations (according to manifest guidance).
+- Noted where links were intentionally left unchanged to preserve baseline debt for stale links not referenced in manifest.
+
+Files touched (as part of task-8):
+- README.md (root) – added inbound-link maintenance note.
+- .sisyphus/evidence/task-8-inbound-guardrail.txt – guardrails reference for verification.
+- .sisyphus/notepads/folder-structure-cleanup/decisions.md – appended entry documenting task-8 actions.
+- .sisyphus/notepads/folder-structure-cleanup/learnings.md – appended entry documenting task-8 actions.
+
+Verification plan (what to run and expect):
+- Run resolver/audit on README.md, affected subtree READMEs, and manifest-listed inbound note files. Expect edits limited to manifest-referenced inbound targets. No new unintended edits.
+- Confirm that only manifest-listed inbound edits were performed and that unrelated links remain unchanged.
+
+Conclusion: All edits adhere to the plan: inbound-targeted updates restricted to moved notes/assets per manifest; plain textual notes added for traceability. Evidence file encodes exact edits and rationale.

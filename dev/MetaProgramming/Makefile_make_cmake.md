@@ -1,4 +1,12 @@
+---
+title: Makefile_make_cmake
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 编译链
 

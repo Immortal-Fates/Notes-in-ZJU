@@ -1,6 +1,13 @@
+---
+title: 01-Foundations-of-AI
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Foundations of AI
 
-Follow the MIT how2ai course. Check the [references](#References). How to AI (Almost) Anything
+Follow the MIT how2ai course. Check the [references](#references). How to AI (Almost) Anything
 
 [TOC]
 
@@ -14,7 +21,7 @@ Follow the MIT how2ai course. Check the [references](#References). How to AI (Al
   3. Large models and modern AI
   4. Interactive AI
 
-- Assignment: read required papers and other resources. Summarize the main take-away points 
+- Assignment: read required papers and other resources. Summarize the main take-away points
 
 ### Introduction to AI and AI research
 
@@ -36,9 +43,7 @@ check all the research project [here](https://mit-mi.github.io/how2ai-course/spr
 
 The Research Process
 
-![image-20251222210651102](./assets/01-Foundations-of-AI.assets/image-20251222210651102.png)
-
-
+![image-20251222210651102](assets/01-Foundations-of-AI.assets/image-20251222210651102.png)
 
 #### How to generate research ideas
 
@@ -52,7 +57,7 @@ The Research Process
 
    Move from a higher-level question to a lower-level concrete testing of that question.
 
-![1_jQ95_BVd04T_amamnxWIKw](./assets/01-Foundations-of-AI.assets/1_jQ95_BVd04T_amamnxWIKw.png)
+![1_jQ95_BVd04T_amamnxWIKw](assets/01-Foundations-of-AI.assets/1_jQ95_BVd04T_amamnxWIKw.png)
 
 #### How to do literature review and read a paper
 
@@ -70,45 +75,9 @@ The Research Process
 
 - **Representation Learning: A Review and New Perspectives**. Yoshua Bengio et.al. **arxiv**, **2012**, ([link](https://arxiv.org/abs/1206.5538v3)).
 
-
-
-
-
-
-
 ## References
 
 - [mit how2ai-course](https://mit-mi.github.io/how2ai-course/spring2025/schedule/)
 
 - [The Idea Hexagon: A Framework for Innovation](https://medium.com/spotprobe/the-hexagon-of-ideas-02e5b770d75e)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

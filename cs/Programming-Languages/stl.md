@@ -1,4 +1,12 @@
+---
+title: stl
+date: 2026-03-02
+tags:
+course: cs
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 STL: standard template library
 

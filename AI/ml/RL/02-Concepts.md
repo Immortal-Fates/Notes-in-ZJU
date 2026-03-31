@@ -1,3 +1,10 @@
+---
+title: 02-Concepts
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Key Concepts and Terminology
 
 check the [open AI](https://spinningup.openai.com/en/latest/spinningup/rl_intro.html#key-concepts-and-terminology)
@@ -16,13 +23,11 @@ check the [open AI](https://spinningup.openai.com/en/latest/spinningup/rl_intro.
 - discount factor $\gamma$
 - horizon $H$
 
-![Agent-environment interaction loop.*](./assets/02-Concepts.assets/rl_diagram_transparent_bg.png)
+![Agent-environment interaction loop.*](assets/02-Concepts.assets/rl_diagram_transparent_bg.png)
 
 强化学习的主要特征是智能体和环境。环境是智能体生活并与之交互的世界。在交互的每一步中，智能体都会看到对世界状态的（可能是部分的）观察，然后决定要采取的行动。当代理作用于环境时，环境会发生变化，但环境也可能会自行变化。
 
 智能体还感知来自环境的奖励信号，这个数字告诉它当前世界状态的好坏。代理的目标是最大化其累积奖励，称为回报。强化学习方法是代理学习行为以实现其目标的方法。
-
-
 
 ## States and Observations
 
@@ -77,7 +82,7 @@ A **policy** is a rule used by an agent to decide what actions to take. The agen
 
     2. There is a neural network that maps from states to log standard deviations, $\log \sigma_{\theta}(s)$. It may optionally share some layers with the mean network.
 
-    Note that in both cases we output **log standard deviations** instead of standard deviations directly. This is because log stds are free to take on any values in $(-\infty, \infty)$, while stds must be nonnegative. It’s **easier to train parameters** if you don’t have to enforce those kinds of constraints. 
+    Note that in both cases we output **log standard deviations** instead of standard deviations directly. This is because log stds are free to take on any values in $(-\infty, \infty)$, while stds must be nonnegative. It’s **easier to train parameters** if you don’t have to enforce those kinds of constraints.
 
     - Sampling: Given the mean action $\mu_{\theta}(s)$ and standard deviation $\sigma_{\theta}(s)$, and a vector $z$ of noise from a spherical Gaussian ($z \sim \mathcal{N}(0, I)$), an action sample can be computed with
       $$
@@ -140,7 +145,7 @@ There are two kinds of return.
 
    > [!NOTE]
    >
-   > Why a discount factor: 
+   > Why a discount factor:
    >
    > - cash now is better than cash early
    > - Mathematically: the infinite sum converges with a discount factor.
@@ -215,7 +220,7 @@ $$
 
 ### Bellman Equations
 
-All four of the value functions obey special self-consistency equations called **Bellman equations**. 
+All four of the value functions obey special self-consistency equations called **Bellman equations**.
 
 - The basic idea behind the Bellman equations is this: The value of your starting point is the reward you expect to get from being there, plus the value of wherever you land next.
 

@@ -1,3 +1,10 @@
+---
+title: 03-Operation-Design
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Operation Design
 
 [TOC]
@@ -32,7 +39,7 @@
   $$
   These shifted channels collectively emulate the receptive field of a 3×3 convolution. A **1×1 convolution** is applied afterward to mix channel information.
 
-  ![image-20251128213635759](./assets/07-Operation-Design.assets/image-20251128213635759.png)
+  ![image-20251128213635759](assets/03-Operation-Design.assets/image-20251128213635759.png)
 
   > [!IMPORTANT]
   >
@@ -42,14 +49,14 @@
 
   ```mermaid
   flowchart LR
-  
+
   A[Channel Assignment<br/>Divide channels into groups<br/>Assign each group a shift direction]
       --> B[Spatial Shift<br/>Apply fixed spatial offsets<br/>Zero parameters, zero FLOPs]
-  
+
   B --> C[Channel Mixing 1x1 Conv<br/>Learnable mixing of shifted channels<br/>Restores expressive power]
-  
+
   C --> D[Stack Shift Blocks<br/>Compose multiple Shift + 1x1 Conv units<br/>Build deeper spatial representations]
-  
+
   ```
 
 - Pros
@@ -60,7 +67,6 @@
 
   - Lower representational power than 3×3 conv. Weaker performance on large-scale tasks
   - May incur memory-movement overhead: Some hardware penalizes data shifts more than arithmetic.
-
 
 ### Development
 
@@ -121,10 +127,9 @@
     $$
     so that when inferring just calculate: $y =Conv(x;W\prime,b\prime)$. BN disappears.
 
-
 - Core Mechanism
 
-  ![image-20251130173838185](./assets/07-Operation-Design.assets/image-20251130173838185.png)
+  ![image-20251130173838185](assets/03-Operation-Design.assets/image-20251130173838185.png)
 
   1. Use multi-branch blocks during training, eg: 3×3 Conv + BN/1×1 Conv + BN/Identity + BN/Depthwise Conv/Asymmetric Conv (e.g., 1×3 + 3×1)
 
@@ -138,18 +143,18 @@
      $$
      W\prime = \frac{\gamma W}{ \sqrt{\sigma^2+\epsilon}}, b\prime = \beta - \frac{\gamma \mu}{\sqrt{\sigma^2+\epsilon}}
      $$
-     
+
      > [!NOTE]
      >
      > The performance of 1x1 + 3x3 is significantly better than 3x3 + 3x3, which means that a strong structure plus a weak structure is better than the sum of two strong structures.
 
 - Pros
-  
+
   - High inference speed. Better accuaracy.
   - Hardware-friendly.
 
 - Cons
-  
+
   - Cannot train after fusion
   - More memory during trainin
   - Not all operations are reparameterizable. Only linear ops (conv/bn) are perfectly convertible.
@@ -158,10 +163,9 @@
 
 - __RepMLP: Re-parameterizing Convolutions into Fully-connected Layers for Image Recognition.__ *Xiaohan Ding et al.* __ArXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2105.01883) [(S2)](https://www.semanticscholar.org/paper/b8885d2078b2367c17aec2d1e13852f30242784b) (Citations __106__)
 
-  - Takeaway: 
+  - Takeaway:
 
-    <img src="./assets/07-Operation-Design.assets/image-20251130215436189.png" alt="image-20251130215436189" style="zoom:50%;" />
-
+    <img src="assets/03-Operation-Design.assets/image-20251130215436189.png" alt="image-20251130215436189" style="zoom:50%;" />
 
 - __Online Convolutional Reparameterization.__ *Mu Hu et al.* __2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2022__ [(Arxiv)](https://arxiv.org/abs/2204.00826) [(S2)](https://www.semanticscholar.org/paper/90d223944aa568022936068b336c2ca4fe3fe296) (Citations __131__)
 
@@ -213,9 +217,7 @@
 
  Weight sharing by scalar quantization (top) and centroids fine-tuning (bottom).
 
-![image-20251123150437396](./assets/07-Operation-Design.assets/image-20251123150437396.png)
-
-
+![image-20251123150437396](assets/03-Operation-Design.assets/image-20251123150437396.png)
 
 - HashNet-style weight hashing
 - Shared-weight architectures (Cell-based NAS blocks)
@@ -229,8 +231,6 @@
 - Nyströmformer
 - Sparse or block attention
 - Low-rank attention
-
-
 
 ## References
 

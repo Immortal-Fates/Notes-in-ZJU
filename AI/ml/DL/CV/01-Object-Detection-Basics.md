@@ -1,4 +1,12 @@
+---
+title: 01-Object-Detection-Basics
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Object Detection Basics
+[TOC]
 
 Quick guide to core object detection ideas: how boxes are defined and refined, how detectors are structured, how we evaluate them, and the trade-offs between design choices.
 
@@ -6,7 +14,7 @@ Quick guide to core object detection ideas: how boxes are defined and refined, h
 
 ## Computer Vision Tasks
 
-![Object detection vs. other CV tasks](./assets/01-Object-Detection-Basics.assets/image-20251119234014976.png)
+![Object detection vs. other CV tasks](assets/01-Object-Detection-Basics.assets/image-20251119234014976.png)
 
 ## Bounding Boxes
 
@@ -150,19 +158,18 @@ Quick guide to core object detection ideas: how boxes are defined and refined, h
 - CAM (Class Activation Mapping)
 
   CAM shows **which spatial regions** are most responsible for the prediction of a class, but it assumes a specific architecture:
-  
+
   - CNN backbone
   - Global Average Pooling (GAP)
   - Linear classification layer directly after GAP (no additional FCs)
-  
+
   Under this architecture, you can directly compute a weighted sum of feature maps for a class.
-  
-  ![image-20251203220733015](./assets/01-Object-Detection-Basics.assets/image-20251203220733015.png)
+
+  ![image-20251203220733015](assets/01-Object-Detection-Basics.assets/image-20251203220733015.png)
 
 - Grad-CAM (Gradient-weighted CAM)
 
   Grad-CAM generalizes CAM to **any CNN-based architecture**, including those with fully connected layers, more complex heads, etc.
-
 
 ## References
 

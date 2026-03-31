@@ -1,4 +1,12 @@
+---
+title: 00-Basics
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Efficient AI
+[TOC]
 
 Model compression techniques aim to make deep learning models smaller, faster, and more efficient, without severely sacrificing accuracy. The objective is to reduce computational and storage costs while maintaining acceptable performance.
 
@@ -8,7 +16,7 @@ Model compression techniques aim to make deep learning models smaller, faster, a
 
 **IoT devices** (Internet of Things devices)
 
-![image-20251126195956567](./assets/00-Basics.assets/image-20251126195956567.png)
+![image-20251126195956567](assets/00-Basics.assets/image-20251126195956567.png)
 
 - Model size affects storage. Activation size affects runtime memory.
 - Flash usage = model size, static, need to hold the entire model
@@ -25,9 +33,9 @@ Today`s CNNs are too big for TinyML
 
 MCUNet: System-Algorithm Co-design
 
-![image-20251126201617842](./assets/00-Basics.assets/image-20251126201617842.png)
+![image-20251126201617842](assets/00-Basics.assets/image-20251126201617842.png)
 
-![image-20251126201626066](./assets/00-Basics.assets/image-20251126201626066.png)
+![image-20251126201626066](assets/00-Basics.assets/image-20251126201626066.png)
 
 MCUNet integrates:
 
@@ -42,10 +50,6 @@ MCUNet integrates:
 2. 模型结构优化
 3. 压缩--训练协同优化
 4. 轻量化神经网络部署与推理
-
-
-
-
 
 | Technique                                       | Main Idea                                                    | Advantages                                                   | Challenges                                                   |
 | ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -69,17 +73,17 @@ Latency benchmark measure wall-clock inference time in ms. FLOPs reduction does 
 
   -  “deep compression”, a three stage pipeline: pruning, trained quantization and Huffman coding
 
-    ![image-20251123144309518](./assets/00-Basics.assets/image-20251123144309518.png)
-    
+    ![image-20251123144309518](assets/00-Basics.assets/image-20251123144309518.png)
+
     - pruning: For each layer $l$, compute weight standard deviation $\sigma_l$. Define a **threshold** $t_l = s\cdot \sigma_l$ to filter the weights.
-    
+
     - quantization and weight shared
-    
-      ![image-20251123160315680](./assets/00-Basics.assets/image-20251123160315680.png)
-    
+
+      ![image-20251123160315680](assets/00-Basics.assets/image-20251123160315680.png)
+
       1. Centroid initialization: **Linear initialization** between min and max weight values is reported best
       2. Run 1D **k-means** clustering to obtain **centroids**
-    
+
     - Huffman coding
 
 - [MIT course](https://hanlab.mit.edu/courses/2024-fall-65940)，[HW](https://github.com/yan-roo/MIT-6.5940)

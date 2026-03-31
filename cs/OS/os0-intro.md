@@ -1,4 +1,12 @@
+---
+title: os0-intro
+date: 2026-03-02
+tags:
+course: cs
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 南大操作系统[操作系统原理 (2025 春季学期)](https://jyywiki.cn/OS/2025/)
 

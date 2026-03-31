@@ -1,4 +1,12 @@
+---
+title: 滑膜控制SMC
+date: 2026-03-02
+tags:
+course: math
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 了解滑膜控制的基本原理及其设计原理。
 
@@ -46,7 +54,7 @@
 1. 方法一：将控制分解为连续控制和切换控制两部分，以减少切换部分的幅度。
 2. 方法二：采用陡峭的饱和函数，代替符号函数。
 
-![v2-035fb523a336b44c4a831a73af95506f_720w](assets/滑膜控制.assets/v2-035fb523a336b44c4a831a73af95506f_720w.webp)
+![v2-035fb523a336b44c4a831a73af95506f_720w](assets/滑膜控制SMC.assets/v2-035fb523a336b44c4a831a73af95506f_720w.webp)
 
 ## References
 

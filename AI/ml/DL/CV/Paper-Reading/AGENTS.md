@@ -1,4 +1,12 @@
+---
+title: AGENTS
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Agent Guidelines for Paper-Reading Repository
+[TOC]
 
 This repository contains documentation notes on computer vision and object detection papers.
 **No build, lint, or test commands** - this is a markdown-only documentation repository.
@@ -55,9 +63,9 @@ This repository contains documentation notes on computer vision and object detec
 - Use proper LaTeX formatting (e.g., `\frac{a}{b}`, `\sum`, `\int`)
 
 ### Images
-- Reference: `./assets/XX-Title.assets/filename.png`
-- Format: `![alt text](./assets/XX-Title.assets/filename.png)`
-- With styling: `<img src="./assets/XX-Title.assets/filename.png" alt="text" style="zoom:50%;" />`
+- Reference: `RELATIVE_ASSET_PATH`
+- Format: `![alt text] -> RELATIVE_ASSET_PATH`
+- With styling: `<img src="https://example.com/asset.png" alt="text" style="zoom:50%;" />`
 
 ### Callout Blocks
 ```markdown
@@ -69,8 +77,8 @@ This repository contains documentation notes on computer vision and object detec
 ```
 
 ### Links
-- Internal: `[text](./other-file.md)` or `(#section-id)`
-- External: `[text](URL)`
+- Internal: `[text] -> relative-note-path` or `(#section-id)`
+- External: `[text] -> https://example.com`
 - Paper links: Include DOI/arxiv links with `[link]` anchor text
 
 ## Language and Tone

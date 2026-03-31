@@ -1,4 +1,12 @@
+---
+title: 02-MCP
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # MCP
+[TOC]
 
 ## Intro
 MCP（Model Context Protocol）是用于 AI 应用对接外部能力的协议标准，重点解决“能力如何被描述、发现、调用”。它让不同工具与数据源以一致方式接入，降低集成成本。
@@ -93,7 +101,7 @@ Conceptually the data layer is the inner layer, while the transport layer is the
   │ Archive & Update   │
   │ Specs (source)     │
   └────────────────────┘
-  
+
   1. Draft a change proposal that captures the spec updates you want.
   2. Review the proposal with your AI assistant until everyone agrees.
   3. Implement tasks that reference the agreed specs.
@@ -127,10 +135,10 @@ Conceptually the data layer is the inner layer, while the transport layer is the
      ```
      # 查看活跃的变更
      openspec list
-     
+
      # 验证提案格式
      openspec validate add-custom-focus-duration
-     
+
      # 查看提案详情
      openspec show add-custom-focus-duration
      ```
@@ -161,10 +169,6 @@ not use:
 - Sequential Thinking：分步骤推理与思考序列
 - Time：时间与时区转换
 - Brave Search：通过 Brave Search API 做网页/本地/图片/视频/新闻搜索
-
-
-
-
 
 ## References
 

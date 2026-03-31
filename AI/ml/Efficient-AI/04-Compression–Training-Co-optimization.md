@@ -1,10 +1,18 @@
+---
+title: 04-Compression–Training-Co-optimization
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Compression–Training Co-optimization
+[TOC]
 
 压缩—训练协同优化
 
 ## Concept
 
-- Motivation: 
+- Motivation:
 
   传统神经网络轻量化流程通常分为“训练大模型→模型压缩→微调恢复性能”三步。但存在明显缺陷,难以兼顾高压缩率与高性能:
 

@@ -1,4 +1,12 @@
+---
+title: 01-What-is-Research
+date: 2026-03-02
+tags:
+course: research
+status: draft
+---
 # What is Research
+[TOC]
 
 作为一个从来没有加入实验室的研0生，了解一下什么是科研应该是非常重要的
 
@@ -23,7 +31,7 @@
 
 ## 应用研究
 
-![ad61a1577a153b6e033e59bf8f7e81cb](./assets/%E7%A7%91%E7%A0%94%E6%8C%87%E5%8D%970%E2%80%94%E2%80%94%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%91%E7%A0%94.assets/ad61a1577a153b6e033e59bf8f7e81cb.png)
+![ad61a1577a153b6e033e59bf8f7e81cb](assets/01-What-is-Research.assets/ad61a1577a153b6e033e59bf8f7e81cb.png)
 
 应用研究会针对实际存在的任务，提出可行的方法，或者找到现有方法存在的问题并提出改进，从而提升效果、放宽条件或者减少成本。**这类学术研究论文的常见逻辑结构便是“做啥任务、现有方法、它有问题、我能解决”。**
 

@@ -1,4 +1,12 @@
+---
+title: 01-3-Quantization
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Quantization
+[TOC]
 
 ## Review: Numeric Data Types
 
@@ -32,7 +40,7 @@ Quantization converts high-precision (e.g., 32-bit floating point) weights and a
 
 ## Two Types of Common Quantization
 
-![image-20251124152332412](./assets/03-Quantization.assets/image-20251124152332412.png)
+![image-20251124152332412](assets/01-3-Quantization.assets/image-20251124152332412.png)
 
 - k-means-based quantization
 
@@ -51,7 +59,7 @@ Quantization converts high-precision (e.g., 32-bit floating point) weights and a
 
     - **Much lower quantization error** than uniform quantization (centroids adapt to real distribution)
 
-  - Con: 
+  - Con:
 
     - Harder to accelerate on standard hardware (centroid lookup)
 
@@ -63,7 +71,7 @@ Quantization converts high-precision (e.g., 32-bit floating point) weights and a
 
   - what: an affine mapping of integers to real numbers
 
-    ![image-20251124222210492](./assets/03-Quantization.assets/image-20251124222210492.png)
+    ![image-20251124222210492](assets/01-3-Quantization.assets/image-20251124222210492.png)
     $$
     r(floating-point) = (q(integer)-Z(integer))\times S(floating-point)
     $$
@@ -71,11 +79,10 @@ Quantization converts high-precision (e.g., 32-bit floating point) weights and a
     $$
     q = int(round(r/S))+Z
     $$
-    
-    > q stands for the n-bit signed int
-    
-    ![image-20251124222443380](./assets/03-Quantization.assets/image-20251124222443380.png)
 
+    > q stands for the n-bit signed int
+
+    ![image-20251124222443380](assets/01-3-Quantization.assets/image-20251124222443380.png)
 
 ## Post-Training Quantization(PTQ)
 
@@ -93,7 +100,7 @@ Introduce Post-Training Quantization(PTQ) that quantizes a floating-point neural
 
 - per-channel
 
-  ![image-20251125212334212](./assets/03-Quantization.assets/image-20251125212334212.png)
+  ![image-20251125212334212](assets/01-3-Quantization.assets/image-20251125212334212.png)
 
 - group quantization
 
@@ -127,7 +134,7 @@ There`are two ways for rounding.
 
      > Weights are correlated with each other. The best rounding for each weight (to nearest) is not the best rounding for the whole tensor.
 
-![image-20251125220007017](./assets/03-Quantization.assets/image-20251125220007017.png)
+![image-20251125220007017](assets/01-3-Quantization.assets/image-20251125220007017.png)
 
 - Let`t check the MobileNet: Smaller models seem to not respondas well to post-training quantization, presumably due to their smaller representational capacity.
 
@@ -143,7 +150,7 @@ There`are two ways for rounding.
 
   During QAT, quantization is inserted into the forward pass while gradients are computed through a non-quantized path.
 
-  ![image-20251125223744732](./assets/03-Quantization.assets/image-20251125223744732.png)
+  ![image-20251125223744732](assets/01-3-Quantization.assets/image-20251125223744732.png)
 
   - how gradients  back-propagate through the (simulated) quantization？
 
@@ -181,7 +188,7 @@ There`are two ways for rounding.
 
 For each layer, we have different choices to choose the different percision. It`s hard to choose. Solution: design automation: HAQ (Hardware-Aware Automated Quantization) is a framework designed to optimize the quantization of deep neural networks (DNNs) by leveraging mixed precision.
 
-![image-20251125225204631](./assets/03-Quantization.assets/image-20251125225204631.png)
+![image-20251125225204631](assets/01-3-Quantization.assets/image-20251125225204631.png)
 
 ## References
 

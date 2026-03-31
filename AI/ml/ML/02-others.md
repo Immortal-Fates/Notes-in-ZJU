@@ -1,3 +1,11 @@
+[TOC]
+---
+title: 02-others
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 TODO to learn
 
 ## References

@@ -1,4 +1,12 @@
+---
+title: BACKLOG
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Papers Backlog
+[TOC]
 
 ## To Read
 - [ ] Add missing S2 IDs for legacy entries

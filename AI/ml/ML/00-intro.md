@@ -1,10 +1,18 @@
+---
+title: 00-intro
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 重学Machine Learning
 
 <!--more-->
 
-![relation](./assets/ML0-intro.assets/a388b49cb06e128515de182fc3e51800.png)
+![relation](assets/00-intro.assets/a388b49cb06e128515de182fc3e51800.png)
 
 ## Prior
 
@@ -80,17 +88,16 @@
      y_i = \frac{\exp(\tilde{z}_i / \tau)}{\sum_{j=1}^K \exp(\tilde{z}_j / \tau)}
      $$
 
-     - High \(\tau\): soft distribution  
-     - Low \(\tau\): nearly one-hot  
+     - High \(\tau\): soft distribution
+     - Low \(\tau\): nearly one-hot
      - \(\tau \to 0\): exactly argmax behavior
 
      Thus: **Gumbel-Softmax ≈ differentiable categorical sampling.**
 
-
 - How: Straight-Through Gumbel-Softmax. Used when a hard sample is required:
 
   - Forward: take argmax (one-hot)  $x_{sample} = x\times y$
-  - Backward: use soft gradients from Gumbel-Softmax  
+  - Backward: use soft gradients from Gumbel-Softmax
 
   This trick keeps sampling discrete but training differentiable.
 

@@ -1,4 +1,12 @@
+---
+title: 00-OD-Trends
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Trends
+[TOC]
 
 介绍目标检测的未来大趋势，现在还啥都不懂，等我再多看点
 

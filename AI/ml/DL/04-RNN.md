@@ -1,4 +1,12 @@
+---
+title: 04-RNN
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 卷积神经网络可以有效地处理空间信息，那么循环神经网络（recurrent neural network，RNN）则可以更好地处理序列信息。
 
@@ -30,7 +38,7 @@ $$
 
 - 隐变量自回归模型：是保留一些对过去观测的总结$h_t$，并且同时更新预测$\hat{x}_t$和总结$h_t$。这就产生了基于$\hat{x}_t = P(x_t \mid h_{t})$估计$x_t$，以及公式$h_t = g(h_{t-1}, x_{t-1})$更新的模型。由于$h_t$从未被观测到，这类模型也被称为隐变量自回归模型（latent autoregressive models）。
 
-  ![sequence-model](./assets/DL4-RNN.assets/sequence-model.svg)
+  ![sequence-model](assets/04-RNN.assets/sequence-model.svg)
 
 统计学家称不变的动力学为*静止的*（stationary）。因此，整个序列的估计值都将通过以下的方式获得：
 
@@ -148,7 +156,7 @@ $$
   \mathbf{O}_t = \mathbf{H}_t \mathbf{W}_{hq} + \mathbf{b}_q.
   $$
 
-![rnn](./assets/RNN.assets/rnn.svg)
+![rnn](assets/04-RNN.assets/rnn.svg)
 
 使用过tanh函数作为激活函数：因为当元素在实数上满足均匀分布时，tanh函数的平均值为0
 
@@ -322,14 +330,14 @@ $$
 
 事实上，语言建模只揭示了序列学习能力的冰山一角。在各种序列学习问题中，如自动语音识别、文本到语音转换和机器翻译，输入和输出都是任意长度的序列。为了阐述如何拟合这种类型的数据，我们将以机器翻译为例介绍基于循环神经网络的“编码器－解码器”架构和束搜索，并用它们来生成序列。
 
-- [GRU](./04_3-RNN_GRU.md)
+- [GRU](04_3-RNN_GRU.md)
 
-- [LSTM](./04_4-RNN_LSTM.md)
+- [LSTM](04_4-RNN_LSTM.md)
 
 然而，由于序列的长距离依赖性，训练长短期记忆网络和其他序列模型（例如门控循环单元）的成本是相当高的。在后面的内容中，我们将讲述更高级的替代模型，如Transformer。
 
-- [deep_rnn](./04_2-RNN_deep_rnn.md)
-- [bi-rnn](./04_1-RNN_bi_rnn.md)
+- [deep_rnn](04_2-RNN_deep_rnn.md)
+- [bi-rnn](04_1-RNN_bi_rnn.md)
 
 # Machine Translation
 
@@ -384,15 +392,15 @@ $$
 
 这被称为*编码器-解码器*（encoder-decoder）架构，
 
-![fad29e29dc2d02c58c50c8b4a573837e](./assets/DL4-RNN.assets/fad29e29dc2d02c58c50c8b4a573837e.png)
+![fad29e29dc2d02c58c50c8b4a573837e](assets/04-RNN.assets/fad29e29dc2d02c58c50c8b4a573837e.png)
 
 “编码器－解码器”体系架构中的术语*状态*会启发人们使用具有状态的神经网络来实现该架构。在下一节中，我们将学习如何应用循环神经网络，来设计基于“编码器－解码器”架构的序列转换模型。
 
-![seq2seq-details](./assets/DL4-RNN.assets/seq2seq-details.svg)
+![seq2seq-details](assets/04-RNN.assets/seq2seq-details.svg)
 
 ## seq2seq
 
-![seq2seq](./assets/DL4-RNN.assets/seq2seq.svg)
+![seq2seq](assets/04-RNN.assets/seq2seq.svg)
 
 特定的“&lt;eos&gt;”表示序列结束词元。一旦输出序列生成此词元，模型就会停止预测。在循环神经网络解码器的初始化时间步，有两个特定的设计决定：
 
@@ -411,7 +419,7 @@ $$
 
 - 束搜索：*束搜索*（beam search）是贪心搜索的一个改进版本。它有一个超参数，名为*束宽*（beam size）$k$。在时间步$1$，我们选择具有最高条件概率的$k$个词元。这$k$个词元将分别是$k$个候选输出序列的第一个词元。在随后的每个时间步，基于上一时间步的$k$个候选输出序列，我们将继续从$k\left|\mathcal{Y}\right|$个可能的选择中挑出具有最高条件概率的$k$个候选输出序列。
 
-  ![beam-search](./assets/DL4-RNN.assets/beam-search.svg)
+  ![beam-search](assets/04-RNN.assets/beam-search.svg)
 
 # References
 

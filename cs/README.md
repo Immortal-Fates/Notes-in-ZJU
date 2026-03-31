@@ -1,31 +1,39 @@
+---
+title: README
+date: 2026-03-02
+tags:
+course: cs
+status: draft
+---
 # CS Notes Overview
+[TOC]
 
 记录个人在计算机科学方向的学习笔记，方便后续查阅与补充。
 
 ## Contents
 
-- [Programming Languages](programming_languages/)
-  - [C++ 基础](programming_languages/c-plus-plus.md)
-  - [Effective C++ 摘要](programming_languages/effective-c-plus-plus.md)
-  - [STL 笔记](programming_languages/stl.md)
-- [Theory & Algorithms](theory_algorithms/)
-  - [数据结构与算法](theory_algorithms/数据结构与算法.md)
-  - [计算机网络](theory_algorithms/计网.md)
-- [Digital Image Processing](digital_image_processing/)
-  - [光学成像传感器与相机](digital_image_processing/数字图像处理——光学成像传感器与相机.md)
-  - [图像分割](digital_image_processing/数字图像处理——图像分割.md)
-  - [图像复原与重建](digital_image_processing/数字图像处理——图像复原与重建.md)
-  - [图像特征与理解](digital_image_processing/数字图像处理——图像特征与理解.md)
-  - [形态学图像处理](digital_image_processing/数字图像处理——形态学图像处理.md)
-  - [深度学习与图像处理](digital_image_processing/数字图像处理——深度学习与图像处理.md)
-  - [灰度变换与空间滤波](digital_image_processing/数字图像处理——灰度变换与空间滤波.md)
-  - [相机标定与三维重建](digital_image_processing/数字图像处理——相机标定与三维重建.md)
-  - [频域滤波](digital_image_processing/数字图像处理——频域滤波.md)
+- [Programming Languages](Programming-Languages/)
+  - [C++ 基础](Programming-Languages/c-plus-plus.md)
+  - [Effective C++ 摘要](Programming-Languages/effective-c-plus-plus.md)
+  - [STL 笔记](Programming-Languages/stl.md)
+- [Theory & Algorithms](Theory-Algorithms/)
+  - [数据结构与算法](Theory-Algorithms/数据结构与算法.md)
+  - [计算机网络](Theory-Algorithms/计网.md)
+- [Digital Image Processing](Digital-Image-Processing/)
+  - [光学成像传感器与相机](Digital-Image-Processing/数字图像处理——光学成像传感器与相机.md)
+  - [图像分割](Digital-Image-Processing/数字图像处理——图像分割.md)
+  - [图像复原与重建](Digital-Image-Processing/数字图像处理——图像复原与重建.md)
+  - [图像特征与理解](Digital-Image-Processing/数字图像处理——图像特征与理解.md)
+  - [形态学图像处理](Digital-Image-Processing/数字图像处理——形态学图像处理.md)
+  - [深度学习与图像处理](Digital-Image-Processing/数字图像处理——深度学习与图像处理.md)
+  - [灰度变换与空间滤波](Digital-Image-Processing/数字图像处理——灰度变换与空间滤波.md)
+  - [相机标定与三维重建](Digital-Image-Processing/数字图像处理——相机标定与三维重建.md)
+  - [频域滤波](Digital-Image-Processing/数字图像处理——频域滤波.md)
 
 ## 其他笔记
 
-- [正则表达式](正则表达式.md)
-- [计控](计控.md)
+- [正则表达式](正则表达式/01-基础.md)
+- [计控](计控/01-计控.md)
 
 ## References
 

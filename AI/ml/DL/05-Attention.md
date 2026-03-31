@@ -1,4 +1,12 @@
+---
+title: 05-Attention
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Attention
+[TOC]
 
 Attention Mechanisms and Transformers
 
@@ -25,7 +33,7 @@ Attention Mechanisms and Transformers
 
 - 在注意力机制的背景下，自主性提示被称为**查询**（query）。给定任何查询，注意力机制通过**注意力汇聚**（attention pooling）将选择引导至**感官输入**（sensory inputs，例如中间特征表示）。在注意力机制中，这些感官输入被称为**值**（value）。更通俗的解释，每个值都与一个**键**（key）配对，这可以想象为感官输入的非自主提示。
 
-![qkv](./assets/DL5-Attention.assets/qkv.svg)
+![qkv](assets/05-Attention.assets/qkv.svg)
 
 可以通过设计注意力汇聚的方式，便于给定的查询（自主性提示）与键（非自主性提示）进行匹配（得到注意力权重），这将引导得出最匹配的值（感官输入）
 
@@ -68,7 +76,7 @@ $$
 
 由于注意力权重是概率分布，因此加权和其本质上是加权平均值。
 
-![attention-output](./assets/DL5-Attention.assets/attention-output.svg)
+![attention-output](assets/05-Attention.assets/attention-output.svg)
 
 用数学语言描述，假设有一个查询$\mathbf{q} \in \mathbb{R}^q$和$m$个“键－值”对$(\mathbf{k}_1, \mathbf{v}_1), \ldots, (\mathbf{k}_m, \mathbf{v}_m)$，其中$\mathbf{k}_i \in \mathbb{R}^k$，$\mathbf{v}_i \in \mathbb{R}^v$。注意力汇聚函数$f$就被表示成值的加权和：
 $$
@@ -105,7 +113,7 @@ $$
 
 ## The Bahdanau Attention Mechanism
 
-![seq2seq-state](./assets/DL5-Attention.assets/seq2seq-state.svg)
+![seq2seq-state](assets/05-Attention.assets/seq2seq-state.svg)
 
 - Sequence-to-sequence model: reasonable for short sequences but struggled whit lbng ones
 
@@ -117,7 +125,7 @@ $$
 
   - what:
 
-    ![seq2seq-details-attention](./assets/DL5-Attention.assets/seq2seq-details-attention.svg)
+    ![seq2seq-details-attention](assets/05-Attention.assets/seq2seq-details-attention.svg)
 
     1. **Encoder Outputs**
        The encoder processes the input sequence $(x_1, x_2, ..., x_T)$ and produces hidden states:  $ h_1, h_2, ..., h_T $
@@ -168,7 +176,7 @@ $$
 
   用独立学习得到的$h$组不同的**线性投影**（linear projections）来变换查询、键和值。然后，这$h$组变换后的查询、键和值将并行地送到注意力汇聚中。最后，将这$h$个注意力汇聚的输出拼接在一起，并且通过另一个可以学习的线性投影进行变换，以产生最终输出。
 
-  ![多头注意力：多个头连结然后线性变换](./assets/DL5-Attention.assets/4bc7b8de484a7206731f8e9bc6460e5a.png)
+  ![多头注意力：多个头连结然后线性变换](assets/05-Attention.assets/4bc7b8de484a7206731f8e9bc6460e5a.png)
 
   每个注意力头$\mathbf{h}_i$（$i = 1, \ldots, h$）的计算方法为：
   $$
@@ -248,7 +256,7 @@ $$
 
 ### Comparing CNNs, RNNs, and Self-Attention
 
-![DM_20251108145945_001](./assets/DL5-Attention.assets/DM_20251108145945_001.svg)
+![DM_20251108145945_001](assets/05-Attention.assets/DM_20251108145945_001.svg)
 
 > Note: that sequential operations prevent parallel computation, while a shorter path between any combination of sequence positions makes it easier to learn long-range dependencies within the sequence
 
@@ -325,7 +333,7 @@ $$
 
 - what: As an instance of the encoder--decoder architecture
 
-  ![transformer](./assets/DL5-Attention.assets/transformer.svg)
+  ![transformer](assets/05-Attention.assets/transformer.svg)
 
 > Despite its pervasive applications in computer vision,batch normalization is usually empirically less effective than layer normalization in natural language processing tasks, where the inputs are often variable-length sequences.
 
@@ -337,7 +345,7 @@ $$
 
 - what
 
-  ![vit](./assets/DL5-Attention.assets/vit.svg)
+  ![vit](assets/05-Attention.assets/vit.svg)
 
 not so good.This is because Transformers **lack** those useful principles in convolution, such as translation invariance and locality
 
@@ -428,6 +436,3 @@ Unlabeled Text  ──► Pretraining (Self-Supervised Learning)
 | **Generalization**          | Transfers linguistic and world knowledge to diverse tasks.   |
 | **Scalability**             | Larger models consistently perform better (scaling laws).    |
 | **Zero-/Few-shot Learning** | Models like GPT-3 can perform tasks with no or few examples. |
-
-
-

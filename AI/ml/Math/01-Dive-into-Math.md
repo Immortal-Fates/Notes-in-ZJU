@@ -1,8 +1,14 @@
+---
+title: 01-Dive-into-Math
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Explore the essence
+[TOC]
 
 - __Convolutional neural networks with low-rank regularization.__ *Cheng Tai et al.* __arXiv: Learning, 2015__ [(Arxiv)](https://arxiv.org/abs/1511.06067) [(S2)](https://www.semanticscholar.org/paper/d5b4721c8188269b120d3d06149a04435753e755) (Citations __483__)
-
-
 
 ## Hungarian Bipartite Matching
 
@@ -29,7 +35,7 @@
 
   - A learning algorithm must **prefer** some of these functions over others (e.g., “simpler functions,” “smooth functions,” “locality,” “translation invariance,” etc.).
 
-    > Examples: 
+    > Examples:
     >
     > - Linear regression assumes the relationship is *approximately linear*.
     > - K-NN assumes *points close in input space have similar outputs*.

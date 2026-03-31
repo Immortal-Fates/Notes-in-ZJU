@@ -1,4 +1,12 @@
+---
+title: 01-Intro
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Metaprogramming Introduction
+[TOC]
 
 Metaprogramming 的意思是用程序来操作程序本身，或者用工具自动生成、构建、测试、发布你的代码与产物。
 
@@ -52,22 +60,22 @@ target: dep1 dep2
 .PHONY: help run test lint format clean
 
 help:
-	@echo "make run | test | lint | format | clean"
+    @echo "make run | test | lint | format | clean"
 
 run:
-	python -m your_pkg
+    python -m your_pkg
 
 test:
-	pytest -q
+    pytest -q
 
 lint:
-	ruff check .
+    ruff check .
 
 format:
-	ruff format .
+    ruff format .
 
 clean:
-	rm -rf .pytest_cache .ruff_cache dist build
+    rm -rf .pytest_cache .ruff_cache dist build
 ```
 
 用法
@@ -90,7 +98,7 @@ PY=python
 PKG=your_pkg
 
 run:
-	$(PY) -m $(PKG)
+    $(PY) -m $(PKG)
 ```
 
 ### 自动推导规则
@@ -100,10 +108,8 @@ Make 支持模式规则，适合批量生成。
 
 ```
 %.pdf: %.md
-	pandoc $< -o $@
+    pandoc $< -o $@
 ```
-
-
 
 ## Dependency Management
 

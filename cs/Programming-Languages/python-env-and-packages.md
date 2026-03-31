@@ -1,4 +1,12 @@
+---
+title: python-env-and-packages
+date: 2026-03-02
+tags:
+course: cs
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 介绍python的包管理器和环境
 

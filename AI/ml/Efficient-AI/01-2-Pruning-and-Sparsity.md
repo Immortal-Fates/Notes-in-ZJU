@@ -1,3 +1,10 @@
+---
+title: 01-2-Pruning-and-Sparsity
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Pruning and Sparsity
 
 [TOC]
@@ -14,7 +21,7 @@
 
   - Sparsity enables efficient inference because zero-valued computations can be skipped, especially with hardware or sparse kernel support.
 
-![image-20251123195008808](./assets/02-Pruning-and-Sparsity.assets/image-20251123195008808.png)
+![image-20251123195008808](assets/01-2-Pruning-and-Sparsity.assets/image-20251123195008808.png)
 
 ## Pruning Granularity
 
@@ -39,7 +46,7 @@
 
   -  Prune during inference based on activation magnitude or input content.
 
-![image-20251123204113754](./assets/02-Pruning-and-Sparsity.assets/image-20251123204113754.png)
+![image-20251123204113754](assets/01-2-Pruning-and-Sparsity.assets/image-20251123204113754.png)
 
 Let’s look into some cases:
 
@@ -56,9 +63,9 @@ Let’s look into some cases:
   - It is supported by NVIDIA’s Ampere GPU Architecture, which delivers up to 2x speed up
   - Usually maintains accuracy (tested on varieties of tasks)
 
-  ![image-20251123211756621](./assets/02-Pruning-and-Sparsity.assets/image-20251123211756621.png)
+  ![image-20251123211756621](assets/01-2-Pruning-and-Sparsity.assets/image-20251123211756621.png)
 
-- [Channel Pruning](##Slimming)
+- [Channel Pruning](#slimming)
 
   - Pro: Direct speed up due to reduced channel numbers (leading to an NN with smaller#channels)
   - Con: smaller compression ratio
@@ -88,7 +95,7 @@ Non-uniform pruning is better than uniform shrinking. So we need to find Pruning
   - Repeat checking the accuracy using different prune ratio for all layers
   - drawback: do not consider the interaction between layers
 
-  ![sensitivity scan](./assets/02-Pruning-and-Sparsity.assets/image-20251123235547297.png)
+  ![sensitivity scan](assets/01-2-Pruning-and-Sparsity.assets/image-20251123235547297.png)
 
   > Notes: the layer with more parameters should have larger sparsity.****
 
@@ -97,7 +104,7 @@ Non-uniform pruning is better than uniform shrinking. So we need to find Pruning
   - Pruning as a reinforcement learning problem.
   - Better results than human.
 
-  ![image-20251124135702671](./assets/02-Pruning-and-Sparsity.assets/image-20251124135702671.png)
+  ![image-20251124135702671](assets/01-2-Pruning-and-Sparsity.assets/image-20251124135702671.png)
 
 - NetAdapt
 
@@ -118,7 +125,7 @@ flowchart LR
 - Learnings rate for fine-tuning is usually 1/100 or 1/10 of the original learning rate.
 - Iterative Pruning
 
-![image-20251123195431870](./assets/02-Pruning-and-Sparsity.assets/image-20251123195431870.png)
+![image-20251123195431870](assets/01-2-Pruning-and-Sparsity.assets/image-20251123195431870.png)
 
 > [!TIP]
 >
@@ -162,7 +169,7 @@ flowchart LR
 
 - Takeaway: Use **L1 regularization** on the **Batch Normalization scaling factors (γ)** to automatically identify unimportant channels and prune them.
 
-  ![image-20251128193601063](./assets/02-Pruning-and-Sparsity.assets/image-20251128193601063.png)
+  ![image-20251128193601063](assets/01-2-Pruning-and-Sparsity.assets/image-20251128193601063.png)
 
 - Motivation: BatchNorm (BN) transforms an input channel $x$ as:
   $$
@@ -181,9 +188,7 @@ flowchart LR
 
 - Pipeline
 
-  ![image-20251128201059505](./assets/02-Pruning-and-Sparsity.assets/image-20251128201059505.png)
-
-
+  ![image-20251128201059505](assets/01-2-Pruning-and-Sparsity.assets/image-20251128201059505.png)
 
 ## References
 

@@ -1,4 +1,12 @@
+---
+title: 03-workflow
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Workflow
+[TOC]
 
 Introduce the workflow using git and github.
 
@@ -18,8 +26,6 @@ Introduce the workflow using git and github.
 ## Gitlens
 
 vscode extension
-
-
 
 ## References
 

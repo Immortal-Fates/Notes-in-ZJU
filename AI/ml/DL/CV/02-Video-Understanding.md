@@ -1,4 +1,12 @@
+---
+title: 02-Video-Understanding
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Video Understanding
+[TOC]
 
 ## Video classification
 
@@ -8,7 +16,7 @@ This is a challenging problem because videos contain both spatial (frame-based) 
 
   - videos are big. sol: Training on Clips
 
-    ![image-20251204143025212](./assets/02-Video-Understanding.assets/image-20251204143025212.png)
+    ![image-20251204143025212](assets/02-Video-Understanding.assets/image-20251204143025212.png)
 
   - Spatiotemporal Modeling
 
@@ -24,7 +32,7 @@ The following parts are trying to solve these challenges.
 
   Now we should consider when to combine the temporal information
 
-  - Late Fusion: 
+  - Late Fusion:
 
     - Intuition: Get high-level appearance of each frame, and combine them
 
@@ -61,7 +69,7 @@ The following parts are trying to solve these challenges.
 
 - **Two-stream networks** consist of two separate neural networks that process different kinds of data from the same video.
 
-  ![image-20251204145802843](./assets/02-Video-Understanding.assets/image-20251204145802843.png)
+  ![image-20251204145802843](assets/02-Video-Understanding.assets/image-20251204145802843.png)
 
   - **Spatial Stream**(appearance): A CNN that processes individual video frames, treating the video as a series of still images.
 
@@ -73,7 +81,7 @@ To solve the con, we try to use RNN, but RNNs are slow for long sequences (canâ€
 
 - Spatio-Temporal Self-Attention (Nonlocal Block)
 
-  ![image-20251204163919726](./assets/02-Video-Understanding.assets/image-20251204163919726.png)
+  ![image-20251204163919726](assets/02-Video-Understanding.assets/image-20251204163919726.png)
 
 - Vision Transformers for Video: many works have been done
 

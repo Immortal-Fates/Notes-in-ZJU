@@ -1,4 +1,12 @@
+---
+title: 03-Pipeline
+date: 2026-03-02
+tags:
+course: research
+status: draft
+---
 # Research Pipeline
+[TOC]
 
 介绍一下我的科研pipeline
 
@@ -15,7 +23,7 @@
 
 > 【我是如何快速阅读和整理文献】<https://www.bilibili.com/video/BV1nA41157y4?vd_source=93bb338120537438ee9180881deab9c1>
 
-1. Filtrate: 
+1. Filtrate:
 
    - 在[Semantic Scholar](https://www.semanticscholar.org/)中搜索文献，看摘要筛选一篇
 
@@ -42,7 +50,7 @@
 
    - blog links
 
-4. Make notes: 
+4. Make notes:
 
    - I recongnise my notes about papers in the following way - Takeaway - Prior - Core Mechanism - Pipeline - Pros - Cons
    - 如果文献多了还可以使用mermaid建立框图

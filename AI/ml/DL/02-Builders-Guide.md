@@ -1,4 +1,12 @@
+---
+title: 02-Builders-Guide
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 usage manual
 
@@ -110,7 +118,7 @@ use **Optuna** for hyperparameter tuning
           super().__init__()
           self.hidden = nn.Linear(20, 256)  # 隐藏层
           self.out = nn.Linear(256, 10)  # 输出层
-  
+
       # 定义模型的前向传播，即如何根据输入X返回所需的模型输出
       def forward(self, X):
           # 注意，这里我们使用ReLU的函数版本，其在nn.functional模块中定义。
@@ -147,7 +155,6 @@ net = nn.Sequential(nn.LazyLinear(256), nn.ReLU(), nn.LazyLinear(10))
 ## File I/O
 
 - Takeaway: how to load and store both individual weight vectors and entire models
-
 
 深度学习框架提供了内置函数来保存和加载整个网络。需要注意的一个重要细节是，这将保存模型的参数而不是保存整个模型。例如，如果我们有一个3层多层感知机，我们需要单独指定架构。因为模型本身可以包含任意代码，所以模型本身难以序列化。因此，为了恢复模型，我们需要用代码生成架构，然后从磁盘加载参数。
 
@@ -204,10 +211,9 @@ net = nn.Sequential(nn.LazyLinear(256), nn.ReLU(), nn.LazyLinear(10))
 Just check the [Loss function document](https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.loss.L1Loss.html) which includes the math formula and how to use it in pytorch.
 
 - BCE loss
-- check the [loss function](./CV/Paper-Reading/03-OD-Loss-Zoo.md)
+- check the [loss function](CV/Paper-Reading/03-OD-Loss-Zoo.md)
 - Focal loss
   - Quality Focal Loss (QFL) / Varifocal Loss (VFL) / Generalized Focal Loss (GFL, v1, v2)
-
 
 ## Activation Function
 
@@ -297,7 +303,6 @@ Introduce indicators for measuring the complexity of a model.
   \text{memory}_{act} = H\times W\times Channel_{out} \times \text{bytes per element}
   $$
 
-
 - FLOPs
 
   - conv layer(consider bais)
@@ -335,14 +340,13 @@ Introduce indicators for measuring the complexity of a model.
   - High ratio → computation dominates (GPU-friendly)
   - Low ratio → memory access dominates (mobile/edge bottleneck)
 
-
 ### Model Compression
 
 When comes to model compression. We usually care about the three parameters:
 
 - Model Size
 - Runtime Memory
-- Number of computing operations: two ways to calculate: 
+- Number of computing operations: two ways to calculate:
   - FLOPS
   - MACs
 
@@ -350,10 +354,9 @@ When comes to model compression. We usually care about the three parameters:
 
 - __A Comparative Analysis of Object Detection Metrics with a Companion Open-Source Toolkit.__ *Rafael Padilla et al.* __Electronics, 2021__ [(Link)](https://doi.org/10.3390/electronics10030279) [(S2)](https://www.semanticscholar.org/paper/7d72fb27184c1e5793e382681dbbc853fe055093) [(code_link_old)](https://github.com/rafaelpadilla/Object-Detection-Metrics)[(code_link_new)](https://github.com/rafaelpadilla/review_object_detection_metrics)(Citations __546__)
 
-
 ## Tips and Tricks
 
-check this [file](./11-Tips-and-Tricks.md)
+check the tips-and-tricks notes in this directory
 
 ## References
 

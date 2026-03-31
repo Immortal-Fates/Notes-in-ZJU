@@ -1,4 +1,12 @@
+---
+title: 01-Open-Class
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Open Class
+[TOC]
 
 学习如何学习一些优质的公开课
 

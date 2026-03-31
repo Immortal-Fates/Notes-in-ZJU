@@ -1,4 +1,12 @@
+---
+title: README
+date: 2026-03-02
+tags:
+course: general
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 Notes-in-ZJU collects study notes from courses and extracurricular exploration during Zhejiang University life. It acts as a quick index so newcomers can dive into the topic they care about and find the supporting sub-module READMEs for deeper guidance.
 

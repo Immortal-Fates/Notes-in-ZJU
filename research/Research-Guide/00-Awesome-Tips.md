@@ -1,4 +1,12 @@
+---
+title: 00-Awesome-Tips
+date: 2026-03-02
+tags:
+course: research
+status: draft
+---
 # Awesome Tips
+[TOC]
 
 just check the [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/main?tab=readme-ov-file)
 
@@ -22,7 +30,7 @@ just check the [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/m
 
 Key idea: **Help them help you!**
 
-![FvLC-YvXoAA6oe8 (1)](./assets/00-Awesome-Tips.assets/FvLC-YvXoAA6oe8 (1).png)
+![FvLC-YvXoAA6oe8 (1)](assets/00-Awesome-Tips.assets/FvLC-YvXoAA6oe8 (1).png)
 
 ## References
 

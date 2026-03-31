@@ -1,4 +1,12 @@
+---
+title: 01-Basic
+date: 2026-03-02
+tags:
+course: AI
+status: draft
+---
 # DL Basics
+[TOC]
 
 This note introduces the first truly deep models we use: **multilayer perceptrons (MLPs)**. We also cover the core issues of **underfitting**, **overfitting**, model selection, regularization techniques (weight decay and dropout), numerical stability in parameter initialization, and basic data preprocessing.
 
@@ -10,7 +18,7 @@ This note introduces the first truly deep models we use: **multilayer perceptron
 
 An MLP stacks multiple fully connected layers. Each hidden unit applies a nonlinear activation to a weighted sum of inputs, giving the network capacity to model complex functions beyond linear decision boundaries.
 
-![MLP diagram](./assets/DL1-Basic.assets/image-20251101203201605.png)
+![MLP diagram](assets/01-Basic.assets/image-20251101203201605.png)
 
 ## Activation Functions
 
@@ -26,7 +34,7 @@ An MLP stacks multiple fully connected layers. Each hidden unit applies a nonlin
   \frac{d}{dx} \operatorname{sigmoid}(x) = \operatorname{sigmoid}(x)\left(1 - \operatorname{sigmoid}(x)\right).
   $$
   Gradients vanish when the input magnitude is large.
-  ![Sigmoid curve](./assets/DL1-Basic.assets/image-20251102113803460.png)
+  ![Sigmoid curve](assets/01-Basic.assets/image-20251102113803460.png)
 
 - **tanh** maps inputs to \((-1, 1)\):
   $$
@@ -46,7 +54,7 @@ An MLP stacks multiple fully connected layers. Each hidden unit applies a nonlin
 
 - **Overfitting**: training error is much lower than validation error; the model memorizes noise instead of generalizing.
 
-![Bias-variance tradeoff illustration](./assets/DL1-Basic.assets/image-20251101210710289.png)
+![Bias-variance tradeoff illustration](assets/01-Basic.assets/image-20251101210710289.png)
 
 ## Improving Generalization
 
@@ -111,8 +119,6 @@ Breaking symmetry and keeping activations/gradients well-scaled are critical whe
 | ------------------ | ------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------ |
 | **Expressiveness** | Types of functions architecture *could* represent            | depth, nonlinearity, topology, inductive bias            | Can this architecture represent hierarchical features?       |
 | **Capacity**       | How many functions the model *can represent with different parameters* | number of parameters, effective DOF, complexity measures | How prone is this model to overfitting? How much can it memorize? |
-
-
 
 ## References
 

@@ -1,4 +1,12 @@
+---
+title: CICD
+date: 2026-03-02
+tags:
+course: dev
+status: draft
+---
 # Main Takeaway
+[TOC]
 
 介绍CI/CD
 
