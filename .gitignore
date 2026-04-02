@@ -2,7 +2,9 @@
 **/.venv/
 **/.env/
 **/.ruff_cache/
+**/.pytest_cache/
 
 # AI
-.codex/
+# .codex/
+# .agent/
 .sisyphus/

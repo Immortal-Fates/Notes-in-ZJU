@@ -184,7 +184,7 @@ Focus on object detection models
 
 - **Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks**. Shaoqing Ren et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1506.01497v3)).
 
-  - Takeaway: Faster R-CNN adds an **RPN** to generate proposals, enabling end-to-end two-stage detection without external proposal methods.
+  - Takeaway: Faster R-CNN adds an **RPN** to generate proposals, enabling end-to-end **two-stage detection** without external proposal methods.
 
     Faster R-CNN’s key idea:  **Learn region proposals with a CNN (RPN) that shares features with the detector.**
 
@@ -194,12 +194,26 @@ Focus on object detection models
     - **Fast R-CNN**: Single CNN per image + ROI pooling; faster but still depends on external region proposal (e.g., Selective Search), which is CPU-bound and slow.
     - The bottleneck: generating region proposals outside the CNN.
 
-  - Core Mechanism: Attach an **RPN head** on top which slides small conv over the feature map. For each spatial position, predicts:
+    所以就想要去除region proposals outside the CNN这个步骤，那么去除之后，如何对这么多的anchor进行选择呢？
+
+  - Core Mechanism: 
+
+    - Architecture
+
+      ![image-20260401140326311](./assets/02-OD-Model-Zoo.assets/image-20260401140326311.png)
+
+    Attach an **RPN head** on top which slides small conv over the feature map. For each spatial position, predicts:
 
     - objectness scores for multiple anchors,
     - bounding box regressions for anchors.
 
-    Then generate proposals from RPN and apply **ROI pooling / ROI Align** on shared features.
+    相当于对anchor进行了初步的筛选和微调得到更合理的anchor，成为proposal
+
+    > [!NOTE]
+    >
+    > Faster R-CNN is a single, unified network for object detection. The RPN module serves as the 'attention' of this unified network.
+
+    Then generate proposals from RPN and apply **ROI pooling / ROI Align** on shared features. 这些anchor经过rpn输出proposal,这些proposal的坐标是原图上的坐标,经过步长计算出该proposal对应特征图上的ROI。将ROI这部分特征送到后面的分类头和回归头
 
     > [!NOTE]
     >
@@ -212,11 +226,58 @@ Focus on object detection models
 
     > [!TIP]
     >
-    > 只在乎这里是不是有个物体，整个特征图上进行滑动扫描，每扫到一个位置，就围绕这个位置生成多种大小和长宽比的候选框，然后给每个框打分、微调位置
+    > 在每个特征图的每个grid生成多种大小和长宽比的候选框anchor(faster R-CNN中设置的是9种anchor)，然后给每个框打分、微调位置，得到proposal
+    >
+    > 当然这里的9中尺度都是超参数需要进行调整，各种聚类，or统计的方法人为设置
 
     <img src="assets/02-OD-Model-Zoo.assets/image-20251121222439105.png" alt="image-20251121222439105" style="zoom:50%;" />
 
-    Faster R-CNN is a single, unified network for object detection. The RPN module serves as the 'attention' of this unified network.
+    在训练阶段和推理阶段proposal使用是不一样的
+
+    - 训练需要更多样本，proposal_number很多，正负样本选择常`正:负=1:3`
+
+    - 推理需要更快速度，proposal_number较少，直接使用top-K proposal
+
+    > [!NOTE]
+    >
+    > 这里我要解释一下proposal(fine tune anchor) or anchor既然是在featuremap上生成的是如何对应原图坐标的：
+    >
+    > ```
+    > 原图: 800 × 800
+    > feature map: 50 × 50
+    > stride = 16
+    > ```
+    >
+    > 这说明feature map 每一个像素对应原图 16×16 区域的中心点。
+    >
+    > 在每个 feature map 位置会生成多个 anchor，例如：
+    >
+    > ```
+    > 3 scales × 3 ratios = 9 anchors
+    > ```
+    >
+    > 例如在某个 feature map 点`(i , j)`：
+    >
+    > ```
+    > center = (x=i*stride, y=j*stride)
+    > ```
+    >
+    > 生成 anchor：
+    >
+    > ```
+    > (x, y, w, h)
+    > ```
+    >
+    > TIP：这些 anchor 的坐标本身就是在**原图尺度**定义的。
+
+    - 正负样本的选择
+
+      Faster R-CNN有两次正负样本的选择,在RPN阶段和最后的Head阶段,但是其选择的依据都是判断anchor和GT的IOU,然后再按照一定的正负样本比例来选择训练样本
+
+    - Loss由四个部分组成
+      $$
+      L = L_{rpn\_cls} + L_{rpn\_bbox} + L_{rcnn\_cls} + L_{rcnn\_bbox}
+      $$
 
   - Pros:
 
@@ -227,16 +288,70 @@ Focus on object detection models
 
     - relatively heavy / two-stage: 1.RPN to generate proposals. 2.ROI head to classify and refine them.
     - Anchor-based design: many hyperparameters, inefficiency
+    - IOU阈值处理
+      - 低阈值：anchor可能比物体小or大，（proposal常常更大，因为是相当于attention已经训练过一遍了）
+      - 高阈值：1.减少正样本的数量，进一步加剧了正负样本不平衡，2.mismatch问题，高IOU的正样本质量很高，但是推理阶段的anchor质量参差不起，倒是数据分布不一样
 
 - **Mask R-CNN**. Kaiming He et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1703.06870v3)).
+
+  - Takeaway
+
+  - Prior
+
+    语义分割和实例分割，实例分割多了一步：如何将同一类别的不同个体区分开来？
+
+    ![image-20260401160942175](./assets/02-OD-Model-Zoo.assets/image-20260401160942175.png)
+
+  - Motivation
+
+  - Core Mechanism
+
+    如何区分呢？直接在语义分割的基础上画框，在faster R-CNN基础上添加一个mask分支（即FCN结构）
+
+    - Architecture
+
+      ![image-20260401163241872](./assets/02-OD-Model-Zoo.assets/image-20260401163241872.png)
+
+    - 新增的mask分支
+
+      ![image-20260401163523330](./assets/02-OD-Model-Zoo.assets/image-20260401163523330.png)
+
+      > [!NOTE]
+      >
+      > 这样的处理方法叫detect-then-segment，所以对检测框的依赖程度比较高,框歪了,或者漏
+      > 了,那么分割也就错了
+      >
+      > 还有其他的处理方法：比如，嵌入向量聚类:Semantic Instance Segmentation with a Discriminative Loss Function：先做语义分割,把同一语义类别的像素找出来,然后再同一类的像素之间做聚类,分出不同的实例（这里模型输出是一个高维向量embedding，因此可以做聚类）这种方法很慢（聚类就很慢），超参影响很大
 
 - __MAFE R-CNN: Selecting More Samples to Learn Category-aware Features for Small Object Detection.__ *Yichen Li et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2505.16442) 
 
 > [!TIP]
 >
-> The R-CNN universe is not used any more because all of they require large calculation
+> The R-CNN universe is not used any more because all of they require large calculation.
 
 ---
+
+### FCN
+
+用于处理语义分割的问题：语义分割是这针对像素而言的，要求每个像素都要确定其具体的所属类别
+
+- FCN(Fully Convolutional Networks)
+
+  - Motivation
+
+    图像分类网络往往输出是全连接层的输出,也就是输出一维的张量,然后Softmax归一化为每一个类别的概率,但是这样一维的特征向量就显式的丢失了空间信息。而语义分割需要空间信息，因此我们最后输出需要是一张二维的特征图，然后对每个像素做softmax分类
+
+  - Core Mechanism
+
+    其实将图像分类网络的最后的全连接层换成卷积层就可以输出二维特征图了,这样整个网络都是由卷积层组成,这样的网络叫做FCN(全卷积网络)
+
+    - Architecture
+
+      ![image-20260401150008317](./assets/02-OD-Model-Zoo.assets/image-20260401150008317.png)
+
+      > 这里21是因为在数据集PascalVOC进行的实验,共20类（21=20+1）
+
+    - skip connection融合浅层特征
 
 ### FPN Zoo
 
@@ -393,6 +508,81 @@ Focus on object detection models
        - \(\mathbf{m}_{\text{fc}}\) is the mask from the fully-connected branch
   
        Again, this is a compact mathematical summary of the fusion idea described in the paper.
+
+### Solo Zoo
+
+- __SOLO: Segmenting Objects by Locations.__ *Xinlong Wang et al.* __European Conference on Computer Vision, 2019__ [(Arxiv)](https://arxiv.org/abs/1912.04488) [(S2)](https://www.semanticscholar.org/paper/4c4f040d0c4ed6d434534fc278e886db31c0d8b4) (Citations __807__)
+
+  - Takeaway
+
+    A new, embarrassingly simple approach to instance segmentation in images by introducing the notion of "instance categories", which assigns categories to each pixel within an instance according to the instance's location and size thus nicely converting instance mask segmentation into a classification-solvable problem.根据实例的位置和大小为实例中的每个像素分配类别
+
+  - Motivation
+
+    之前的实例分割方法都是阶段性的,要不先分出来实例再分割,要不就是先分割再分出来实例,能不能实现一个直接端到端的方法?直接输出不同的实例呢?——位置和形状，那么怎么表示呢
+
+    - 位置：FCOS里面的网格,不同的网格的感受野内的特征是不一样的，因此不同位置上的实例就是不同的实例，转化为了位置分类
+    - 形状：形状变化很大，这里用大小来表示
+
+  - Core Mechanism
+
+    - Architecture
+
+      ![image-20260401165317980](./assets/02-OD-Model-Zoo.assets/image-20260401165317980.png)
+
+      将实例分割重新表述为两个同时的、类别预测和实例掩码生成问题。具体而
+      言,将输入图像划分为统一的网格,即 S × S 。如果对象的中心落入网格单
+      元,则该网格单元负责该实例对象的语义类别预测以及mask预测
+
+    - Head
+
+      ![image-20260401170323016](./assets/02-OD-Model-Zoo.assets/image-20260401170323016.png)
+
+      > [!NOTE]
+      >
+      > 上面分支是$S\times S$，每个网格对应instance mash branch的一个channel。即分类通道上的一个网格是和掩码分支输出的一个通道有一对一的关系。
+      >
+      > 那么掩码分支的通道和分类分支的网格有对应的关系,所以,不同位置的特征也要去该位置对应的通道上输出mask。但是卷积具有平移不变性,一个特征无论在哪个位置,其都是不变的。那我应该如何根据特征来决定将其输出到对应的mask通道上呢?所以,在mask分支中,会引入位置
+      > 编码
+      >
+      > ![image-20260401171928787](./assets/02-OD-Model-Zoo.assets/image-20260401171928787.png)
+
+    - Matrix NMS
+
+      Matrix NMS 本质上是 Soft-NMS 的并行实现。它引入了一个“衰减因子”的概念。也就是说对于任何一个框,他最终**被保留的概率取决于他自己原本的分数和他被比他分数高的框的抑制程度**。该方法结合了Soft-NMS和Fast-NMS的方法
+
+      - 传统NMS:只要一个框的IOU和得分最高的框的IOU大于阈值就被抑制，串行计算，很慢
+      - FastNMS:假设所有的框是同时存在的,直接通过IOU判断哪些框应该被抑制,实现了并行计算NMS,速度很快
+      - SoftNMS:不会像传统NMS那样直接删除掉框,而是衰减其分数,这样能够一定程度上的缓解密集检测的问题
+      - Matrix NMS:结合将FastNMS和Soft-NMS，既并行计算，又不会直接删框，A,B两个框,A的得分高,B在计算被A抑制的程度的时候,也要考虑到A本身是否已经被更高得分的框抑制了,如果A已经被抑制了,那么对B的一直程度就应该减少一点,因为A本来就是一个被抑制的框
+
+- __SOLOv2: Dynamic, Faster and Stronger.__ *Xinlong Wang et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2003.10152) [(S2)](https://www.semanticscholar.org/paper/fab853583c8465c01e2b8244debaa2bcd6be18d6) (Citations __99__)
+
+  > Arxiv和S2上面的论文名字还不一样的，奇怪
+
+  - Takeaway
+
+  - Motivation
+
+    SOLOv1中提出的mask head的通道数是网格的数量，很多都是冗余的，因此想要对其做一些改进
+
+  - Core Mechanism
+
+    - Architecture
+
+      ![image-20260401174249122](./assets/02-OD-Model-Zoo.assets/image-20260401174249122.png)
+
+    - decoupled head
+
+      ![image-20260401174712122](./assets/02-OD-Model-Zoo.assets/image-20260401174712122.png)
+
+      每个通道不再预测mask,而是预测X和Y方向两个向量,类似的,每个网格都有一个X,Y向量。第 i个网格的Mask直接取出来第i个X,Y向量相乘即可得到
+
+    - 动态卷积
+
+      > 对照结构图查看
+
+      将mask head分为两个branch。上面这个branch输出的是卷积核的参数,通道数就是卷积核参数的个数,也就是说每个网格都会对应一个卷积核。下面这个分支输出的就是一张特征图。当需要第 i个网格的mask的时候,就将第 i个网格逐通道取出来卷积核的参数,然后取下面分支输出的特征图上进行卷积操作,再经过sigmoid就得到了最终的mask
 
 
 ### GhostNet Zoo
@@ -632,13 +822,20 @@ Focus on object detection models
         - cost matrix 计算`cost_matrix = cls_cost + iou_cost * self.iou_factor`
         - dynamic_k_matching: 用联合代价挑正样本，并让每个 GT 的正样本数量由当前 IoU 质量自适应决定
         
-        Pipeline
+        Pipeline:
         
         1. prior center 过滤候选
         2. 计算cost matrix
-        3. 取每个 GT 的 top-k IoU（topk=13）下取整数, min=1
+        3. 取 k = max(每个 GT 的 top-k IoU（topk=13）下取整数, 1)
         4. 选cost最小的k个prior
-        5. 解决一个 prior 匹配多个 GT 的冲突：只保留cost最小的gt
+        5. 后处理：解决一个 prior 匹配多个 GT 的冲突：只保留cost最小的gt
+        
+      - Loss的计算，nanodet-plus中有两套loss，因为aux head也有自己的一套同构loss
+      
+        1. 先用 `aux_preds` 做 assignment
+        2. 用这个 assignment 结果算主 head 的 loss
+        3. 再用同一个 assignment 结果，给 `aux head` 也算一份同构的 loss
+        4. 最后：$\mathcal L_{\text{total}}=\mathcal L_{\text{main}}+\mathcal L_{\text{aux}}$
       
       | Method               | COCO mAP 0.5:0.95 |
       | -------------------- | ----------------- |
@@ -687,76 +884,107 @@ check [here](02-2-YOLO-Zoo.md)
 
     > 第一个这样做得比较好的，直接回归点到四边的距离
 
+  - Motivation
+
+    我们想要实现anchor-free, proposal-free, one-stage detector，那么就需要判断哪里有物体（换句话说就是每个像素是否有物体），物体是哪一类，边界框在哪。这就和FCN语义分割比较像
+
   - Core Mechanism
-
-    ![image-20251223212240953](assets/02-OD-Model-Zoo.assets/image-20251223212240953.png)
-
-    - fuse the features:
-      $$
-      P_l = \operatorname{Conv}\bigl(\operatorname{Up}(P_{l+1}) + \operatorname{Lat}(C_l)\bigr)
-      $$
-      where:
   
-      - $C_l$ is the backbone feature at level $l$
-      - $\operatorname{Lat}(C_l)$ is a lateral projection, usually a $1\times1$ conv
-      - $\operatorname{Up}(P_{l+1})$ is the upsampled higher-level pyramid feature
-      - the sum merges the two
-      - the final conv smooths the fused result
+    - Architure:
   
+      ![image-20251223212240953](assets/02-OD-Model-Zoo.assets/image-20251223212240953.png)
+  
+      就是比语义分割多了一个画框的问题，那么在FCN的基础上再参考anchor-base的方法，多用一个head来预测边界框即可。这也是为什么输出是二维特征图的原因
+  
+      ```
+      backbone+FPN+head
+      ```
+  
+    - backbone
+      
+    - FPN: fuse the features
+      
     - head：共享权重的检测头
   
       > [!NOTE]
       >
-      > FCN(fully convolutional)与CNN的区域在把于CNN最后的全连接层换成卷积层，输出的是一张已经Label好的图片，不需要保持同样的尺寸
+      > 检测头有共享权重的，也有不共享的
       
       - 归一化方法：使用Group Normalization
+      
+      Per location on a feature map, FCOS predicts three things： **classification, box regression, centerness**
+      
+      - Box regression uses distances to four sides of the target box
+        $$
+        \mathbf{t} = (l, t, r, b)
+        $$
+        <img src="assets/02-OD-Model-Zoo.assets/image-20251223212106670.png" alt="image-20251223212106670" style="zoom: 67%;" />
+      
+        For a feature-map location mapped to image coordinates $(x, y)$ and a ground-truth box with corners $(x_0, y_0)$ and $(x_1, y_1)$
+        $$
+        l = x - x_0,\quad t = y - y_0,\quad r = x_1 - x,\quad b = y_1 - y
+        $$
+      
+      - Centerness down-weights locations near box edges: a **localization quality indicator**
+        $$
+        \text{centerness} =
+        \sqrt{
+        \frac{\min(l, r)}{\max(l, r)}
+        \cdot
+        \frac{\min(t, b)}{\max(t, b)}
+        }
+        $$
+      
+        > [!TIP]
+        >
+        > We employ sqrt here to slow down the decay of the centerness
+      
+        ![image-20260401152824005](./assets/02-OD-Model-Zoo.assets/image-20260401152824005.png)
+      
+        > [!NOTE]
+        >
+        > 现在我们来讨论一下为什么需要一个centerness？中心度
+        >
+        > 因为进行正负样本选择时发现分布在框边缘的那些点得到的框效果是不好的，这里有几个解释
+        >
+        > 1. 其感受野是有限的，更多地依赖于非此物体的信息
+        > 2. 更容易回归，中心点预测得到的四个边界值的差距不会很大，比较平滑
+        >
+        > 因为设置了一个center region(大小由超参数设置)，这样会加剧正负样本不平衡的问题，因此为了缓解这个问题，cls branch使用的是focal loss
+      
+      Final score at inference multiplies classification confidence and centerness
+      $$
+      s = \sigma(p_{\text{cls}})\cdot \sigma(p_{\text{ctr}})
+      $$
+      Training objective combines classification, regression, and centerness losses
+      $$
+      L = L_{\text{cls}} + \lambda L_{\text{reg}} + \gamma L_{\text{ctr}}
+      $$
+      A common regression choice in FCOS is IoU or GIoU loss
+      $$
+      L_{\text{reg}} = 1 - \mathrm{IoU}(B, B^{gt})
+      $$
+      
+      $$
+      L_{\text{reg}} = 1 - \mathrm{GIoU}(B, B^{gt})
+      $$
   
-    Per location on a feature map, FCOS predicts three things： **classification, box regression, centerness**
+    Cons
   
-    Box regression uses distances to four sides of the target box
-    $$
-    \mathbf{t} = (l, t, r, b)
-    $$
-    <img src="assets/02-OD-Model-Zoo.assets/image-20251223212106670.png" alt="image-20251223212106670" style="zoom: 67%;" />
-  
-    For a feature-map location mapped to image coordinates $(x, y)$ and a ground-truth box with corners $(x_0, y_0)$ and $(x_1, y_1)$
-    $$
-    l = x - x_0,\quad t = y - y_0,\quad r = x_1 - x,\quad b = y_1 - y
-    $$
-    Centerness down-weights locations near box edges: a **localization quality indicator**
-    $$
-    \text{centerness} =
-    \sqrt{
-    \frac{\min(l, r)}{\max(l, r)}
-    \cdot
-    \frac{\min(t, b)}{\max(t, b)}
-    }
-    $$
-  
-    > We employ sqrt here to slow down the decay of the centerness
-  
-    Final score at inference multiplies classification confidence and centerness
-    $$
-    s = \sigma(p_{\text{cls}})\cdot \sigma(p_{\text{ctr}})
-    $$
-    Training objective combines classification, regression, and centerness losses
-    $$
-    L = L_{\text{cls}} + \lambda L_{\text{reg}} + \gamma L_{\text{ctr}}
-    $$
-    A common regression choice in FCOS is IoU or GIoU loss
-    $$
-    L_{\text{reg}} = 1 - \mathrm{IoU}(B, B^{gt})
-    $$
-  
-    $$
-    L_{\text{reg}} = 1 - \mathrm{GIoU}(B, B^{gt})
-    $$
-  
-  - Cons
     - FCOS的centerness分支在轻量级的模型上很难收敛
       - Sol: GFL 完美去掉了Centerness分支
 
+这里来总结一下anchor-base and anchor-free
 
+- Anchor-base和Anchor-free实质上就是一个东西,就拿acnhor-based方法来说,如果把每个点上的anchor数量设置为1,所生成的anchor尺寸都设置为0,这部就变为了anchor-free类似的方法
+
+  那么区别其实在于正负样本的选择和回归方法
+
+- 正负样本选择：Anchor-base根据IOU选择正负样本,Anchor-free根据位置选择正负样本(其实思想差不多)，在这个框架下，本质就是去解决如何处理正负样本不均的问题
+
+- anchor-free检出率更高，recall更高，也会有更多的误检，因此常通过re-weight来检测出结果（fcos里面的centerness就是如此）
+
+### RetinaNet Zoo
 
 ### EfficientNet Zoo
 

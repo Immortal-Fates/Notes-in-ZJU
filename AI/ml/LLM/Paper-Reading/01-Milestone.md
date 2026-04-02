@@ -4,6 +4,72 @@
 
 
 
+- **Attention Is All You Need**. Ashish Vaswani et.al. **NeurIPS**, **2017**, ([Arxiv](https://arxiv.org/abs/1706.03762)) ([NeurIPS](https://papers.nips.cc/paper/7181-attention-is-all-you-need)).
+
+  - Takeaway:
+
+    Transformer replaces recurrence and convolutions with an attention-only encoder-decoder, improving translation quality while making training much more parallelizable. This paper is the milestone that turns self-attention into the dominant primitive for later LLMs.
+
+  - Motivation:
+
+    Earlier seq2seq systems were mostly based on RNNs or CNNs, so they still suffered from sequential computation or long dependency paths even after adding attention. The paper asks whether sequence transduction can be built from attention alone so that long-range interactions become easier to model and training becomes faster on modern hardware.
+
+  - Core Mechanism:
+
+    - The model uses a pure encoder-decoder stack: the encoder alternates multi-head self-attention and position-wise FFN blocks, while the decoder adds masked self-attention and encoder-decoder cross-attention.
+
+    - Scaled dot-product attention is the basic operation:
+
+      $$
+      \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+      $$
+
+      Dividing by $\sqrt{d_k}$ keeps logits from growing too large, which stabilizes optimization when key/query dimensions increase.
+
+    - Multi-head attention lets the model attend to different relations in parallel:
+
+      $$
+      \mathrm{MultiHead}(Q, K, V) = [\mathrm{head}_1; \ldots; \mathrm{head}_h]W^O, \quad
+      \mathrm{head}_i = \mathrm{Attention}(QW_i^Q, KW_i^K, VW_i^V)
+      $$
+
+      This gives different heads different representation subspaces instead of forcing all dependencies into a single attention map.
+
+      ![transformer-architecture](./assets/01-Milestone.assets/transformer-architecture.png)
+
+      The original architecture diagram shows the full encoder-decoder stack, residual connections, and where masked attention appears in the decoder.
+
+    - Because the model has no recurrence or convolution, it injects token order through sinusoidal positional encoding:
+
+      $$
+      PE_{(pos,2i)} = \sin\left(pos / 10000^{2i/d_{\mathrm{model}}}\right), \quad
+      PE_{(pos,2i+1)} = \cos\left(pos / 10000^{2i/d_{\mathrm{model}}}\right)
+      $$
+
+      This gives the network relative and absolute position information without introducing a recurrent state.
+
+  - Pipeline:
+
+    1. Tokenize source and target sentences, then map them to embeddings.
+    2. Add positional encodings so the attention-only stack can distinguish token order.
+    3. Pass the source sequence through the encoder to build contextual memory.
+    4. Feed shifted target tokens into the decoder with causal masking, then cross-attend to encoder memory.
+    5. Predict next-token probabilities autoregressively and train with Adam, learning-rate warmup, dropout, and label smoothing.
+
+  - Pros:
+
+    - Removes recurrence, so training is substantially more parallelizable than classic RNN-based seq2seq models.
+    - Achieves new SOTA translation results on WMT14 English-German and English-French in the paper's setting.
+    - Any two positions interact through short attention paths, which helps model long-range dependencies.
+    - The architecture is simple and modular enough to become the backbone for later encoder-only, decoder-only, and multimodal foundation models.
+
+  - Cons:
+
+    - Full self-attention has $O(n^2)$ time and memory complexity in sequence length, which becomes a bottleneck for long contexts.
+    - Specifically, during self-attention, intermediate maps such as the attention map (QKT ) and the softmax map (L × L) need to be stored from high-speed GPU SRAM (the actual location of the computation) to high bandwidth GPU memory (HBM) and later retrieved during the computation, and the read and write speed of the former is more than 10 times that of the latter, thus resulting in significant memory accessing overhead and increased wall-clock time1 .
+    - The paper is still framed as a translation-focused encoder-decoder system, so it does not yet describe the decoder-only large-scale recipe used by later LLMs.
+    - Some English-French headline numbers differ slightly across arXiv and proceedings versions, so the safest takeaway is the SOTA claim rather than one exact FR BLEU value.
+
 ## Zoo
 
 - __Scaling Vision Transformers.__ *Xiaohua Zhai et al.* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2106.04560) 

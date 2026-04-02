@@ -61,6 +61,15 @@
 
       - concat in different layers: 先从下到上，再从上到下
 
+
+## YOLOX
+
+- __YOLOX: Exceeding YOLO Series in 2021.__ *Zheng Ge et al.* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2107.08430) 
+
+  - Core Mechanism
+    - Decoupled head
+    - data augmentation: Mosaic and MixUp
+
 - __YOLOv7: Trainable Bag-of-Freebies Sets New State-of-the-Art for Real-Time Object Detectors.__ *Chien-Yao Wang et al.* __2023 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2022__ [(Arxiv)](https://arxiv.org/abs/2207.02696) [(S2)](https://www.semanticscholar.org/paper/3aed4648f7857c1d5e9b1da4c3afaf97463138c3) (Citations __8815__)
 
   - Main Takeaway: In addition to architecture optimization, Yolov7 proposed methods will focus on the optimization of the **training process**.
@@ -211,9 +220,150 @@
 
     ![image-20251215171217106](assets/02-2-YOLO-Zoo.assets/image-20251215171217106.png)
 
+
+## YOLOv10
+
 - __YOLOv10: Real-Time End-to-End Object Detection.__ *Ao Wang et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2405.14458) [(S2)](https://www.semanticscholar.org/paper/3723f1406b8f65471030b81fb5045067f0e29c2d) (Citations __3550__)
 
-  - Takeaway: YOLOv10 eliminates NMS, marking a shift toward fully end-to-end detection.
+  - Takeaway: YOLOv10 eliminates NMS, marking a shift toward fully end-to-end detection. 系统性地重构了 backbone、neck 和 head 的若干组件，用更低的计算开销换取更好的精度速度权衡。
+
+    ![performance](./assets/02-2-YOLO-Zoo.assets/image-20260402094650731.png)
+
+  - Motivation
+
+    不够快的两个关键瓶颈
+
+    - 后处理以来nms
+    - 很多已有 YOLO 的模块设计是逐步堆叠出来的，存在明显的 **计算冗余和效率浪费**
+
+  - Core Mechanism
+
+    - Architecture
+
+      ![pipeline](./assets/02-2-YOLO-Zoo.assets/pipeline.svg)
+
+    - NMS-free
+
+      ![image-20260402093718873](./assets/02-2-YOLO-Zoo.assets/image-20260402093718873.png)
+
+      - Motivation: 我们想要实现nms-free，one-to-one matching assigns only one prediction to each ground truth, avoiding the NMS post-processing. However, it leads to weak supervision, which causes suboptimal accuracy and convergence speed.
+
+        因此想要使用one to many的来补偿这部分损失
+
+      提出了 **consistent dual assignments**，让模型在训练时同时获得 one to many 和 one to one 两种监督，从而在推理时可以只保留 one to one 分支并去掉 NMS
+
+      Consistent matching metric
+      $$
+      m(\alpha,\beta)=s \cdot p^{\alpha}\cdot \mathrm{IoU}(\hat{b}, b)^{\beta}
+      $$
+
+      - s表示spatial prior,也就是这个预测点是否落在对应目标内部的空间先验
+      - p是分类分数
+      - $\hat b$是预测框
+      - b是gt box
+      - $\alpha$控制分类的权重
+      - $\beta$控制定位的权重
+
+      > [!NOTE]
+      >
+      > 为什么要有这个Consistent matching metric，因为如果两个分支有不同的匹配度量，就会产生supervision gap
+      >
+      > 实际上，两个分支只是公式形式一样，但参数形式不同
+      > $$
+      > m_{o2m}=m(\alpha_{o2m},\beta_{o2m}),~ m_{o2o}=m(\alpha_{o2o},\beta_{o2o})
+      > $$
+      > 假设 one to many 分支给某个真实目标分出了正样本集合 $\Omega$，one to one 分支最终选中了第 $i$ 个预测，那么它们的分类目标写成：
+      > $$
+      > t_{o2m,j}=u^{*}\cdot \frac{m_{o2m,j}}{m_{o2m}^{*}}, \qquad j\in\Omega \\
+      > t_{o2o,i}=u^{*}\cdot \frac{m_{o2o,i}}{m_{o2o}^{*}} = u^{*} \\
+      > m^*表示最大匹配分数
+      > $$
+      > 然后我们需要衡量supervision gap
+      >
+      > 把两个分支的监督差异写成 1-Wasserstein distance，最后化简成:
+      > $$
+      > A = t_{o2o,i} - \mathbb{I}(i\in\Omega)\, t_{o2m,i}
+      >     + \sum_{k\in\Omega\setminus\{i\}} t_{o2m,k}
+      > $$
+      > $\mathbb{I}(i\in\Omega)$是指示函数。如果 one to one 选中的第 $i$ 个预测也在 one to many 的正样本集合里，它等于 1，否则等于 0。
+      >
+      > 看一下这个式子，差异=o2o监督 - o2m共享的部分 + o2m其他正样本的而额外监督，A越小，监督越一致，即当one to one选的样本正好是one to many选的最优正样本时，gap最小
+      >
+      > 可以证明$\alpha_{o2o}=r\cdot \alpha_{o2m},\beta_{o2o}=r\cdot \beta_{o2m}$，即$m_{o2o}=m_{o2m}^{\,r}$能保持一致性，使得监督方向更协调
+
+      那么o2o到底是如何从o2m中学习的呢
+
+      - o2m让backbone and neck获得的特征比较好
+
+      - o2o和o2m学习的正样本利用$m_{o2o}=m_{o2m}^{\,r}$尽量保持一致
+
+        > 感觉o2m的帮助很弱
+
+    - 系统性地重构了 backbone、neck 和 head 的若干组件，用更低的计算开销换取更好的精度速度权衡。
+
+      ![image-20260402103158402](./assets/02-2-YOLO-Zoo.assets/image-20260402103158402.png)
+
+      ```python
+      class CIB(nn.Module):
+          """Standard bottleneck."""
+      
+          def __init__(self, c1, c2, shortcut=True, e=0.5, lk=False):
+              """Initializes a bottleneck module with given input/output channels, shortcut option, group, kernels, and
+              expansion.
+              """
+              super().__init__()
+              c_ = int(c2 * e)  # hidden channels
+              self.cv1 = nn.Sequential(
+                  Conv(c1, c1, 3, g=c1),
+                  Conv(c1, 2 * c_, 1),
+                  Conv(2 * c_, 2 * c_, 3, g=2 * c_) if not lk else RepVGGDW(2 * c_),
+                  Conv(2 * c_, c2, 1),
+                  Conv(c2, c2, 3, g=c2),
+              )
+      		# 决定做不做残差
+              self.add = shortcut and c1 == c2
+      
+          def forward(self, x):
+              """'forward()' applies the YOLO FPN to input data."""
+              return x + self.cv1(x) if self.add else self.cv1(x)
+      
+      class C2fCIB(C2f):
+          """Faster Implementation of CSP Bottleneck with 2 convolutions."""
+      
+          def __init__(self, c1, c2, n=1, shortcut=False, lk=False, g=1, e=0.5):
+              """Initialize CSP bottleneck layer with two convolutions with arguments ch_in, ch_out, number, shortcut, groups,
+              expansion.
+              """
+              super().__init__(c1, c2, n, shortcut, g, e)
+              self.m = nn.ModuleList(CIB(self.c, self.c, shortcut, e=1.0, lk=lk) for _ in range(n))
+      ```
+
+      ```python
+      class PSA(nn.Module):
+      
+          def __init__(self, c1, c2, e=0.5):
+              super().__init__()
+              assert(c1 == c2)
+              self.c = int(c1 * e)
+              self.cv1 = Conv(c1, 2 * self.c, 1, 1)
+              self.cv2 = Conv(2 * self.c, c1, 1)
+              
+              self.attn = Attention(self.c, attn_ratio=0.5, num_heads=self.c // 64)
+              self.ffn = nn.Sequential(
+                  Conv(self.c, self.c*2, 1),
+                  Conv(self.c*2, self.c, 1, act=False)
+              )
+              
+          def forward(self, x):
+              a, b = self.cv1(x).split((self.c, self.c), dim=1)
+              b = b + self.attn(b)
+              b = b + self.ffn(b)
+              return self.cv2(torch.cat((a, b), 1))
+      ```
+
+      
+
+## YOLOv11
 
 - __YOLOv11: An Overview of the Key Architectural Enhancements.__ *Rahima Khanam, Muhammad Hussain.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2410.17725) [(S2)](https://www.semanticscholar.org/paper/adccc00dbd0fe63e4e34bc3445a29bc2ec910cbc) (Citations __1398__)
 
@@ -229,15 +379,72 @@
     - C3k2
     - C2PSA
 
-- __YOLOv12: Attention-Centric Real-Time Object Detectors.__ *Yunjie Tian et al.* __ArXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2502.12524) [(S2)](https://www.semanticscholar.org/paper/ae1d5360f2f556139cffd10d6e9d2e0241c937e0) (Citations __609__)
 
+## YOLOv12
+
+- __YOLOv12: Attention-Centric Real-Time Object Detectors.__ *Yunjie Tian et al.* __ArXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2502.12524) [(S2)](https://www.semanticscholar.org/paper/ae1d5360f2f556139cffd10d6e9d2e0241c937e0) [(Code)](https://github.com/sunsmarterjie/yolov12) (Citations __609__)
+
+  - Takeaway:
+
+    YOLOv12 is an attention-centric real-time detector that tries to keep YOLO-style speed while shifting the backbone and neck toward efficient attention. Its main result is a better latency-accuracy trade-off than YOLOv10, YOLO11, and several RT-DETR variants at comparable scales.
+
+    ![yolov12-tradeoff](./assets/02-2-YOLO-Zoo.assets/yolov12-tradeoff.png)
+
+  - Motivation:
+
+    Earlier YOLO variants mostly stayed CNN-centric because vanilla self-attention is expensive: token interactions scale quadratically with sequence length and often have worse memory behavior than convolutions. YOLOv12 is motivated by a narrower question: can attention be integrated into YOLO in a way that still preserves real-time deployment characteristics?
+
+  - Core Mechanism:
+
+    - Area Attention (A2): instead of full global attention, YOLOv12 partitions features into a few(L) large horizontal or vertical areas and performs attention inside those areas. This cuts attention cost while keeping a larger receptive field than many small-window schemes.
+
+      > [!NOTE]
+      >
+      > This is the paper's starting point: attention is more expressive, and its quadratic scaling is the main barrier to real-time detection.
+
+      ![yolov12-area-attention](./assets/02-2-YOLO-Zoo.assets/yolov12-area-attention.png)
+
+      Under the default area partition setting(L == 4), the paper states the attention computation is reduced from:
+
+      $$
+      2 n^2 h d \;\rightarrow\; \frac{1}{2} n^2 h d
+      $$
+
+      where $n$ is the token count per direction, $h$ is the head count, and $d$ is the head dimension. The reduction comes from replacing full pairwise interactions with area-based interactions.
+
+    - R-ELAN: YOLOv12 redesigns the ELAN-style aggregation block with residual scaling and a cleaner aggregation path, because naive attention plus standard ELAN becomes unstable for larger detector scales.
+
+      ![image-20260402162121679](./assets/02-2-YOLO-Zoo.assets/image-20260402162121679.png)
+
+      - Motivation
+
+        Efficient layer aggregation networks (ELAN) can introduce **instability**. We argue that such a design causes gradient blocking and lacks residual connections from input to output.而且还围绕注意力机制构建网络，都会导致网络不稳定。
+
+    - YOLO-specific attention cleanup: the paper also makes several pragmatic choices so attention behaves well in detector codepaths, including FlashAttention, no positional encoding, a smaller MLP ratio, `Conv2d + BN` instead of `Linear + LN`, and a `7x7` depthwise separable position perceiver.
+
+  - Pipeline:
+  
+    1. Resize the input image and pass it through a hierarchical YOLO-style backbone.
+    2. Keep the first two backbone stages from YOLOv11, then replace later stages with attention-centric blocks built around A2 and R-ELAN.
+    3. Aggregate multi-scale features in the neck using the same efficient attention design philosophy.
+    4. Feed the resulting feature pyramid into a standard YOLO multi-scale detection head for box and class prediction.
+    5. Train and evaluate on COCO; the paper positions YOLOv12 mainly as an architecture improvement rather than a new loss-design paper.
+
+  - Pros:
+  
+    - Pushes YOLO toward attention-centric design without giving up the real-time regime.
+    - Reports strong latency-accuracy trade-offs across N/S/M/L/X model scales.
+    - Uses relatively simple engineering choices instead of introducing a heavy new assignment or loss pipeline.
+    - Shows attention can outperform strong CNN-based YOLO baselines and RT-DETR-style competitors when tuned for detector efficiency.
+
+  - Cons:
+  
+    - The method is still resolution-sensitive because attention cost grows with token count.
+    - Area attention is an efficiency trade-off, so it does not preserve full global attention.
+    - The paper is more architecture/system design than mathematical novelty, so there is limited new theory or loss design to study.
+    - Larger attention-based variants required extra stabilization work such as R-ELAN and residual scaling.
+  
 - __YOLO-World: Real-Time Open-Vocabulary Object Detection.__ *Tianheng Cheng et al.* __2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2024__ [(Arxiv)](https://arxiv.org/abs/2401.17270) [(S2)](https://www.semanticscholar.org/paper/37c112454a236ab91c9c6b5cc165a6c3251e9206) (Citations __698__)
-
-- __YOLOX: Exceeding YOLO Series in 2021.__ *Zheng Ge et al.* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2107.08430) 
-
-  - Core Mechanism
-    - Decoupled head
-    - data augmentation: Mosaic and MixUp
 
 ## YOLOv13
 
@@ -604,32 +811,31 @@ __YOLOv13: Real-Time Object Detection with Hypergraph-Enhanced Adaptive Visual P
               return self.cv2(torch.cat(y, 1))
       ```
   
+    - a Full-Pipeline Aggregation-and-Distribution (FullPAD) paradigm based on HyperACE
+  
+      - Motivation: 如果只有一个强模块塞在某一层，信息增强往往是局部的
+  
+      FullPAD不是只在单个阶段做特征增强，而是把 HyperACE 处理过的相关性增强特征，通过三条通道分发到：
+  
+      1. backbone 和 neck 的连接处
+      2. neck 的内部层
+      3. neck 和 head 的连接处
+  
+      ```python
+      class FullPAD_Tunnel(nn.Module):
+          def __init__(self):
+              super().__init__()
+              self.gate = nn.Parameter(torch.tensor(0.0))
       
+          def forward(self, x):
+              out = x[0] + self.gate * x[1]
+              return out
+      ```
   
-  - a Full-Pipeline Aggregation-and-Distribution (FullPAD) paradigm based on HyperACE
+      这里还有个门控机制，因为训练刚开始时，额外注入的增强信息几乎不起作用，系统更稳定
   
-    - Motivation: 如果只有一个强模块塞在某一层，信息增强往往是局部的
+    - 轻量化 DS 系列模块：FullPAD会增加一些开销，又用这些DS block把开销压下去
   
-    FullPAD不是只在单个阶段做特征增强，而是把 HyperACE 处理过的相关性增强特征，通过三条通道分发到：
-  
-    1. backbone 和 neck 的连接处
-    2. neck 的内部层
-    3. neck 和 head 的连接处
-  
-    ```python
-    class FullPAD_Tunnel(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.gate = nn.Parameter(torch.tensor(0.0))
-    
-        def forward(self, x):
-            out = x[0] + self.gate * x[1]
-            return out
-    ```
-  
-    这里还有个门控机制，因为训练刚开始时，额外注入的增强信息几乎不起作用，系统更稳定
-  
-  - 轻量化 DS 系列模块：FullPAD会增加一些开销，又用这些DS block把开销压下去
 
 ## YOLOv26
 
@@ -639,29 +845,183 @@ __YOLOv13: Real-Time Object Detection with Hypergraph-Enhanced Adaptive Visual P
 
 - Core Mechanism：End-to-End NMS-Free, DFL removal
 
+  - Architecture
+
+    
+
   - DFL removal
 
-    - Motivation: DFL 虽然有效，但常常让导出变复杂，也限制硬件兼容性
+    - Motivation: DFL 虽然有效，但常常让导出变复杂，也限制硬件兼容性。所以 YOLO26 直接去掉了 DFL，以换取更简洁的推理与更广的边缘设备支持
 
-    所以 YOLO26 直接去掉了 DFL，以换取更简洁的推理与更广的边缘设备支持
-
+    ```python
+    self.reg_max = reg_max
+    self.no = nc + self.reg_max * 4
+    self.cv2 = nn.ModuleList(
+        nn.Sequential(Conv(x, c2, 3), Conv(c2, c2, 3), nn.Conv2d(c2, 4 * self.reg_max, 1))
+        for x in ch
+    )
+    # 直接变成恒等映射
+    self.dfl = DFL(self.reg_max) if self.reg_max > 1 else nn.Identity()
+    ```
+  
   - End-to-End NMS-Free: YOLO26 is a native end-to-end model. 
 
     > [!NOTE]
     >
     > How to achieve???
-
+  
+    yolov26当前实现里同时保留了 one-to-many 和 one-to-one 两种训练头，用于不同的监督方式（如果开启端到端，两种会一起运行）
+  
+    Detect头定义
+  
+    ```python
+    self.end2end = end2end
+    if end2end:
+        self.one2one_cv2 = copy.deepcopy(self.cv2)
+        self.one2one_cv3 = copy.deepcopy(self.cv3)
+    ```
+  
+    Detect 头前向传播
+  
+    ```py
+    preds = self.forward_head(x, **self.one2many)
+    if self.end2end:
+        x_detach = [xi.detach() for xi in x]
+        one2one = self.forward_head(x_detach, **self.one2one)
+        preds = {"one2many": preds, "one2one": one2one}
+    
+    if self.training:
+        return preds
+    # 推理阶段只取 one-to-one 结果做解码
+    y = self._inference(preds["one2one"] if self.end2end else preds)
+    if self.end2end:
+        y = self.postprocess(y.permute(0, 2, 1))
+    return y if self.export else (y, preds)
+    ```
+  
+    后处理为什么不用NMS：scores and conf直接取topk
+  
+    ```python
+    @staticmethod
+    def postprocess(preds: torch.Tensor, max_det: int, nc: int = 80):
+        boxes, scores = preds.split([4, nc], dim=-1)
+        scores, conf, idx = Detect.get_topk_index(scores, max_det)
+        boxes = boxes.gather(dim=1, index=idx.repeat(1, 1, 4))
+        return torch.cat([boxes, scores, conf], dim=-1)
+    ```
+  
   - ProgLoss + STAL
-
+  
     Improved loss functions increase detection accuracy, with notable improvements in **small-object recognition**
-
+  
+    ```python
+    def init_criterion(self):
+        return E2ELoss(self) if getattr(self, "end2end", False) else v8DetectionLoss(self)
+    ```
+  
+    > [!TIP]
+    >
+    > 什么是V8检测头
+  
+    Then dive into E2ELoss
+  
+    > [!NOTE]
+    >
+    > 有两套loss，让one2many loss的权重逐渐衰减。
+    >
+    > Progloss stands for progressive loss.渐进式体现在训练初期更依赖 one-to-many 的密集监督，让优化更稳定。训练后期逐渐把重心转向 one-to-one，更贴近端到端推理目标
+  
+    ```python
+    class E2ELoss:
+        def __init__(self, model, loss_fn=v8DetectionLoss):
+            self.one2many = loss_fn(model, tal_topk=10)
+            self.one2one = loss_fn(model, tal_topk=7, tal_topk2=1)
+            self.updates = 0
+            self.total = 1.0
+            self.o2m = 0.8
+            self.o2o = self.total - self.o2m
+            self.o2m_copy = self.o2m
+            self.final_o2m = 0.1
+    
+        def __call__(self, preds, batch):
+            loss_one2many = self.one2many(preds["one2many"], batch)
+            loss_one2one = self.one2one(preds["one2one"], batch)
+            return loss_one2many[0] * self.o2m + loss_one2one[0] * self.o2o, loss_one2one[1]
+    	
+        def update(self):
+            self.updates += 1
+            self.o2m = self.decay(self.updates)
+            self.o2o = self.total - self.o2m
+    ```
+  
+    STAL stands for ?
+  
+    > [!NOTE]
+    >
+    > STAL 会特别照顾小目标，比如对小于 8 像素的目标保证最少若干个 anchor assignment
+  
+    ```python
+    gt_bboxes_xywh = xyxy2xywh(gt_bboxes)
+    wh_mask = gt_bboxes_xywh[..., 2:] < self.stride[0]
+    gt_bboxes_xywh[..., 2:] = torch.where(
+        (wh_mask * mask_gt).bool(),
+        torch.tensor(self.stride_val, device=gt_bboxes.device, dtype=gt_bboxes.dtype),
+        gt_bboxes_xywh[..., 2:],
+    )
+    gt_bboxes = xywh2xyxy(gt_bboxes_xywh)
+    ```
+  
+    `gt_bboxes_xywh[..., 2:] = torch.where(...)`对这些过小的目标，强行把宽高至少提升到 `stride_val`。过小目标如果按原尺寸做正样本选择，容易谁都分不到，或者分得太少。所以直接先把小框“托底”到一个更容易命中的尺寸，再做候选点筛选，实现“小目标感知分配”。
+  
   - MuSGD Optimizer: combine SGD with Muon(Inspired by Moonshot AI's [Kimi K2](https://www.kimi.com/)) enabling more stable training and faster convergence.
-
+  
+    下面来详细看看代码的实现：参数分组，
+  
+    ```python
+    use_muon = name == "MuSGD"
+    # 二维及以上的参数，比如卷积核、线性层权重，进入 Muon 风格更新组
+    if param.ndim >= 2 and use_muon:
+        g[3][fullname] = param
+        # 偏置项单独分组
+    elif "bias" in fullname:
+        g[2][fullname] = param
+        # BN 参数、温度参数单独分组
+    elif isinstance(module, bn) or "logit_scale" in fullname:
+        g[1][fullname] = param
+    else:
+        g[0][fullname] = param
+    ```
+  
+    ```python
+    def muon_update(grad, momentum, beta=0.95, nesterov=True):
+        # 用线性插值更新动量缓冲
+        momentum.lerp_(grad, 1 - beta)
+        # 启用 Nesterov，就把当前梯度与动量混合
+        update = grad.lerp(momentum, beta) if nesterov else momentum
+        if update.ndim == 4:
+            update = update.view(len(update), -1)
+        # 对更新矩阵做 Newton-Schulz 形式的零幂归一化处理
+        update = zeropower_via_newtonschulz5(update)
+        update *= max(1, grad.size(-2) / grad.size(-1)) ** 0.5
+        return update
+    ```
+  
+    MUSGD.step
+  
+    ```python
+    update = muon_update(grad, state["momentum_buffer"], group["momentum"], group["nesterov"])
+    p.add_(update.reshape(p.shape), alpha=-(lr * self.muon))
+    
+    if group["weight_decay"] != 0:
+        grad = grad.add(p, alpha=group["weight_decay"])
+    
+    state["momentum_buffer_SGD"].mul_(group["momentum"]).add_(grad)
+    sgd_update = grad.add(state["momentum_buffer_SGD"], alpha=group["momentum"]) if group["nesterov"] else state["momentum_buffer_SGD"]
+    p.add_(sgd_update, alpha=-(lr * self.sgd))
+    ```
+  
   - **Precision Pose Estimation**
     Integrates [Residual Log-Likelihood Estimation](https://arxiv.org/abs/2107.11291) (RLE) for more accurate keypoint localization and optimizes the decoding process for increased inference speed.
-
+  
   - **Refined OBB Decoding**
     Introduces a specialized angle loss to improve detection accuracy for square-shaped objects and optimizes OBB decoding to resolve boundary discontinuity issues.
-  
-- 
-

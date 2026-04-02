@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "mcp-builder": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "da280c26ceee48533ce8b39e5492d81b4a74b65732988cafc50668371dfeb525"
+    }
+  }
+}

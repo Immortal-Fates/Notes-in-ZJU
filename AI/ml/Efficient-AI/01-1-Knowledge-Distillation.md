@@ -10,12 +10,6 @@ status: draft
 
 知识蒸馏是迁移学习的一种
 
-```
-
-```
-
-
-
 ## What is knowledge distillation
 
 ![image-20251126185706868](assets/01-1-Knowledge-Distillation.assets/image-20251126185706868.png)
@@ -115,7 +109,7 @@ How to match? - use distillation loss to train.
 
     ![comparison](assets/01-1-Knowledge-Distillation.assets/comparison.png)
   
-    ![structure](./assets/01-1-Knowledge-Distillation.assets/structure.png)
+    ![image-20260331113917140](./assets/01-1-Knowledge-Distillation.assets/image-20260331113917140.png)
   
     The total training objective is the student’s normal detection loss plus a KD term on the cross-head predictions:
     $$
