@@ -10,6 +10,8 @@ status: draft
 
 Quick guide to core object detection ideas: how boxes are defined and refined, how detectors are structured, how we evaluate them, and the trade-offs between design choices.
 
+可能这节最重要的是目标检测的本质部分
+
 <!--more-->
 
 ## Computer Vision Tasks
@@ -92,6 +94,23 @@ Quick guide to core object detection ideas: how boxes are defined and refined, h
 **Anchor math**
 - Anchor \(a = (x_a, y_a, w_a, h_a)\); predict offsets \(t = (\Delta x, \Delta y, \Delta w, \Delta h)\).
 - Decode: \(x = x_a + \Delta x \, w_a,\; y = y_a + \Delta y \, h_a,\; w = w_a e^{\Delta w},\; h = h_a e^{\Delta h}\).
+
+### 目标检测的本质
+
+![image-20260414234058440](./assets/01-Object-Detection-Basics.assets/image-20260414234058440.png)
+
+当我们处理一个anchor base的检测任务的时候，我们如何设置anchor呢，一般是根据训练集合的数据分布进行统计获得的那么为什么要这样呢？这里就要介绍我们目标检测任务的目的：提高检出，减少误检，即提高precision，减小recall，那么如何实现呢。也就是要我们预先设定的每个anchor都能学得好：
+
+> [!NOTE]
+>
+> 为什么是每个，因为一旦有anchor学习不好就会使得该anchor对应的检测目标识别效果不好，precision低或者出现误检。
+
+那么我们如何能使得每个anchor学习好呢？就需要训练样本对每个anchor(不同尺度、大小)都要有以下要求：
+
+- 样本质量高（什么叫样本质量高，就是分配anchor与gt时，匹配的程度高）：要iou_thres大，当然后面有添加类别感知的方法来评定好坏
+- 样本数量多（让尽可能多的anchor去匹配gt）：iou_thres小，图像多
+
+这里就出现了一个矛盾：iou_thres既要大又要小，所以我们对于thres是做trade-off的，现在的很多label assignment就是在用不同的方法调整得到一个好的iou_thres，那么到底好不好呢，我们可以统计看一下最后输出的调整后的iou_thres是什么样的，大概就知道数据集和咱们的anchor匹配是怎么样的。这就可以指导我们调整我们的整体模型框架。
 
 ## Anchor-Free Detectors
 

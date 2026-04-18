@@ -15,3 +15,79 @@
 | Day5 | 理解推理、解码与加速，知道模型回答时发生了什么     | Hugging Face Generation Strategies 文档 ([Hugging Face](https://huggingface.co/docs/transformers/en/generation_strategies?utm_source=chatgpt.com))Hugging Face KV Cache 文档 ([Hugging Face](https://huggingface.co/docs/transformers/cache_explanation?utm_source=chatgpt.com))vLLM 官方文档 ([vLLM](https://docs.vllm.ai/en/latest/?utm_source=chatgpt.com))FlashAttention 论文 ([arXiv](https://arxiv.org/abs/2205.14135?utm_source=chatgpt.com)) | vllm-project/vllm 仓库 ([GitHub](https://github.com/vllm-project/vllm?utm_source=chatgpt.com))ggml-org/llama.cpp 仓库 ([GitHub](https://github.com/ggml-org/llama.cpp?utm_source=chatgpt.com)) | 用同一个模型比较 greedy 和 sampling 输出差异。调 temperature 和 top p，观察稳定性与多样性变化。本地跑通一条推理链路，机器弱就优先试 llama.cpp。记录输入长度变化对推理速度和显存的影响。 | 为什么推理阶段特别依赖缓存。KV cache 复用了什么。greedy 和 sampling 适合什么任务。推理框架和模型本体有什么区别。FlashAttention 解决的本质瓶颈是什么。 |
 | Day6 | 学习微调，重点掌握 LoRA 和 QLoRA                   | LoRA 论文 ([arXiv](https://arxiv.org/abs/2106.09685?utm_source=chatgpt.com))QLoRA 论文 ([arXiv](https://arxiv.org/abs/2305.14314?utm_source=chatgpt.com))Hugging Face PEFT Quicktour ([Hugging Face](https://huggingface.co/docs/peft/quicktour?utm_source=chatgpt.com))Hugging Face PEFT Quantization 文档 ([Hugging Face](https://huggingface.co/docs/peft/developer_guides/quantization?utm_source=chatgpt.com))TRL 的 SFT Trainer 文档 ([Hugging Face](https://huggingface.co/docs/trl/sft_trainer?utm_source=chatgpt.com)) | huggingface/peft 仓库 ([GitHub](https://github.com/huggingface/peft?utm_source=chatgpt.com))huggingface/trl 仓库 ([GitHub](https://github.com/huggingface/trl?utm_source=chatgpt.com)) | 找一个小型 instruction 数据集。选一个小模型做一次 LoRA 微调。保存 adapter 权重。对比微调前后回答差异。条件允许就试量化加载加 PEFT。 | 为什么全量微调成本高。LoRA 为什么能减少训练参数。adapter 权重和基础模型权重是什么关系。QLoRA 比 LoRA 多解决了什么问题。监督微调本质上改变了模型什么能力。 |
 | Day7 | 理解对齐和评估，形成完整闭环                       | InstructGPT 论文 ([arXiv](https://arxiv.org/abs/2203.02155?utm_source=chatgpt.com))TRL 官方文档 ([Hugging Face](https://huggingface.co/docs/trl/en/index?utm_source=chatgpt.com))Stanford CS336 课程主页，回看整体框架 ([Stanford CS336](https://cs336.stanford.edu/?utm_source=chatgpt.com)) | EleutherAI 做了 lm-evaluation-harness 统一评测框架 ([GitHub](https://github.com/EleutherAI/lm-evaluation-harness?utm_source=chatgpt.com)) | 给本周训练或微调过的模型设计一套 20 条以上的小评测集。从是否答非所问、是否重复、是否事实捏造、是否风格稳定四个维度评测。条件允许就接入 lm-evaluation-harness。写 2 到 3 页总结，题目可设为我如何理解大模型从数据到对齐的全流程。 | 监督微调和对齐是不是一回事。为什么不能只看 loss。为什么会答题不等于好用。人类偏好数据在对齐中扮演什么角色。现在能否完整讲出数据到 tokenizer 到预训练到推理到微调到对齐到评估这条链路。 |
+
+## 知识库
+
+【要成为大模型算法工程师，至少应该掌握哪些内容？来自一线算法工程师的建议】 https://www.bilibili.com/video/BV1ix6UBcEp2/?share_source=copy_web&vd_source=93bb338120537438ee9180881deab9c1
+
+成为大模型算法工程师，最少要什么：
+
+1. 数学 done
+
+   大学三件套走天下了
+
+2. 深度学习 done
+
+   梯度下降，loss function, dropout/BN, resnet, adam, LR, CNN(RNN已经被淘汰了)
+
+3. 大模型基础 done
+
+   - transformer: qkv动手啃【强烈推荐新人入门LLM的方法——逐行调试一个小模型】 https://www.bilibili.com/video/BV1BNy9BREno/?share_source=copy_web&vd_source=93bb338120537438ee9180881deab9c1
+
+     两条线
+
+     - bert: embedding
+     - gpt: 
+
+   - 生态：**huggingface**, transformers库
+
+   - SFT, LoRA, QLoRA: DeepSpeed, 混合精度， 显存与规模的估算（如何设置batch size，要不要梯度累计，自己手动推导）
+
+     - 对齐：RL(DPO,PPO,GRPO)
+
+   - 量化：kvcache, 怎么部署
+
+   - 测评：各种任务的指标
+
+   - 顶会论文
+
+4. 计算机基础 done
+
+5. 数据工程：算法工程师，90%时间都是在跟数据打交道
+
+
+
+《大白话概率论讲义：从数学直觉到AI视野》
+
+《一个大模型算法工程师的诞生》
+
+
+
+什么是attention???
+
+cross-attention: 建立两个语言之间的桥梁
+
+多头注意力：给attention加上卷积
+
+transformer:全局建模能力很强。小镇做题家模型，需要大量数据
+
+scaling law
+
+SFT:监督式微调（不新，所以我们要用强化学习）
+
+强化学习：chatgpt先训练了一个打分器
+
+RLHF诞生了
+
+图文对齐：CLIP
+
+当预训练把不管什么智慧敲进KV矩阵后，另外一个神经网络就有信息把它提取出来（生成Q，然后cross-attention）
+
+未来：SFT+RHLF
+
+空间感知智能
+
+
+
+
+

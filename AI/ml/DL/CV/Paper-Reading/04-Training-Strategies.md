@@ -108,13 +108,28 @@ status: draft
 ### Intro
 
 - Takeaway: label assignment就是在训练时，哪些预测框是正样本（positive）？哪些是负样本（negative）？
+
+  > [!TIP]
+  >
+  > 仅在dense perdiction中存在，sparse prediction已经解决了这个问题
+
 - Motivation: 如果 assignment 不合理：
   - 正样本太少 → 学不到
   - 正样本太多 → 噪声大
   - 小目标没有 anchor → 小目标 recall 崩
   - 遮挡目标被分错 → AP50 还行，AP75 很差
 
-- 查看label assignment: assignment visualization
+- 查看label assignment: 需要可视化看anchor如何与gt进行匹配的
+
+- 一些insight: assignment 本质是 heuristic，没有一个真正理论最优解。
+
+  因此 dense detection 论文大量时间都在研究：
+
+  ```
+  better label assignment
+  ```
+
+  而不是模型本身
 
 下面介绍一些主流的方法：
 

@@ -12,20 +12,20 @@ status: draft
 
 <!--more-->
 
-# 刷机装系统
+## 刷机装系统
 
 1. 下载iso
 2. 分区压缩卷
 3. U盘使用rufus登制作启动盘
 4. 目标电脑进BIOS关闭安全模式，选择U盘启动然后install
 
-# 新电脑环境配置
+## 新电脑环境配置
 
 > 事先声明：平时开发主要用IDE，配置这些有的没的主要是闲的，偶尔懒得开vscode会用，lua不太会
 
-## ubuntu
+### ubuntu
 
-### 系统安装
+#### 系统安装
 
 - 换源及更新
 
@@ -66,7 +66,7 @@ status: draft
 
 - 高分屏适配：settings->Displays开启HiDPI支持
 
-### 一键配置
+#### 一键配置
 
 - git
 
@@ -78,7 +78,7 @@ status: draft
 
 - chezmoi
 
-### Terminal and Shell
+#### Terminal and Shell
 
 **Terminal 是“显示/输入的窗口（终端模拟器）仪表盘+方向盘”，Shell 是“命令解释器（你跟系统对话的大脑）引擎”。** 它们常一起出现，但不是一回事。
 
@@ -181,10 +181,10 @@ status: draft
 - CMatrix黑客帝国
 
   ```
-  # 安装
+  安装
   sudo apt install cmatrix
 
-  # 运行（加上 -lba 参数看起来更像电影，加上 -ol 参数起来更像 Win/Mac 的屏保）
+  运行（加上 -lba 参数看起来更像电影，加上 -ol 参数起来更像 Win/Mac 的屏保）
   cmatrix
   ```
 
@@ -192,7 +192,7 @@ status: draft
 
   - installation: 上github下载新版，CIL下载的是很老的版本
 
-### 软件安装
+#### 软件安装
 
 - 搭梯子：clash verge (on github)，然后来glados找自己的配置文件导入即可
 
@@ -211,7 +211,7 @@ status: draft
 
 - vscode/cursor
 
-### 桌面美化
+#### 桌面美化
 
 - transparent window: used to set any window to transparent
 TODO
@@ -246,9 +246,9 @@ TODO
     sed -i "s#https\?://mirror.msys2.org/#https://mirrors.tuna.tsinghua.edu.cn/msys2/#g" /etc/pacman.d/mirrorlist*
     ```
 
-## MacOS
+### MacOS
 
-# CheetSheet
+## CheetSheet
 
 - wezterm
 
@@ -262,7 +262,7 @@ TODO
 
   - **`Super + H`** → 隐藏（最小化）当前窗口
 
-# References
+## References
 
 - [Windows11 + Linux (Ubuntu22.04) 双系统最简安装详细避坑版_win11安装linux双系统-CSDN博客](https://blog.csdn.net/2401_84064328/article/details/137232169)
 - [(39 封私信 / 80 条消息) 写给工程师的 Ubuntu 20.04 最佳配置指南 - 知乎](https://zhuanlan.zhihu.com/p/139305626)

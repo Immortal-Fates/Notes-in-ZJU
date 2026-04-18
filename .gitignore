@@ -8,3 +8,7 @@
 # .codex/
 # .agent/
 .sisyphus/
+.worktrees/
+
+# pdf
+**/*.assets/*.pdf

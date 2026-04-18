@@ -1266,7 +1266,7 @@ Camera Calibration（single-view calibration）
   - 齐次坐标与笛卡尔坐标之间的转换
     $$
     (x, y, w) \Leftrightarrow \left( \frac{x}{w}, \frac{y}{w} \right)\\
-
+    
     \text{Homogeneous} \quad \Leftrightarrow \quad \text{Cartesian}(x, y, w)
     $$
     刚体变换$Rx+t$可以表示为齐次坐标下的矩阵乘法形式：

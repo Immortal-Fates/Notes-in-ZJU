@@ -127,6 +127,30 @@ status: draft
   
 - __LAF-YOLOv10 with Partial Convolution Backbone, Attention-Guided Feature Pyramid, Auxiliary P2 Head, and Wise-IoU Loss for Small Object Detection in Drone Aerial Imagery.__ *Sohail Ali Farooqui et al.* __arXiv, 2026__ [(Arxiv)](https://arxiv.org/abs/2602.13378) 
 
+  - Takeaway
+
+    就是在yolov10上做了一些修改变为LAF-YOLOv10，用于UAV-specific(Unmanned aerial vehicles)这个场景，将一些模块拼凑而成
+
+  - Motivation
+
+  - Core Mechanism
+
+    一共提出了四个module(缝合怪，没有新的东西)
+
+    - A Partial Convolution C2f (PC-C2f) module restricts spatial convolution to one quarter of backbone channels, reducing redundant computation while preserving discriminative capacity. 压缩backbone计算量
+
+      标准的 C2f 块通过空间核处理 3×3 所有 C 通道。由于小物体只激活部分信道，该操作浪费了计算。PC-C2f 将空间卷积限制在 C/4 通道内，并使用 1×1 投影进行跨通道混音，作为隐式信息瓶颈，迫使骨干将容量集中于判别特征。
+
+    - An Attention-Guided Feature Pyramid Network (AG-FPN) inserts Squeeze-and-Excitation channel gates before multi-scale fusion and replaces nearest-neighbor upsampling with DySample for content-aware interpolation. 细化跨尺度融合
+
+    - An auxiliary P2 detection head at 160\*160 resolution extends localization to objects below 8\*8 pixels, while the P5 head is removed to redistribute parameters. P2恢复空间分辨率
+
+      添加细分辨率探测头并去除大物体头已成为一种解决小目标检测的既定策略（但是要保证基本只有小目标，因为这样会对大目标有影响）
+
+    - Wise-IoU v3 replaces CIoU for bounding box regression, attenuating gradients from noisy annotations in crowded aerial scenes. 稳定标签噪声下的回归
+
+    
+
 - __RS-TinyNet: Stage-wise Feature Fusion Network for Detecting Tiny Objects in Remote Sensing Images.__ *Xiaozheng Jiang et al.* __ArXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2507.13120) [(S2)](https://www.semanticscholar.org/paper/c3122c8c6a77e19f1197f9cf1501db9297591cc9) (Citations __0__)
 
 - __A Data-Driven RetinaNet Model for Small Object Detection in Aerial Images.__ *Zhicheng Tang et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2509.02928)

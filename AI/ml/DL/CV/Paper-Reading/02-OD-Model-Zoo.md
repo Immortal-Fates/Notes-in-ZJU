@@ -147,189 +147,7 @@ Focus on object detection models
 
 ### R-CNN Zoo
 
-- **Rich feature hierarchies for accurate object detection and semantic segmentation**. Ross Girshick et.al. **arxiv**, **2013**, ([link](https://arxiv.org/abs/1311.2524v5)).
-
-  > R-CNN: Regions with CNN features
-
-  - Takeaway
-
-    CNN on region proposals (Selective Search): run the CNN **on each region proposals**.
-
-    ![image-20251121203041130](assets/02-OD-Model-Zoo.assets/image-20251121203041130.png)
-
-    -  Module design: Region proposals(Selective Search) + Feature extraction(4096-dimensional vector using pre-trained CNN) +  classspecific linear SVMs
-    - drawback: multi-stage / non end-to-end, slow, require large disk space
-
-  - Core Mechanism
-
-    To solve the labeled datais scarce: use unsupervised pre-training, followed by supervised fine-tuning/supervised pre-training on a large auxiliary dataset (ILSVRC), followed by domainspecific fine-tuning on a small dataset(is also effective)
-
-  - Cons
-
-    - very slow: need to do ~2k independent forward passes for each image.
-
-- **Fast R-CNN**. Ross Girshick et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1504.08083v2)).
-
-  - Run the CNN **once per image** to get a feature map, then use **ROI pooling** to reuse convolutional features for all proposals. Train classification and bbox regression jointly with a single softmax + regression head.
-
-    ![image-20251121204749852](assets/02-OD-Model-Zoo.assets/image-20251121204749852.png)
-
-    > how to project: using the network’s total stride sss to map box coordinates from image space to feature-map space: divide coordinates by sss, then crop that sub-region from the conv feature map.
-
-    - Joint loss: classification cross-entropy + smooth L1 bbox regression loss.
-    - The RoI pooling layer uses max pooling to convert the features inside any valid region of interest into a small feature map with a fixed spatial extent of H × W (e.g., 7 × 7).
-
-  - Cons:
-    - Proposals are the test-time computational bottleneck in state-of-the-art detection systems.
-
-- **Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks**. Shaoqing Ren et.al. **arxiv**, **2015**, ([link](https://arxiv.org/abs/1506.01497v3)).
-
-  - Takeaway: Faster R-CNN adds an **RPN** to generate proposals, enabling end-to-end **two-stage detection** without external proposal methods.
-
-    Faster R-CNN’s key idea:  **Learn region proposals with a CNN (RPN) that shares features with the detector.**
-
-  - Motivation
-
-    - **R-CNN**: Selective Search proposals + per-region CNN; very slow.
-    - **Fast R-CNN**: Single CNN per image + ROI pooling; faster but still depends on external region proposal (e.g., Selective Search), which is CPU-bound and slow.
-    - The bottleneck: generating region proposals outside the CNN.
-
-    所以就想要去除region proposals outside the CNN这个步骤，那么去除之后，如何对这么多的anchor进行选择呢？
-
-  - Core Mechanism: 
-
-    - Architecture
-
-      ![image-20260401140326311](./assets/02-OD-Model-Zoo.assets/image-20260401140326311.png)
-
-    Attach an **RPN head** on top which slides small conv over the feature map. For each spatial position, predicts:
-
-    - objectness scores for multiple anchors,
-    - bounding box regressions for anchors.
-
-    相当于对anchor进行了初步的筛选和微调得到更合理的anchor，成为proposal
-
-    > [!NOTE]
-    >
-    > Faster R-CNN is a single, unified network for object detection. The RPN module serves as the 'attention' of this unified network.
-
-    Then generate proposals from RPN and apply **ROI pooling / ROI Align** on shared features. 这些anchor经过rpn输出proposal,这些proposal的坐标是原图上的坐标,经过步长计算出该proposal对应特征图上的ROI。将ROI这部分特征送到后面的分类头和回归头
-
-    > [!NOTE]
-    >
-    > ROI Pooling是如何对不同大小ROI特征区域进行处理的，如何处理大小不同的输入:
-    >
-    > 1. **先规定一个输出尺寸**，比如 $H \times W = 7 \times 7$；
-    > 2. **把当前这个 $h \times w$ 的区域，均匀切成 $H \times W$ 个小格子**；
-    > 3. 每个小格子内部做一次 **max pooling**；
-    > 4. 这样每个小格子输出 1 个值，最终就得到一个 $H \times W$ 的结果。
-
-    > [!TIP]
-    >
-    > 在每个特征图的每个grid生成多种大小和长宽比的候选框anchor(faster R-CNN中设置的是9种anchor)，然后给每个框打分、微调位置，得到proposal
-    >
-    > 当然这里的9中尺度都是超参数需要进行调整，各种聚类，or统计的方法人为设置
-
-    <img src="assets/02-OD-Model-Zoo.assets/image-20251121222439105.png" alt="image-20251121222439105" style="zoom:50%;" />
-
-    在训练阶段和推理阶段proposal使用是不一样的
-
-    - 训练需要更多样本，proposal_number很多，正负样本选择常`正:负=1:3`
-
-    - 推理需要更快速度，proposal_number较少，直接使用top-K proposal
-
-    > [!NOTE]
-    >
-    > 这里我要解释一下proposal(fine tune anchor) or anchor既然是在featuremap上生成的是如何对应原图坐标的：
-    >
-    > ```
-    > 原图: 800 × 800
-    > feature map: 50 × 50
-    > stride = 16
-    > ```
-    >
-    > 这说明feature map 每一个像素对应原图 16×16 区域的中心点。
-    >
-    > 在每个 feature map 位置会生成多个 anchor，例如：
-    >
-    > ```
-    > 3 scales × 3 ratios = 9 anchors
-    > ```
-    >
-    > 例如在某个 feature map 点`(i , j)`：
-    >
-    > ```
-    > center = (x=i*stride, y=j*stride)
-    > ```
-    >
-    > 生成 anchor：
-    >
-    > ```
-    > (x, y, w, h)
-    > ```
-    >
-    > TIP：这些 anchor 的坐标本身就是在**原图尺度**定义的。
-
-    - 正负样本的选择
-
-      Faster R-CNN有两次正负样本的选择,在RPN阶段和最后的Head阶段,但是其选择的依据都是判断anchor和GT的IOU,然后再按照一定的正负样本比例来选择训练样本
-
-    - Loss由四个部分组成
-      $$
-      L = L_{rpn\_cls} + L_{rpn\_bbox} + L_{rcnn\_cls} + L_{rcnn\_bbox}
-      $$
-
-  - Pros:
-
-    - End-to-end CNN-based detection with learned proposals.
-    - Flexible: works with various backbones (ResNet, MobileNet, etc.).
-
-  - Cons:
-
-    - relatively heavy / two-stage: 1.RPN to generate proposals. 2.ROI head to classify and refine them.
-    - Anchor-based design: many hyperparameters, inefficiency
-    - IOU阈值处理
-      - 低阈值：anchor可能比物体小or大，（proposal常常更大，因为是相当于attention已经训练过一遍了）
-      - 高阈值：1.减少正样本的数量，进一步加剧了正负样本不平衡，2.mismatch问题，高IOU的正样本质量很高，但是推理阶段的anchor质量参差不起，倒是数据分布不一样
-
-- **Mask R-CNN**. Kaiming He et.al. **arxiv**, **2017**, ([link](https://arxiv.org/abs/1703.06870v3)).
-
-  - Takeaway
-
-  - Prior
-
-    语义分割和实例分割，实例分割多了一步：如何将同一类别的不同个体区分开来？
-
-    ![image-20260401160942175](./assets/02-OD-Model-Zoo.assets/image-20260401160942175.png)
-
-  - Motivation
-
-  - Core Mechanism
-
-    如何区分呢？直接在语义分割的基础上画框，在faster R-CNN基础上添加一个mask分支（即FCN结构）
-
-    - Architecture
-
-      ![image-20260401163241872](./assets/02-OD-Model-Zoo.assets/image-20260401163241872.png)
-
-    - 新增的mask分支
-
-      ![image-20260401163523330](./assets/02-OD-Model-Zoo.assets/image-20260401163523330.png)
-
-      > [!NOTE]
-      >
-      > 这样的处理方法叫detect-then-segment，所以对检测框的依赖程度比较高,框歪了,或者漏
-      > 了,那么分割也就错了
-      >
-      > 还有其他的处理方法：比如，嵌入向量聚类:Semantic Instance Segmentation with a Discriminative Loss Function：先做语义分割,把同一语义类别的像素找出来,然后再同一类的像素之间做聚类,分出不同的实例（这里模型输出是一个高维向量embedding，因此可以做聚类）这种方法很慢（聚类就很慢），超参影响很大
-
-- __MAFE R-CNN: Selecting More Samples to Learn Category-aware Features for Small Object Detection.__ *Yichen Li et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2505.16442) 
-
-> [!TIP]
->
-> The R-CNN universe is not used any more because all of they require large calculation.
-
----
+check [here](./02-4-RCNN-Zoo.md)
 
 ### FCN
 
@@ -359,7 +177,7 @@ Focus on object detection models
 
   - Takeaway
 
-    Feature Pyramid Networks (FPN) is a multi-scale feature fusion architecture for object detection. Its key idea is to combine the **strong semantics of deep layers** with the **high resolution of shallow layers** through a **top-down pathway with lateral connections**, producing feature maps at multiple scales that are all semantically strong. :contentReference[oaicite:0]{index=0}
+    Feature Pyramid Networks (FPN) is a multi-scale feature fusion architecture for object detection. Its key idea is to combine the **strong semantics of deep layers** with the **high resolution of shallow layers** through a **top-down pathway with lateral connections**, producing feature maps at multiple scales that are all semantically strong. 
 
   - Motivation
 
@@ -610,7 +428,7 @@ Focus on object detection models
 
       > [!NOTE]
       >
-      > Here cheap operation is actually group convolution, group number = input channel number, which is equivalent to depthwise separable convolution. Of course, we can apply other ops like affine transformation, wavelet transformation, shift etc.
+      > Here cheap operation is actually group convolution, when group number == input channel number, which is equivalent to depthwise separable convolution. Of course, we can apply other ops like affine transformation, wavelet transformation, shift etc.
 
     GhostBottleneck
 
@@ -753,18 +571,55 @@ Focus on object detection models
 
     lightweight, anchor-free, one-stage object detector. Tiny and fast with better feature fusion (Ghost-PAN) and better label assignment during training (AGM + DSLA). 良心涨点
 
-  - Prior: FCOS + GFL
+  - Prior:
 
-  - Core Mechanism
-
-    ```
-    backbone(ShuffleNetV2) → GhostPAN → NanoDetPlusHead + aux_head
-    ```
-    
-    ![nanodet-plus-arch](assets/02-OD-Model-Zoo.assets/nanodet-plus-arch.png)
-    
     - FCOS-style anchor-free detection: `backbone+FPN+head`
-    
+
+    - GFL
+  
+      - **QFL (Quality Focal Loss):** Solve "Does classification score reflect positioning quality?
+  
+      - **DFL (Distribution Focal Loss):** Solve "Can regression express positioning uncertainty?"
+  
+        For bounding box regression, each side offset is modeled as a **discrete distribution**.
+  
+    - GhostBlock
+  
+      ![image-20251128232247387](assets/02-OD-Model-Zoo.assets/image-20251128232247387.png)
+  
+      GhostModule proposes that output feature maps consist of:
+  
+      - **Intrinsic features:** small set of essential feature maps (computed by real convolution)
+  
+      - **Ghost features:** redundant maps derived from intrinsic ones (via cheap ops)
+  
+  - Motivation:
+  
+    作者把标签分配说成目标检测训练里最核心的问题之一。原版 NanoDet 用的是 ATSS，这类方法虽然会动态选样本，但本质上还是比较依赖中心点、anchor 这类先验信息，属于偏静态的匹配。与此同时，DETR、OTA、YOLOX 这一类方法开始流行基于 matching cost 的动态匹配，这些方法在大模型上效果很好。
+  
+    问题在于，**大模型能用，不代表小模型也能直接用**。作者明确指出，把这种依赖预测结果的动态匹配直接搬到轻量检测模型上，会遇到大模型没有的困难. 为什么呢? 这里我们需要来看看动态匹配到底是什么
+  
+    > [!NOTE]
+    >
+    > 基于Matching Cost的动态匹配：简单来说，就是直接使用模型检测头的输出，与每一个Ground Truth计算一个**匹配的代价**，这个代价一般由分类loss和回归loss组成。Feature Map上所有的点（N个）的预测值与所有的Ground Truth（M个）计算得到的**NxM的矩阵**，就是所谓的**Cost Matrix**，基于这个Cost Matrix进行二分图匹配也好还是传输优化也好再或者直接取TopK也好，就是一种动态匹配策略。这种策略与之前的基于Anchor算IOU的匹配最大的不同就是，它**不再只依赖先验的静态的信息**，而是使用当前的预测结果去动态寻找最优的匹配，只要模型预测的越准确，匹配算法求得的结果也会更优秀。
+  
+    既然标签匹配需要依赖预测输出，但预测输出又是依赖标签匹配去训练的，但我的模型一开始是**随机初始化**的，啥也没有呀？那这不就成了一个**鸡生蛋，蛋生鸡的问题**了吗？不过好在神经网络天生具有抗噪能力，即使一开始随机初始化的时候给模型随机分配一些点去训练，只要这些点在对应的GT框内，模型也能够逐渐的去拟合那些最容易学到的特征。因此对于除了DETR这种稀疏预测以外，稠密的目标检测的动态标签匹配都会加上一些**位置约束**，比如OTA和SimOTA都使用了一个5x5的中心区域去**限制匹配的自由程度**。
+  
+    但是这样会有一个问题,轻量模型的检测头太轻了。NanoDet 的 head 很小，只用了很少的深度可分离卷积去同时做分类和回归；和大模型里那种更重、更强的检测头相比，表达能力差很多。所以你让这样一个从随机初始化开始、表达能力又有限的小 head，在训练初期就去产出可靠预测，再拿这些预测反过来指导标签匹配，这件事本身就很难
+  
+  - Core Mechanism
+  
+    ```
+    ShuffleNetV2 Backbone → GhostPAN → NanoDetPlusHead
+                          └── GhostPAN_copy → aux_head (training only)
+    ```
+  
+    ![nanodet-plus-arch](assets/02-OD-Model-Zoo.assets/nanodet-plus-arch.png)
+  
+    > [!WARNING]
+    >
+    > 这个图片画的有问题,因为没有直接从backbone输入到assign guidance module的部分
+  
     - GFL-style box representation: combine Quality Focal Loss, Distribution Focal Loss, and GIoU Loss
       $$
       \mathcal{L}
@@ -773,9 +628,9 @@ Focus on object detection models
       + \lambda_{\text{bbox}}\,\mathcal{L}_{\text{GIoU}}
       + \lambda_{\text{DFL}}\,\mathcal{L}_{\text{DFL}}.
       $$
-      
+  
     - Ghost-PAN(a light feature pyramid) for lightweight multi-scale fusion
-    
+  
       Ghost-PAN: add ghost blocks to PAN module
       $$
       \{C_3,C_4,C_5\}
@@ -786,67 +641,185 @@ Focus on object detection models
       \text{Bottom-up: }\;
       P_{l+1}^{out}=\text{GhostBlock}\big(\operatorname{Concat}(\operatorname{Down}(P_l^{out}),P_{l+1}^{td})\big)
       $$
-      
+  
       Pipeline
-      
+  
       1. reduce all input feature C channels to a fixed value
       2. Top-down: upsample P(bilinear), cancat with C, and send into the ghostblock to get the fused feature
       3. Bottom-up: downsample N(conv with stride=2), cancat with P, and send into the ghostblock to get the fused feature
       4. extra layer: 为了增强对更大目标的检测。this combines:
          - a stride-2 transform of the original deepest reduced backbone feature
          - a stride-2 transform of the current deepest PAN output
+  
+      ```python
+          def forward(self, inputs):
+              """
+              Args:
+                  inputs (tuple[Tensor]): input features.
+              Returns:
+                  tuple[Tensor]: multi level features.
+              """
+              assert len(inputs) == len(self.in_channels)
+              inputs = [
+                  reduce(input_x) for input_x, reduce in zip(inputs, self.reduce_layers)
+              ]
+              # top-down path
+              inner_outs = [inputs[-1]]
+              for idx in range(len(self.in_channels) - 1, 0, -1):
+                  feat_heigh = inner_outs[0]
+                  feat_low = inputs[idx - 1]
       
-    - head: num_cls+4*(reg_max+1) where the reg_max is the distribution for each side
-    
+                  inner_outs[0] = feat_heigh
+      
+                  upsample_feat = self.upsample(feat_heigh)
+      
+                  inner_out = self.top_down_blocks[len(self.in_channels) - 1 - idx](
+                      torch.cat([upsample_feat, feat_low], 1)
+                  )
+                  inner_outs.insert(0, inner_out)
+      
+              # bottom-up path
+              outs = [inner_outs[0]]
+              for idx in range(len(self.in_channels) - 1):
+                  feat_low = outs[-1]
+                  feat_height = inner_outs[idx + 1]
+                  downsample_feat = self.downsamples[idx](feat_low)
+                  out = self.bottom_up_blocks[idx](
+                      torch.cat([downsample_feat, feat_height], 1)
+                  )
+                  outs.append(out)
+      
+              # extra layers
+              for extra_in_layer, extra_out_layer in zip(
+                  self.extra_lvl_in_conv, self.extra_lvl_out_conv
+              ):
+                  outs.append(extra_in_layer(inputs[-1]) + extra_out_layer(outs[-1]))
+      
+              return tuple(outs)
+      ```
+  
+    - head: output num_cls+4*(reg_max+1) where the reg_max is the distribution for each side
+  
+      > [!NOTE]
+      >
+      > - 对于小网络, 独立的head会好点
+      > - 对于大网络, share的head会收敛快点
+  
+      ```python
+      self.gfl_cls = nn.ModuleList(
+          [
+              nn.Conv2d(
+                  self.feat_channels,
+                  self.num_classes + 4 * (self.reg_max + 1),
+                  1,
+                  padding=0,
+              )
+              for _ in self.strides
+          ]
+      )
+      for feat, cls_convs, gfl_cls in zip(
+          feats,
+          self.cls_convs,
+          self.gfl_cls,
+      ):
+          for conv in cls_convs:
+              # 两层
+              feat = conv(feat)
+          output = gfl_cls(feat)
+          outputs.append(output.flatten(start_dim=2))
+      outputs = torch.cat(outputs, dim=2).permute(0, 2, 1)
+      ```
+  
     - label assignment: AGM + DSLA
-    
+  
       > [!IMPORTANT]
       >
-      > Idea: 用更强大branch的来指导head做匹配
-    
+      > Idea: 用更强大branch的来指导head做匹配(4 convs)
+  
       - AGM(Assign Guidance Module): guide the head to do label assignment.
-    
+  
         > [!TIP]
         >
         > Training-only auxiliary branch
         >
         > aux head 需要 detach，Reason：它在 NanoDet-Plus 里主要是做 assignment guidance，不希望这条辅助分配路径持续反向干扰 backbone 和主 FPN 的特征学习
-    
+  
         Pipeline
-      
-        1. deepcopy fpn as aux_fpn and concat the fpn_feat and aux_fpn_feat as dual_fpn_feat to send into the aux_head
-        2. AGM用4个3x3的卷积预测类概率和检测框送进DSLA
-      
-      - DSLA(Dynamic Soft Label Assigner): 计算cost_matrix，然后进行动态分配
+  
+        1. deepcopy fpn as aux_fpn and concat the fpn_feat and aux_fpn_feat as dual_fpn_feat to send into the aux_head 通道信息更丰富
+        2. AGM用4个3x3的conv+1个conv对每个slot进行预测，得到预测类概率和检测框送进DSLA
+  
+           > [!NOTE]
+           >
+           > 是在不同featuremap的每个slot上预测cls and reg，也就是每个grid cell的顶点
+  
+      - DSLA(Dynamic Soft Label Assigner): 利用AGM的结果计算cost_matrix，然后对main head进行动态分配
         
         - cost matrix 计算`cost_matrix = cls_cost + iou_cost * self.iou_factor`
         - dynamic_k_matching: 用联合代价挑正样本，并让每个 GT 的正样本数量由当前 IoU 质量自适应决定
         
+        > [!WARNING]
+        >
+        > 训练后期还使用aux head这样好吗???
+        
         Pipeline:
         
-        1. prior center 过滤候选
-        2. 计算cost matrix
+        1. prior center 过滤候选slot: 先默认全是背景0
+        
+           > [!TIP]
+           >
+           > ignore 不是默认就有的，它只在配置了 gt_bboxes_ignore 且 ignore_iof_thr > 0 时启用，见 nanodet/model/head/assigner/dsl_assigner.py:123
+           >
+           > 然后会计算预测框和 ignore 区域的 IOF(Intersection over Foreground)，如果超过阈值：
+           > ignore_idxs = ignore_max_overlaps > self.ignore_iof_thr
+           > assigned_gt_inds[ignore_idxs] = -1
+           >
+           > 这样就会被当作ignore不参与训练(即有潜力被当作正样本的样本会被忽略,避免影响)
+        
+        2. 对每个slot的anchor计算cost matrix
+        
         3. 取 k = max(每个 GT 的 top-k IoU（topk=13）下取整数, 1)
+        
+           ```python
+                   # calculate dynamic k for each gt
+                   dynamic_ks = torch.clamp(topk_ious.sum(0).int(), min=1)
+                   for gt_idx in range(num_gt):
+                       _, pos_idx = torch.topk(
+                           cost[:, gt_idx], k=dynamic_ks[gt_idx].item(), largest=False
+                       )
+                       matching_matrix[:, gt_idx][pos_idx] = 1.0
+           ```
+        
         4. 选cost最小的k个prior
+        
         5. 后处理：解决一个 prior 匹配多个 GT 的冲突：只保留cost最小的gt
         
       - Loss的计算，nanodet-plus中有两套loss，因为aux head也有自己的一套同构loss
-      
-        1. 先用 `aux_preds` 做 assignment
+  
+        1. 先用 `aux_preds` 做 assignment(DSLA)
         2. 用这个 assignment 结果算主 head 的 loss
         3. 再用同一个 assignment 结果，给 `aux head` 也算一份同构的 loss
         4. 最后：$\mathcal L_{\text{total}}=\mathcal L_{\text{main}}+\mathcal L_{\text{aux}}$
-      
+  
       | Method               | COCO mAP 0.5:0.95 |
       | -------------------- | ----------------- |
       | NanoDet              | 20.6              |
       | NanoDet + DSLA       | 21.9              |
       | NanoDet + DSLA + AGM | 22.7              |
-    
+  
+    - 后处理筛选求解
+  
+      对于这么多slot,我们后处理是通过很多步骤来进行处理的
+  
+      1. 先解码
+      2. 一轮筛选: 只保留 score(分类分支输出经过 sigmoid 之后得到的每类分数) 大于 score_thr=0.05
+      3. 二轮筛选: 做NMS,只保留其中最好的几个,IoU 阈值这里是 0.6
+      4. 限制: 最后最多保留 100 个检测框
+  
   - Experiment
   
     - Config: AdamW+CosineAnnealingLR+EMA
-    
+  
     | Model                   | Resolution | mAPval 0.5:0.95 | CPU Latency (i7-8700) | ARM Latency (4xA76) | FLOPS     | Params    | Model Size                         |
     | ----------------------- | ---------- | --------------- | --------------------- | ------------------- | --------- | --------- | ---------------------------------- |
     | NanoDet-m               | 320*320    | 20.6            | **4.98ms**            | **10.23ms**         | **0.72G** | **0.95M** | **1.8MB(FP16)** \| **980KB(INT8)** |
@@ -860,16 +833,16 @@ Focus on object detection models
     | YOLOv5-n                | 640*640    | 28.4            | -                     | 44.39ms             | 4.5G      | 1.9M      | 3.8MB(FP16)                        |
     | FBNetV5                 | 320*640    | 30.4            | -                     | -                   | 1.8G      | -         | -                                  |
     | MobileDet               | 320*320    | 25.6            | -                     | -                   | 0.9G      | -         | -                                  |
-    
-  - Cons
   
-    - 很多部分都被过多优化了，为了追求极值的小模型
+  - Cons
   
     - Small-object performance is still challenging
   
-    - Heavily optimized for a particular engineering niche
-    
-      not suit for server-side high-accuracy detection
+    - 正负样本分配差距很严重,很多背景作为负样本,不然打开ignore这样很多纯背景也没有被当作副样本
+  
+      > ?被loss处理过可能没啥问题???
+  
+    - 训练后期还使用aux head这样好吗???
 
 ### Yolo Zoo
 
@@ -984,85 +957,11 @@ check [here](02-2-YOLO-Zoo.md)
 
 - anchor-free检出率更高，recall更高，也会有更多的误检，因此常通过re-weight来检测出结果（fcos里面的centerness就是如此）
 
-### RetinaNet Zoo
-
 ### EfficientNet Zoo
 
 ### DETR Zoo
 
-- DETR: check [here](01-Basic-Model-Zoo.md)
-
-- __Deformable DETR: Deformable Transformers for End-to-End Object Detection.__ *Xizhou Zhu et al.* __arXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2010.04159) [(Video)](https://www.bilibili.com/video/BV1GB4y1X72R/?spm_id_from=333.337.search-card.all.click&vd_source=3a8e3df5af30a81c441200ce3c96e8fc) [(Code)](https://github.com/fundamentalvision/Deformable-DETR)
-
-  - Takeaway: Deformable DETR replaces global dense attention with sparse, learnable **deformable attention** that focuses on a small set of key sampling points across multi-scale features, dramatically accelerating convergence and significantly improving small-object detection while preserving end-to-end training.
-
-  - Motivation: slow convergence and limited feature spatial resolution and Global attention complexity: $\mathcal{O}(N^2)$ of DETR
-
-    - Root causes: Global attention over full feature maps is inefficient and No effective multi-scale feature integration.
-
-  - Core Mechanism
-
-    ![x1](assets/02-OD-Model-Zoo.assets/x1.png)
-
-    1. Deformable Attention
-
-       Instead of attending to **all spatial positions**, each query attends to a **small set of learned sampling points** around a reference point.
-
-       Standard attention:
-       $$
-       \text{Attention}(Q,K,V) = \text{Softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V
-       $$
-       Complexity:
-       $$
-       \mathcal{O}(HW \times HW)
-       $$
-
-       ------
-
-       Deformable attention:
-       $$
-       \text{DeformAttn}(z_q, p_q, x) =
-       \sum_{m=1}^{M}
-       W_m
-       \left[
-       \sum_{k=1}^{K}
-       A_{mqk} \cdot
-       W'_m \, x\left(p_q + \Delta p_{mqk}\right)
-       \right]
-       $$
-
-    2. Multi-Scale Deformable Attention
-
-       Extends deformable attention to multiple feature levels:
-       $$
-       \text{MSDeformAttn}(z_q, \hat{p}_q) =
-       \sum_{m=1}^{M}
-       W_m
-       \left[
-       \sum_{l=1}^{L}
-       \sum_{k=1}^{K}
-       A_{mlqk} \cdot
-       W'_m \, x_l(\phi_l(\hat{p}_q) + \Delta p_{mlqk})
-       \right]
-       $$
-       ![x2](assets/02-OD-Model-Zoo.assets/x2-1772440512532-3.png)
-
-  - Pros:
-
-    - faster convergence
-    - Strong small-object performance.
-
-  - Cons:
-
-    - More complex implementation than vanilla DETR
-    - CUDA custom ops required for efficiency
-
-- __RT-DETRv2: Improved Baseline with Bag-of-Freebies for Real-Time Detection Transformer.__ *Wenyu Lv et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2407.17140) [(S2)](https://www.semanticscholar.org/paper/1e030d91607e38b7b7fdd002123ca8baafbedc8f) [(Code)](https://github.com/lyuwenyu/RT-DETR?tab=readme-ov-file)(Citations __186__)
-
-- __RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models.__ *Zijun Liao et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2510.25257)
-
-- __Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection.__ *Zhangchi Hu et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2505.05741)
-  - [check here](02-1-Small-Object.md)
+[check here](02-3-DETR-Zoo.md)
 
 ### Shuffle-Net Zoo
 
@@ -1085,12 +984,6 @@ check [here](02-2-YOLO-Zoo.md)
     - Accuracy still limited compared to newer designs like MobileNet v3, GhostNet, MobileOne at similar budgets.
 
 - __ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design.__ *Ningning Ma et al.* __ArXiv, 2018__ [(Arxiv)](https://arxiv.org/abs/1807.11164) [(S2)](https://www.semanticscholar.org/paper/c02b909a514af6b9255315e2d50112845ca5ed0e) (Citations __6114__)
-
-### DINO Zoo
-
-- __DINO-X: A Unified Vision Model for Open-World Object Detection and Understanding.__ *Tianhe Ren et al.* __arXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2411.14347)
-
-- __Grounding DINO: Marrying DINO with Grounded Pre-Training for Open-Set Object Detection.__ *Shilong Liu et al.* __arXiv, 2023__ [(Arxiv)](https://arxiv.org/abs/2303.05499) [(Code)](https://github.com/IDEA-Research/GroundingDINO)
 
 ### SAM
 
@@ -1164,23 +1057,288 @@ check [here](02-2-YOLO-Zoo.md)
 
     - inference time: all these branches are algebraically fused into a single conv per stage, so the runtime block is very simple
 
+      > [!TIP]
+      >
       > Straight cylinder shape： this structure is chosen to minimize latency and memory access cost on mobile hardware.
 
     - the DSC module is integrated by "scale branch", "skip branch" and "conv branches"
-
+  
       - `rbr_scale`: center-only 1×1 path (after padding) that improves channel-wise scaling flexibility
       - `rbr_skip`: identity + BN path providing residual-like behavior and extra affine freedom
       - `rbr_conv`: main expressive conv paths (3×3 or 1×1)
 
     ![Model Scaling](assets/02-OD-Model-Zoo.assets/image-20251122174746980.png)
 
+  - Pipeline
+
+    - 先来看看结构
+
+      ```python
+      # 可以看到只有前2个小模型的"num_conv_branches": 4,其他都是2,说明branch不是越大越好的
+      PARAMS = {
+          "s0small": {"width_multipliers": (0.5, 0.75, 0.5, 0.5), "num_conv_branches": 4},
+          "s0": {"width_multipliers": (0.75, 1.0, 1.0, 2.0), "num_conv_branches": 4},
+          "s0_b2": {"width_multipliers": (0.75, 1.0, 1.0, 2.0), "num_conv_branches": 2},
+          "s1": {"width_multipliers": (1.5, 1.5, 2.0, 2.5)},
+          "s2": {"width_multipliers": (1.5, 2.0, 2.5, 4.0)},
+          "s3": {"width_multipliers": (2.0, 2.5, 3.0, 4.0)},
+          "s4": {"width_multipliers": (3.0, 3.5, 3.5, 4.0), "use_se": True},
+      }
+      
+      def mobileone(
+          num_classes: int = 1000,
+          inference_mode: bool = False,
+          variant: str = "s0",
+          stagetype=None,
+      ) -> nn.Module:
+          """Get MobileOne model.
+      
+          :param num_classes: Number of classes in the dataset.
+          :param inference_mode: If True, instantiates model in inference mode.
+          :param variant: Which type of model to generate.
+          :param stagetype:
+          :return: MobileOne model."""
+          return MobileOne(
+              num_classes=num_classes,
+              inference_mode=inference_mode,
+              stagetype=stagetype,
+              **(PARAMS[variant]),
+          )
+      ```
+      
+      然后我们来看看MobileOne的具体构造
+      
+      ```
+      # Build stages
+              self.stage0 = MobileOneBlock(
+                  in_channels=3,
+                  out_channels=self.in_planes,
+                  kernel_size=3,
+                  stride=2,
+                  padding=1,
+                  inference_mode=self.inference_mode,
+              )
+              self.cur_layer_idx = 1
+              self.stage1 = self._make_stage(
+                  int(64 * width_multipliers[0]), num_blocks_per_stage[0], num_se_blocks=0
+              )
+              self.stage2 = self._make_stage(
+                  int(128 * width_multipliers[1]), num_blocks_per_stage[1], num_se_blocks=0
+              )
+              if self.stagetype == "stage3s1":
+                  self.stage3 = self._make_stride1_stage(
+                      int(256 * width_multipliers[2]),
+                      num_blocks_per_stage[2],
+                      num_se_blocks=int(num_blocks_per_stage[2] // 2) if use_se else 0,
+                  )
+              else:
+                  self.stage3 = self._make_stage(
+                      int(256 * width_multipliers[2]),
+                      num_blocks_per_stage[2],
+                      num_se_blocks=int(num_blocks_per_stage[2] // 2) if use_se else 0,
+                  )
+                  self.stage4 = self._make_stage(
+                      int(512 * width_multipliers[3]),
+                      num_blocks_per_stage[3],
+                      num_se_blocks=num_blocks_per_stage[3] if use_se else 0,
+                      stride=1 if self.stagetype == "stage4s1" else 2,
+                  )
+                  self.gap = nn.AdaptiveAvgPool2d(output_size=1)
+                  self.linear = nn.Linear(int(512 * width_multipliers[3]), num_classes)
+      ```
+      
+      构造了四个stage,然后一个池化层+线性层,直接输出类别
+      
+      ```
+      def _make_stage(
+          self, planes: int, num_blocks: int, num_se_blocks: int, stride: int = 2
+      ) -> nn.Sequential:
+      
+              # Get strides for all layers
+              strides = [stride] + [1] * (num_blocks - 1)
+              blocks = []
+              for ix, stride in enumerate(strides):
+                  use_se = False
+                  if num_se_blocks > num_blocks:
+                      raise ValueError("Number of SE blocks cannot exceed number of layers.")
+                  if ix >= (num_blocks - num_se_blocks):
+                      use_se = True
+      
+                  # Depthwise conv
+                  blocks.append(
+                      MobileOneBlock(
+                          in_channels=self.in_planes,
+                          out_channels=self.in_planes,
+                          kernel_size=3,
+                          stride=stride,
+                          padding=1,
+                          groups=self.in_planes,
+                          inference_mode=self.inference_mode,
+                          use_se=use_se,
+                          num_conv_branches=self.num_conv_branches,
+                      )
+                  )
+                  # Pointwise conv
+                  blocks.append(
+                      MobileOneBlock(
+                          in_channels=self.in_planes,
+                          out_channels=planes,
+                          kernel_size=1,
+                          stride=1,
+                          padding=0,
+                          groups=1,
+                          inference_mode=self.inference_mode,
+                          use_se=use_se,
+                          num_conv_branches=self.num_conv_branches,
+                      )
+                  )
+                  self.in_planes = planes
+                  self.cur_layer_idx += 1
+              return nn.Sequential(*blocks)
+      ```
+      
+    - reparameterize
+  
+      ```python
+      def reparameterize(self):
+          """ Following works like `RepVGG: Making VGG-style ConvNets Great Again` -
+          https://arxiv.org/pdf/2101.03697.pdf. We re-parameterize multi-branched
+          architecture used at training time to obtain a plain CNN-like structure
+          for inference.
+          """
+          if self.inference_mode:
+              return
+          kernel, bias = self._get_kernel_bias()
+          self.reparam_conv = nn.Conv2d(in_channels=self.rbr_conv[0].conv.in_channels,
+                                        out_channels=self.rbr_conv[0].conv.out_channels,
+                                        kernel_size=self.rbr_conv[0].conv.kernel_size,
+                                        stride=self.rbr_conv[0].conv.stride,
+                                        padding=self.rbr_conv[0].conv.padding,
+                                        dilation=self.rbr_conv[0].conv.dilation,
+                                        groups=self.rbr_conv[0].conv.groups,
+                                        bias=True)
+          self.reparam_conv.weight.data = kernel
+          self.reparam_conv.bias.data = bias
+      
+          # Delete un-used branches
+          for para in self.parameters():
+              para.detach_()
+          self.__delattr__('rbr_conv')
+          self.__delattr__('rbr_scale')
+          if hasattr(self, 'rbr_skip'):
+              self.__delattr__('rbr_skip')
+      
+          self.inference_mode = True
+      ```
+  
+      当然主要是`._get_kernel_bias`的计算
+  
+      ```python
+      def _get_kernel_bias(self) -> Tuple[torch.Tensor, torch.Tensor]:
+          """ Method to obtain re-parameterized kernel and bias.
+          Reference: https://github.com/DingXiaoH/RepVGG/blob/main/repvgg.py#L83
+      
+          :return: Tuple of (kernel, bias) after fusing branches.
+          """
+          # get weights and bias of scale branch
+          kernel_scale = 0
+          bias_scale = 0
+          if self.rbr_scale is not None:
+              kernel_scale, bias_scale = self._fuse_bn_tensor(self.rbr_scale)
+              # Pad scale branch kernel to match conv branch kernel size.
+              pad = self.kernel_size // 2
+              kernel_scale = torch.nn.functional.pad(kernel_scale,
+                                                     [pad, pad, pad, pad])
+      
+          # get weights and bias of skip branch
+          kernel_identity = 0
+          bias_identity = 0
+          if self.rbr_skip is not None:
+              kernel_identity, bias_identity = self._fuse_bn_tensor(self.rbr_skip)
+      
+          # get weights and bias of conv branches
+          kernel_conv = 0
+          bias_conv = 0
+          for ix in range(self.num_conv_branches):
+              _kernel, _bias = self._fuse_bn_tensor(self.rbr_conv[ix])
+              kernel_conv += _kernel
+              bias_conv += _bias
+      
+          kernel_final = kernel_conv + kernel_scale + kernel_identity
+          bias_final = bias_conv + bias_scale + bias_identity
+          return kernel_final, bias_final
+      
+      def _fuse_bn_tensor(self, branch) -> Tuple[torch.Tensor, torch.Tensor]:
+          """ Method to fuse batchnorm layer with preceeding conv layer.
+          Reference: https://github.com/DingXiaoH/RepVGG/blob/main/repvgg.py#L95
+      
+          :param branch:
+          :return: Tuple of (kernel, bias) after fusing batchnorm.
+          """
+          if isinstance(branch, nn.Sequential):
+              kernel = branch.conv.weight
+              running_mean = branch.bn.running_mean
+              running_var = branch.bn.running_var
+              gamma = branch.bn.weight
+              beta = branch.bn.bias
+              eps = branch.bn.eps
+          else:
+              assert isinstance(branch, nn.BatchNorm2d)
+              if not hasattr(self, 'id_tensor'):
+                  input_dim = self.in_channels // self.groups
+                  kernel_value = torch.zeros((self.in_channels,
+                                              input_dim,
+                                              self.kernel_size,
+                                              self.kernel_size),
+                                             dtype=branch.weight.dtype,
+                                             device=branch.weight.device)
+                  for i in range(self.in_channels):
+                      kernel_value[i, i % input_dim,
+                                   self.kernel_size // 2,
+                                   self.kernel_size // 2] = 1
+                  self.id_tensor = kernel_value
+              kernel = self.id_tensor
+              running_mean = branch.running_mean
+              running_var = branch.running_var
+              gamma = branch.weight
+              beta = branch.bias
+              eps = branch.eps
+          std = (running_var + eps).sqrt()
+          t = (gamma / std).reshape(-1, 1, 1, 1)
+          return kernel * t, beta - running_mean * gamma / std
+      
+      def _conv_bn(self,
+                   kernel_size: int,
+                   padding: int) -> nn.Sequential:
+          """ Helper method to construct conv-batchnorm layers.
+      
+          :param kernel_size: Size of the convolution kernel.
+          :param padding: Zero-padding size.
+          :return: Conv-BN module.
+          """
+          mod_list = nn.Sequential()
+          mod_list.add_module('conv', nn.Conv2d(in_channels=self.in_channels,
+                                                out_channels=self.out_channels,
+                                                kernel_size=kernel_size,
+                                                stride=self.stride,
+                                                padding=padding,
+                                                groups=self.groups,
+                                                bias=False))
+          mod_list.add_module('bn', nn.BatchNorm2d(num_features=self.out_channels))
+          return mod_list
+      ```
+  
+      
+  
   - Pros
-
+  
     - Extremely fast at inference due to: Single-path structure/Fewer ops, better cache behavior.
-
+  
   - Cons
-
+  
     - Once fused, the model loses its multi-branch flexibility (harder to fine-tune structurally).
+
+
 
 ### Vit Zoo
 
@@ -1297,6 +1455,12 @@ check the [OD-Loss-Zoo](./03-OD-Loss-Zoo)
 ## Module Design
 
 chech the [Module Design](../../../Efficient-AI/02-Module-Design.md)
+
+## Key Points Detection
+
+chech the [kpts](05-Kpts-OD.md)
+
+
 
 ## References
 

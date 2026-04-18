@@ -418,16 +418,16 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    IOU["IoU Loss<br/>直接优化预测框与 GT 的重叠程度"]
-    GIOU["GIoU Loss<br/>在不重叠时加入最小外接框惩罚"]
-    DIOU_CIOU["DIoU / CIoU<br/>加入中心距离，并在 CIoU 中继续约束宽高比"]
-    SIOU["SIoU Loss<br/>进一步显式建模角度、距离与形状"]
-    WIOU["Wise-IoU<br/>通过动态聚焦机制重加权不同质量样本"]
+    IOU["IoU Loss<br/>优化预测框与 GT 的重叠"]
+    GIOU["GIoU Loss<br/>不重叠时加入<br/>最小外接框惩罚"]
+    DIOU_CIOU["DIoU / CIoU<br/>加入中心距离<br/>CIoU 继续约束宽高比"]
+    SIOU["SIoU Loss<br/>显式建模角度<br/>距离与形状"]
+    WIOU["Wise-IoU<br/>通过动态聚焦<br/>重加权不同质量样本"]
 
-    IOU -->|"IoU 在框不相交时梯度为零，需要补上非重叠场景的优化信号。 "| GIOU
-    GIOU -->|"仅靠外接框惩罚仍不够快，于是继续引入中心距离和形状约束。 "| DIOU_CIOU
-    DIOU_CIOU -->|"再往后关注回归路径本身，希望用方向信息减少低效移动。 "| SIOU
-    SIOU -->|"几何项更完整后，新的重点转向按样本质量动态分配梯度。 "| WIOU
+    IOU -->|"不相交时<br/>梯度为零"| GIOU
+    GIOU -->|"继续加入<br/>中心距离约束"| DIOU_CIOU
+    DIOU_CIOU -->|"进一步利用方向信息<br/>减少低效移动"| SIOU
+    SIOU -->|"从几何建模<br/>转向样本重加权"| WIOU
 ```
 
 - __UnitBox: An Advanced Object Detection Network.__ *Jiahui Yu et al.* __Proceedings of the 24th ACM international conference on Multimedia, 2016__ [(Arxiv)](https://arxiv.org/abs/1608.01471) [(S2)](https://www.semanticscholar.org/paper/22264e60f1dfbc7d0b52549d1de560993dd96e46) (Citations __1614__)

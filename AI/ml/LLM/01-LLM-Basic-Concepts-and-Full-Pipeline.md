@@ -1,6 +1,8 @@
 # LLM Basic Concepts and Full Pipeline
 
-- 本章目标：画一张大模型总图，包含数据、tokenizer、embedding、attention、FFN、训练目标、推理、微调、评估。跑通一个最小文本生成脚本。写一页笔记，总结大模型训练与使用流程。
+在看内容之前可以先看一下https://linux.do/t/topic/1409664/31这篇文章，感受一下什么是大模型
+
+
 
 ## Basic Concepts
 
@@ -17,6 +19,8 @@
     - **Bias**: They may reproduce biases present in their training data or inputs.
     - **Context windows**: They have limited context windows (though this is improving)
     - **Computational resources**: They require significant computational resources
+
+- [huggingface](https://huggingface.co/): [huggingface-intro](https://zhuanlan.zhihu.com/p/535100411)
 
 ## Full Pipeline
 

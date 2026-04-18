@@ -35,31 +35,334 @@
     - coarse localization
     - struggles with small objects
 
-- YOLOv5(no formal paper, engineering release)
+## YOLOv3
 
-  ![DM_20251213224217_001](assets/02-2-YOLO-Zoo.assets/DM_20251213224217_001.jpg)
+[(blog)](https://blog.csdn.net/qq_37541097/article/details/81214953?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522c6ac0ced0796591f52d13a50962a3a02%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=c6ac0ced0796591f52d13a50962a3a02&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-81214953-null-null.nonecase&utm_term=yolov5&spm=1018.2226.3001.4450)
+
+![image-20260412192813369](./assets/02-2-YOLO-Zoo.assets/image-20260412192813369.png)
+
+- __YOLOv3: An Incremental Improvement.__ *Joseph Redmon, Ali Farhadi.* __arXiv, 2018__ [(Arxiv)](https://arxiv.org/abs/1804.02767) 
 
   - Core Mechanism
 
-    - backbone
+    - Darknet-53
 
+      在yolov2的Darknet-19上使用连续的$3\times 3$ and $1\times 1$ conv layers with some shortcut connections. 因为用了53个 conv，所以叫做Darknet-53
+
+      ![image-20260413110059147](./assets/02-2-YOLO-Zoo.assets/image-20260413110059147.png)
+
+      ![image-20260413110330839](./assets/02-2-YOLO-Zoo.assets/image-20260413110330839.png)
+
+    - head: a fully convolutional detection head
+
+      > [!NOTE]
+      >
+      > - 
+      
+      每个head输出`H × W × (3 × (5 + C))`，每个anchor预测`bbox + objectness + class`
+      
+      - 3：每个 grid 的 anchor 数量
+      - C：是类别数
+      
+      - 5：bbox 信息: `tx, ty, tw, th, objectness`
+      
+        - objectness：是否有目标
+      
+        - class: 类别（支持多标签类别）
+      
+        - tx, ty, tw, th
+      
+          bounding box 通过如下方式解码：
+      
+          ```
+          bx = σ(tx) + cx
+          by = σ(ty) + cy
+          bw = pw * e^{tw}
+          bh = ph * e^{th}
+          ```
+      
+          其中
+      
+          - `(cx, cy)` grid cell 位置
+          - `(pw, ph)` anchor size
+          - `σ` sigmoid
+      
+          最终坐标映射回原图：
+      
+          ```
+          bx = (σ(tx) + cx) / S
+          by = (σ(ty) + cy) / S
+          ```
+      
+          S 为 stride。
+      
+        
+
+        
+
+
+
+
+## YOLOv4
+
+- __YOLOv4: Optimal Speed and Accuracy of Object Detection.__ *Alexey Bochkovskiy et al.* __arXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2004.10934) 
+
+  - Takeaway
+
+    a highly engineered one-stage detector. 不是原作者做的，但是仍然被原作者接受和承认
+
+  - Motivation
+
+    希望完成地改进各个部分
+
+  - Prior
+
+    - CSP: CSPNet(Cross Stage Paritial Network)中提出的
+
+      CSPNet的作者认为推理计算过高的问题是由于网络优化中的**梯度信息重复**导致的。因此采用CSP模块先将基础层的特征映射划分为两部分，然后通过跨阶段层次结构将它们合并，在减少了计算量的同时可以保证准确率
+
+      ![image-20260412190808306](./assets/02-2-YOLO-Zoo.assets/image-20260412190808306.png)
+
+      - Pros: 增强学习能力，降低计算瓶颈，减少内存占用（显存）
+
+    - PAN：见FPN Zoo
+
+  - Core Mechanism
+
+    - Architecture: 
+
+      ```
+      backbone(CSPDarkNet53)+neck(PAN)+head(yolov3)
+      ```
+
+      ![img](https://i-blog.csdnimg.cn/blog_migrate/eafec99eb0de905468b96e3cbea8ca84.png#pic_center)
+
+    - Backbone: CSPDarkNet53, yolov4就是将CSP模块加入了之前的Darknet53框架里面
+
+      这里yolov4在原始CSP的基础上改为了如下的形式
+
+      ![image-20260412190948661](./assets/02-2-YOLO-Zoo.assets/image-20260412190948661.png)
+
+      CBM如下，是yolov4的最小组件，Conv+Bn+Mish激活函数
+
+      ![image-20260412191012876](./assets/02-2-YOLO-Zoo.assets/image-20260412191012876.png)
+
+      ResBlock：一个残差结构，网络中还有很多倒残差结构
+
+      ![image-20260412191019497](./assets/02-2-YOLO-Zoo.assets/image-20260412191019497.png)
+
+    - Neck: SPP, PAN
+
+      - SPP(spatial pyramid pooling): 用于解决多尺度问题
+
+        是何恺明大佬提出的，主要是用来解决不同尺寸的特征图如何进入全连接层的，在网络的最后一层concat所有特征图，后面能够继续接CNN模块。对任意尺寸的特征图直接进行固定尺寸的池化，来得到固定数量的特征
+
+        ![image-20260412191533742](./assets/02-2-YOLO-Zoo.assets/image-20260412191533742.png)
+
+        ![image-20260412191139613](./assets/02-2-YOLO-Zoo.assets/image-20260412191139613.png)
+
+      - PAN: 将原始PAN的addition直接改为channel层面的concat
+
+        ![image-20260412191919635](./assets/02-2-YOLO-Zoo.assets/image-20260412191919635.png)
+
+    - Head: yolov3
+
+    some optimization strategy
+
+    在介绍之前先需要了解yolov4是如何进行anchor与gt的匹配的：为不同featuremap的每个grid cell创建如下的三个anchor模板，然后与gt进行匹配，IOU>thres后作为正样本
+
+    ![image-20260412193052480](./assets/02-2-YOLO-Zoo.assets/image-20260412193052480.png)
+
+    ![image-20260412192730075](./assets/02-2-YOLO-Zoo.assets/image-20260412192730075.png)
+
+    - Eliminate Grid Sensitivity
+
+      最后bbox reg用下面的这个公式进行回归的（都是相对于左上角）
+      $$
+      b_x = \sigma(t_x) + c_x,\quad
+      b_y = \sigma(t_y) + c_y,\quad
+      b_w = p_w \cdot e^{t_w},\quad
+      b_h = p_h \cdot e^{t_h} \in (0,1) \\
+      \sigma(x) = \frac{1}{1+e^{-x}},sigmoid\in(0,1)
+      $$
+      yolov4改成了如下形式（其实应该是与一个系数scale相关的公式，但常常设置为2就得到如下形式）
+      $$
+      b_x = (2 \cdot \sigma(t_x) - 0.5) + c_x,\quad
+      b_y = (2 \cdot \sigma(t_y) - 0.5) + c_y,\quad
+      b_w = p_w \cdot e^{t_w},\quad
+      b_h = p_h \cdot e^{t_h}
+      $$
+      Compare the center point offset before and after scaling. The center point offset range is adjusted from (0, 1) to (-0.5, 1.5). Therefore, offset can easily get 0 or 1 which reduces grid sensitivity. 因为之前y要到0 or 1需要x倒无穷大，现在可以比较轻松达到，而且还能够增加对每个gt匹配的anchor个数（根据预先设置的anchor进行匹配），这样就不会只匹配中心落在grid cell中的那个anchor了
+
+      ![image-20260412192602093](./assets/02-2-YOLO-Zoo.assets/image-20260412192602093.png)
+
+    - mosic data augmentation
+
+    - CIOU: 回归损失采用CIOU
+
+  -  Performance
+
+    ![image-20260412190357758](./assets/02-2-YOLO-Zoo.assets/image-20260412190357758.png)
+
+
+## YOLOv5
+
+- YOLOv5 [(Ultralytics YOLOv5 Architecture)](https://docs.ultralytics.com/yolov5/tutorials/architecture_description/?utm_source=chatgpt.com#2-data-augmentation-techniques) [(Great Blog)](https://blog.roboflow.com/yolov5-improvements-and-evaluation/?utm_source=chatgpt.com) 这里主要介绍v6.1的结构
+
+  - Takeaway
+
+  - Core Mechanism
+
+    - Architecture
+
+      ```
+      backbone(new CSPDarkNet53)+neck(PAN)+head(yolov3)
+      ```
+
+      ![yolov5l](./assets/02-2-YOLO-Zoo.assets/yolov5-model-structure.jpg)
+
+    - data: 用了多种数据增强
+
+      - **Mosaic Augmentation**: An image processing technique that combines four training images into one in ways that encourage [object detection](https://www.ultralytics.com/glossary/object-detection) models to better handle various object scales and translations.
+
+        ![YOLOv5 mosaic data augmentation combining four images](./assets/02-2-YOLO-Zoo.assets/mosaic-augmentation.avif)将1- 4 张图片进行随机裁剪、缩放后，再随机排列拼接形成一张图片
+    
+        1. 随机选取图片拼接基准点坐标（xc，yc），另外随机选取四张图片；
+    
+        2. 四张图片根据基准点，调整尺寸和比例缩放，放在大图的四个角；
+    
+           ![image-20260412192816305](./assets/02-2-YOLO-Zoo.assets/image-20260412192816305.png)
+    
+        3. 根据图片变换方式变换对应label；
+    
+        4. 拼接图片，处理越界坐标；
+    
+        Pros
+    
+        - 丰富数据集
+        - 增加小样本目标，提高小目标检测能力
+        - 增强BN效果，BN计算每个特征层均值方差，当批样本总量越大，BN计算均值和方差越接近整个训练集的均值和方差
+        - 有效防止过拟合
+    
+      - **Copy-Paste Augmentation**: An innovative data augmentation method that copies random patches from an image and pastes them onto another randomly chosen image, effectively generating a new training sample.
+    
+        ![YOLOv5 copy-paste augmentation for instance segmentation](./assets/02-2-YOLO-Zoo.assets/copy-paste.avif)
+    
+      - **Random Affine Transformations**: This includes random rotation, scaling, translation, and shearing of the images.
+    
+        ![YOLOv5 random affine transformations for training](./assets/02-2-YOLO-Zoo.assets/random-affine-transformations.avif)
+    
+      - **MixUp Augmentation**: A method that creates composite images by taking a linear combination of two images and their associated labels.
+    
+        ![YOLOv5 MixUp data augmentation blending two images](./assets/02-2-YOLO-Zoo.assets/mixup.avif)
+    
+      - **Albumentations**: A powerful image augmentation library that supports a wide variety of augmentation techniques. Learn more about [using Albumentations augmentations](https://www.ultralytics.com/blog/using-albumentations-augmentations-to-diversify-your-data).
+    
+      - **HSV Augmentation**: Random changes to the Hue, Saturation, and Value of the images.
+    
+        ![YOLOv5 HSV color space augmentation examples](./assets/02-2-YOLO-Zoo.assets/hsv-augmentation.avif)
+    
+      - **Random Horizontal Flip**: An augmentation method that randomly flips images horizontally.
+    
+        ![YOLOv5 random horizontal flip augmentation](./assets/02-2-YOLO-Zoo.assets/random-horizontal-flip.avif)
+    
+    - backbone: new CSPDarknet53: a modification of the Darknet architecture used in previous versions.
+    
+      > [!NOTE]
+      >
+      > DarkNet只是一种用于yolo(v1~v4)的高性能深度学习框架不是网络结构,现在是改进了一下,后续被pytorch替代。但是自带了一些框架：darknet-19,darknet-53是网络结构
+      >
+      > | 框架       | 特点             |
+      > | ---------- | ---------------- |
+      > | Darknet    | 快、轻量、偏工程 |
+      > | PyTorch    | 灵活、研究友好   |
+      > | TensorFlow | 工业级、生态大   |
+    
+      - CSP backbone
+    
       - Conv -- CBA(convolution, batch normalization, activation(SiLU--sigmoid linear unit))
-
+    
         use conv layer to replace the pooling layer
-
-      - SPP(Spatial Pyramid Pooling)/SPPF(Spatial Pyramid Pooling Fast)
-
-        ![image-20251213220943999](assets/02-2-YOLO-Zoo.assets/image-20251213220943999.png)
-
+    
+      - The `Focus` structure, found in earlier versions, is replaced with a `6x6 Conv2d` structure. This change boosts efficiency
+    
       - C3 -- cross stage partial network with 3 convolutions
-
+    
         > [!NOTE]
         >
         > a simplified CSPNet(CSP (Cross Stage Partial))
-
-    - neck
-
-      - concat in different layers: 先从下到上，再从上到下
+    
+    - neck: connects the backbone and the head. In YOLOv5, `SPPF` (Spatial Pyramid Pooling - Fast) and `New CSP-PAN` (Path Aggregation Network) structures are utilized.
+    
+      - PANet: concat in different layers, 先从下到上，再从上到下
+    
+      - The `SPP`(Spatial Pyramid Pooling) structure is replaced with `SPPF`(Spatial Pyramid Pooling Fast). This alteration more than doubles the speed of processing while maintaining the same output.
+    
+        不堪这个CBS的卷积，就是将pooling的操作变成串行的，输出的结果一样但是更快
+        
+        ![image-20251213220943999](assets/02-2-YOLO-Zoo.assets/image-20251213220943999.png)
+    
+    - head: This part is responsible for generating the final output. YOLOv5 uses the `YOLOv3 Head` for this purpose.
+    
+    - loss 三部分组成
+    
+      - classes loss(BCE loss only for 正样本)
+    
+      - objectness loss(BCE loss only for 正样本)： 这里obj只网络预测的bbox与GT的CIoU
+    
+        平衡了不同尺度上的损之，针对三个特征曾P3,P4,P5，obj loss采用了不同的权重
+        $$
+        L_{\text{obj}} = 4.0 \cdot L_{\text{obj}}^{\text{small}} + 1.0 \cdot L_{\text{obj}}^{\text{medium}} + 0.4 \cdot L_{\text{obj}}^{\text{large}}
+        $$
+        
+      - Location loss: 定位损失，CIoU loss, only for 正样本
+      
+    - Eliminate Grid Sensitivity
+      $$
+      b_x = (2 \cdot \sigma(t_x) - 0.5) + c_x,\quad
+      b_y = (2 \cdot \sigma(t_y) - 0.5) + c_y,\quad
+      b_w = p_w \cdot (2 \cdot \sigma(t_w))^2,\quad
+      b_h = p_h \cdot (2 \cdot \sigma(t_h))^2
+      $$
+      在yolov4的基础上将$b_w,b_h$改为了$b_w = p_w \cdot (2 \cdot \sigma(t_w))^2,\quad
+      b_h = p_h \cdot (2 \cdot \sigma(t_h))^2 \in (0,4)$
+    
+      ![158508089-5ac0c7a3-6358-44b7-863e-a6e45babb842](./assets/02-2-YOLO-Zoo.assets/158508089-5ac0c7a3-6358-44b7-863e-a6e45babb842.png)
+    
+      在修改前宽度和高度是完全无界的，因为它们只是 out=exp(in)，这是危险的，因为它可能导致梯度失控、不稳定、NaN 损失并最终完全失去训练，因此现在这样修改后是稳定一些的
+    
+    - 正负样本匹配
+    
+      先查看一下yolov4的正样本匹配，之前只是用IoU作为衡量标准，太草率了。yolov5改为用如下形式进行匹配
+    
+      计算真实框尺寸与每个锚模板尺寸的比率（宽，高），如果两个的宽高越接近，那么$r_w^{\max},r_h^{\max}$越接近1,
+      $$
+      \begin{aligned}
+      r_w &= \frac{w_{gt}}{w_{at}} \\
+      r_h &= \frac{h_{gt}}{h_{at}} \\
+      
+      r_w^{\max} &= \max(r_w, \frac{1}{r_w}) \\
+      r_h^{\max} &= \max(r_h, \frac{1}{r_h}) \\
+      
+      r^{\max} &= \max(r_w^{\max}, r_h^{\max}) \\
+      \end{aligned}
+      $$
+      如果$r^{\max} < \text{anchor}_t(一个阈值，人为设置的超参数=4)$那么这个anchor就当作这个gt的正样本
+    
+      > [!TIP]
+      >
+      > 也就是gt只要长宽在anchor的$(0.25,4)$之间就算匹配成功
+    
+      ![158508119-fbb2e483-7b8c-4975-8e1f-f510d367f8ff](./assets/02-2-YOLO-Zoo.assets/158508119-fbb2e483-7b8c-4975-8e1f-f510d367f8ff.png)
+    
+    - Training Strategies
+    
+      - **Multiscale Training**: The input images are randomly rescaled within a range of 0.5 to 1.5 times their original size during the training process.
+      - **AutoAnchor**: This strategy optimizes the prior anchor boxes to match the statistical characteristics of the ground truth boxes in your custom data.
+      - **Warmup and Cosine LR Scheduler**: A method to adjust the [learning rate](https://www.ultralytics.com/glossary/learning-rate) to enhance model performance.
+      - **Exponential Moving Average (EMA)**: A strategy that uses the average of parameters over past steps to stabilize the training process and reduce generalization error.
+      - **[Mixed Precision](https://www.ultralytics.com/glossary/mixed-precision) Training**: A method to perform operations in half-[precision](https://www.ultralytics.com/glossary/precision) format, reducing memory usage and enhancing computational speed.
+      - **Hyperparameter Evolution**: A strategy to automatically tune hyperparameters to achieve optimal performance. Learn more about [hyperparameter tuning](https://docs.ultralytics.com/zh/guides/hyperparameter-tuning/).
 
 
 ## YOLOX
