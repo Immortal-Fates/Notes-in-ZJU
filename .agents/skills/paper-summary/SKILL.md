@@ -9,7 +9,7 @@ This skill turns an arXiv paper link in a markdown note into a repository-native
 
 I follow the local paper-reading style already used in this repository, especially the patterns under `AI/ml/DL/CV/Paper-Reading/` and the reading workflow described in `research/Research-Guide/03-Pipeline.md`.
 
-I write concise English summaries in Typora-friendly markdown, place core math formulas under the relevant `Core Mechanism` or `Pipeline` points, and store useful figures under the local `assets/<note-file-base>.assets/` directory.
+I write concise Chinese-dominant mixed-language summaries in Typora-friendly markdown, place core math formulas under the relevant `Core Mechanism` or `Pipeline` points, and store useful figures under the local `assets/<note-file-base>.assets/` directory.
 
 ## Use this skill when
 
@@ -25,18 +25,18 @@ I write concise English summaries in Typora-friendly markdown, place core math f
 - Prefer the citation style shown in `AI/ml/DL/CV/Paper-Reading/AGENTS.md`
 - Keep summaries compact and useful for later review
 - Match nearby files before inventing a new structure
-- Mix Chinese and English only when the surrounding directory already does so
+- Write explanations mainly in Chinese, but keep technical nouns, module names, benchmark names, and short technical phrases in English when that is clearer
 - Keep Markdown readable in Typora
 - Preserve existing frontmatter, title, TOC, and unrelated note content unless the task explicitly asks to restructure them
 
 ## Required note structure
 
-Write the summary in English first, but follow the local bilingual style when surrounding notes already mix Chinese and English naturally.
+Write the summary in Chinese-dominant mixed-language style.
 
-Nearby-file style is the primary rule.
+Nearby-file structure is the primary rule, but the default language baseline remains Chinese-dominant mixed-language unless the surrounding directory already has a strong and stable alternative convention.
 Use this section order as the default pattern, but adapt to the surrounding file when it already uses a stable local variation such as `Prior` or `Background` instead of `Motivation`.
 
-By default, place formulas and figures inline under the relevant `Core Mechanism` or `Pipeline` bullets instead of collecting them into detached summary sections.
+By default, place formulas and figures inline under the relevant `Core Mechanism` points instead of collecting them into detached summary sections.
 
 ## Takeaway
 - One or two sentences only
@@ -50,15 +50,35 @@ By default, place formulas and figures inline under the relevant `Core Mechanism
 `Prior` or `Background` is also acceptable when that matches the local note style better.
 
 ## Core Mechanism
-- Explain the central idea only
-- Focus on the key model, algorithm, objective, or theoretical move
-- If needed, mention one critical assumption
+- Start `Core Mechanism` with one architecture figure when the paper has a clear model structure and the figure is genuinely useful for orientation
+- After the first figure, explain each major innovation point using `What`, `Why`, and `How`
+- Only create mechanism bullets for genuinely important innovations, not trivial background details
+
+### What
+- Explain what the innovation is
+- Include the core formula or mathematical relation when needed
+- Explain the math essence directly here instead of splitting it into a separate subsection
+
+### Why
+- Explain what problem the innovation addresses
+- Explain what weakness in prior work motivates it
+
+### How
+- Explain where the innovation sits in the model or algorithm
+- Explain what inputs and outputs it has and how it interacts with other modules
+- Explain how it is used during training and/or inference when the paper makes that clear
 
 ## Pipeline
 1. Input / setup
 2. Main processing stages
 3. Training or inference flow
 4. Output or evaluation flow
+
+Pipeline should stay concise and operational.
+
+- Do not force Python code blocks in `Pipeline`
+- Focus on the end-to-end process rather than repeating the detailed innovation analysis from `Core Mechanism`
+- Keep the section step-based and useful for later review
 
 ## Pros
 - Concrete strengths only
@@ -245,10 +265,12 @@ Only keep figures that satisfy at least one of these purposes:
 
 Prefer figures in this order:
 
-1. overall method or architecture diagram
+1. architecture diagram when the paper has a clear model structure
 2. pipeline or training/inference flow diagram
 3. key module illustration
-4. one main results figure only if it materially supports the takeaway
+4. one main results figure only if no mechanism-supporting figure is stronger
+
+- Guardrail: use the architecture-first rule only when the architecture figure genuinely helps orient the reader.
 
 Do not keep:
 
@@ -407,7 +429,7 @@ Match the repository's existing local asset pattern.
 1. Read the target markdown note and extract the arXiv link.
 2. Inspect nearby notes in the same directory and follow their local style.
 3. Use `a2b` only if citation enrichment is useful.
-4. Summarize the paper in English-first style using the default section order, but adapt to stable nearby conventions when needed.
+4. Summarize the paper in Chinese-dominant mixed-language style using the default section order, but adapt to stable nearby conventions when needed.
 5. Preserve the paper's most important formulas in markdown math directly under the relevant mechanism or pipeline points.
 6. Save and embed at least one high-value figure locally into the matching `assets/<note>.assets/` folder when the paper clearly contains one and the source is usable.
 7. Keep the final note readable in Typora.

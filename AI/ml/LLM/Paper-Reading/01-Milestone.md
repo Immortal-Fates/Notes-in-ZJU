@@ -14,25 +14,27 @@
 
     The seq2seq model normally has an encoder-decoder architecture: the encoder compress the info into a context vector of fixed length. A critical and apparent disadvantage of this fixed-length context vector design is incapability of remembering long sentences. The attention mechanism was born ([Bahdanau et al., 2015](https://arxiv.org/pdf/1409.0473.pdf)) to resolve this problem.
 
+    其实google开始提出transformer就是想要解决机器翻译这个任务，但是最后也说明了可以迁移到其他任务
+
   - Core Mechanism:
 
     - The model uses a pure encoder-decoder stack: the encoder alternates multi-head self-attention and position-wise FFN blocks, while the decoder adds masked self-attention and encoder-decoder cross-attention.
 
     - Scaled dot-product attention is the basic operation:
-
+  
       $$
       \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
       $$
-  
+
       Dividing by $\sqrt{d_k}$ keeps logits from growing too large, which stabilizes optimization when key/query dimensions increase.
 
     - Multi-head attention lets the model attend to different relations in parallel:
-
+  
       $$
       \mathrm{MultiHead}(Q, K, V) = [\mathrm{head}_1; \ldots; \mathrm{head}_h]W^O, \quad
       \mathrm{head}_i = \mathrm{Attention}(QW_i^Q, KW_i^K, VW_i^V)
       $$
-  
+
       This gives different heads different representation subspaces instead of forcing all dependencies into a single attention map.
 
       ![transformer-architecture](./assets/01-Milestone.assets/transformer-architecture.png)
@@ -40,24 +42,24 @@
       The original architecture diagram shows the full encoder-decoder stack, residual connections, and where masked attention appears in the decoder.
 
     - Because the model has no recurrence or convolution, it injects token order through sinusoidal positional encoding:
-
+  
       $$
       PE_{(pos,2i)} = \sin\left(pos / 10000^{2i/d_{\mathrm{model}}}\right), \quad
       PE_{(pos,2i+1)} = \cos\left(pos / 10000^{2i/d_{\mathrm{model}}}\right)
       $$
-  
+
       This gives the network relative and absolute position information without introducing a recurrent state.
 
   - Pros:
-
+  
     - Transformer rule the world!
     - Removes recurrence, so training is substantially more parallelizable than classic RNN-based seq2seq models.
     - Achieves new SOTA translation results on WMT14 English-German and English-French in the paper's setting.
     - Any two positions interact through short attention paths, which helps model long-range dependencies.
     - The architecture is simple and modular enough to become the backbone for later encoder-only, decoder-only, and multimodal foundation models.
-  
-  - Cons:
 
+  - Cons:
+  
     - Full self-attention has $O(n^2)$ time and memory complexity in sequence length, which becomes a bottleneck for long contexts.
     - Specifically, during self-attention, intermediate maps such as the attention map (QKT ) and the softmax map (L × L) need to be stored from high-speed GPU SRAM (the actual location of the computation) to high bandwidth GPU memory (HBM) and later retrieved during the computation, and the read and write speed of the former is more than 10 times that of the latter, thus resulting in significant memory accessing overhead and increased wall-clock time1 .
     - The paper is still framed as a translation-focused encoder-decoder system, so it does not yet describe the decoder-only large-scale recipe used by later LLMs.

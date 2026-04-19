@@ -12,14 +12,16 @@
 
   - Motivation:
 
-    在 BERT 之前，主流预训练方法要么是 feature-based（如 ELMo,双向信息，但是CNN），要么是 fine-tuning based 但仍然使用单向语言模型（如 GPT,transformer，但是单向）。作者认为这种单向约束限制了表示能力，尤其对需要同时看左右上下文的 token-level tasks 很不友好。下面是一些不友好的例子:
+    BERT其实想要将CV中成熟的先预训练一个模型然后再微调出子任务的结果这一套搬到NLP上
 
+    在 BERT 之前，主流预训练方法要么是 feature-based（如 ELMo,双向信息，但是CNN），要么是 fine-tuning based 但仍然使用单向语言模型（如 GPT,transformer，但是单向）。作者认为这种单向约束限制了表示能力，尤其对需要同时看左右上下文的 token-level tasks 很不友好。下面是一些不友好的例子:
+  
     - Left-to-right pre-training cannot fully use both-side context in every layer.
     - Sentence-pair tasks such as NLI and QA need stronger cross-sentence interaction than shallow feature reuse.
     - If one pre-trained encoder can be reused with minimal task-specific changes, transfer learning in NLP becomes much simpler and more general.
 
     因此bert就想解决单向的问题将其变为双向，于是提出了MLM
-
+  
     > [!NOTE]
     >
     > ELMo是一个CNN的架构，所有要迁移到一些nlp任务的时候，就需要做架构上的改变，而bert只需要该最后的输出层就可以了
@@ -27,31 +29,31 @@
   - Core Mechanism:
 
     - Architecture
-
-      ![bert-overall](./assets/02-3-BERT.assets/bert-overall.png)
   
+      ![bert-overall](./assets/02-3-BERT.assets/bert-overall.png)
+
       The overall pipeline figure shows the full recipe: pre-train once with MLM + NSP, then attach a lightweight task head and fine-tune all parameters end-to-end.
 
     - Bidirectional Transformer encoder
-
+  
       BERT uses only the Transformer encoder stack, but unlike GPT-style causal masking, each token can attend to both its left and right context during pre-training. The paper reports two standard scales: **BERT Base** $(L=12,H=768,A=12,110\text{M})$ and **BERT Large** $(L=24,H=1024,A=16,340\text{M})$.
   
     - Input representation, embedding层
-  
-      BERT packs either one sentence or a sentence pair into one token sequence using `[CLS]` and `[SEP]`, then represents each token by summing token, segment, and position embeddings.
 
+      BERT packs either one sentence or a sentence pair into one token sequence using `[CLS]` and `[SEP]`, then represents each token by summing token, segment, and position embeddings.
+  
       $$
       E_i = E_i^{\text{token}} + E_i^{\text{segment}} + E_i^{\text{position}}
       $$
-  
-      这里 `segment` embedding 用来区分 sentence A / B，`position` embedding 提供顺序信息，而 `[CLS]` 的最终 hidden state 常被拿来做分类任务的序列级表示。
 
+      这里 `segment` embedding 用来区分 sentence A / B，`position` embedding 提供顺序信息，而 `[CLS]` 的最终 hidden state 常被拿来做分类任务的序列级表示。
+  
       > [!TIP]
       >
       > `[CLS]` = classification token（分类标记）,永远放在输入序列的最前面
       >
       > `[SEP]` = separator token（分隔标记）
-
+  
       > [!note]
       >
       > `[SEP]`句子的结束我们很好理解,但是为什么需要一个`[CLS]`(因为这不是代表一个sentence的开始,而是一个蓄力额定而开始,可能是多个句子组成):
@@ -59,11 +61,11 @@
       > 因为Transformer 本身：没有“句子级输出”，只输出 token-level 表示。所以需要一个“代表整个序列的 token”
   
       ![bert-input-representation](./assets/02-3-BERT.assets/bert-input-representation.png)
-  
+
       This figure shows the exact packed input format and why BERT can naturally support both single-sentence and sentence-pair tasks in one encoder.
 
     - Pre-training objectives: MLM + NSP
-
+  
       The key change is MLM(完形填空): randomly choose 15% of WordPiece tokens, then predict the original token from bidirectional context. For the selected positions, 80% are replaced by `[MASK]`, 10% by a random token, and 10% are left unchanged to reduce pretrain-finetune mismatch.
   
       $$
@@ -89,7 +91,7 @@
       
       > [!NOTE]
       >
-      > 这个NSP是为了让BERT学习一下句子层面的东西
+      > NSP通过判断句子是否相邻，是为了让BERT学习一下句子层面的东西
       
     - Transfer learning
   
@@ -98,9 +100,21 @@
   - Pipeline:
   
     1. Build an input sequence with WordPiece tokens, prepend `[CLS]`, and separate sentence A / B with `[SEP]`.
-    2. Sum token, segment, and position embeddings, then feed the sequence into a multi-layer bidirectional Transformer encoder.
+  
+       这里介绍一下WordPiece，这是一种sub-word级别的，因此在做tokenization的时候，要基于规则先把子词识别出来，比如"palying" 就被识别为 "play" + "##ing",这些是在vocab中设定出来的
+  
+       然后补齐长度，设置seq_length超参数，超过这个的就截断，短于这个的就补齐的策略，这没啥说的，如果补齐就是补[PAD]符号
+  
+    2. token embedings: Sum token, segment, and position embeddings, then feed the sequence into a multi-layer bidirectional Transformer encoder.
+  
     3. During pre-training, optimize MLM on masked positions and NSP on the `[CLS]` representation using BooksCorpus + English Wikipedia.
+  
+       预训练主要使用了回归（regression）和分类（classification）损失函数。回归任务常用均方误差（mean square error，MSE）作为损失函数，而分类任务一般用交叉熵（cross entropy，CE）作为损失函数。
+  
+       BERT中的优化器 Adam
+  
     4. For each downstream task, initialize from the same pre-trained checkpoint, add a small task-specific output layer, and fine-tune all parameters end-to-end.
+  
     5. Use `[CLS]` for classification tasks and token-level hidden states for sequence labeling or span prediction tasks.
   
   - Pros:
