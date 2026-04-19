@@ -6,7 +6,7 @@
 
 当然在最开始先介绍transformer
 
-- **Attention Is All You Need**. Ashish Vaswani et.al. **NeurIPS**, **2017**, ([Arxiv](https://arxiv.org/abs/1706.03762)) ([NeurIPS](https://papers.nips.cc/paper/7181-attention-is-all-you-need)) ([details](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization)).
+- **Attention Is All You Need**. Ashish Vaswani et.al. **NeurIPS**, **2017**, ([Arxiv](https://arxiv.org/abs/1706.03762)) ([NeurIPS](https://papers.nips.cc/paper/7181-attention-is-all-you-need)) ([details](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization)). ([My PDF](https://drive.google.com/file/d/1Y2cKZq125zPHGf2SBOZ9ZZRUkiJfAvob/view?usp=drivesdk))
 
   - Takeaway: Transformer is a **self-attention-only** seq2seq model with **positional encoding**, enabling highly parallel training.
 
