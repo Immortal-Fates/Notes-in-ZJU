@@ -1,0 +1,8 @@
+{
+  "drive_folder_id": "YOUR_GOOGLE_DRIVE_FOLDER_ID",
+  "link_type": "webViewLink",
+  "paper_name_policy": "paper-id",
+  "remote_path_template": "PaperReading/{note_name}/{paper_id}.pdf",
+  "client_secret_file": "~/.config/google-drive-paper-upload/client_secret.json",
+  "token_file": "~/.config/google-drive-paper-upload/token.json"
+}
