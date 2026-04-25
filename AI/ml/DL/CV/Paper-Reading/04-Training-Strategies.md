@@ -156,6 +156,8 @@ status: draft
 
 ### Taxonomy
 
+#### 规则驱动
+
 - Fixed IoU Threshold
 
 - Center-Prior Assignment
@@ -163,40 +165,71 @@ status: draft
     - Positive only if anchor center is inside GT center region (radius/ratio), then apply IoU rule.
     - Medium effort, reduces noisy positives near borders.
 
-- __Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection.__ *Shifeng Zhang et al.* __2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019__ [(Arxiv)](https://arxiv.org/abs/1912.02424) [(S2)](https://www.semanticscholar.org/paper/db160e36aec4b43cc0651039eb1fc1e63527b090) (Citations __1965__) -- ATSS
+- __Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection.__ *Shifeng Zhang et al.* __CVPR, 2020__ [(Arxiv)](https://arxiv.org/abs/1912.02424) [(S2)](https://www.semanticscholar.org/paper/db160e36aec4b43cc0651039eb1fc1e63527b090) (Citations __1965__) -- ATSS ([My PDF](https://drive.google.com/file/d/1pjk--V3r9oXrp0tIsSChaH9jjGlGgGNr/view?usp=drivesdk))
 
-  - Takeaway: （规则驱动）ATSS automatically selects positive samples based on statistical characteristics, bridging anchor-based and anchor-free detectors.
+  - Takeaway: （规则驱动）ATSS argues that the key gap between anchor-based and anchor-free dense detectors is not the anchor itself, but **how positives/negatives are assigned**. 它用 per-GT 的自适应 IoU 阈值选正样本，在不增加推理开销的前提下显著提升 RetinaNet / FCOS。
 
     Anchor design 不是关键，sample selection 才是。
 
-    > CNN成立，现在Transformer NMS-free不再完全成立
+    > CNN 成立；放到后来的 Transformer / NMS-free / query-based detector，这个结论就不再能原样照搬。
 
-  - Motivation: Label assignment in detection relies on fixed IoU thresholds; anchor-based vs anchor-free detectors have different assignment strategies.
+  - Motivation:
 
-    - 当时大家认为： Anchor-free 比 anchor-based 好，是因为“没有 anchor”
-    - 但作者提出一个关键问题：真正的差别，是否只是 sample selection 不同？
+    - 传统 anchor-based detector 用固定 IoU threshold（如 0.5/0.4）分配正负样本，hyperparameter 很敏感。
+    - FCOS 这类 anchor-free detector 用 spatial + scale constraint 选样本，看起来更强，但作者追问的是：提升到底来自 “anchor-free”，还是来自 **assignment strategy**？
+    - 论文先做 controlled comparison，发现只要把正负样本定义统一，anchor box regression 和 point regression 的性能差距几乎消失。
 
-  - Core Mechanism: Anchor-based 和 Anchor-free 的差距，本质来自训练样本选择方式，而不是 anchor 本身。
+  - Core Mechanism:
 
-    ATSS 对每个 GT，动态计算 IoU 阈值
+    ![image-20260421142018860](./assets/04-Training-Strategies.assets/image-20260421142018860.png)
 
-    1. Per-level selection: Select $k$ anchors closest to GT center per pyramid level
-    2. Dynamic IoU threshold: $t_g = m_g + v_g$ (mean + std of IoU values)
+    - **Step 1: per-level candidate mining**. 对每个 GT $g$，在每个 FPN level 里选出中心点距离 GT center 最近的 $k$ 个 anchors，组成 candidate set
+      $$
+      \mathcal{C}_g = \bigcup_{i=1}^{\mathcal{L}} \mathcal{S}_i,
+      \quad |\mathcal{S}_i| = k,
+      \quad |\mathcal{C}_g| = k\mathcal{L}.
+      $$
+      这样先保证每个尺度层都有机会参与，不再靠人工指定某个 level 负责某类目标。
 
-    > [!NOTE]
-    >
-    > 自适应后，anchor-base更像是anchor-free
+    - **Step 2: adaptive IoU threshold**. 计算这些 candidates 与 GT 的 IoU 分布
+      $$
+      \mathcal{D}_g = IoU(\mathcal{C}_g, g),
+      \qquad
+      t_g = m_g + v_g,
+      $$
+      其中 $m_g = \mathrm{Mean}(\mathcal{D}_g)$，$v_g = \mathrm{Std}(\mathcal{D}_g)$。
+
+      - $m_g$ 高：说明这个 GT 和预设 anchor 很匹配，threshold 应该更高。
+      - $v_g$ 高：说明只有少数 pyramid levels 特别适合它，ATSS 会更倾向只从这些 level 里挑 positives。
+
+    - **Step 3: final positive selection**. 若 candidate 满足 $IoU(c,g) \ge t_g$ 且 its center lies inside the GT box，则标为 positive；若一个 anchor 同时匹配多个 GT，就分给 IoU 最大的那个 GT。
+
+      > [!NOTE]
+      >
+      > 本质上，ATSS 还是先用几何先验（center distance + IoU）筛 candidates，再做自适应 threshold，因此它比固定规则灵活，但还不是后面那种 fully prediction-driven matching。
+
+  - Pipeline:
+
+    1. 输入 image，经过 FPN 得到 multi-level dense anchors / points。
+    2. 对每个 GT，在每个 level 选 top-$k$ closest candidates。中心点之间的欧式距离来计算
+    3. 统计 candidate IoU 的 mean/std，得到该 GT 自己的 threshold $t_g$。
+    4. 选出满足 threshold 且 center in GT 的 positives，用于 classification / regression 训练。
+    5. 剩余样本视为 negatives；推理阶段不改 detector head，因此没有额外 inference overhead。
 
   - Pros:
-    - No hyperparameter for IoU threshold
-    - Better performance than fixed-threshold methods
+    - 把 fixed IoU threshold / fixed scale range 变成 per-object adaptive assignment，鲁棒性更强。
+    - 统一解释了 anchor-based 和 anchor-free 的差别：关键在 assignment，而不是 box vs point。
+    - 几乎不引入额外超参，核心只剩一个较稳健的 $k$（默认 9）。
+    - 在 paper 的 COCO minival 验证里，RetinaNet (#A=1) 用 ATSS 可从 $37.0$ AP 提升到 $39.3$ AP；FCOS full version 也有明显提升。
 
   - Cons:
-    - Still level-based assignment
-    - 这个结论在当时2020–2022的CNN detector基本成立，但是现在Transformer、NMS-free、Query-based不再完全成立
-    - 虽然称为动态，但是本质上依然是**基于先验信息**（中心点和anchor）的静态匹配策略
+    - 虽然叫 adaptive，但仍建立在 center prior、IoU 和 FPN level 这些 hand-crafted inductive bias 上。
+    - 仍属于 rule/statistics-driven assignment，不会利用当前分类分数或回归质量做真正的 prediction-driven matching。
+    - “anchor 本身不重要” 这个结论主要适用于当时的 CNN dense detectors；放到 DETR-style / NMS-free 范式需要重新审视。
 
 近年来正样本的选择（label assignment）**由模型当前预测结果决定**，而不是固定规则决定。
+
+#### 预测驱动
 
 - **TOOD: Task-aligned One-stage Object Detection**. Chengjian Feng et.al. **ICCV**, **2021**, [(Arxiv)](https://arxiv.org/abs/2108.07755) [(S2)](https://www.semanticscholar.org/paper/7438524bf00d7c5a22cb8799797f57c3a794b220) [(Code)](https://github.com/fcjian/TOOD). -- TAL
 
@@ -263,9 +296,62 @@ status: draft
     - Higher computational cost (solving OT problem)
     - Complex implementation 人脸 / 手势检测常用。后来常用simOTA，效果接近更简单
 
-- SimOTA
+- **YOLOX: Exceeding YOLO Series in 2021**. Zheng Ge et.al. **arXiv**, **2021**, [(Arxiv)](https://arxiv.org/abs/2107.08430) [(Code)](https://github.com/Megvii-BaseDetection/YOLOX). -- SimOTA
 
-  - 相比OTA的实现更加简单，效果差不多，更加常用
+  - Takeaway: SimOTA 是 YOLOX 里对 OTA 的工程化简化版。它保留了 **loss-aware cost + center prior + dynamic number of positives** 这几个关键思想，但不再真的去解 Optimal Transport，而是直接用 dynamic top-$k$ 做近似匹配，因此训练更快、实现更简单。
+
+  - Motivation:
+
+    - OTA 很强，但要用 Sinkhorn-Knopp 求 OT，YOLOX 作者实测会带来约 25% 的额外训练时间。
+    - 对实时检测器来说，label assignment 不能太重，否则训练成本过高，不利于大规模工程使用。
+    - 所以 SimOTA 的核心目标不是再追求“最优传输”的理论完备性，而是：保留 OTA 的有效成分，丢掉最贵的求解器。
+
+  - Core Mechanism:
+
+    - **Pair-wise matching cost**. 对每个 GT $g_i$ 和 prediction $p_j$，先计算匹配代价
+      $$
+      c_{ij} = L_{ij}^{cls} + \lambda L_{ij}^{reg},
+      $$
+      其中 $L_{ij}^{cls}$ 是分类损失，$L_{ij}^{reg}$ 是回归损失，$\lambda$ 是平衡系数。
+
+      这个 cost 本质上在回答：哪个 prediction 对这个 GT 来说“又分得对，又框得准”。
+
+    - **Center prior**. SimOTA 不是在全图所有 predictions 上选 positives，而是先限制在一个 fixed center region 内再做匹配。
+
+      这样做的原因是：靠近 GT center 的 grids 更可能是高质量正样本，也能减少训练初期不稳定的低质量匹配。
+
+    - **Dynamic top-$k$ matching**. 对每个 GT，不是固定分配 1 个或固定 $k$ 个正样本，而是在候选中心区域内选 cost 最小的 top-$k$ predictions 作为 positives。
+
+      这里的 $k$ 不是常数，而是 dynamic 的。YOLOX 这篇 paper 把具体估计细节引用到 OTA：对每个 GT，先找出与它 IoU 最高的 top-$q$ predictions（OTA 里默认 $q=20$），再把这些 IoU 相加，得到该 GT 需要的正样本数量估计：
+      $$
+      k_i \approx \sum_{j \in \operatorname{Top}q(IoU)} IoU(p_j, g_i).
+      $$
+      实际实现里通常会再把它转成整数（至少为 1），作为这个 GT 的 dynamic $k$。
+
+      直觉上，如果一个 GT 周围本来就有更多 predictions 能回归得很好，那么高 IoU prediction 的总和就更大，这个 GT 就应该分到更多 positives；反之，如果它本身难回归、可用候选少，那它的 $k$ 也会更小。
+
+      > [!NOTE]
+      >
+      > 所以 SimOTA 可以看成：用 cost-based ranking + dynamic top-$k$，去近似 OTA 里的全局最优分配；它保留了“动态正样本数”这个很关键的 insight，但放弃了真正的 OT solver。
+
+  - Pipeline:
+
+    1. 对每个 GT，先根据 center prior 缩小候选预测范围。
+    2. 计算候选 predictions 与该 GT 的 pair-wise cost。
+    3. 用 dynamic $k$ 估计这个 GT 该分配多少个 positives。
+    4. 选出该 GT 下 cost 最小的 top-$k$ predictions 作为 positives。
+    5. 对应 grids 标为正样本，其余为负样本；不需要 Sinkhorn-Knopp 或 OT 求解。
+
+  - Pros:
+    - 相比 OTA，训练更省时，且不再引入 Sinkhorn 求解器相关的额外超参。
+    - 保留了 loss-aware matching、center prior、dynamic positive count 这些真正有效的部分。
+    - 很适合 one-stage real-time detector，因此后来在 YOLO 系里非常常见。
+    - 在 YOLOX-DarkNet53 的 roadmap 里，加入 SimOTA 后 AP 从 $45.0$ 提升到 $47.3$。
+
+  - Cons:
+    - 它是对 OTA 的近似，不再显式保证 global optimal assignment。
+    - center prior 仍然是一种 hand-crafted bias，候选区域外的预测基本没有机会成为正样本。
+    - dynamic $k$ 估计仍然依赖当前预测框的 IoU 质量，因此训练初期的 matching 质量会受模型状态影响。
 
 - __Category-Aware Dynamic Label Assignment with High-Quality Oriented Proposal.__ *Mingkui Feng et al.* __ArXiv, 2024__ [(Arxiv)](https://arxiv.org/abs/2407.03205) [(S2)](https://www.semanticscholar.org/paper/ccb0d094cf39cb17cf29214cb930f0dce9ca3211) (Citations __4__)
 
@@ -357,10 +443,6 @@ status: draft
     - Its quality depends heavily on the choice of $\sigma$.
 
 - He initialization
-
-
-
-
 
 ## Scheduling & Optimization
 

@@ -136,7 +136,7 @@ status: draft
 
 - **BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding**. Jacob Devlin et.al. **arxiv**, **2018**, ([link](http://arxiv.org/abs/1810.04805v2)).
 
-## Relations
+## Relation
 
 ```mermaid
 graph TD

@@ -93,6 +93,10 @@
       >
       > NSP通过判断句子是否相邻，是为了让BERT学习一下句子层面的东西
       
+    - self-supervised learning
+  
+      对完整的句子直接加入mask来让模型预测，使其获得对文本提取特征的能力，这样就可以在大规模、没有标号的数据上进行训练
+      
     - Transfer learning
   
       bert认为在大量无label的数据集上训练比在小量有label的数据集上训练得到的效果可能更好

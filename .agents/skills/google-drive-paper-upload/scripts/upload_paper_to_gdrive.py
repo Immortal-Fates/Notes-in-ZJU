@@ -20,11 +20,21 @@ class GoogleDrivePermissionError(RuntimeError):
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG_PATH = SKILL_DIR / "config.json"
+USER_CONFIG_DIR = Path.home() / ".config" / "google-drive-paper-upload"
+USER_CONFIG_PATH = USER_CONFIG_DIR / "config.json"
 DEFAULT_LINK_TYPE = "webViewLink"
-DEFAULT_PAPER_NAME_POLICY = "paper-id"
-DEFAULT_REMOTE_PATH_TEMPLATE = "PaperReading/{note_name}/{paper_id}.pdf"
+LEGACY_DEFAULT_PAPER_NAME_POLICY = "paper-id"
+LEGACY_DEFAULT_REMOTE_PATH_TEMPLATE = "PaperReading/{note_name}/{paper_id}.pdf"
+DEFAULT_PAPER_NAME_POLICY = "common-name"
+DEFAULT_REMOTE_PATH_TEMPLATE = "{paper_name}.pdf"
+DEFAULT_COMMON_NAME_OVERRIDES = {
+    "attention is all you need": "transformer",
+    "an image is worth 16x16 words: transformers for image recognition at scale": "ViT",
+    "swin transformer: hierarchical vision transformer using shifted windows": "Swin-Transformer",
+    "masked autoencoders are scalable vision learners": "MAE",
+}
 ALLOWED_LINK_TYPES = {"webViewLink", "webContentLink"}
-ALLOWED_PAPER_NAME_POLICIES = {"paper-id", "note-name"}
+ALLOWED_PAPER_NAME_POLICIES = {"common-name", "paper-id", "note-name"}
 
 
 def _escape_drive_query_value(value: str) -> str:
@@ -56,7 +66,7 @@ def _sanitize_path_component(value: str) -> str:
 
 
 def _validate_template_placeholders(template: str) -> None:
-    allowed_fields = {"note_name", "paper_id"}
+    allowed_fields = {"note_name", "paper_id", "paper_name"}
     for _, field_name, _, _ in string.Formatter().parse(template):
         if field_name is None:
             continue
@@ -67,26 +77,119 @@ def _validate_template_placeholders(template: str) -> None:
             )
 
 
-def _build_remote_name(note_path: Path, paper_id: str, config) -> str:
+def _strip_pdf_extension(value: str) -> str:
+    stripped = value.strip()
+    if stripped.lower().endswith(".pdf"):
+        return stripped[:-4]
+    return stripped
+
+
+def _extract_paper_title_from_entry_line(line: str) -> str | None:
+    match = re.match(r"\s*-\s+(?:\*\*|__)(.+?)(?:\*\*|__)", line)
+    if not match:
+        return None
+    return match.group(1).strip().strip(" .") or None
+
+
+def _extract_common_name_alias_from_entry_line(line: str) -> str | None:
+    line_without_my_pdf = re.sub(r"\s*\(?\[My PDF\]\([^)]+\)\)?", "", line).rstrip()
+    match = re.search(r"--\s*([^()\[\]\n]+?)\s*$", line_without_my_pdf)
+    if not match:
+        return None
+    return match.group(1).strip().strip(" .") or None
+
+
+def _normalize_common_name_overrides(raw_overrides) -> dict[str, str]:
+    if raw_overrides is None:
+        raw_overrides = DEFAULT_COMMON_NAME_OVERRIDES
+    if not isinstance(raw_overrides, dict):
+        raise ValueError("common_name_overrides must be a JSON object")
+
+    normalized = {}
+    for raw_title, raw_common_name in raw_overrides.items():
+        if not isinstance(raw_title, str) or not raw_title.strip():
+            raise ValueError("common_name_overrides keys must be non-empty strings")
+        if not isinstance(raw_common_name, str) or not raw_common_name.strip():
+            raise ValueError("common_name_overrides values must be non-empty strings")
+        normalized[raw_title.strip().lower()] = _strip_pdf_extension(raw_common_name)
+    return normalized
+
+
+def _infer_common_paper_name(
+    entry_line: str | None,
+    paper_id: str,
+    config,
+    explicit_file_name: str | None = None,
+) -> str:
+    if explicit_file_name is not None and explicit_file_name.strip():
+        return _strip_pdf_extension(explicit_file_name)
+
+    if entry_line is not None:
+        alias = _extract_common_name_alias_from_entry_line(entry_line)
+        if alias:
+            return alias
+
+        title = _extract_paper_title_from_entry_line(entry_line)
+        if title:
+            override = config["common_name_overrides"].get(title.lower())
+            if override:
+                return override
+
+    return paper_id
+
+
+def _build_remote_name(
+    note_path: Path,
+    paper_id: str,
+    config,
+    entry_line: str | None = None,
+    explicit_file_name: str | None = None,
+) -> str:
     note_name = _sanitize_path_component(note_path.stem)
-    paper_name_source = paper_id
+    paper_name_source = _infer_common_paper_name(
+        entry_line=entry_line,
+        paper_id=paper_id,
+        config=config,
+        explicit_file_name=explicit_file_name,
+    )
+    paper_id_name = _sanitize_path_component(paper_id)
     if config["paper_name_policy"] == "note-name" and note_path.stem.strip():
         paper_name_source = note_path.stem
+    elif config["paper_name_policy"] == "paper-id":
+        paper_name_source = paper_id
     paper_name = _sanitize_path_component(paper_name_source)
     return config["remote_path_template"].format(
         note_name=note_name,
-        paper_id=paper_name,
+        paper_id=paper_id_name,
+        paper_name=paper_name,
     )
+
+
+def _get_default_config_candidates():
+    return [DEFAULT_CONFIG_PATH, USER_CONFIG_PATH]
+
+
+def _resolve_config_path(config_path=None) -> Path:
+    if config_path is not None:
+        return Path(config_path).expanduser()
+
+    for candidate in _get_default_config_candidates():
+        if candidate.exists():
+            return candidate
+
+    return DEFAULT_CONFIG_PATH
 
 
 def load_runtime_config(config_path=None):
-    resolved_config_path = (
-        Path(config_path).expanduser()
-        if config_path is not None
-        else DEFAULT_CONFIG_PATH
-    )
+    resolved_config_path = _resolve_config_path(config_path)
     if not resolved_config_path.exists():
-        raise FileNotFoundError(f"Config file not found: {resolved_config_path}")
+        searched_paths = ", ".join(
+            str(path) for path in _get_default_config_candidates()
+        )
+        raise FileNotFoundError(
+            "Config file not found. Checked explicit/default paths: "
+            f"{resolved_config_path if config_path is not None else searched_paths}"
+        )
 
     try:
         raw_config = json.loads(resolved_config_path.read_text(encoding="utf-8"))
@@ -120,7 +223,17 @@ def load_runtime_config(config_path=None):
     )
     if not isinstance(remote_path_template, str) or not remote_path_template.strip():
         raise ValueError("remote_path_template must be a non-empty string")
+    if (
+        paper_name_policy == LEGACY_DEFAULT_PAPER_NAME_POLICY
+        and remote_path_template == LEGACY_DEFAULT_REMOTE_PATH_TEMPLATE
+    ):
+        paper_name_policy = DEFAULT_PAPER_NAME_POLICY
+        remote_path_template = DEFAULT_REMOTE_PATH_TEMPLATE
     _validate_template_placeholders(remote_path_template)
+
+    common_name_overrides = _normalize_common_name_overrides(
+        raw_config.get("common_name_overrides")
+    )
 
     client_secret_file = Path((raw_config.get("client_secret_file") or "")).expanduser()
     token_file = Path((raw_config.get("token_file") or "")).expanduser()
@@ -139,6 +252,7 @@ def load_runtime_config(config_path=None):
         "link_type": link_type,
         "paper_name_policy": paper_name_policy,
         "remote_path_template": remote_path_template,
+        "common_name_overrides": common_name_overrides,
         "client_secret_file": client_secret_file,
         "token_file": token_file,
     }
@@ -216,6 +330,68 @@ def replace_or_append_my_pdf(line: str, new_url: str) -> str:
         new_line[: first.start()] + f"([My PDF]({new_url}))" + new_line[first.end() :]
     )
     return new_line
+
+
+def _replace_my_pdf_url(line: str, new_url: str) -> str:
+    pattern = re.compile(r"\[My PDF\]\([^)]+\)")
+    matches = list(pattern.finditer(line))
+    if not matches:
+        raise ValueError("Line does not contain a My PDF link")
+    new_line = line
+    for match in reversed(matches[1:]):
+        new_line = new_line[: match.start()] + new_line[match.end() :]
+    first = matches[0]
+    return new_line[: first.start()] + f"[My PDF]({new_url})" + new_line[first.end() :]
+
+
+def _extract_drive_file_id_from_my_pdf(line: str) -> str | None:
+    match = re.search(
+        r"\[My PDF\]\(https://drive\.google\.com/file/d/([^/)]+)/[^)]*\)", line
+    )
+    if not match:
+        return None
+    return match.group(1)
+
+
+def _iter_markdown_files(note_root: Path):
+    if note_root.is_file():
+        if note_root.suffix.lower() == ".md":
+            yield note_root
+        return
+
+    for path in sorted(note_root.rglob("*.md")):
+        if any(part in {".git", "__pycache__"} for part in path.parts):
+            continue
+        yield path
+
+
+def _find_existing_drive_pdf_entries(note_path: Path, config):
+    note_text = note_path.read_text(encoding="utf-8")
+    entries = []
+    for line_number, line in enumerate(note_text.splitlines(), start=1):
+        file_id = _extract_drive_file_id_from_my_pdf(line)
+        if not file_id:
+            continue
+        paper_title = _extract_paper_title_from_entry_line(line)
+        if not paper_title:
+            continue
+        remote_name = _build_remote_name(
+            note_path=note_path,
+            paper_id=paper_title,
+            config=config,
+            entry_line=line,
+        )
+        entries.append(
+            {
+                "note_path": note_path,
+                "line_number": line_number,
+                "line": line,
+                "file_id": file_id,
+                "paper_id": paper_title,
+                "remote_name": remote_name,
+            }
+        )
+    return entries
 
 
 def extract_download_url(line: str) -> str:
@@ -420,6 +596,36 @@ class GoogleDriveClient:
             )
         return file_id
 
+    def rename_pdf_and_get_link(self, file_id: str, remote_name: str) -> str:
+        if not file_id:
+            raise ValueError("file_id must not be empty")
+        if not remote_name or not remote_name.strip():
+            raise ValueError("remote_name must not be empty")
+
+        try:
+            result = (
+                self.service.files()
+                .update(
+                    fileId=file_id,
+                    body={"name": remote_name},
+                    fields="id",
+                    supportsAllDrives=True,
+                )
+                .execute()
+            )
+        except Exception as error:
+            status = _get_http_status(error)
+            if status in {401, 403}:
+                raise GoogleDriveUploadError(
+                    f"Google Drive rename permission failed for file {file_id}"
+                ) from error
+            raise GoogleDriveUploadError(
+                f"Google Drive rename failed for file {file_id} to '{remote_name}'"
+            ) from error
+
+        renamed_file_id = result.get("id") or file_id
+        return self.get_share_link(renamed_file_id)
+
     def get_share_link(self, file_id: str) -> str:
         if not file_id:
             raise ValueError("file_id must not be empty")
@@ -560,6 +766,51 @@ def process_note_entry(
             shutil.rmtree(str(temp_pdf_path.parent), ignore_errors=True)
 
 
+def rename_existing_drive_pdfs(note_root, drive_client, config, dry_run: bool = False):
+    resolved_note_root = Path(note_root)
+    entries_by_note = {}
+    for note_path in _iter_markdown_files(resolved_note_root):
+        entries = _find_existing_drive_pdf_entries(note_path, config)
+        if entries:
+            entries_by_note[note_path] = entries
+
+    operations = []
+    patched_lines = {}
+    for note_path, entries in entries_by_note.items():
+        patched_lines[note_path] = []
+        for entry in entries:
+            if dry_run:
+                share_link = f"https://drive.google.com/file/d/{entry['file_id']}/view"
+            else:
+                share_link = drive_client.rename_pdf_and_get_link(
+                    entry["file_id"], entry["remote_name"]
+                )
+            patched_line = _replace_my_pdf_url(entry["line"], share_link)
+            patched_lines[note_path].append((entry["line"], patched_line))
+            operations.append(
+                {
+                    "note_path": str(note_path),
+                    "line_number": entry["line_number"],
+                    "paper_id": entry["paper_id"],
+                    "file_id": entry["file_id"],
+                    "remote_name": entry["remote_name"],
+                    "share_link": share_link,
+                }
+            )
+
+    if dry_run:
+        return operations
+
+    for note_path, replacements in patched_lines.items():
+        note_text = note_path.read_text(encoding="utf-8")
+        patched_text = note_text
+        for old_line, new_line in replacements:
+            patched_text = patched_text.replace(old_line, new_line, 1)
+        note_path.write_text(patched_text, encoding="utf-8")
+
+    return operations
+
+
 def build_argument_parser():
     parser = argparse.ArgumentParser(description="Upload a paper PDF to Google Drive")
     parser.add_argument("--note-path", required=True, help="Path to the note to update")
@@ -568,13 +819,32 @@ def build_argument_parser():
         help="Paper identifier used to select the citation line; optional when the note is unambiguous",
     )
     parser.add_argument(
+        "--file-name",
+        help=(
+            "Optional common PDF file name to upload as, without any folder path. "
+            "The .pdf suffix is optional. Examples: ATSS, transformer"
+        ),
+    )
+    parser.add_argument(
         "--config-path",
-        help="Optional path to config.json; defaults to the skill-local config.json",
+        help=(
+            "Optional path to config.json; defaults to auto-discovery in the skill "
+            "directory and ~/.config/google-drive-paper-upload/config.json"
+        ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Run upload orchestration without writing the note back to disk",
+    )
+    parser.add_argument(
+        "--rename-existing",
+        action="store_true",
+        help="Rename existing Google Drive My PDF files and update their Markdown links",
+    )
+    parser.add_argument(
+        "--note-root",
+        help="Markdown file or directory to scan when --rename-existing is used",
     )
     return parser
 
@@ -585,11 +855,31 @@ def main(argv=None) -> int:
 
     try:
         config = load_runtime_config(args.config_path)
+        if args.rename_existing:
+            note_root = Path(args.note_root or args.note_path)
+            drive_client = None if args.dry_run else create_drive_client_from_config(config)
+            operations = rename_existing_drive_pdfs(
+                note_root=note_root,
+                drive_client=drive_client,
+                config=config,
+                dry_run=args.dry_run,
+            )
+            print(json.dumps(operations, ensure_ascii=False, indent=2))
+            return 0
+
         note_path = Path(args.note_path)
         paper_id = args.paper_id
+        note_text = note_path.read_text(encoding="utf-8")
         if paper_id is None:
-            paper_id = _infer_paper_id_from_note(note_path.read_text(encoding="utf-8"))
-        remote_name = _build_remote_name(note_path, paper_id, config)
+            paper_id = _infer_paper_id_from_note(note_text)
+        entry_line = find_paper_entry_line(note_text, paper_id)
+        remote_name = _build_remote_name(
+            note_path=note_path,
+            paper_id=paper_id,
+            config=config,
+            entry_line=entry_line,
+            explicit_file_name=args.file_name,
+        )
         drive_client = create_drive_client_from_config(config)
         share_link = process_note_entry(
             note_path=note_path,

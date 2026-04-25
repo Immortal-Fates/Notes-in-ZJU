@@ -488,6 +488,10 @@
 
     DINO(**D**ETR with **I**mproved de**N**oising anch**O**r boxes) makes DETR-style end-to-end detection much more practical by combining stronger denoising training, better decoder query initialization, and improved box refinement. It keeps the no-NMS end-to-end formulation while reaching strong COCO results and much faster convergence than earlier DETR variants.
 
+    > [!TIP]
+    >
+    > transformer加自监督在视觉也很香
+
   - Motivation:
 
     Earlier DETR-family models still suffered from slow convergence, unstable matching early in training, and weak query semantics in the decoder.主要想要解决以下两点问题

@@ -712,23 +712,3 @@ flowchart TB
     假设有K个类别: mIoU = \frac{1}{K}\sum_{i=1}^{K} IoU_i
     $$
     
-
-
-
-最近相关发展 paper links
-
-- EIoU, Focal-EIoU
-   Focal and Efficient IOU Loss for Accurate Bounding Box Regression
-   [https://arxiv.org/abs/2101.08158](https://arxiv.org/abs/2101.08158?utm_source=chatgpt.com) [arXiv](https://arxiv.org/abs/2101.08158?utm_source=chatgpt.com)
-- Alpha-IoU
-   Alpha-IoU: A Family of Power Intersection over Union Losses for Bounding Box Regression
-   [https://arxiv.org/abs/2110.13675](https://arxiv.org/abs/2110.13675?utm_source=chatgpt.com) [arXiv](https://arxiv.org/abs/2110.13675?utm_source=chatgpt.com)
-
-旋转框方向上也有一条很常见的相关发展线
-
-- GWD
-   Rethinking Rotated Object Detection with Gaussian Wasserstein Distance Loss
-   [https://arxiv.org/abs/2101.11952](https://arxiv.org/abs/2101.11952?utm_source=chatgpt.com) [arXiv](https://arxiv.org/abs/2101.11952?utm_source=chatgpt.com)
-- KFIoU
-   The KFIoU Loss for Rotated Object Detection
-   [https://arxiv.org/abs/2201.12558](https://arxiv.org/abs/2201.12558?utm_source=chatgpt.com)

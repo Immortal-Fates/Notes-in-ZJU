@@ -370,6 +370,7 @@
 - __YOLOX: Exceeding YOLO Series in 2021.__ *Zheng Ge et al.* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2107.08430) 
 
   - Core Mechanism
+    - Simota
     - Decoupled head
     - data augmentation: Mosaic and MixUp
 

@@ -205,17 +205,4 @@ Tiny object detection presents significant challenges due to limited pixel infor
 
       > **position information** alone cannot serve as the sole criterion for determining positive and negative samples.
 
-  - Sol: 
-
-
-
-
-
-
-
-
-
-
-N. Jiang, X. Yu, and X. P. *et al.*, “SM+: refined scale match for tiny person detection,” in *IEEE International Conference on Acoustics, Speech and Signal Processing,(ICASSP)*, 2021, pp. 1815–1819.
-
-C. Xu, J. Wang, W. Yang, H. Yu, L. Yu, and G. Xia, “RFLA: gaussian receptive field based label assignment for tiny object detection,” in *European Conference on Computer Vision (ECCV)*, 2022, pp. 526–543.
+  - Sol:

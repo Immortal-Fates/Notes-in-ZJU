@@ -1,8 +1,14 @@
 {
   "drive_folder_id": "YOUR_GOOGLE_DRIVE_FOLDER_ID",
   "link_type": "webViewLink",
-  "paper_name_policy": "paper-id",
-  "remote_path_template": "PaperReading/{note_name}/{paper_id}.pdf",
+  "paper_name_policy": "common-name",
+  "remote_path_template": "{paper_name}.pdf",
+  "common_name_overrides": {
+    "Attention Is All You Need": "transformer",
+    "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale": "ViT",
+    "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows": "Swin-Transformer",
+    "Masked Autoencoders Are Scalable Vision Learners": "MAE"
+  },
   "client_secret_file": "~/.config/google-drive-paper-upload/client_secret.json",
   "token_file": "~/.config/google-drive-paper-upload/token.json"
 }

@@ -1342,61 +1342,7 @@ check [here](02-2-YOLO-Zoo.md)
 
 ### Vit Zoo
 
-- __An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale.__ *Alexey Dosovitskiy et al.* __ArXiv, 2020__ [(Arxiv)](https://arxiv.org/abs/2010.11929) [(S2)](https://www.semanticscholar.org/paper/268d347e8a55b5eb82fb5e7d2f800e33c75ab18a) (Citations __52634__)
-
-  - Takeaway: ViT tokenizes image **patches** and runs a **Transformer encoder** with global self-attention.
-
-  - Motivation: Try transformer in vision.
-
-  - Core Machanism:
-
-    ViT replaces convolution with **patch-level tokens** processed by a **Transformer encoder**.
-
-    - the input of transformer encoder includes: $N$ patches vecters of $D$ dimension concats the `[CLS]` token which is one vector of D dimension. And add the positional embedding by element-wise addition.
-
-      ```
-      encoder input = patch embeddings + class token + positional embeddings.
-      ```
-
-    ![image-20251203210356823](assets/02-OD-Model-Zoo.assets/image-20251203210356823.png)
-
-  - Pros
-
-    - Global Receptive Field from the Start
-    - Foundation for Many Vision Transformers
-
-  - Cons
-
-    - Requires Large-Scale Data
-    - Quadratic Cost of Self-Attention
-
-- __FastViT: A Fast Hybrid Vision Transformer using Structural Reparameterization.__ *Pavan Kumar Anasosalu Vasu et al.* __arXiv, 2023__ [(Arxiv)](https://arxiv.org/abs/2303.14189) 
-
-  > MobileOne 原班人马打造，可以看做是 MobileOne 的方法在 Transformer 上的一个改进型的应用
-
-  - Takeaway: a hybrid vision transformer architecture that obtains the state-of-the-art latency-accuracy trade-off. 引入了一种新的 token mixer，叫做 RepMixer，它使用结构重新参数化技术，通过删除网络中的 Shortcut 来降低内存访问成本。效果也很好
-
-  - Core Mechanism
-
-    - Architecture: FastViT 是一个 hybrid vision transformer，也就是混合式视觉 Transformer。作者把网络分成了四个 stage。前 3 个 stage 主要用 RepMixer 来做 token mixing，第 4 个 stage 才使用 self attention
-
-      ![image-20260324182524700](assets/02-OD-Model-Zoo.assets/image-20260324182524700.png)
-
-      - 每个stage分辨率减半，通道数加倍
-
-    - a new token mixer: RepMixer。它的目标不是像标准注意力那样做全局交互，而是更像一个高效的局部信息搅拌器，用深度卷积去混合空间信息。下面介绍一下主要特点
-
-      > [!TIP]
-      >
-      > skip connection由于增加了内存访问成本 (memory access cost)，这些跳过连接在延迟方面占了很大的开销。所以这里想到了使用**结构重参数化**来删除 skip-connection
-    
-      1. use structural reparameterization to remove skip connection
-    
-      2. 为主要的层添加一些过参数化的额外的分支，以在训练时提升模型的精度，在推理时全部消除
-    
-      3. 使用了大核卷积在前几个阶段替换掉 self-attention
-    
-         主要是在FFN和Patch Embedding中加入
+check [here](./02-5-Vit-Zoo.md)
 
 
 
