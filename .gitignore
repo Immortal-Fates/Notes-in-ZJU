@@ -12,3 +12,4 @@
 
 # pdf
 **/*.assets/*.pdf
+.omx/

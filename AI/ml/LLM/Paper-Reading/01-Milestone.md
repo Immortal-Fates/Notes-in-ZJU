@@ -121,7 +121,7 @@ $$
 >   
 >   除以 $\sqrt{d_k}$ 后，数值尺度更平稳，训练更容易。
 >
->   > [!NOTE]
+>   > [!TIP]
 >  >
 >   > 为什么需要数值尺度更平缓呢？
 >   >
@@ -159,6 +159,122 @@ $$
 >   这意味着点积的**标准差**是$\sqrt{d_k}$。
 >   
 > - ${\text{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)}$: 是注意力权重矩阵，满足每一行和为 1，对当前位置来说，整句话里每个位置分别该分配多少权重
+
+- 计算复杂度的计算
+
+  符号定义
+
+  - 假设图像特征图大小是：$H × W$
+
+  - flatten 后 token 数量是：$N_k = HW$
+
+  - 如果是 decoder cross-attention，query 数量是：$N_q$
+
+  - 如果是 encoder self-attention，query 也来自图像 token，所以：$N_q = HW$
+
+  - 假设 hidden dimension 是：$C$
+
+  - 如果有多头 attention：$M = \text{num heads}$，每个 head 的维度是：$d = \frac{C}{M}$
+
+  对单个 head 来说：
+
+  ```
+  Q: [N_q, d]
+  K: [HW, d]
+  V: [HW, d]
+  ```
+
+  然后开始计算，这里只以一个为例$QK^T=\mathcal{O}(M \cdot N_q \cdot HW \cdot d)=\mathcal{O}(N_q \cdot HW \cdot C)$
+
+  | 步骤              | 形状变化                          | 复杂度        |
+  | ----------------- | --------------------------------- | ------------- |
+  | Q projection      | `[N_q, C] -> [N_q, C]`            | `O(N_q C²)`   |
+  | K projection      | `[HW, C] -> [HW, C]`              | `O(HW C²)`    |
+  | V projection      | `[HW, C] -> [HW, C]`              | `O(HW C²)`    |
+  | QKᵀ               | `[N_q, C] × [C, HW] -> [N_q, HW]` | `O(N_q HW C)` |
+  | scale             | `[N_q, HW]`                       | `O(N_q HW)`   |
+  | softmax           | `[N_q, HW]`                       | `O(N_q HW)`   |
+  | attention × V     | `[N_q, HW] × [HW, C] -> [N_q, C]` | `O(N_q HW C)` |
+  | output projection | `[N_q, C] -> [N_q, C]`            | `O(N_q C²)`   |
+
+  对于encoder完整复杂度可以写成：
+  $$
+  \mathcal{O}(4NC^2 + 2N^2C)
+  $$
+
+  > [!TIP]
+  >
+  > 因为 `C` 通常远大于 1，所以省略低阶项和常数
+
+  $$
+  \text{Attention}(Q,K,V) = \text{Softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V, \quad \text{complexity: } \mathcal{O}(N_q \times HW\times C),\\
+  when~self-attention~ N_q=HW,O((HW)^2C)
+  $$
+
+  对于decoder中的cross attention
+
+  假设：
+  $$
+  N_q = 100
+  $$
+  图像 token 数量是：
+  $$
+  HW
+  $$
+  那么复杂度是：
+  $$
+  \mathcal{O}(100 \cdot HW \cdot C)
+  $$
+  这比 encoder self-attention 的：
+  $$
+  \mathcal{O}((HW)^2 C)
+  $$
+  小很多。因为 decoder 中 query 数量通常远小于图像 token 数量：
+  $$
+  N_q \ll HW
+  $$
+  刚才讲的是 attention 的核心计算，也就是：
+  $$
+  \text{Softmax}(QK^T)V
+  $$
+  但完整 Multi-Head Attention 还包括线性投影。
+
+  假设输入 query feature 是：$X_q: [N_q, C]$
+
+  图像 feature 是：$X_kv: [HW, C]$
+
+  那么：
+  $$
+  Q = X_q W_Q
+  $$
+  复杂度是：$\mathcal{O}(N_q C^2) = \mathcal{O}(HW C^2)$
+
+  attention 输出后还有 output projection：
+  $$
+  O = \text{Attn}(Q,K,V) W_O
+  $$
+  复杂度是：$\mathcal{O}(N_q C^2)$
+
+  所以完整 cross-attention 可以写成：
+  $$
+  \mathcal{O}
+  \left(
+  2N_q C^2
+  +
+  2HW C^2
+  +
+  2N_q HW C
+  \right)
+  $$
+  通常省略常数：
+  $$
+  \mathcal{O}
+  \left(
+  (N_q + HW)C^2
+  +
+  N_q HW C
+  \right)
+  $$
 
 - Pipeline
 
@@ -245,6 +361,8 @@ Multi-Head Self-Attention (MHSA):
 
   <img src="./assets/01-Milestone.assets/multi-head-attention.png" alt="multi-head-attention" style="zoom:50%;" />
 
+- 复杂度计算见self attention的部分
+
 - Pipeline
 
   ```python
@@ -315,6 +433,45 @@ class PositionwiseFeedForward(nn.Module):
     def forward(self, x):
         return self.w_2(self.dropout(self.w_1(x).relu()))
 ```
+
+#### LayerNorm
+
+transformer中为什么要用layernorm，而CNN中常用BN，二者的目的是什么？为什么要这样
+
+  - Transformer： why LN
+
+    - 常用于 NLP、序列建模、生成任务，batch size 和 sequence length 经常变化。自回归生成时，推理可能一次只处理一个样本甚至一个 token，BN 的 batch statistics 不稳定。
+    - Transformer 的核心计算是 attention 和 MLP，特征主要在 hidden dimension 内混合，所以沿 hidden dimension 归一化更自然。
+
+    - LN 不依赖 batch，因此训练和推理行为更一致。
+
+    - Transformer 很深，残差连接 + attention 容易造成激活尺度累积，LN 能稳定每层输入输出尺度
+
+- CNN
+
+  - 也能用LN：某些 modern ConvNet 或小 batch 场景会用 LN、GroupNorm
+
+  - BN成熟高效，同一个 channel 在不同空间位置共享卷积核，统计 $N,H,W$ 上的均值方差很自然
+    $$
+      \hat{x} = \frac{x - \mu}{\sqrt{\sigma^2+\epsilon}}
+    $$
+
+    然后再接一个可学习的缩放和平移：
+
+    $$
+      y = \gamma \hat{x} + \beta
+    $$
+
+    这里：
+
+      - $\mu$：被归一化维度上的均值
+      - $\sigma^2$：方差
+      - $\epsilon$：防止除零
+      - $\gamma$：可学习缩放参数
+      - $\beta$：可学习平移参数
+
+    注意，normalization 不是简单地强行把特征固定死。因为后面有 $\gamma,\beta$，网络仍然可以学回自己需要的尺度和偏移。
+
 
 #### Embeddings and Softmax
 
@@ -509,7 +666,7 @@ class EncoderLayer(nn.Module):
 
 然后嵌入层输入是你字典的大小，输出是$H$，最后可以估计参数如下
 
-![image-20260418212512794](./assets/01-Milestone.assets/image-20260418212512794.png)
+<img src="./assets/01-Milestone.assets/image-20260418212512794.png" alt="image-20260418212512794" style="zoom:50%;" />
 
 
 
@@ -519,7 +676,7 @@ class EncoderLayer(nn.Module):
 
 ![transformer-decoder](./assets/01-Milestone.assets/transformer-decoder.png)
 
-Decoder有三个sublayers. Each layer has two sub-layers of multi-head attention mechanisms and one sub-layer of fully-connected feed-forward network.
+Decoder有三个sublayers: one sub-layer of self masked multi-head attention mechanisms, one sub-layer of cross-attention and one sub-layer of fully-connected feed-forward network.
 
 ```python
 class Decoder(nn.Module):
@@ -568,6 +725,80 @@ class DecoderLayer(nn.Module):
   ```
 
 ![image-20260417205236533](./assets/01-Milestone.assets/image-20260417205236533.png)
+
+- 训练阶段
+
+  模型依靠右移序列来训练,训练时虽然一次性输入完整序列：
+
+  ```
+  <bos> 我 爱 你
+  ```
+
+  但是 decoder self-attention 会加 causal mask。
+
+  所以每个位置能看到的信息是：
+
+  ```
+  位置 1：只能看 <bos>
+  位置 2：只能看 <bos> 我
+  位置 3：只能看 <bos> 我 爱
+  位置 4：只能看 <bos> 我 爱 你
+  ```
+
+  也就是说，模型虽然并行计算所有位置，但是每个位置不能偷看未来。
+
+  这就是训练阶段可以**并行计算自回归任务**的原因。
+
+  可以理解为：
+
+  ```
+  训练时：
+  一次性算出所有时间步的 next-token prediction
+  
+  推理时：
+  一个 token 一个 token 生成
+  ```
+
+  - 在普通 Transformer 中，通常只对最后一层计算 loss
+
+    decoder 输出 hidden states：
+
+    ```
+    h_1, h_2, h_3, h_4
+    ```
+
+    经过词表分类层：
+
+    ```
+    logits_1, logits_2, logits_3, logits_4
+    ```
+
+    每个位置都算一个 cross entropy loss：
+
+    ```
+    logits_1 预测 我
+    logits_2 预测 爱
+    logits_3 预测 你
+    logits_4 预测 <eos>
+    ```
+
+    所以训练时一句话的所有 token 位置通常都会参与 loss。
+
+> [!NOTE]
+>
+> 既然decoder的输入和输出一样长,那么如何预测下一个token呢?
+>
+> 实际上decoder input: <bos> 我 爱 你,输出为四个:我爱你<eos>,我们只需要<eos>即可
+
+
+
+
+
+> [!IMPORTANT]
+>
+> 实际大模型推理时，一般不会每一步都重新计算整个前缀，而是保存过去的 key 和 value，这叫 KV cache
+
+
 
 ### Inference
 
@@ -698,6 +929,12 @@ $$
 ### Training
 
 check ([details](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization))
+
+
+
+
+
+
 
 ## Zoo
 

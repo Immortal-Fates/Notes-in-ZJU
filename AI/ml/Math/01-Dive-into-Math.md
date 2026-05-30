@@ -42,6 +42,13 @@ status: draft
 
   That **preference** is exactly the inductive bias.
 
+## Interpolate插值
+
+现在我就遇到了两个
+
+- `nearest`：最近邻插值（直接复制像素）
+- `bilinear`：双线性插值（对周围 4 个点做加权平均）
+
 ## Energy and Policy Considerations for Deep Learning in NLP
 
 - __Energy and Policy Considerations for Deep Learning in NLP.__ *Emma Strubell et al.* __ArXiv, 2019__ [(Arxiv)](https://arxiv.org/abs/1906.02243) [(S2)](https://www.semanticscholar.org/paper/d6a083dad7114f3a39adc65c09bfbb6cf3fee9ea) (Citations __5983__)

@@ -87,3 +87,5 @@ Latency benchmark measure wall-clock inference time in ms. FLOPs reduction does 
     - Huffman coding
 
 - [MIT course](https://hanlab.mit.edu/courses/2024-fall-65940)，[HW](https://github.com/yan-roo/MIT-6.5940)
+
+- Good Manual: https://intellabs.github.io/distiller/

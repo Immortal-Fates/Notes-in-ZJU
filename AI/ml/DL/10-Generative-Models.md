@@ -261,7 +261,7 @@ This is our VAE training objective.
 
 ## Generative Adversarial Networks (GANs)
 
-> check [吴恩达《生成对抗网络（Generative Adversarial Networks，GAN）》中英字幕](https://www.bilibili.com/video/BV1JC4y1T7vZ/?share_source=copy_web&vd_source=93bb338120537438ee9180881deab9c1)
+> 2015年～2020年左右可能很火吧
 
 > [!TIP]
 >
@@ -377,7 +377,7 @@ Generative Adversarial Networks give up on modeling p(x), but allow us to  draw 
   - Unstable training
   - Hard to scale to big models + data
 
-## Development
+### Development
 
 - DC-GAN
 - StyleGAN
@@ -385,6 +385,14 @@ Generative Adversarial Networks give up on modeling p(x), but allow us to  draw 
 ## Diffusion Models
 
 check [here](10-1-diffusion.md)
+
+## Flow Matching
+
+从一个简单的distribution to a complicated distribution.
+
+![image-20260520173130403](./assets/10-Generative-Models.assets/image-20260520173130403.png)
+
+## Application
 
 ## References
 

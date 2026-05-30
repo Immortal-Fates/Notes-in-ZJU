@@ -91,6 +91,22 @@ But what do you do with a remote server that does not have its ports directly av
 
 - Unmount: `fusermount -u ~/remote`
 
+## ProxyJump
+
+`ProxyJump` 表示：SSH 先登录某台机器，再从那台机器继续 SSH 到目标机器。
+
+就是有些内网之类的机器需要跳板。下面给一个例子
+
+```
+Host 66j128
+HostName 10.25.2.148
+User inner
+Port 22
+ProxyJump Test@192.168.96.66
+```
+
+我现在要到inner，但是去不了，通过Test机器先跳一下间接到inner
+
 ## Lessons Learned
 
 - If you want to use AI to assist you and running on your local computer. There are three ways

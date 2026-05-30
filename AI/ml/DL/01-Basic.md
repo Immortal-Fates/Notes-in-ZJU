@@ -14,6 +14,10 @@ This note introduces the first truly deep models we use: **multilayer perceptron
 
 > check the [深度学习百科](https://paddlepedia.readthedocs.io/en/latest/index.html)
 
+## key Idea
+
+深度学习就是将一些简单的通用模块组合起来表达高度复杂的功能
+
 ## Multilayer Perceptrons
 
 An MLP stacks multiple fully connected layers. Each hidden unit applies a nonlinear activation to a weighted sum of inputs, giving the network capacity to model complex functions beyond linear decision boundaries.
