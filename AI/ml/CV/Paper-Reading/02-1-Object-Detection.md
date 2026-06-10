@@ -493,44 +493,8 @@ check [here](./02-4-RCNN-Zoo.md)
 
     lightweight, anchor-free, one-stage object detector. Tiny and fast with better feature fusion (Ghost-PAN) and better label assignment during training (AGM + DSLA). 良心涨点
 
-  - Prior:
-
-    - FCOS-style anchor-free detection: `backbone+FPN+head`
-
-    - GFL
-  
-      - **QFL (Quality Focal Loss):** Solve "Does classification score reflect positioning quality?
-  
-      - **DFL (Distribution Focal Loss):** Solve "Can regression express positioning uncertainty?"
-  
-        For bounding box regression, each side offset is modeled as a **discrete distribution**.
-  
-    - GhostBlock
-  
-      ![image-20251128232247387](assets/02-OD-Model-Zoo.assets/image-20251128232247387.png)
-  
-      GhostModule proposes that output feature maps consist of:
-  
-      - **Intrinsic features:** small set of essential feature maps (computed by real convolution)
-  
-      - **Ghost features:** redundant maps derived from intrinsic ones (via cheap ops)
-  
-  - Motivation:
-  
-    作者把标签分配说成目标检测训练里最核心的问题之一。原版 NanoDet 用的是 ATSS，这类方法虽然会动态选样本，但本质上还是比较依赖中心点、anchor 这类先验信息，属于偏静态的匹配。与此同时，DETR、OTA、YOLOX 这一类方法开始流行基于 matching cost 的动态匹配，这些方法在大模型上效果很好。
-  
-    问题在于，**大模型能用，不代表小模型也能直接用**。作者明确指出，把这种依赖预测结果的动态匹配直接搬到轻量检测模型上，会遇到大模型没有的困难. 为什么呢? 这里我们需要来看看动态匹配到底是什么
-  
-    > [!NOTE]
-    >
-    > 基于Matching Cost的动态匹配：简单来说，就是直接使用模型检测头的输出，与每一个Ground Truth计算一个**匹配的代价**，这个代价一般由分类loss和回归loss组成。Feature Map上所有的点（N个）的预测值与所有的Ground Truth（M个）计算得到的**NxM的矩阵**，就是所谓的**Cost Matrix**，基于这个Cost Matrix进行二分图匹配也好还是传输优化也好再或者直接取TopK也好，就是一种动态匹配策略。这种策略与之前的基于Anchor算IOU的匹配最大的不同就是，它**不再只依赖先验的静态的信息**，而是使用当前的预测结果去动态寻找最优的匹配，只要模型预测的越准确，匹配算法求得的结果也会更优秀。
-  
-    既然标签匹配需要依赖预测输出，但预测输出又是依赖标签匹配去训练的，但我的模型一开始是**随机初始化**的，啥也没有呀？那这不就成了一个**鸡生蛋，蛋生鸡的问题**了吗？不过好在神经网络天生具有抗噪能力，即使一开始随机初始化的时候给模型随机分配一些点去训练，只要这些点在对应的GT框内，模型也能够逐渐的去拟合那些最容易学到的特征。因此对于除了DETR这种稀疏预测以外，稠密的目标检测的动态标签匹配都会加上一些**位置约束**，比如OTA和SimOTA都使用了一个5x5的中心区域去**限制匹配的自由程度**。
-  
-    但是这样会有一个问题,轻量模型的检测头太轻了。NanoDet 的 head 很小，只用了很少的深度可分离卷积去同时做分类和回归；和大模型里那种更重、更强的检测头相比，表达能力差很多。所以你让这样一个从随机初始化开始、表达能力又有限的小 head，在训练初期就去产出可靠预测，再拿这些预测反过来指导标签匹配，这件事本身就很难
-  
   - Core Mechanism
-  
+
     ```
     ShuffleNetV2 Backbone → GhostPAN → NanoDetPlusHead
                           └── GhostPAN_copy → aux_head (training only)
@@ -542,18 +506,8 @@ check [here](./02-4-RCNN-Zoo.md)
     >
     > 这个图片画的有问题,因为没有直接从backbone输入到assign guidance module的部分
   
-    - GFL-style box representation: combine Quality Focal Loss, Distribution Focal Loss, and GIoU Loss
-      $$
-      \mathcal{L}
-      =
-      \mathcal{L}_{\text{QFL}}
-      + \lambda_{\text{bbox}}\,\mathcal{L}_{\text{GIoU}}
-      + \lambda_{\text{DFL}}\,\mathcal{L}_{\text{DFL}}.
-      $$
-  
-    - Ghost-PAN(a light feature pyramid) for lightweight multi-scale fusion
-  
-      Ghost-PAN: add ghost blocks to PAN module
+    - Ghost-PAN(a light feature pyramid):add ghost blocks to PAN module for lightweight multi-scale fusion
+    
       $$
       \{C_3,C_4,C_5\}
       \;\xrightarrow{\text{1×1 reduce conv}}\;
@@ -563,208 +517,43 @@ check [here](./02-4-RCNN-Zoo.md)
       \text{Bottom-up: }\;
       P_{l+1}^{out}=\text{GhostBlock}\big(\operatorname{Concat}(\operatorname{Down}(P_l^{out}),P_{l+1}^{td})\big)
       $$
-  
+    
       Pipeline
-  
+    
       1. reduce all input feature C channels to a fixed value
       2. Top-down: upsample P(bilinear), cancat with C, and send into the ghostblock to get the fused feature
       3. Bottom-up: downsample N(conv with stride=2), cancat with P, and send into the ghostblock to get the fused feature
       4. extra layer: 为了增强对更大目标的检测。this combines:
          - a stride-2 transform of the original deepest reduced backbone feature
          - a stride-2 transform of the current deepest PAN output
-  
-      ```python
-          def forward(self, inputs):
-              """
-              Args:
-                  inputs (tuple[Tensor]): input features.
-              Returns:
-                  tuple[Tensor]: multi level features.
-              """
-              assert len(inputs) == len(self.in_channels)
-              inputs = [
-                  reduce(input_x) for input_x, reduce in zip(inputs, self.reduce_layers)
-              ]
-              # top-down path
-              inner_outs = [inputs[-1]]
-              for idx in range(len(self.in_channels) - 1, 0, -1):
-                  feat_heigh = inner_outs[0]
-                  feat_low = inputs[idx - 1]
-      
-                  inner_outs[0] = feat_heigh
-      
-                  upsample_feat = self.upsample(feat_heigh)
-      
-                  inner_out = self.top_down_blocks[len(self.in_channels) - 1 - idx](
-                      torch.cat([upsample_feat, feat_low], 1)
-                  )
-                  inner_outs.insert(0, inner_out)
-      
-              # bottom-up path
-              outs = [inner_outs[0]]
-              for idx in range(len(self.in_channels) - 1):
-                  feat_low = outs[-1]
-                  feat_height = inner_outs[idx + 1]
-                  downsample_feat = self.downsamples[idx](feat_low)
-                  out = self.bottom_up_blocks[idx](
-                      torch.cat([downsample_feat, feat_height], 1)
-                  )
-                  outs.append(out)
-      
-              # extra layers
-              for extra_in_layer, extra_out_layer in zip(
-                  self.extra_lvl_in_conv, self.extra_lvl_out_conv
-              ):
-                  outs.append(extra_in_layer(inputs[-1]) + extra_out_layer(outs[-1]))
-      
-              return tuple(outs)
-      ```
-  
+    
     - head: output num_cls+4*(reg_max+1) where the reg_max is the distribution for each side
-  
+    
       > [!NOTE]
       >
       > - 对于小网络, 独立的head会好点
       > - 对于大网络, share的head会收敛快点
-  
-      ```python
-      self.gfl_cls = nn.ModuleList(
-          [
-              nn.Conv2d(
-                  self.feat_channels,
-                  self.num_classes + 4 * (self.reg_max + 1),
-                  1,
-                  padding=0,
-              )
-              for _ in self.strides
-          ]
-      )
-      for feat, cls_convs, gfl_cls in zip(
-          feats,
-          self.cls_convs,
-          self.gfl_cls,
-      ):
-          for conv in cls_convs:
-              # 两层
-              feat = conv(feat)
-          output = gfl_cls(feat)
-          outputs.append(output.flatten(start_dim=2))
-      outputs = torch.cat(outputs, dim=2).permute(0, 2, 1)
-      ```
-  
-    - label assignment: AGM + DSLA
-  
-      > [!IMPORTANT]
-      >
-      > Idea: 用更强大branch的来指导head做匹配(4 convs)
-  
+    
+    - label assignment: 用更强大branch的来指导head做匹配 AGM + DSLA
+    
       - AGM(Assign Guidance Module): guide the head to do label assignment.
-  
+    
         > [!TIP]
         >
         > Training-only auxiliary branch
         >
-        > aux head 需要 detach，Reason：它在 NanoDet-Plus 里主要是做 assignment guidance，不希望这条辅助分配路径持续反向干扰 backbone 和主 FPN 的特征学习
-  
-        Pipeline
-  
-        1. deepcopy fpn as aux_fpn and concat the fpn_feat and aux_fpn_feat as dual_fpn_feat to send into the aux_head 通道信息更丰富
+        > aux head 训练一段时间(10epochs)需要 detach，Reason：它在 NanoDet-Plus 里主要是做 assignment guidance，不希望这条辅助分配路径持续反向干扰 backbone 和主 FPN 的特征学习
+    
+        1. deepcopy fpn as aux_fpn, concat the fpn_feat and aux_fpn_feat as dual_fpn_feat to send into the aux_head 通道信息更丰富
         2. AGM用4个3x3的conv+1个conv对每个slot进行预测，得到预测类概率和检测框送进DSLA
-  
-           > [!NOTE]
-           >
-           > 是在不同featuremap的每个slot上预测cls and reg，也就是每个grid cell的顶点
-  
-      - DSLA(Dynamic Soft Label Assigner): 利用AGM的结果计算cost_matrix，然后对main head进行动态分配
         
-        - cost matrix 计算`cost_matrix = cls_cost + iou_cost * self.iou_factor`
-        - dynamic_k_matching: 用联合代价挑正样本，并让每个 GT 的正样本数量由当前 IoU 质量自适应决定
+      - DSLA(Dynamic Soft Label Assigner): 就是simota
         
-        > [!WARNING]
-        >
-        > 训练后期还使用aux head这样好吗???
-        
-        Pipeline:
-        
-        1. prior center 过滤候选slot: 先默认全是背景0
-        
-           > [!TIP]
-           >
-           > ignore 不是默认就有的，它只在配置了 gt_bboxes_ignore 且 ignore_iof_thr > 0 时启用，见 nanodet/model/head/assigner/dsl_assigner.py:123
-           >
-           > 然后会计算预测框和 ignore 区域的 IOF(Intersection over Foreground)，如果超过阈值：
-           > ignore_idxs = ignore_max_overlaps > self.ignore_iof_thr
-           > assigned_gt_inds[ignore_idxs] = -1
-           >
-           > 这样就会被当作ignore不参与训练(即有潜力被当作正样本的样本会被忽略,避免影响)
-        
-        2. 对每个slot的anchor计算cost matrix
-        
-        3. 取 k = max(每个 GT 的 top-k IoU（topk=13）下取整数, 1)
-        
-           ```python
-           # calculate dynamic k for each gt
-           dynamic_ks = torch.clamp(topk_ious.sum(0).int(), min=1)
-           for gt_idx in range(num_gt):
-               _, pos_idx = torch.topk(
-                   cost[:, gt_idx], k=dynamic_ks[gt_idx].item(), largest=False
-               )
-               matching_matrix[:, gt_idx][pos_idx] = 1.0
-           ```
-        
-        4. 选cost最小的k个prior
-        
-        5. 后处理：解决一个 prior 匹配多个 GT 的冲突：只保留cost最小的gt
-        
-      - Loss的计算，nanodet-plus中有两套loss，因为aux head也有自己的一套同构loss
-  
-        1. 先用 `aux_preds` 做 assignment(DSLA)
-        2. 用这个 assignment 结果算主 head 的 loss
-        3. 再用同一个 assignment 结果，给 `aux head` 也算一份同构的 loss
-        4. 最后：$\mathcal L_{\text{total}}=\mathcal L_{\text{main}}+\mathcal L_{\text{aux}}$
-  
-      | Method               | COCO mAP 0.5:0.95 |
-      | -------------------- | ----------------- |
-      | NanoDet              | 20.6              |
-      | NanoDet + DSLA       | 21.9              |
-      | NanoDet + DSLA + AGM | 22.7              |
-  
-    - 后处理筛选求解
-  
-      对于这么多slot,我们后处理是通过很多步骤来进行处理的
-  
-      1. 先解码
-      2. 一轮筛选: 只保留 score(分类分支输出经过 sigmoid 之后得到的每类分数) 大于 score_thr=0.05
-      3. 二轮筛选: 做NMS,只保留其中最好的几个,IoU 阈值这里是 0.6
-      4. 限制: 最后最多保留 100 个检测框
-  
-  - Experiment
-  
-    - Config: AdamW+CosineAnnealingLR+EMA
-  
-    | Model                   | Resolution | mAPval 0.5:0.95 | CPU Latency (i7-8700) | ARM Latency (4xA76) | FLOPS     | Params    | Model Size                         |
-    | ----------------------- | ---------- | --------------- | --------------------- | ------------------- | --------- | --------- | ---------------------------------- |
-    | NanoDet-m               | 320*320    | 20.6            | **4.98ms**            | **10.23ms**         | **0.72G** | **0.95M** | **1.8MB(FP16)** \| **980KB(INT8)** |
-    | **NanoDet-Plus-m**      | 320*320    | **27.0**        | **5.25ms**            | **11.97ms**         | **0.9G**  | **1.17M** | **2.3MB(FP16)** \| **1.2MB(INT8)** |
-    | **NanoDet-Plus-m**      | 416*416    | **30.4**        | **8.32ms**            | **19.77ms**         | **1.52G** | **1.17M** | **2.3MB(FP16)** \| **1.2MB(INT8)** |
-    | **NanoDet-Plus-m-1.5x** | 320*320    | **29.9**        | **7.21ms**            | **15.90ms**         | **1.75G** | **2.44M** | **4.7MB(FP16)** \| **2.3MB(INT8)** |
-    | **NanoDet-Plus-m-1.5x** | 416*416    | **34.1**        | **11.50ms**           | **25.49ms**         | **2.97G** | **2.44M** | **4.7MB(FP16)** \| **2.3MB(INT8)** |
-    | YOLOv3-Tiny             | 416*416    | 16.6            | -                     | 37.6ms              | 5.62G     | 8.86M     | 33.7MB                             |
-    | YOLOv4-Tiny             | 416*416    | 21.7            | -                     | 32.81ms             | 6.96G     | 6.06M     | 23.0MB                             |
-    | YOLOX-Nano              | 416*416    | 25.8            | -                     | 23.08ms             | 1.08G     | 0.91M     | 1.8MB(FP16)                        |
-    | YOLOv5-n                | 640*640    | 28.4            | -                     | 44.39ms             | 4.5G      | 1.9M      | 3.8MB(FP16)                        |
-    | FBNetV5                 | 320*640    | 30.4            | -                     | -                   | 1.8G      | -         | -                                  |
-    | MobileDet               | 320*320    | 25.6            | -                     | -                   | 0.9G      | -         | -                                  |
-  
-  - Cons
-  
-    - Small-object performance is still challenging
-  
-    - 正负样本分配差距很严重,很多背景作为负样本,不然打开ignore这样很多纯背景也没有被当作副样本
-  
-      > ?被loss处理过可能没啥问题???
-  
-    - 训练后期还使用aux head这样好吗???
+        后处理：解决一个 prior 匹配多个 GT 的冲突：只保留cost最小的gt
+    
+    
+    - training recipe: AdamW+CosineAnnealingLR+EMA
+    
 
 ## Yolo Zoo
 
@@ -1461,4 +1250,4 @@ check [here](./02-5-Vit-Zoo.md)
 - [MobileNetv2 explanation]( https://ai.googleblog.com/2018/04/mobilenetv2-next-generation-of-on.html)
 - [MobileNetV2 explained video](https://www.youtube.com/watch?v=DkNIBBBvcPs)
 - [MobileNetV1_intro](https://research.google/blog/mobilenets-open-source-models-for-efficient-on-device-vision/?_gl=1)
-- [Selective-search](https://learnopencv.com/selective-search-for-object-detection-cpp-python/)
+- ###### [Selective-search](https://learnopencv.com/selective-search-for-object-detection-cpp-python/)

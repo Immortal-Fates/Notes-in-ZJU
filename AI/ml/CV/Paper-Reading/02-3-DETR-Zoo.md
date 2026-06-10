@@ -2,7 +2,7 @@
 
 ## DETR
 
-- __End-to-End Object Detection with Transformers.__ *Nicolas Carion et al.* __ECCV, 2020__ [(Arxiv)](https://arxiv.org/abs/2005.12872) [(S2)](https://www.semanticscholar.org/paper/962dc29fdc3fbdc5930a10aba114050b82fe5a3e)[(code_link)](https://github.com/facebookresearch/detr)[(Video)](https://www.bilibili.com/video/BV1GB4y1X72R/?spm_id_from=333.337.search-card.all.click&vd_source=3a8e3df5af30a81c441200ce3c96e8fc) (Citations __15847__) -- DETR
+- __End-to-End Object Detection with Transformers.__ *Nicolas Carion et al.* __ECCV, 2020__ [(Arxiv)](https://arxiv.org/abs/2005.12872) [(S2)](https://www.semanticscholar.org/paper/962dc29fdc3fbdc5930a10aba114050b82fe5a3e)[(code_link)](https://github.com/facebookresearch/detr)[(Video)](https://www.bilibili.com/video/BV1GB4y1X72R/?spm_id_from=333.337.search-card.all.click&vd_source=3a8e3df5af30a81c441200ce3c96e8fc) (Citations __15847__)
 
   - Takeaway: DETR(DEtection TRansformer) 将目标检测重新定义为 set prediction 问题——用 Transformer encoder-decoder 直接输出一组无序预测框，再通过 **Hungarian bipartite matching** 做一对一匹配。彻底消除了 anchor、NMS、region proposal 等手工组件，是第一个真正的 **end-to-end object detector**。虽收敛慢（500 epoch），但开启了 DETR 系列（Deformable DETR, DINO, RT-DETR 等）的整个方向。
 

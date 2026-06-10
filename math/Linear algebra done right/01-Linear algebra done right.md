@@ -8,13 +8,6 @@ status: draft
 # Main Takeaway
 [TOC]
 
-- 书本官方网站[Linear Algebra Done Right (axler.net)](https://linear.axler.net/)
-
-- 大佬的notes and exercises [celiopassos/linear-algebra-done-right-solutions: Solutions to Linear Algebra Done Right, Third Edition (github.com)](https://github.com/celiopassos/linear-algebra-done-right-solutions)
-- 大佬的notes and exercises[Wayne Small's Blog (waynemystir.github.io)](https://waynemystir.github.io/)
-
-- MIT的线代笔记：[MIT18.06 跟男神教授学线性代数 - 知乎 (zhihu.com)](https://www.zhihu.com/column/gs-linear-algebra)
-
 This encounter will focus on abstract vector spaces and linear maps.
 
 <!--more-->
@@ -93,6 +86,10 @@ Invertibility and Isomorphisms(同构)
 
 ![image-20250302141148959](assets/01-Linear algebra done right.assets/image-20250302141148959.png)
 
-# References
+## References
 
-- [Linear Algebra Done Right (axler.net)](https://linear.axler.net/)
+- 书本官方网站[Linear Algebra Done Right (axler.net)](https://linear.axler.net/)
+- 大佬的notes and exercises [celiopassos/linear-algebra-done-right-solutions: Solutions to Linear Algebra Done Right, Third Edition (github.com)](https://github.com/celiopassos/linear-algebra-done-right-solutions)
+- 大佬的notes and exercises[Wayne Small's Blog (waynemystir.github.io)](https://waynemystir.github.io/)
+
+- MIT的线代笔记：[MIT18.06 跟男神教授学线性代数 - 知乎 (zhihu.com)](https://www.zhihu.com/column/gs-linear-algebra)

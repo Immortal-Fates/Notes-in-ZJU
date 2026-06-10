@@ -367,7 +367,7 @@
 
 ## YOLOX
 
-- __YOLOX: Exceeding YOLO Series in 2021.__ *Zheng Ge et al.* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2107.08430) 
+- __YOLOX: Exceeding YOLO Series in 2021.__ *Zheng Ge et al.旷视科技* __arXiv, 2021__ [(Arxiv)](https://arxiv.org/abs/2107.08430) 
 
   - Core Mechanism
     - Simota

@@ -29,12 +29,9 @@
 
 - Interactive / Promptable Segmentation：允许用户用点、框、mask、文本等 prompt 指定要分割的区域
 
-## Papers
+- 视频目标分割（Video Object Segmentation, VOS）
 
-| Paper / Method | 为什么放入这个任务 | 在任务中的作用 | 详细笔记 |
-| --- | --- | --- | --- |
-| Mask R-CNN | 在 Faster R-CNN 上增加 mask branch。 | Two-stage instance segmentation baseline | [02-4-RCNN-Zoo](02-4-RCNN-Zoo.md) |
-| SOLO | 从 grid / location-based prediction 角度建模 instance segmentation。 | One-stage segmentation route | [02-OD-Model-Zoo](02-OD-Model-Zoo.md#solo-zoo) |
+## Papers
 
 ### U-Net
 
@@ -321,82 +318,208 @@ Promptable Segmentation
 
   - Takeaway
 
-    将 SAM 从图像域自然地推广到视频域，通过引入 streaming memory bank 实现帧级实时交互式视频分割。统一模型在一个框架内同时完成 image segmentation 和 video segmentation，在视频任务上以 3× 更少交互达到更高精度，在图像任务上比 SAM 快 6× 且更准。
+    将 SAM 从图像域自然地推广到视频域，通过引入 streaming memory bank 实现帧级实时交互式视频分割。第一个统一模型在一个框架内同时完成 image segmentation 和 video segmentation
 
   - Motivation
 
-    现实世界中的视觉内容越来越多以视频形式存在，AR/VR、自动驾驶、视频编辑等应用需要 temporal localization 而不仅仅是 image-level segmentation。视频分割面临独特挑战：物体因运动/形变/遮挡/光照变化导致外观剧烈变化，视频帧常常质量更低（运动模糊、低分辨率），需要高效处理大量帧。
-
-    此前的方法（如 SAM+XMem++、SAM+Cutie）采用 decoupled 方案：用 SAM 在单帧生成 mask，再用 VOS tracker 传播到其他帧。这种两阶段的方案有根本缺陷：tracker 不一定对所有物体有效，SAM 在视频帧上性能下降，且**没有交互式 refinement 机制**——一旦出错只能在该帧从头用 SAM 重新标注并重启 tracking。
-
-    SAM 2 的核心 insight：**将 temporal propagation 与 interactive segmentation 统一到一个 streaming 模型中**，利用 memory 保存之前帧的预测和 prompt 信息，使得后续帧的 refinement 只需少量 correction clicks 即可恢复正确结果。
-
+    - SAM1只能处理图像，不能处理视频
+    - 视频分割面临独特挑战：物体因运动/形变/遮挡/光照变化导致外观剧烈变化，视频帧常常质量更低（运动模糊、低分辨率）
+    - 视频分割数据规模不足，现有视频分割数据集规模远小于图像数据集
+    - 以前的两阶段方法：此前的方法（如 SAM+XMem++、SAM+Cutie）采用 decoupled 方案：用 SAM 在单帧生成 mask，再用 VOS tracker 传播到其他帧。这种两阶段的方案有根本缺陷：tracker 不一定对所有物体有效，SAM 在视频帧上性能下降，且**没有交互式 refinement 机制**——一旦出错只能在该帧从头用 SAM 重新标注并重启 tracking。
+  
   - Core Mechanism
+  
+    主要的三个贡献：
+  
+    - 任务: PVS
+    - 模型: SAM2
+    - 数据集: SA-V
+  
+    ![image-20260601141949408](./assets/04-1-Segmentation.assets/image-20260601141949408.png)
+  
+    下面我们来分别看看
+  
+    1. task:Promptable Visual Segmentation (PVS)
+  
+    2. model:SAM2, a simple transformer architecture with streaming memory for real-time video processing
+  
+       ![sam2_architecture](./assets/04-1-Segmentation.assets/sam2_architecture.png)
+  
+       **Overall**: SAM 2 = Image encoder + Memory attention + Prompt encoder & Mask decoder + Memory encoder + Memory bank。视频帧以 streaming 方式逐帧处理，image encoder 只跑一次为每帧生成 unconditioned embedding，memory attention 用 cross-attention 将当前帧特征与 memory bank 中存储的过往帧信息融合，mask decoder（基本沿用 SAM 设计）据此预测当前帧的 mask。
+  
+       > [!NOTE]
+       >
+       > SAM 2 的核心 insight：**将 temporal propagation 与 interactive segmentation 统一到一个 streaming 模型中**，利用 memory 保存之前帧的预测和 prompt 信息，使得后续帧的 refinement 只需少量 correction clicks 即可恢复正确结果。
 
-    ![sam2_architecture](./assets/04-1-Segmentation.assets/sam2_architecture.png)
+       #### Image encoder
 
-    **Overall**: SAM 2 = Image encoder + Memory attention + Prompt encoder & Mask decoder + Memory encoder + Memory bank。视频帧以 streaming 方式逐帧处理，image encoder 只跑一次为每帧生成 unconditioned embedding，memory attention 用 cross-attention 将当前帧特征与 memory bank 中存储的过往帧信息融合，mask decoder（基本沿用 SAM 设计）据此预测当前帧的 mask。
+       采用Hiera Transfomer生成frame embedding
+  
+       Hiera + 结合MAE的整体架构如下所示：
 
-    #### Streaming Memory Bank
+       ![image-20260601153938995](./assets/04-1-Segmentation.assets/image-20260601153938995.png)
+  
+       忽略针对自监督MAE的改进，单纯从下游应用的结构进行分析，值得注意的几个点：
 
-    - **What**: 一个 FIFO 队列结构的记忆库，存储两类信息：
-      - **Spatial features**: 最多 $N$ 个近期帧的 memory（由 memory encoder 生成的空间特征图） + 最多 $M$ 个被 prompt 过的帧的 memory
-      - **Object pointers**: 轻量级向量列表，来自每帧 mask decoder 的 output token，编码目标物体的高层语义信息
-
-    - **Why**: 视频分割需要跨帧传递目标信息。传统的 VOS 方法要么只条件化于首帧，要么用 RNN/Transformer 编码所有历史——前者在遮挡/形变时脆弱，后者计算量随帧数增长。Memory bank 设计使模型能够基于已存储的历史信息高效推理，同时支持 refinement（任意帧的新 prompt 可即刻更新 memory 并影响后续预测）。
-
-    - **How**: Memory encoder 将当前帧的预测 mask 经卷积下采样后与 image encoder 输出做 element-wise 加和，再经轻量卷积融合，存入 memory bank。对于 VOS 场景（仅首帧有 mask prompt），memory bank 始终保留首帧 memory + 最近 $N$ 帧 memory。对于交互式场景（中途有 refinement click），被 prompt 帧的 memory 也进入 bank。近期帧的 memory 嵌入 temporal position encoding 以建模短时运动信息。
-
-    #### Memory Attention
-
-    - **What**: 堆叠 $L$ 个 transformer block，每个 block 执行：
-      1. Self-attention on current frame features
-      2. Cross-attention to memory bank（spatial features + object pointers）
-      3. MLP
-
-    - **Why**: 当前帧的 image encoder 输出是 unconditioned 的（不携带任何目标信息）。Memory attention 通过 cross-attention 将当前帧与 memory bank 中的目标历史信息融合，使 mask decoder 得到受历史预测和 prompt 条件化的 frame embedding。
-
-    - **How**: 自注意力和交叉注意力均使用 vanilla attention（可利用 FlashAttention 等高效算子），并引入 2D spatial RoPE 编码空间位置信息（但 object pointer tokens 不加 RoPE，因为它们没有特定空间对应）。Memory attention 的输出送入 mask decoder。
-
-    #### 与 SAM 的关键区别
-
-    - **Occlusion head**: 新增一个 head 预测当前帧目标是否存在（binary prediction）。这在 video 中是必要的——目标可能被完全遮挡后重新出现。SAM 假设有 positive prompt 就一定存在有效目标，不适用于视频。
-    - **Skip connections**: 从 hierarchical image encoder（Hiera）的高分辨率层绕过 memory attention 直接连到 mask decoder 上采样层，保留细粒度空间细节。
-    - **Multi-mask 传播**: 与 SAM 类似的 multi-mask 预测机制在每帧生效。若无后续 prompt 解决歧义，只传播 predicted IoU 最高的 mask。
-
-    #### Training Loss
-
-    $$\mathcal{L} = \underbrace{20 \cdot (\mathcal{L}_{\text{focal}} + \mathcal{L}_{\text{dice}})}_{\text{mask loss}} + \underbrace{1 \cdot \mathcal{L}_{\text{MAE}}}_{\text{IoU}} + \underbrace{1 \cdot \mathcal{L}_{\text{CE}}}_{\text{occlusion}}$$
-
-    - 训练时联合使用 image 和 video 数据，模拟交互式 prompting：随机选择 8-frame 序列中的最多 2 帧给 prompt（mask 50%、positive click 25%、box 25%），以一定概率采样 correction clicks
-
-  - Pipeline
-
-    1. **Input**: 视频帧序列 + 用户在任意帧上的 prompt（click/box/mask）
-    2. **Image encoding**: Hiera encoder（MAE 预训练，hierarchical）对每帧跑一次，输出多尺度 feature embeddings
-    3. **Memory attention**: 当前帧 embedding 与 memory bank（前 $N$ 帧 spatial features + object pointers + 被 prompt 帧）做 cross-attention，得到 conditioned frame embedding
-    4. **Mask decoding**: Prompt encoder（沿用 SAM 设计）+ mask decoder（two-way transformer blocks + skip connections from Hiera high-res features），输出 multi-mask predictions + IoU scores + occlusion score
-    5. **Memory update**: Memory encoder 将当前帧预测 mask + image embedding 融合，压入 memory bank FIFO；object pointer 从 decoder output token 提取并追加
-    6. **输出**: 当前帧的 segmentation mask + 整个视频的 masklet；用户可随时在任意帧追加 prompt 进行 refinement
-
+       1. Hiera本质上可以简单理解为可变windows size的swin transformer（且不考虑shifted window），且在特定的层使用global attention；
+       2. down sample的方式就是maxpool2d；
+       3. sam2中encoder的位置编码方式和原版相比也进行了更换，改成一个全局的position embedding与局部window position embedding， 实际使用中全局位置编码方式使用插值的方式扩展到输入embedding的尺寸，而window位置编码使用平铺的方式到对应的尺寸，两者进行相加得到最终的位置编码，研究表明这样的使用方法才适合插值position用于后续微调的步骤。
+  
+       #### Streaming Memory Bank
+  
+       - **What**: 一个 FIFO 队列结构的记忆库，存储两类信息：
+         - **Spatial features**: 最多 $N$ 个近期帧的 memory（由 memory encoder 生成的空间特征图） + 最多 $M$ 个被 prompt 过的帧的 memory
+         - **Object pointers**: 轻量级向量列表，来自每帧 mask decoder 的 output token，编码目标物体的高层语义信息
+  
+       - **Why**: 视频分割需要跨帧传递目标信息。传统的 VOS 方法要么只条件化于首帧，要么用 RNN/Transformer 编码所有历史——前者在遮挡/形变时脆弱，后者计算量随帧数增长。Memory bank 设计使模型能够基于已存储的历史信息高效推理，同时支持 refinement（任意帧的新 prompt 可即刻更新 memory 并影响后续预测）。
+  
+       - **How**: Memory encoder 将当前帧的预测 mask 经卷积下采样后与 image encoder 输出做 element-wise 加和，再经轻量卷积融合，存入 memory bank。对于 VOS 场景（仅首帧有 mask prompt），memory bank 始终保留首帧 memory + 最近 $N$ 帧 memory。对于交互式场景（中途有 refinement click），被 prompt 帧的 memory 也进入 bank。近期帧的 memory 嵌入 temporal position encoding 以建模短时运动信息。
+  
+       #### Memory Attention
+  
+       - **What**: 堆叠 $L$ 个 transformer block
+  
+         <img src="./assets/04-1-Segmentation.assets/image-20260601154233701.png" alt="image-20260601154233701" style="zoom:50%;" />
+  
+         Memory attention 使用的位置编码方式为RoPE
+  
+       - **Why**: 当前帧的 image encoder 输出是 unconditioned 的（不携带任何目标信息）。Memory attention 通过 cross-attention 将当前帧与 memory bank 中的目标历史信息融合，使 mask decoder 得到受历史预测和 prompt 条件化的 frame embedding。
+  
+       - **How**: 自注意力和交叉注意力均使用 vanilla attention（可利用 FlashAttention 等高效算子），并引入 2D spatial RoPE 编码空间位置信息（但 object pointer tokens 不加 RoPE，因为它们没有特定空间对应）。Memory attention 的输出送入 mask decoder。
+  
+         > [!WARNING]
+         >
+         > 什么是vanilla attention
+         > Tri Dao. Flashattention-2: Faster attention with better parallelism and work partitioning.
+         >  arXiv preprint
+         > arXiv:2307.08691, 2023.
+  
+       #### Mask Decoder
+  
+       - 使用two-way transformer输入 frame embedding以及prompt embedding输出segmentation mask
+  
+         ![image-20260601154734956](./assets/04-1-Segmentation.assets/image-20260601154734956.png)
+  
+         > [!NOTE]
+         >
+         > 为什么叫two way: prompt和image双向交互
+         >
+         > 每个 mask token 会经过一个小 MLP，生成一个动态线性分类器。然后这个动态分类器和上采样后的图像特征做矩阵乘法，得到对应的 mask logits
+  
+       - mask decoder的输入中 output token通常指的是obj score token（用于预测物体最终是否存在）iou token（用于预测iou）以及四个mask token（简单来说如果在超参中设置仅使用单token的结果，那么通常会利用第一个token进行mask的解码,如果设置多mask输出则选择后三个token中iou值最大作为mask解码输出，并且提取出该mask token进行线性映射得到obj ptr）
+  
+         > [!NOTE]
+         >
+         > 为啥是output token? -- 实际上output是容易让人误解的，实际上是对于output的查询token
+         >
+         > 实际上在进入 transformer 前，它是 **learnable query token**。
+         >
+         > ```
+         > obj score token
+         > iou token
+         > mask token 0
+         > mask token 1
+         > mask token 2
+         > mask token 3
+         > ```
+         >
+         > 就是一堆查询的queries，最后输出我们想要的内容
+  
+         > [!NOTE]
+         >
+         > 为什么需要multi-mask 输出？
+         >
+         > 一个 prompt 可能对应多个合理的分割目标（ambiguity），如果是单个mask，会输出平均mask，不好学（参考SAM1）
+  
+       - obj ptr对于sam2的目标身份识别极其重要，是轻量级向量，用来表示目标的高级语义信息，去掉的话，虽然mask以及recall结果会提升，但是出入镜指标会出现急剧恶化。需要注意的是这里的位置编码方式为PositionEmbeddingRandom。
+  
+       #### Memory Encoder
+  
+       - 把输出的当前帧mask和frame feature结合生成memory特征，存入memory bank
+  
+         ![image-20260601155117183](./assets/04-1-Segmentation.assets/image-20260601155117183.png)
+  
+         > [!NOTE]
+         >
+         > Mem feat除了本身空间中会使用的空间（正余弦）位置编码方式，还会额外维护可学习的位置编码，该位置编码的长度即为memory bank的长度，训练过程中被判定为条件帧的mem feat始终使用固定位置的可学习位置编码（条件帧在实际项目中，通常就是指开头的第一帧）
+         >
+         > obj ptr同样会被加上一维的时间编码信息，以此进行位置编码。
+  
+       > [!TIP]
+       >
+       > 推理的时候需要注意的点在于，目前sam2这类工作在分割的时候仍然是按照离线视频的方式进行处理，先将整个视频帧加载进来然后选取合适的条件帧与非条件帧进行分割。
+  
+       Other tricks
+  
+       - **Occlusion head**: 新增一个 head 预测当前帧目标是否存在（binary prediction）。这在 video 中是必要的——目标可能被完全遮挡后重新出现。SAM 假设有 positive prompt 就一定存在有效目标，不适用于视频。
+  
+         > [!NOTE]
+         >
+         > 因为SAM是针对图片的，别人点了就会输出多种mask，但是视频中给了prompt，在某些帧中可能不存在目标，因此需要这个head
+  
+       - **Skip connections**: 从 hierarchical image encoder（Hiera）的高分辨率层绕过 memory attention 直接连到 mask decoder 上采样层，保留细粒度空间细节。
+  
+       - **Multi-mask 传播**: 与 SAM 类似的 multi-mask 预测机制在每帧生效。若无后续 prompt 解决歧义，只传播 predicted IoU 最高的 mask。
+  
+       - Training Loss
+         $$
+         \mathcal{L} = \underbrace{20 \cdot (\mathcal{L}_{\text{focal}} + \mathcal{L}_{\text{dice}})}_{\text{mask loss}} + \underbrace{1 \cdot \mathcal{L}_{\text{MAE}}}_{\text{IoU}} + \underbrace{1 \cdot \mathcal{L}_{\text{CE}}}_{\text{occlusion}}
+         $$
+         mask ： focal loss  + dice loss
+  
+         Iou : mean-absolute-error
+  
+         Object score: cross entropy
+  
+       - 训练时联合使用 image 和 video 数据，模拟交互式 prompting：随机选择 8-frame 序列中的最多 2 帧给 prompt（mask 50%、positive click 25%、box 25%），以一定概率采样 correction clicks
+  
+    3. data:Segment Anything Video (SA-V) dataset
+  
+       SAM 2 was trained on a large and diverse set of videos and masklets (object masks over time), created by applying SAM 2 interactively in a model in the loop data-engine. 分为三个阶段
+  
+       1. SAM per frame：人工提示 SAM，得到 mask。没有时间信息
+  
+       2. SAM + SAM2 Mask：SAM2只接受mask prompt
+  
+          ```
+          人工用 SAM 在第一帧标出一个高质量 mask
+                  ↓
+          SAM2 Mask 把这个 mask 传播到后续帧
+                  ↓
+          人工检查中间帧
+                  ↓
+          如果某些帧错了，人工重新修正 mask
+                  ↓
+          重新传播
+          ```
+  
+       3. Full SAM2
+  
+          ```
+          人工给出初始 prompt
+                  ↓
+          SAM2 预测整个视频中的 masklet
+                  ↓
+          人工在错误帧上点几下修正
+                  ↓
+          SAM2 根据 memory 和新 prompt 更新后续预测
+                  ↓
+          得到高质量 masklet
+          ```
+  
   - Pros
-
-    - **统一架构**: 同时覆盖 image 和 video segmentation，image 输入退化为单帧视频（memory 为空），行为等价于 SAM
+  
+    - 统一架构
     - **3× 更少交互**: 在 9 个 zero-shot video 数据集上，用 3 clicks 即可超越 SAM+XMem++/Cutie 等 baseline
     - **实时速度**: Hiera-B+ 达到 43.8 FPS（单 A100），支持流式逐帧处理
-    - **巨大数据集**: SA-V 包含 50.9K 视频 / 35.5M masks（是此前最大 VOS 数据集的 53×），且标注覆盖 whole objects + parts + subparts，不限于特定语义类别
-    - **交互式 refinement**: 一次 click 即可从错误中恢复（而不需要像 decoupled 方案那样从头来）
-    - **Image 任务更强**: 在 37 个 zero-shot image segmentation benchmark 上超越 SAM，同时快 6×
-
+    - **交互式 refinement**: 一次 click 即可从错误中恢复（而不需要像 decoupled 方案那样从头来
+    
   - Cons
-
+  
     - **镜头切换脆弱**: 跨 shot changes 时容易丢失目标
     - **细长/快速运动物体**: 对非常细的、快速运动的物体跟踪精度有限
     - **长时遮挡和 crowded scenes**: 长时间完全遮挡后重识别困难，相似外观的多个物体（如多个相同杂耍球）容易混淆
     - **多物体独立处理**: 同时跟踪多个物体时，每个物体独立处理，仅共享 per-frame embeddings，无 inter-object communication
-    - **数据引擎依赖人工**: masklet quality verification 和新帧 correction 仍需人工 annotator 参与
-
-
 
 #### v3
 
@@ -404,7 +527,7 @@ Promptable Segmentation
 
   - Takeaway
 
-    SAM 3 将 SAM 系列从"用 visual prompt（点、框）分割单个物体"扩展到"用 concept prompt（短名词短语、image exemplar，或两者组合）检测、分割并追踪**所有**匹配的实例"，提出了 Promptable Concept Segmentation (PCS) 任务。通过 decoupled presence head、detector+tracker 共享 backbone、以及一个基于 AI + 人工的数据引擎（4M unique concept labels），SAM 3 在 PCS 上比现有系统准确率翻倍，同时保持了 SAM v1/v2 的 visual prompt 交互能力。
+    SAM 3 将 SAM 系列从"用 visual prompt（点、框）分割单个物体"扩展到"用 concept prompt（短名词短语、image exemplar(典范)，或两者组合）检测、分割并追踪**所有**匹配的实例"，提出了 Promptable Concept Segmentation (PCS) 任务。通过 decoupled presence head、detector+tracker 共享 backbone、以及一个基于 AI + 人工的数据引擎（4M unique concept labels），SAM 3 在 PCS 上比现有系统准确率翻倍，同时保持了 SAM v1/v2 的 visual prompt 交互能力。
 
   - Motivation
 
@@ -417,7 +540,7 @@ Promptable Segmentation
 
     ![sam3-architecture](./assets/04-1-Segmentation.assets/sam3-architecture.png)
 
-    **Architecture 总览**：SAM 3 = **Detector**（DETR-based，负责图像级检测）+ **Tracker**（SAM 2 style memory-based，负责视频 tracking），两者共享一个 Perception Encoder (PE) backbone。Detector 是 identity-agnostic 的（只关心"这是什么概念"），Tracker 负责在不同帧之间维护 identity（"这个 instance 和上一帧的是同一个"），二者解耦避免了 task conflict。
+    **overall**：SAM 3 = **Detector**（DETR-based，负责图像级检测）+ **Tracker**（SAM 2 style memory-based，负责视频 tracking），两者共享一个 Perception Encoder (PE) backbone。Detector 是 identity-agnostic 的（只关心"这是什么概念"），Tracker 负责在不同帧之间维护 identity（"这个 instance 和上一帧的是同一个"），二者解耦避免了 task conflict。
 
     - **Presence Head（核心创新）**
 
@@ -487,6 +610,14 @@ Promptable Segmentation
     - __video inference 随物体数扩展__：当 scene 中匹配物体数量较多时（>10），tracking latency 线性增长
     - __依赖大规模数据引擎__：4M concepts 的训练数据依赖于复杂的 human-AI-in-the-loop pipeline，复现门槛高
     - __PCS 任务本身的歧义性__：多义词（mouse 动物/设备）、主观描述（cozy）、边界模糊（mirror 含不含镜框）等问题没有根本解决，仅通过多 annotator 和 ambiguity module 缓解
+
+#### v3.1
+
+- SAM 3.1: Faster and More Accessible Real-Time Video Detection and Tracking With Multiplexing and Global Reasoning
+
+  ![658783005_976222541732621_4396625680307590489_n](./assets/04-1-Segmentation.assets/658783005_976222541732621_4396625680307590489_n.png)
+
+#### SAM 3D
 
 
 

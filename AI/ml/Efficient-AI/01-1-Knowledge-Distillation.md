@@ -389,76 +389,7 @@ How to match? - use distillation loss to train.
        >
        > 这里还有个细节，就是常常只学习label assignment分配的正样本/负样本（mask），而没有啥都学习
        >
-       >   1. head 类型不同
-       >       - PureDet：SSD-style head，多 prior、多类别分组，可带背景类或 nobg 版本。
-       >       - RemoAniFaceDet：NanoDet-Plus / GFL head，输出是 cls logits + 4 * (reg_max + 1) 分
-       >         布回归。
-       >   2. mask 构造不同
-       >       - PureDet：kd_conf_mask = statistic_onlyneg_nolabel_mat(..., force_all_neg=True)，正
-       >         样本加满足 sample_neg 的所有负样本。这个函数会用 teacher/student score 做 hard
-       >         negative mining，但 CrossKD 里 force_all_neg=True，所以不按 neg_ratio 采样，而是保
-       >         留所有合法负样本。见 /home/immortal-pc1/ws/projects/obsbot/src/animal_face_detect/
-       >         PureDet/ModelLib/Models/TS_Model_CrossKD.py:92 和 /home/immortal-pc1/ws/projects/
-       >         obsbot/src/animal_face_detect/PureDet/ModelLib/assign.py:640。
-       >       - RemoAniFaceDet：kd_conf_mask = label_weight > 0，来自 NanoDet 动态 assign 后的普通
-       >         loss mask；正负样本都进入，再按 stride 过滤。见 eyedet/models/
-       >         model_M00_EYEDET_V00_NanoDetplus.py:380。
-       >   7. 回归 KD loss 不同
-       >       - PureDet：支持 smooth_l1_loss 或 giou_loss，可选 decode 到 box 后算 GIoU；再乘
-       >         teacher score 权重。见 /home/immortal-pc1/ws/projects/obsbot/src/
-       >         animal_face_detect/PureDet/ModelLib/loss_utils.py:454。
-       >       - RemoAniFaceDet：对 GFL 分布回归做 KL：KL(student log_softmax, teacher softmax)，同
-       >         样乘 teacher score。见 eyedet/models/loss/crosskd_loss.py:66。
-       >
-       >   3. mask 构造差异很大
-       >
-       >   PureDet 的 KD mask：
-       >
-       >   kd_conf_mask = statistic_onlyneg_nolabel_mat(
-       >       cfg, tea_conf, all_neg_inds, conf_mask, sample_neg,
-       >       prior_level_num=..., force_all_neg=True
-       >   )
-       >
-       >   见 PureDet/ModelLib/Models/TS_Model_CrossKD.py:92
-       >
-       >   statistic_onlyneg_nolabel_mat 会考虑：
-       >
-       >   - assigned_pos
-       >   - assigned_neg
-       >   - sample_neg
-       >   - class label / sample_neg_labels
-       >   - neg_ratio
-       >   - level-wise hard negative mining
-       >
-       >   但 CrossKD 这里传了 force_all_neg=True，所以 KD 分支会跳过 neg_ratio，使用满足
-       >   sample_neg 条件的所有负样本 + 正样本。见 PureDet/ModelLib/assign.py:640。
-       >
-       >   当前 Remo 的 KD mask：
-       >
-       >   kd_conf_mask = label_weight > 0
-       >   kd_pos_mask = label in [0, num_classes)
-       >
-       >   见 eyedet/models/model_M00_EYEDET_V00_NanoDetplus.py:380
-       >
-       >   也就是说当前版本不再走 PureDet 的 sample_neg / neg_ratio / dataset-side assignment 逻
-       >   辑，而是直接复用 NanoDet 动态 assign 后的 label_weights。在现在的实现里，正负样本通常都
-       >   会 label_weight=1，所以 KD 覆盖范围更粗。
-       >
-       >   6. 背景类处理不同
-       >
-       >   PureDet 有两个版本：
-       >
-       >   - TS_Model_CrossKD
-       >   - TS_Model_CrossKD_nobg
-       >
-       >   nobgcls=True 时会改变 teacher score 的取法和 loss 输入。见 PureDet/ModelLib/Models/
-       >   TS_Model_CrossKD.py:105
-       >
-       >   当前 Remo 的 NanoDet-Plus head 是 sigmoid multi-label 风格，没有显式 background class，
-       >   只有 num_classes 个前景 logit。
-       >
-       >   - 去掉了 PureDet 的多 class-group、多 loss 类型、sample_neg hard negative mining 细节
-
+       
        > [!WARNING]
        >
        >   PureDet：
@@ -486,24 +417,24 @@ How to match? - use distillation loss to train.
        >     normalization。
        >   - 但 PureDet 的做法统计量更多，batch 足够大且数据分布稳定时，噪声更小
        >
-       > 既然通道数不对其，那么统计学生的feat内容是否有影响？如何计算
-
+       > 既然通道数不对齐，那么统计学生的feat内容是否有影响？如何计算
+       
     6. inference 时只保留 student detector，不需要 teacher head，也不引入额外推理开销。
-
+    
        ```python
        feats = self.extract_feat(batch_inputs)
        results = self.bbox_head.predict(feats, batch_data_samples)
        ```
-
+    
   - Pros
-
+  
     - **Task-oriented**：仍然蒸馏 prediction-level knowledge，比纯 feature imitation 更贴近检测目标。
     - **结构简单**：不依赖复杂 region selection，paper 中直接在整张 prediction map 上蒸馏。
     - **冲突更小**：把 normal detection path 和 distillation path 分开，缓解 GT target 与 teacher target 的直接竞争。
     - **部署友好**：额外 teacher-head reuse 只发生在 training，inference 仍然是原 student detector。
-
+  
   - Cons
-
+  
     - 主要验证范围是 COCO 上的 **dense object detectors**，不能直接推断到 two-stage detector、DETR-style detector 或 3D detection。
     - training 阶段需要额外访问 teacher head 并计算 cross-head forward，训练成本高于普通 student-only training。
     - 方法依赖 student / teacher detection head 能够被切分并复用后半段；如果 head 结构差异很大，复用 teacher head tail 会更麻烦。

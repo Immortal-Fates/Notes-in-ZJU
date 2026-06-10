@@ -508,4 +508,10 @@
     | RotCons 角度受限 | 大角度可能破坏 crop | 结合 3D rotation augmentation 在 $\mathcal{SO}(3)$ 上直接采样 |
 | backward heads 过滤而非学习 | 完全不可辨识 | 引入 temporal/multi-view consistency 或 3D prior |
 
+### YOLO Pose
+
+
+
+
+
 ## Relation

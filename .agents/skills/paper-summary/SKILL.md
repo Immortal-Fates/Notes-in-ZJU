@@ -1,6 +1,6 @@
 ---
 name: paper-summary
-description: Summarize an arXiv paper into this repository's paper-reading markdown format, enrich citations with a2b, preserve core formulas, and save useful figures locally
+description: Summarize an arXiv paper into this repository's paper-reading markdown format, enrich citations with a2b from conda base or manually when a2b is unavailable, preserve core formulas, and save useful figures locally
 ---
 
 ## What I do
@@ -17,7 +17,8 @@ I write concise Chinese-dominant mixed-language summaries in Typora-friendly mar
 - You want the summary in this order: Takeaway, Motivation, Core Mechanism, Pipeline, Pros, Cons
 - You want key formulas shown directly under the relevant mechanism bullets
 - You want useful figures actually saved locally next to the note
-- You want citation metadata enriched with `a2b`
+- You want citation metadata enriched with `a2b`, or manually injected when `a2b` is unavailable
+- You require every summarized paper entry to include a citation count field
 
 ## Local repository conventions to follow
 
@@ -100,23 +101,41 @@ Prefer this citation format for new entries:
 - **Paper Title**. Author1 Author2 et.al. **Venue**, **Year**, ([link](URL)).
 ```
 
-If useful, append auxiliary links in the local style used elsewhere in the repo, for example:
+Always append a citation count field for every summarized paper entry. The preferred local style is:
 
 ```markdown
 [(Arxiv)](URL) [(S2)](URL) [(Code)](URL) (Citations __N__)
 ```
 
-## a2b usage
+`(Citations __N__)` is mandatory, not optional. If the citation count comes from Semantic Scholar, include the `[(S2)](...)` link when available. If Semantic Scholar is rate-limited or unavailable, use a reasonable fallback such as arxiv.gg, Google Scholar snippets, OpenAlex, Crossref, DBLP-connected pages, publisher pages, or another stable bibliographic/search source, then still write `(Citations __N__)`. Do not fabricate an `[(S2)](...)` link when the count did not come from Semantic Scholar.
+
+Only if no citation count can be verified after reasonable fallback attempts, write `(Citations __unknown__)` in the entry and mention the failed sources in the final report. Do not omit the citation field.
+
+## a2b and citation enrichment
 
 Use `a2b` only for bibliography enrichment, not for full paper extraction.
 
-Supported first-party usage includes:
+Always try `a2b` from the conda `base` environment first. Prefer `conda run` because it does not depend on shell activation state:
 
 ```bash
-pip install a2b
-a2b --arxiv https://arxiv.org/abs/<paper-id>
-a2b path/to/file.md
+conda run -n base a2b --arxiv https://arxiv.org/abs/<paper-id>
+conda run -n base a2b path/to/file.md
 ```
+
+If `conda run -n base a2b ...` fails because `a2b` is not installed or the base environment is unavailable, do not stop at "a2b unavailable" and do not leave the citation incomplete. Manually gather and inject citation metadata from primary or stable bibliographic sources:
+
+1. arXiv abstract page for title, authors, arXiv ID, submitted/revised dates, DOI, and official code links when present.
+2. Semantic Scholar for S2 URL and citation count when reachable.
+3. Fallback citation-count sources such as arxiv.gg, OpenAlex, Google Scholar snippets, Crossref, publisher pages, or reputable indexed paper pages when Semantic Scholar is unavailable.
+4. DBLP, OpenReview, CVF, ACL Anthology, NeurIPS proceedings, ICLR/ICML/OpenReview pages, or the official project page for venue/year/code when more authoritative than arXiv metadata.
+
+Manual citation enrichment should update the note entry in the local style, for example:
+
+```markdown
+[(Arxiv)](URL) [(S2)](URL) [(Code)](URL) (Citations __N__)
+```
+
+For ordinary metadata fields, if a field cannot be verified after trying reasonable sources, omit that field rather than guessing; mention the gap briefly in the final report. Citation count is the exception: always include `(Citations __N__)` when verified, or `(Citations __unknown__)` if it truly cannot be verified.
 
 Important limitation:
 
@@ -125,7 +144,7 @@ Important limitation:
 - `a2b` does not preserve formulas from the paper
 - `a2b` only produces or injects bibliography metadata
 
-If helpful, use `a2b` to improve the citation entry inside the markdown note, but do not treat it as the source of the summary.
+Use `a2b` or the manual fallback to improve the citation entry inside the markdown note, but do not treat either as the source of the summary.
 
 ## Source priority and fallback workflow
 
@@ -428,12 +447,13 @@ Match the repository's existing local asset pattern.
 
 1. Read the target markdown note and extract the arXiv link.
 2. Inspect nearby notes in the same directory and follow their local style.
-3. Use `a2b` only if citation enrichment is useful.
-4. Summarize the paper in Chinese-dominant mixed-language style using the default section order, but adapt to stable nearby conventions when needed.
-5. Preserve the paper's most important formulas in markdown math directly under the relevant mechanism or pipeline points.
-6. Save and embed at least one high-value figure locally into the matching `assets/<note>.assets/` folder when the paper clearly contains one and the source is usable.
-7. Keep the final note readable in Typora.
-8. Keep the final summary grounded in the paper even if auxiliary sources are consulted.
+3. Try citation enrichment with `conda run -n base a2b ...`; if `a2b` is unavailable, manually gather citation metadata and inject it into the note entry.
+4. Verify and write a citation count for every summarized paper entry as `(Citations __N__)`; if no count can be verified after reasonable fallbacks, write `(Citations __unknown__)` and report the attempted sources.
+5. Summarize the paper in Chinese-dominant mixed-language style using the default section order, but adapt to stable nearby conventions when needed.
+6. Preserve the paper's most important formulas in markdown math directly under the relevant mechanism or pipeline points.
+7. Save and embed at least one high-value figure locally into the matching `assets/<note>.assets/` folder when the paper clearly contains one and the source is usable.
+8. Keep the final note readable in Typora.
+9. Keep the final summary grounded in the paper even if auxiliary sources are consulted.
 
 ## Must not do
 

@@ -32,7 +32,7 @@ status: draft
 
 - **ImageNet classification with deep convolutional neural networks**. Krizhevsky Alex et.al. **Commun. ACM**, **2017-5-24**, ([link](https://doi.org/10.1145/3065386)). -- AlexNet
 
-  - Takeaway: 就是scale up模型更大，数据更多。还有很多工程上的tricks
+  - Takeaway: scale up模型更大，数据更多。还有很多工程上的tricks
     ![alt text](assets/01-Basic-Model-Zoo.assets/image.png)
   - Core Mechanism
     - data scaling: ImageNet 1.28 million images and 1000 classes
@@ -40,6 +40,7 @@ status: draft
     - reducing overfitting
       - 使用数据增广来获得更多训练样本，通过平移、灰度变换等增广方式来扩充数据，使网络适应更多情况
       - 对网络中间层加入Dropout， 即随机使部分神经元不工作
+    - group conv
     - 采用ReLU函数来替代Sigmoid函数，降低了计算量的同时，还避免了极端输入导致的梯度消失
     - 使用动量参数和学习率降低策略来加速收敛， 每当学习陷入瓶颈时学习率就会降低（手动）
     - GPU training
@@ -65,6 +66,9 @@ VGG是分阶段训练，先训练浅层的再添加更多的层数，然后微�
     多分支结构，主要是1*1分支的使用
 
     打破了initialization assumptions，因此人们来时研究normalization归一化
+
+
+### ResNet
 
 - **Deep ResidualZoo Learning for Image Recognition**. He Kaiming et.al. **No journal**, **2016-6** ([link](https://doi.org/10.1109/cvpr.2016.90)).
 
@@ -92,6 +96,15 @@ VGG是分阶段训练，先训练浅层的再添加更多的层数，然后微�
   >
   > 为什么ResNet改变了世界？
   > 因为有了残差连接之后，我们只需要关注每个block的设计就可以了，然后堆叠起来（用残差连接）
+
+
+### ResNeXt
+
+- grouped conv
+
+### ShuffleNet
+
+- 分组卷积 + 通道混洗
 
 - **Densely Connected Convolutional Networks**. Huang Gao et.al. **No journal**, **2017-7** ([link](https://doi.org/10.1109/cvpr.2017.243)). -- DenseNet
 
