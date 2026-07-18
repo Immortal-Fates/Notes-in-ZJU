@@ -21,7 +21,7 @@ The key is learn it slowly. Balancing your theory intake rate with their practic
 
 ## PKM
 
-PKM(personal knowledge manage)都快形成一个圈子了，但是本质还是学习销量的提升+信息的获取吧
+PKM(personal knowledge manage)都快形成一个圈子了，但是本质还是学习的提升+信息的获取吧
 
 必须时刻提醒自己 KISS（Keep It Simple & Stupid）
 
@@ -48,7 +48,40 @@ PKM(personal knowledge manage)都快形成一个圈子了，但是本质还是�
 
 ## 我的学习工作流
 
-heptabase+typora(当作PKM用于记录和整理)+notion(作为database)
+typora+heptabase(当作PKM用于记录和整理)+notion(作为database)
+
+> [!TIP]
+>
+> 这里我故意使用typora+heptabase，而没有all in heptabase是因为
+>
+> 1. 我还是希望我的文件可以本地管理，并且AI来读取
+> 2. 自动将学习变为两个步骤，更加深刻
+
+```
+Capture: 快速收集信息，要求快，不要边读边好好整理
+    ↓
+Clarify: 理解，多问QA
+    ↓
+Process: 处理压缩内容，提炼总结写进heptabase，把info变为knowledge
+    ↓
+Connect: 在heptabase中创建知识网络
+    ↓
+Create: 可以在一条路线形成后创建一个blog paper
+    ↓
+Apply: 真正的学习是将知识应用于实践
+    ↓
+Review
+```
+
+可延伸问题
+
+```
+可以做什么改进
+可以和谁比较
+可以用于什么任务
+```
+
+
 
 
 

@@ -20,9 +20,9 @@ Focus on Vision Transformer variants and their core design trade-offs.
   
     为什么之前transformer没有用到CV，到底有什么难处？
     
-  1. 需要把图片这个2d转换为1d的序列输入encoder
-    2. 计算复杂度是$O(n^2)$，如果直接像素输入序列太长计算复杂度会爆炸
-  
+    1. 需要把图片这个2d转换为1d的序列输入encoder
+    1. 计算复杂度是$O(n^2)$，如果直接像素输入序列太长计算复杂度会爆炸
+    
   - Core Mechanism:
   
     ![vit-figure](./assets/02-5-Vit-Zoo.assets/vit-figure.png)

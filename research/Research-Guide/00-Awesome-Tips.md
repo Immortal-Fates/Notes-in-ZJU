@@ -12,28 +12,27 @@ just check the [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/m
 
 <!--more-->
 
-## 扫盲网站列表
 
-- arXiv：了防止自己的idea在论文被收录前被别人剽窃，我们会将预稿上传到arvix作为预收录，因此这就是个可以证明论文原创性（上传时间戳）的文档收录网站
 
-- ScienceDirect：外文数据资源库，直接访问文献
+## 一个实验的思考方式
 
-- SCI（科学引文索引）、EI(工程索引）、ISTP（科技会议录索引）是世界著名的三大科技文献检索系统
+1. Ask yourself, “How surprised would I be if this run failed?”
+   问问自己：“如果这次尝试失败了，我会有多惊讶呢？”
+2. If the answer is ‘not very surprised’, put yourself in the shoes of future-you where the run *has* failed, and ask, “If I’m here, what might have gone wrong?”
+   如果答案是“并不太惊讶”，那就试着站在未来自己的立场上来思考：如果这次尝试失败了，会是什么原因呢？
+3. Fix whatever comes to mind.
+   把能想到的问题都解决掉吧。
+4. Repeat until the answer to question 1 is “very surprised” (or at least “as surprised as I can get”).
+   重复这个过程，直到对问题 1 的回答为“非常惊讶”（或者至少是“已经尽可能惊讶了”）。
 
-  引文数据库，提供文献的引用信息，适合进行**学术影响力评估**
 
-- Google Scholar：学术搜索引擎
-
-- DOI，全称是Digital Object Unique Identifier，意思是数字对象唯一标识符
-
-## How to do research with my mentors effectively?
-
-Key idea: **Help them help you!**
-
-![FvLC-YvXoAA6oe8 (1)](assets/00-Awesome-Tips.assets/FvLC-YvXoAA6oe8 (1).png)
 
 ## References
 
 - [(36 封私信 / 80 条消息) 什么是arXiv？](https://www.zhihu.com/question/31864895?sort=created)
 
 - [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/main?tab=readme-ov-file)
+
+- [蒂姆·罗克塔舍尔 --- Tim Rocktäschel Advice for Short-term Machine Learning Research Projects](https://rockt.ai/2018/08/29/msc-advice)
+
+- [从一篇深度强化学习论文的复现过程中得到的经验教训 --- Lessons Learned Reproducing a Deep Reinforcement Learning Paper](https://amid.fish/reproducing-deep-rl)

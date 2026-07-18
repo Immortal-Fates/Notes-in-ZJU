@@ -2,9 +2,87 @@
 
 ### Review
 
-- a review: __A Survey of State of the Art Large Vision Language Models: Alignment, Benchmark, Evaluations and Challenges.__ *Zongxia Li et al.* __arXiv, 2025__ [(Arxiv)](https://arxiv.org/abs/2501.02189) 
+- a review: __A Survey of State of the Art Large Vision Language Models: Alignment, Benchmark, Evaluations and Challenges.__ *Zongxia Li et al.* __CVPRW, 2025__ [(Arxiv)](https://arxiv.org/abs/2501.02189) [(S2)](https://www.semanticscholar.org/paper/A-Survey-of-State-of-the-Art-Large-Vision-Language-Li-Wu/423e03b2a83e79a0ecdaafbb7c7bd5b956a2f3a8) [(Code)](https://github.com/zli12321/Vision-Language-Models-Overview) (Citations __93__)
 
-![image-20260305115237278](../assets/04-Multi-Modal-Foundation-Models.assets/image-20260305115237278.png)
+  - Takeaway:
+
+    这篇 survey 把 2025 年前后的 VLM / LVLM 进展整理成四条主线：SoTA model list、architecture transition、benchmark / evaluation、hallucination / safety / fairness / alignment 等挑战。它适合作为 VLM 领域路线图，而不是某个单一模型的 technical paper。
+
+  - Motivation:
+
+    LLM 的纯文本能力已经很强，但高质量文本数据有限，而且单模态模型难以处理现实世界里的视觉空间关系、对象、场景和跨模态推理。VLM 把 image / video 与 language 结合后，能扩展到 VQA、robotics、autonomous driving、accessibility 等任务，但也引入了 hallucination、视觉-语言错配、安全和公平性问题。
+
+    - 领域发展太快，单篇模型论文难以看清 architecture 和 evaluation 的整体变化。
+    - 现有 benchmark 数量快速增长，但很多仍依赖 short answer matching、yes/no 或 multiple choice，不能充分衡量真实 multimodal intelligence。
+    - VLM 的风险不只是 LLM 风险的复制，还包括视觉输入带来的隐私、偏见、误识别和下游 embodied action 风险。
+
+  - Core Mechanism:
+
+    - Architecture transition
+
+      ![vlm-survey-components](./assets/01-VLM.assets/vlm-survey-components.png)
+
+      - What:
+
+        论文把 VLM 架构从 early joint-training / dual encoder 路线，整理到用 pretrained LLM 作为 backbone 的 LVLM 路线。核心组件包括 vision encoder、text encoder / decoder、projector、cross-attention，以及 newer architecture 中把 image / video 当作 token 统一处理的方向。
+
+      - Why:
+
+        早期 CLIP / BLIP / ALIGN 更强调 image-text embedding alignment，适合 retrieval、zero-shot classification 等；后来的 LLaVA、Qwen-VL、GPT-4V、Gemini 等模型更依赖 LLM 的 reasoning / generation 能力，需要把视觉特征映射到 LLM 可处理的 token space。
+
+      - How:
+
+        Survey 将训练方式分成 from-scratch contrastive learning、LLM-backbone projector / joint training / freeze training，以及 treating all modalities as tokens。这个分类有助于理解：VLM 的瓶颈从“能否对齐图文表示”逐渐转向“如何让视觉 token 真正参与 LLM reasoning 和 generation”。
+
+    - Benchmark and evaluation taxonomy
+
+      - What:
+
+        论文整理了 95 个 benchmark，覆盖 visual reasoning / VQA、OCR、chart understanding、visual math reasoning、multilingual multimodal understanding、video understanding、text-to-image generation、hallucination、robot / web-agent benchmark、world model 等类别。
+
+      - Why:
+
+        VLM 的能力边界很宽，单一 VQA 或 caption metric 已经不足以说明模型是否具备可靠的视觉理解。尤其是 OCR、math、chart、video、robotics 这些任务，对视觉细节、时序、符号和物理常识的要求不同。
+
+      - How:
+
+        论文把 benchmark construction 分成 fully human-annotated、synthetic generation + human validation、simulator interaction 三类，并指出大量 evaluation 仍受限于 answer matching / multiple choice。Multiple choice 容易评分，但模型可能在没有真正理解视觉内容时也做出高于随机的猜测。
+
+    - Challenges map
+
+      - What:
+
+        Survey 将 VLM 主要挑战归纳为 hallucination、safety、fairness、multi-modality alignment、commonsense / physics alignment、training efficiency 和 high-quality data scarcity。
+
+      - Why:
+
+        VLM 不只是把视觉 encoder 接到 LLM 上。视觉输入会带来不存在对象的幻觉、图像 jailbreak、群体偏见、跨模态上下文偏移，以及 embodied / robotics 场景中的物理世界风险。
+
+      - How:
+
+        论文对应整理了 POPE、CHAIR、HallusionBench、AMBER、MM-SafetyBench、JailbreakV、FMBench、CulturalVQA、PhysBench、VideoPhy 等 evaluation / mitigation 方向，强调未来工作需要更可靠的数据、更好的 alignment 方法和更贴近真实应用的评估。
+
+  - Pipeline:
+
+    1. 先按时间和代表性收集 SoTA VLM / LVLM，包括 CLIP、BLIP、Flamingo、LLaVA、Qwen-VL、GPT-4V、Gemini 等。
+    2. 从 architecture 角度抽象 common components：vision encoder、text encoder / decoder、projector、cross-attention、LLM backbone 和 unified tokenization。
+    3. 总结训练与 alignment 方法：contrastive pre-training、projector alignment、freeze / joint training、RLHF / DPO / PPO / GRPO / RLVR 等。
+    4. 汇总 benchmark taxonomy 和 evaluation practice，分析 human annotation、synthetic generation、simulator interaction 三类数据构造方式。
+    5. 按 hallucination、safety、fairness、alignment、training efficiency、data scarcity 梳理当前风险和开放问题。
+
+  - Pros:
+
+    - 覆盖范围广，能快速建立 VLM 领域的 architecture、benchmark、application、challenge 全局地图。
+    - 把 benchmark 的数据构造方式和 evaluation format 单独拆开讨论，比只罗列榜单更有参考价值。
+    - 对 hallucination / safety / fairness / alignment 的整理适合后续查找具体 benchmark 和 mitigation paper。
+    - 配套 GitHub repo 持续维护 model、benchmark、alignment、application 列表，适合做 literature tracking。
+
+  - Cons:
+
+    - Survey 范围很大，因此很多模型和方法只能高层概括，缺少深入的 technical comparison。
+    - 论文更新到 2025 初，VLM 发展很快，后续 native multimodal、omni-modal、RL-based reasoning model 需要依赖配套 repo 继续追踪。
+    - Benchmark 部分指出 evaluation 局限，但没有给出统一的新评估协议或实证对比。
+    - 作为 survey，没有核心数学目标函数；对具体模型实现细节仍需要回到原始 paper。
 
 ### CLIP
 

@@ -205,6 +205,5 @@ graph TD
 
 - [Great Intro to DL](https://www.bilibili.com/video/BV1Vw4m1d7pf/?share_source=copy_web&vd_source=93bb338120537438ee9180881deab9c1)
 - [DERT blog](https://ai.meta.com/blog/end-to-end-object-detection-with-transformers/)
-- [Great blog about attention family](https://lilianweng.github.io/posts/2018-06-24-attention/)
-
 - [Vit blog](https://research.google/blog/transformers-for-image-recognition-at-scale/?m=1)
+- [Great blog about attention family](https://lilianweng.github.io/posts/2018-06-24-attention/)
