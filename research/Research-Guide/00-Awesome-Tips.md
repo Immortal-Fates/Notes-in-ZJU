@@ -8,7 +8,7 @@ status: draft
 # Awesome Tips
 [TOC]
 
-just check the [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/main?tab=readme-ov-file)
+just check the references. 
 
 <!--more-->
 
@@ -28,6 +28,12 @@ just check the [Awesome Tips](https://github.com/jbhuang0604/awesome-tips/tree/m
 
 
 ## References
+
+- [博士生的楷模：Sebastian Starke](https://pengsida.notion.site/Sebastian-Starke-1713fe292ff1808eb33be93ea2d79ad9)
+
+- [10minFreeman2013.pdf](https://people.csail.mit.edu/billf/talks/10minFreeman2013.pdf)
+
+- [pengsida/learning_research: 本人的科研经验](https://github.com/pengsida/learning_research)
 
 - [(36 封私信 / 80 条消息) 什么是arXiv？](https://www.zhihu.com/question/31864895?sort=created)
 
