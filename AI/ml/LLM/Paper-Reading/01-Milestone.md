@@ -4,66 +4,36 @@
 
 ## Transformer
 
-当然在最开始先介绍transformer
+- **Attention Is All You Need**. Ashish Vaswani et al. **NeurIPS**, **2017**, ([arXiv](https://arxiv.org/abs/1706.03762)) ([NeurIPS](https://papers.nips.cc/paper/7181-attention-is-all-you-need)) ([Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization)) ([My PDF](https://drive.google.com/file/d/1Y2cKZq125zPHGf2SBOZ9ZZRUkiJfAvob/view?usp=drivesdk)). (Citations 173,155)
 
-- **Attention Is All You Need**. Ashish Vaswani et.al. **NeurIPS**, **2017**, ([Arxiv](https://arxiv.org/abs/1706.03762)) ([NeurIPS](https://papers.nips.cc/paper/7181-attention-is-all-you-need)) ([details](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization)). ([My PDF](https://drive.google.com/file/d/1Y2cKZq125zPHGf2SBOZ9ZZRUkiJfAvob/view?usp=drivesdk))
+  - **Takeaway**
 
-  - Takeaway: Transformer is a **self-attention-only** seq2seq model with **positional encoding**, enabling highly parallel training.
+    Transformer 用 self-attention 取代序列建模中的循环和卷积操作，并配合位置编码构成可并行训练的 encoder-decoder 模型；论文在 WMT14 机器翻译上取得当时的领先结果。
 
-  - Motivation: What’s Wrong with Seq2Seq Model?
+  - **Motivation**
 
-    The seq2seq model normally has an encoder-decoder architecture: the encoder compress the info into a context vector of fixed length. A critical and apparent disadvantage of this fixed-length context vector design is incapability of remembering long sentences. The attention mechanism was born ([Bahdanau et al., 2015](https://arxiv.org/pdf/1409.0473.pdf)) to resolve this problem.
-
-    其实google开始提出transformer就是想要解决机器翻译这个任务，但是最后也说明了可以迁移到其他任务
-
-  - Core Mechanism:
-
-    - The model uses a pure encoder-decoder stack: the encoder alternates multi-head self-attention and position-wise FFN blocks, while the decoder adds masked self-attention and encoder-decoder cross-attention.
-
-    - Scaled dot-product attention is the basic operation:
+    既有 seq2seq 使用fixed-length context vector，attention [(Bahdanau et al., 2015 )](https://arxiv.org/pdf/1409.0473.pdf) to resolve this problem
   
-      $$
-      \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
-      $$
-
-      Dividing by $\sqrt{d_k}$ keeps logits from growing too large, which stabilizes optimization when key/query dimensions increase.
-
-    - Multi-head attention lets the model attend to different relations in parallel:
+- **Core Mechanism**
   
-      $$
-      \mathrm{MultiHead}(Q, K, V) = [\mathrm{head}_1; \ldots; \mathrm{head}_h]W^O, \quad
-      \mathrm{head}_i = \mathrm{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-      $$
-
-      This gives different heads different representation subspaces instead of forcing all dependencies into a single attention map.
-
-      ![transformer-architecture](./assets/01-Milestone.assets/transformer-architecture.png)
-
-      The original architecture diagram shows the full encoder-decoder stack, residual connections, and where masked attention appears in the decoder.
-
-    - Because the model has no recurrence or convolution, it injects token order through sinusoidal positional encoding:
+  完整结构查看whole architecture
   
-      $$
-      PE_{(pos,2i)} = \sin\left(pos / 10000^{2i/d_{\mathrm{model}}}\right), \quad
-      PE_{(pos,2i+1)} = \cos\left(pos / 10000^{2i/d_{\mathrm{model}}}\right)
-      $$
-
-      This gives the network relative and absolute position information without introducing a recurrent state.
-
-  - Pros:
+- **Experiment**
   
-    - Transformer rule the world!
-    - Removes recurrence, so training is substantially more parallelizable than classic RNN-based seq2seq models.
-    - Achieves new SOTA translation results on WMT14 English-German and English-French in the paper's setting.
-    - Any two positions interact through short attention paths, which helps model long-range dependencies.
-    - The architecture is simple and modular enough to become the backbone for later encoder-only, decoder-only, and multimodal foundation models.
-
-  - Cons:
+  - WMT14 English-German 上，Transformer (big) 达到 **28.4 BLEU**，比此前最佳结果（含 ensemble）高逾 2 BLEU；English-French 上达到 **41.0 BLEU**，优于此前单模型 SOTA，训练约 3.5 天、使用 8 张 P100 GPU。arXiv 摘要中的 English-French 数值与 NeurIPS 论文表格略有差异，此处采用正式会议版的 41.0。
+    - 作者还在 English constituency parsing 上验证迁移能力；主要性能证据仍来自两项 WMT14 翻译任务。
   
-    - Full self-attention has $O(n^2)$ time and memory complexity in sequence length, which becomes a bottleneck for long contexts.
-    - Specifically, during self-attention, intermediate maps such as the attention map (QKT ) and the softmax map (L × L) need to be stored from high-speed GPU SRAM (the actual location of the computation) to high bandwidth GPU memory (HBM) and later retrieved during the computation, and the read and write speed of the former is more than 10 times that of the latter, thus resulting in significant memory accessing overhead and increased wall-clock time1 .
-    - The paper is still framed as a translation-focused encoder-decoder system, so it does not yet describe the decoder-only large-scale recipe used by later LLMs.
-    - Some English-French headline numbers differ slightly across arXiv and proceedings versions, so the safest takeaway is the SOTA claim rather than one exact FR BLEU value.
+  - **Critical Thinking**
+
+    - **Pros**：消除训练阶段的 token-by-token recurrence，改善 GPU 并行度；短路径 self-attention 让任意两个位置直接交互；WMT14 上以单模型刷新翻译结果。
+  
+      实际上我们发现不止是翻译，而是啥都能做
+    
+    - **Cons**：全量 attention 的计算和注意力矩阵内存随序列长度按 $O(n^2)$ 增长；decoder 推理仍需逐 token 生成，因此训练并行不等于生成并行。
+    
+  - **System Model & Assumptions**：实验以 WMT14 的有监督翻译数据和固定评测集为主，parse 任务提供了额外迁移证据；这些结果不足以单独证明超长上下文或大规模预训练下的效率与泛化表现。
+    
+  - **Trade-offs**：模型用二次的 token 间交互开销换取更高的训练并行度和较短的信息传播路径；中短序列上收益明确，长序列会受到显存和计算量约束。
 
 ### The whole architecture
 
@@ -82,7 +52,7 @@
 >
 > 在介绍Scaled Dot-Product Attention先介绍一下attention. The two most commonly used attention functions are additive attention [(cite)](https://arxiv.org/abs/1409.0473), and dot-product (multiplicative) attention.
 >
-> - ot-product (multiplicative) attention pros: 计算更快更有效
+> - dot-product (multiplicative) attention pros: 计算更快更有效
 >
 > 在transformer中使用的attention是在Dot-Product基础上还在了scaled, scaling factor of
 > $\frac{1}{\sqrt{d_k}}$, 因此叫做Scaled Dot-Product Attention
@@ -106,7 +76,6 @@ Q = XW_Q \\
 K = XW_K \\
 V = XW_V
 $$
-Given query Q, key K, value V:
 $$
 \text{Attention}(Q, K, V) = {\text{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)} {V}
 $$
@@ -116,9 +85,9 @@ $$
 > - $\sqrt{d_k}$: 假设 $Q$ 和 $K$ 的分量都比较独立，方差接近 1，那么点积 $Q \cdot K$ 的方差会随着维度 $d_k$ 增大而增大(为什么,见后面)。维度越大，点积值越容易很大。进入 softmax 后会变得很尖锐，导致：
 >
 >   - 某些位置权重几乎是 1
->  - 其余位置几乎是 0
+>   - 其余位置几乎是 0
 >   - 梯度不稳定
->   
+>
 >   除以 $\sqrt{d_k}$ 后，数值尺度更平稳，训练更容易。
 >
 >   > [!TIP]
@@ -127,7 +96,7 @@ $$
 >   >
 >   > - 当 logits 太大时: $\text{softmax}(8, 1, -2) \approx (0.999, 0.001, 0)$ 注意力几乎全压到一个位置，梯度很小，训练不稳定
 >   > - 当 logits 太小时: $\text{softmax}(0.01, 0.02, -0.01) \approx (0.334, 0.337, 0.329)$ 看不出来谁重要，注意力表达能力变弱
->   
+>
 >   下面我们来看看为什么除以 $\sqrt{d_k}$ 可以稳定方差到常数量级，看看背后的数学原理：
 >
 >   设单个 query 和 key 向量分别是
@@ -139,11 +108,13 @@ $$
 >   s = q^\top k = \sum_{i=1}^{d_k} q_i k_i
 > $$
 >   为了分析方便，通常做一个经典假设：
->   
->   - $q_i$ 和 $k_i$ 独立
->  - 均值为 0
->   - 方差为 1
->   
+> $$
+> q_i \perp\!\!\!\perp k_i,
+> \qquad
+> \mathbb{E}[q_i]=\mathbb{E}[k_i]=0,
+> \qquad
+> \operatorname{Var}(q_i)=\operatorname{Var}(k_i)=1.
+> $$
 >   那么每一项 $q_i k_i$ 的均值是 0，方差是
 > $$
 >   \operatorname{Var}(q_i k_i) = \operatorname{Var}(q_i)\operatorname{Var}(k_i) = 1
@@ -157,124 +128,37 @@ $$
 >   \operatorname{Var}(q^\top k) = d_k
 > $$
 >   这意味着点积的**标准差**是$\sqrt{d_k}$。
->   
-> - ${\text{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)}$: 是注意力权重矩阵，满足每一行和为 1，对当前位置来说，整句话里每个位置分别该分配多少权重
+>
 
-- 计算复杂度的计算
+##### 计算复杂度
 
-  符号定义
+记 query 数量为 $N_q$，key/value 数量为 $N_{\mathrm{kv}}$（图像特征展平时 $N_{\mathrm{kv}}=HW$），通道宽度为 $C$，head 数为 $M$，每个 head 的维度为 $d=C/M$。以下忽略 batch、常数因子。
 
-  - 假设图像特征图大小是：$H × W$
+**完整 Multi-Head Attention：**
+$$
+T=\mathcal{O}\left((N_q+N_{\mathrm{kv}})C^2+N_qN_{\mathrm{kv}}C\right),
+\qquad
+S_{\mathrm{attn}}=\mathcal{O}(M N_qN_{\mathrm{kv}})
+$$
 
-  - flatten 后 token 数量是：$N_k = HW$
+- **投影项** $(N_q+N_{\mathrm{kv}})C^2$：Q 和输出投影各处理 $N_q$ 个 token；K、V 投影各处理 $N_{\mathrm{kv}}$ 个 token。
+- **注意力交互项** $N_qN_{\mathrm{kv}}C$：$QK^\top$ 计算权重，权重再与 $V$ 相乘；两次矩阵乘法同阶。Scale 和 softmax 为 $\mathcal{O}(M N_qN_{\mathrm{kv}})$，当 $d>1$ 时低于矩阵乘法项。标准实现保存形状为 $M\times N_q\times N_{\mathrm{kv}}$ 的注意力图，对应上式中的显存项。
 
-  - 如果是 decoder cross-attention，query 数量是：$N_q$
+**Self-attention** 中 $N_q=N_{\mathrm{kv}}=N$：
+$$
+T=\mathcal{O}(NC^2+N^2C),
+\qquad
+S_{\mathrm{attn}}=\mathcal{O}(MN^2)
+$$
+序列变长时，attention 交互和权重存储呈二次增长；常简写为计算 $\mathcal{O}(N^2C)$、注意力矩阵显存 $\mathcal{O}(N^2)$（固定 head 数）。
 
-  - 如果是 encoder self-attention，query 也来自图像 token，所以：$N_q = HW$
-
-  - 假设 hidden dimension 是：$C$
-
-  - 如果有多头 attention：$M = \text{num heads}$，每个 head 的维度是：$d = \frac{C}{M}$
-
-  对单个 head 来说：
-
-  ```
-  Q: [N_q, d]
-  K: [HW, d]
-  V: [HW, d]
-  ```
-
-  然后开始计算，这里只以一个为例$QK^T=\mathcal{O}(M \cdot N_q \cdot HW \cdot d)=\mathcal{O}(N_q \cdot HW \cdot C)$
-
-  | 步骤              | 形状变化                          | 复杂度        |
-  | ----------------- | --------------------------------- | ------------- |
-  | Q projection      | `[N_q, C] -> [N_q, C]`            | `O(N_q C²)`   |
-  | K projection      | `[HW, C] -> [HW, C]`              | `O(HW C²)`    |
-  | V projection      | `[HW, C] -> [HW, C]`              | `O(HW C²)`    |
-  | QKᵀ               | `[N_q, C] × [C, HW] -> [N_q, HW]` | `O(N_q HW C)` |
-  | scale             | `[N_q, HW]`                       | `O(N_q HW)`   |
-  | softmax           | `[N_q, HW]`                       | `O(N_q HW)`   |
-  | attention × V     | `[N_q, HW] × [HW, C] -> [N_q, C]` | `O(N_q HW C)` |
-  | output projection | `[N_q, C] -> [N_q, C]`            | `O(N_q C²)`   |
-
-  对于encoder完整复杂度可以写成：
-  $$
-  \mathcal{O}(4NC^2 + 2N^2C)
-  $$
-
-  > [!TIP]
-  >
-  > 因为 `C` 通常远大于 1，所以省略低阶项和常数
-
-  $$
-  \text{Attention}(Q,K,V) = \text{Softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V, \quad \text{complexity: } \mathcal{O}(N_q \times HW\times C),\\
-  when~self-attention~ N_q=HW,O((HW)^2C)
-  $$
-
-  对于decoder中的cross attention
-
-  假设：
-  $$
-  N_q = 100
-  $$
-  图像 token 数量是：
-  $$
-  HW
-  $$
-  那么复杂度是：
-  $$
-  \mathcal{O}(100 \cdot HW \cdot C)
-  $$
-  这比 encoder self-attention 的：
-  $$
-  \mathcal{O}((HW)^2 C)
-  $$
-  小很多。因为 decoder 中 query 数量通常远小于图像 token 数量：
-  $$
-  N_q \ll HW
-  $$
-  刚才讲的是 attention 的核心计算，也就是：
-  $$
-  \text{Softmax}(QK^T)V
-  $$
-  但完整 Multi-Head Attention 还包括线性投影。
-
-  假设输入 query feature 是：$X_q: [N_q, C]$
-
-  图像 feature 是：$X_kv: [HW, C]$
-
-  那么：
-  $$
-  Q = X_q W_Q
-  $$
-  复杂度是：$\mathcal{O}(N_q C^2) = \mathcal{O}(HW C^2)$
-
-  attention 输出后还有 output projection：
-  $$
-  O = \text{Attn}(Q,K,V) W_O
-  $$
-  复杂度是：$\mathcal{O}(N_q C^2)$
-
-  所以完整 cross-attention 可以写成：
-  $$
-  \mathcal{O}
-  \left(
-  2N_q C^2
-  +
-  2HW C^2
-  +
-  2N_q HW C
-  \right)
-  $$
-  通常省略常数：
-  $$
-  \mathcal{O}
-  \left(
-  (N_q + HW)C^2
-  +
-  N_q HW C
-  \right)
-  $$
+**Cross-attention** 中 $N_q$ 为 decoder query 数，$N_{\mathrm{kv}}=HW$ 为 encoder 图像 token 数：
+$$
+T=\mathcal{O}\left((N_q+HW)C^2+N_qHWC\right),
+\qquad
+S_{\mathrm{attn}}=\mathcal{O}(M N_qHW)
+$$
+当 $N_q\ll HW$ 时，交互项相较于长度为 $HW$ 的 self-attention 按约 $N_q/HW$ 缩小；K、V 对全部 encoder token 的投影仍需计算。
 
 - Pipeline
 
@@ -436,6 +320,23 @@ class PositionwiseFeedForward(nn.Module):
 
 #### LayerNorm
 
+- Takeaway: LayerNorm 对**单个样本（在 Transformer 中通常是单个 token）的特征维度**做归一化，不依赖 batch 中其他样本
+
+  - Core Mechnism
+
+    对 token 表示 $x\in\mathbb{R}^{d}$，沿特征维计算：
+
+    $$
+    \mu=\frac{1}{d}\sum_{j=1}^{d}x_j, \qquad \sigma^2=\frac{1}{d}\sum_{j=1}^{d}(x_j-\mu)^2,
+    $$
+
+    $$
+    \operatorname{LN}(x)_j = \gamma_j\frac{x_j-\mu}{\sqrt{\sigma^2+\epsilon}}+\beta_j.
+    $$
+
+    其中 $\epsilon>0$ 用于数值稳定；$\gamma,\beta\in\mathbb{R}^d$ 是可学习的缩放和平移参数
+
+
 transformer中为什么要用layernorm，而CNN中常用BN，二者的目的是什么？为什么要这样
 
   - Transformer： why LN
@@ -477,7 +378,7 @@ transformer中为什么要用layernorm，而CNN中常用BN，二者的目的是�
 
 用embedding将input token和output token转换为$d_{model}$
 
-In our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [(cite)](https://arxiv.org/abs/1608.05859). In the embedding layers, we multiply those weights by dmodel*d*model.
+In our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [(cite)](https://arxiv.org/abs/1608.05859). In the embedding layers, we multiply those weights by $d_{model}$
 
 ```python
 class Embeddings(nn.Module):
@@ -505,7 +406,7 @@ where $pos$ is the position and $i$ is the dimension.
 
 > [!NOTE]
 >
-> 为什么用正弦和余弦：
+> why sinusoidal encodings
 >
 >   - 这样模型既能区分绝对位置，也更容易感知相对距离
 >
@@ -676,7 +577,11 @@ class EncoderLayer(nn.Module):
 
 ![transformer-decoder](./assets/01-Milestone.assets/transformer-decoder.png)
 
-Decoder有三个sublayers: one sub-layer of self masked multi-head attention mechanisms, one sub-layer of cross-attention and one sub-layer of fully-connected feed-forward network.
+Decoder有三个sublayers: 
+
+1. self masked multi-head attention mechanisms,
+2. cross-attention
+3. fully-connected feed-forward network.
 
 ```python
 class Decoder(nn.Module):
@@ -790,15 +695,9 @@ class DecoderLayer(nn.Module):
 >
 > 实际上decoder input: <bos> 我 爱 你,输出为四个:我爱你<eos>,我们只需要<eos>即可
 
-
-
-
-
 > [!IMPORTANT]
 >
 > 实际大模型推理时，一般不会每一步都重新计算整个前缀，而是保存过去的 key 和 value，这叫 KV cache
-
-
 
 ### Inference
 
@@ -929,10 +828,6 @@ $$
 ### Training
 
 check ([details](https://nlp.seas.harvard.edu/annotated-transformer/#attention-visualization))
-
-
-
-
 
 
 
